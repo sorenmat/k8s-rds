@@ -1,0 +1,20 @@
+dist: trusty
+sudo: required
+language: go
+go: 1.9
+services:
+  - docker
+install:
+  - GOOS=linux CGO_ENABLED=0 go build
+  - go test
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker build -t sorenmat/k8s-rds:$TRAVIS_BUILD_NUMBER .
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    docker push sorenmat/k8s-rds:$TRAVIS_BUILD_NUMBER
+    fi 
+
+
+notifications:
+  email: false
