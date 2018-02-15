@@ -251,21 +251,27 @@ func createDatabase(db *crd.Database, crdclient *client.Crdclient) error {
 	if err != nil {
 		return (errors.Wrap(err, "CreateDBInstance"))
 	}
-	go func(svc *rds.RDS, crdclient *client.Crdclient, db *crd.Database) {
-		log.Println("inside db: ", db)
-		var rdsdb *rds.DBInstance
-		waitForDBState(svc, db, "available")
+	var rdsdb *rds.DBInstance
+	waitForDBState(svc, db, "available")
 
-		dbHostname := *rdsdb.Endpoint.Address
+	// Get the newly created database so we can get the endpoint
+	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
+	result2, err := svc.DescribeDBInstances(k)
+	if err != nil {
+		return errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", db.Spec.DBName))
+	}
+	rdsdb = result2.DBInstances[0]
 
-		kubectl := getKubectl()
+	dbHostname := *rdsdb.Endpoint.Address
 
-		serviceInterface := kubectl.CoreV1().Services(db.Namespace)
-		syncService(serviceInterface, db.Namespace, dbHostname, db.Spec.Name)
-	}(svc, crdclient, db)
+	kubectl := getKubectl()
+	// create a service in kubernetes that points to the AWS RDS instance
+	serviceInterface := kubectl.CoreV1().Services(db.Namespace)
+	syncService(serviceInterface, db.Namespace, dbHostname, db.Spec.Name)
 	return nil
 }
 
+// create an External nameed service object for Kubernetes
 func createService(s *v1.Service, namespace string, hostname string, internalname string) *v1.Service {
 	var ports []v1.ServicePort
 
