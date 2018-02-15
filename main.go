@@ -275,8 +275,8 @@ func createDatabase(db *crd.Database, crdclient *client.Crdclient) error {
 	kubectl := getKubectl()
 	// create a service in kubernetes that points to the AWS RDS instance
 	serviceInterface := kubectl.CoreV1().Services(db.Namespace)
-	syncService(serviceInterface, db.Namespace, dbHostname, db.Spec.Name)
-	return nil
+	err = syncService(serviceInterface, db.Namespace, dbHostname, db.Spec.Name)
+	return err
 }
 
 // create an External nameed service object for Kubernetes
@@ -299,13 +299,15 @@ func createService(s *v1.Service, namespace string, hostname string, internalnam
 }
 
 // syncService Update the service in Kubernetes with the new information
-func syncService(serviceInterface corev1.ServiceInterface, namespace, hostname string, internalname string) {
+func syncService(serviceInterface corev1.ServiceInterface, namespace, hostname string, internalname string) error {
 	s, sErr := serviceInterface.Get(hostname, metav1.GetOptions{})
 
 	if sErr != nil {
 		s = &v1.Service{}
 	}
-	createService(s, namespace, hostname, internalname)
+	s = createService(s, namespace, hostname, internalname)
+	s, err := serviceInterface.Update(s)
+	return err
 }
 
 func main() {
