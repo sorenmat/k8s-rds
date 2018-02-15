@@ -321,6 +321,15 @@ func main() {
 		cache.ResourceEventHandlerFuncs{
 			AddFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
+
+				db.Status = crd.DatabaseStatus{Message: "Creating", State: "Creating"}
+				_, err = crdclient.Update(db)
+				if err == nil {
+					log.Println("Database CRD updated")
+				} else {
+					log.Println("Database CRD update failed: ", err)
+
+				}
 				createDatabase(*db, crdclient)
 			},
 			DeleteFunc: func(obj interface{}) {
