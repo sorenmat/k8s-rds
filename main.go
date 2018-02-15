@@ -247,16 +247,25 @@ func createDatabase(db *crd.Database, crdclient *client.Crdclient) error {
 	}
 	input := convertSpecToInput(db, subnetName)
 
-	_, err = svc.CreateDBInstance(input)
+	// search for the instance
+	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
+	result2, err := svc.DescribeDBInstances(k)
 	if err != nil {
-		return (errors.Wrap(err, "CreateDBInstance"))
+		return errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", db.Spec.DBName))
+	}
+	if len(result2.DBInstances) == 0 {
+		// seems like we didn't find a database with this name, let's create on
+		_, err = svc.CreateDBInstance(input)
+		if err != nil {
+			return (errors.Wrap(err, "CreateDBInstance"))
+		}
 	}
 	var rdsdb *rds.DBInstance
 	waitForDBState(svc, db, "available")
 
 	// Get the newly created database so we can get the endpoint
-	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
-	result2, err := svc.DescribeDBInstances(k)
+	k = &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
+	result2, err = svc.DescribeDBInstances(k)
 	if err != nil {
 		return errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", db.Spec.DBName))
 	}
