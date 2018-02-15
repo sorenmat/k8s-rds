@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8s-rds
+  namespace: default  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: k8s-rds
+  template:
+    metadata:
+      labels:
+        name: k8s-rds
+    spec:
+      containers:
+      - image: sorenmat/k8s-rds:latest
+        imagePullPolicy: Always
+        name: k8s-rds
+      restartPolicy: Always
+

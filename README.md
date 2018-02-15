@@ -2,14 +2,25 @@
 
 [![Build Status](https://travis-ci.org/sorenmat/k8s-rds.svg?branch=master)](https://travis-ci.org/sorenmat/k8s-rds)
 
-
 A Custom Resource Definition for provisioning AWS RDS databases.
+
+
+## Assumptions
+
+The node running the pod should have an instance profile that allows creation and deletion of RDS databases and Subnets.
 
 ## Building
 
 `go build`
 
+## Installing
+
+You can start the the controller by applying `kubectl apply -f deploy/deployment.yaml`
+
 ## Deploying
+
+When the controller is running in the cluster you can deploy/crete a new database by running `kubectl apply` on the following
+file.
 
 ```yaml
 apiVersion: k8s.io/v1
@@ -25,3 +36,4 @@ metadata:
     password: mysupersecretPW
     username: postgres
 ```
+
