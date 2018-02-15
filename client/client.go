@@ -35,7 +35,7 @@ func (f *Crdclient) Create(obj *crd.Database) (*crd.Database, error) {
 func (f *Crdclient) Update(obj *crd.Database) (*crd.Database, error) {
 	var result crd.Database
 	err := f.cl.Put().
-		Namespace(f.ns).Resource(f.plural).
+		Namespace(f.ns).Resource(f.plural).Name(obj.Name).
 		Body(obj).Do().Into(&result)
 	return &result, err
 }
