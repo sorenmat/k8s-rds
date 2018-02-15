@@ -1,16 +1,13 @@
-
 apiVersion: k8s.io/v1
 kind: Database
 metadata:
   name: test-pgsql
   namespace: default
-  spec:
-    class: db.t2.micro
-    engine: postgres
-    dbname: test-pgsql
-    name: test-pgsql
-    password: mysupersecretPW
-    username: postgres
-
-
-  
+spec:
+  class: db.t2.medium
+  engine: postgres
+  dbname: test-pgsql
+  name: test-pgsql
+  password: mysupersecretPW
+  username: postgres
+  size: 10

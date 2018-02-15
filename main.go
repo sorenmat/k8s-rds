@@ -145,7 +145,7 @@ func getSubnets(public bool) ([]*string, error) {
 	return result, nil
 }
 
-func deleteDatabase(db crd.Database) {
+func deleteDatabase(db *crd.Database) {
 	svc := rdsclient()
 
 	_, err := svc.DeleteDBInstance(&rds.DeleteDBInstanceInput{
@@ -169,7 +169,31 @@ func deleteDatabase(db crd.Database) {
 
 }
 
-func createDatabase(db crd.Database, crdclient *client.Crdclient) error {
+func convertSpecToInput(v *crd.Database, subnetName string) *rds.CreateDBInstanceInput {
+	input := &rds.CreateDBInstanceInput{
+		AllocatedStorage:     aws.Int64(v.Spec.Size),
+		DBInstanceClass:      aws.String(v.Spec.Class),
+		DBInstanceIdentifier: aws.String(v.Spec.DBName),
+		Engine:               aws.String(v.Spec.Engine),
+		MasterUserPassword:   aws.String(v.Spec.Password),
+		MasterUsername:       aws.String(v.Spec.Username),
+		//AvailabilityZone:     aws.String("eu-west-1a"),
+		DBSubnetGroupName:     aws.String(subnetName),
+		PubliclyAccessible:    aws.Bool(v.Spec.PubliclyAccessible),
+		MultiAZ:               aws.Bool(v.Spec.MultiAZ),
+		StorageEncrypted:      aws.Bool(v.Spec.StorageEncrypted),
+		BackupRetentionPeriod: aws.Int64(0), //disable backups
+	}
+	if v.Spec.StorageType != "" {
+		input.StorageType = aws.String(v.Spec.StorageType)
+	}
+	if v.Spec.Iops > 0 {
+		input.Iops = aws.Int64(v.Spec.Iops)
+	}
+	return input
+}
+
+func createDatabase(db *crd.Database, crdclient *client.Crdclient) error {
 	subnets, err := getSubnets(db.Spec.PubliclyAccessible)
 	if err != nil {
 		return err
@@ -194,34 +218,15 @@ func createDatabase(db crd.Database, crdclient *client.Crdclient) error {
 			log.Println(errors.Wrap(err, "CreateDBSubnetGroup"))
 		}
 	}
-
-	input := &rds.CreateDBInstanceInput{
-		AllocatedStorage:     aws.Int64(db.Spec.Size),
-		DBInstanceClass:      aws.String(db.Spec.Class),
-		DBInstanceIdentifier: aws.String(db.Spec.DBName),
-		Engine:               aws.String(db.Spec.Engine),
-		MasterUserPassword:   aws.String(db.Spec.Password),
-		MasterUsername:       aws.String(db.Spec.Username),
-		//AvailabilityZone:     aws.String("eu-west-1a"),
-		DBSubnetGroupName:  aws.String(subnetName),
-		PubliclyAccessible: aws.Bool(db.Spec.PubliclyAccessible),
-		MultiAZ:            aws.Bool(db.Spec.MultiAZ),
-		StorageEncrypted:   aws.Bool(db.Spec.StorageEncrypted),
-	}
-	if db.Spec.StorageType != "" {
-		input.StorageType = aws.String(db.Spec.StorageType)
-	}
-	if db.Spec.Iops > 0 {
-		input.Iops = aws.Int64(db.Spec.Iops)
-	}
+	input := convertSpecToInput(db, subnetName)
 
 	_, err = svc.CreateDBInstance(input)
 	if err != nil {
-		log.Println(errors.Wrap(err, "CreateDBInstance"))
+		return (errors.Wrap(err, "CreateDBInstance"))
 	}
 	status := ""
-
-	go func(svc *rds.RDS, crdclient *client.Crdclient, db crd.Database) {
+	go func(svc *rds.RDS, crdclient *client.Crdclient, db *crd.Database) {
+		log.Println("inside db: ", db)
 		var rdsdb *rds.DBInstance
 		for {
 			k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
@@ -234,7 +239,7 @@ func createDatabase(db crd.Database, crdclient *client.Crdclient) error {
 			status = *rdsdb.DBInstanceStatus
 			if db.Status.State != *rdsdb.DBInstanceStatus {
 				db.Status.State = *rdsdb.DBInstanceStatus
-				_, err = crdclient.Update(&db)
+				_, err = crdclient.Update(db)
 				if err == nil {
 					log.Println("Database CRD updated")
 				} else {
@@ -288,6 +293,7 @@ func syncService(serviceInterface corev1.ServiceInterface, namespace, hostname s
 }
 
 func main() {
+	log.Println("Starting k8s-rds")
 	config, err := getClientConfig(kubeconfig())
 	if err != nil {
 		panic(err.Error())
@@ -314,10 +320,11 @@ func main() {
 	// Create a CRD client interface
 	crdclient := client.CrdClient(crdcs, scheme, "default")
 
+	log.Println("Watching for database changes...")
 	_, controller := cache.NewInformer(
 		crdclient.NewListWatch(),
 		&crd.Database{},
-		time.Minute*10,
+		time.Minute*2,
 		cache.ResourceEventHandlerFuncs{
 			AddFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
@@ -328,17 +335,18 @@ func main() {
 					log.Println("Database CRD updated")
 				} else {
 					log.Println("Database CRD update failed: ", err)
-
 				}
-				createDatabase(*db, crdclient)
+				err := createDatabase(db, crdclient)
+				if err != nil {
+					log.Println(err)
+				}
 			},
 			DeleteFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
-				fmt.Printf("deleting database: %s \n", db.Name)
-				deleteDatabase(*db)
+				log.Printf("deleting database: %s \n", db.Name)
+				deleteDatabase(db)
 			},
 			UpdateFunc: func(oldObj, newObj interface{}) {
-				//fmt.Printf("Update old: %s \n      New: %s\n", oldObj, newObj)
 			},
 		},
 	)

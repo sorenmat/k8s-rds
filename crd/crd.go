@@ -66,8 +66,8 @@ type DatabaseSpec struct {
 }
 
 type DatabaseStatus struct {
-	State   string `json:"state,omitempty"`
-	Message string `json:"message,omitempty"`
+	State   string `json:"state,omitempty" description:"State of the deploy"`
+	Message string `json:"message,omitempty" description:"Detailed message around the state"`
 }
 
 type DatabaseList struct {
@@ -90,6 +90,7 @@ var SchemeGroupVersion = schema.GroupVersion{Group: CRDGroup, Version: CRDVersio
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
 		&Database{},
+		&DatabaseList{},
 	)
 	meta_v1.AddToGroupVersion(scheme, SchemeGroupVersion)
 	return nil
