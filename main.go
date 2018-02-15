@@ -146,38 +146,46 @@ func getSubnets(public bool) ([]*string, error) {
 }
 
 func deleteDatabase(db *crd.Database) {
-	svc := rdsclient()
 
-	_, err := svc.DeleteDBInstance(&rds.DeleteDBInstanceInput{
+	// delete the service first, this way we can't get more traffic to the instance
+	serviceInterface := getKubectl().CoreV1().Services(db.Namespace)
+	err := serviceInterface.Delete(db.Spec.Name, &metav1.DeleteOptions{})
+	if err != nil {
+		log.Println(err)
+	}
+
+	// delete the database instance
+	svc := rdsclient()
+	_, err = svc.DeleteDBInstance(&rds.DeleteDBInstanceInput{
 		DBInstanceIdentifier: aws.String(db.Spec.DBName),
 		SkipFinalSnapshot:    aws.Bool(true),
 	})
 	if err != nil {
 		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName)))
+	} else {
+		waitForDBState(svc, db, "deleted")
+		log.Println("Deleted DB instance: ", db.Spec.DBName)
 	}
+
+	// delete the subnet group attached to the instance
 	subnetName := db.Name + "-subnet"
 	_, err = svc.DeleteDBSubnetGroup(&rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
 	if err != nil {
 		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete subnet %v", subnetName)))
-	}
-	// TODO delete service
-	serviceInterface := getKubectl().CoreV1().Services(db.Namespace)
-	err = serviceInterface.Delete(db.Spec.Name, &metav1.DeleteOptions{})
-	if err != nil {
-		log.Println(err)
+	} else {
+		log.Println("Deleted DBSubnet group: ", subnetName)
 	}
 
 }
 
 func convertSpecToInput(v *crd.Database, subnetName string) *rds.CreateDBInstanceInput {
 	input := &rds.CreateDBInstanceInput{
-		AllocatedStorage:     aws.Int64(v.Spec.Size),
-		DBInstanceClass:      aws.String(v.Spec.Class),
-		DBInstanceIdentifier: aws.String(v.Spec.DBName),
-		Engine:               aws.String(v.Spec.Engine),
-		MasterUserPassword:   aws.String(v.Spec.Password),
-		MasterUsername:       aws.String(v.Spec.Username),
-		//AvailabilityZone:     aws.String("eu-west-1a"),
+		AllocatedStorage:      aws.Int64(v.Spec.Size),
+		DBInstanceClass:       aws.String(v.Spec.Class),
+		DBInstanceIdentifier:  aws.String(v.Spec.DBName),
+		Engine:                aws.String(v.Spec.Engine),
+		MasterUserPassword:    aws.String(v.Spec.Password),
+		MasterUsername:        aws.String(v.Spec.Username),
 		DBSubnetGroupName:     aws.String(subnetName),
 		PubliclyAccessible:    aws.Bool(v.Spec.PubliclyAccessible),
 		MultiAZ:               aws.Bool(v.Spec.MultiAZ),
@@ -191,6 +199,25 @@ func convertSpecToInput(v *crd.Database, subnetName string) *rds.CreateDBInstanc
 		input.Iops = aws.Int64(v.Spec.Iops)
 	}
 	return input
+}
+
+func waitForDBState(svc *rds.RDS, db *crd.Database, status string) {
+	var rdsdb *rds.DBInstance
+	for {
+		k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
+		result2, err := svc.DescribeDBInstances(k)
+		if err != nil {
+			log.Println(err)
+			break
+		}
+		rdsdb = result2.DBInstances[0]
+
+		if *rdsdb.DBInstanceStatus == status {
+			break
+		}
+		log.Printf("Wait for db status to be %v was %v\n", status, *rdsdb.DBInstanceStatus)
+		time.Sleep(5 * time.Second)
+	}
 }
 
 func createDatabase(db *crd.Database, crdclient *client.Crdclient) error {
@@ -224,35 +251,10 @@ func createDatabase(db *crd.Database, crdclient *client.Crdclient) error {
 	if err != nil {
 		return (errors.Wrap(err, "CreateDBInstance"))
 	}
-	status := ""
 	go func(svc *rds.RDS, crdclient *client.Crdclient, db *crd.Database) {
 		log.Println("inside db: ", db)
 		var rdsdb *rds.DBInstance
-		for {
-			k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
-			result2, err := svc.DescribeDBInstances(k)
-			if err != nil {
-				log.Println(err)
-				break
-			}
-			rdsdb = result2.DBInstances[0]
-			status = *rdsdb.DBInstanceStatus
-			if db.Status.State != *rdsdb.DBInstanceStatus {
-				db.Status.State = *rdsdb.DBInstanceStatus
-				_, err = crdclient.Update(db)
-				if err == nil {
-					log.Println("Database CRD updated")
-				} else {
-					log.Println("Database CRD update failed: ", err)
-				}
-
-			}
-			if *rdsdb.DBInstanceStatus == "available" {
-				break
-			}
-			log.Println("Wait for db to become ready, staus was", status)
-			time.Sleep(3 * time.Second)
-		}
+		waitForDBState(svc, db, "available")
 
 		dbHostname := *rdsdb.Endpoint.Address
 
