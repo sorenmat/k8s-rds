@@ -37,3 +37,9 @@ metadata:
     username: postgres
 ```
 
+After the deploy is done you should be able to see your database via `kubectl get databases`
+
+```shell
+NAME         AGE
+test-pgsql   11h
+```

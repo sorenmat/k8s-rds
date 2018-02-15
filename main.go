@@ -67,9 +67,30 @@ func getKubectl() *kubernetes.Clientset {
 	return kubectl
 }
 
-func getSubnets() []*string {
-	publiclyAccessible := false
+func ec2config() *aws.Config {
+	return &aws.Config{
+		Region: aws.String("eu-west-1"),
+		CredentialsChainVerboseErrors: aws.Bool(true),
+	}
+}
 
+func ec2client() *ec2.EC2 {
+	ses, err := session.NewSession(ec2config())
+	if err != nil {
+		log.Fatal("unable to create session: ", err)
+	}
+	svc := ec2.New(ses, ec2config())
+	return svc
+}
+
+func rdsclient() *rds.RDS {
+	return rds.New(session.New(ec2config()))
+}
+
+// getSubnets returns a list of subnets that the RDS instance should be attached to
+// We do this by findind a node in the cluster, take the VPC id from that node a list
+// the security groups in the VPC
+func getSubnets(public bool) ([]*string, error) {
 	kubectl := getKubectl()
 
 	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
@@ -77,19 +98,15 @@ func getSubnets() []*string {
 		log.Fatal("unable to get nodes")
 	}
 	name := ""
-	for _, n := range nodes.Items {
-		name = n.Spec.ExternalID
+	if len(nodes.Items) > 0 {
+		// take the first one, we assume that all nodes are created in the same VPC
+		name = nodes.Items[0].Spec.ExternalID
+	} else {
+		return nil, fmt.Errorf("unable to find any nodes in the cluster")
 	}
 	log.Println("Found node with ID: ", name)
-	cfg := &aws.Config{
-		Region: aws.String("eu-west-1"),
-		CredentialsChainVerboseErrors: aws.Bool(true),
-	}
-	ses, err := session.NewSession()
-	if err != nil {
-		log.Fatal("unable to create session: ", err)
-	}
-	svc := ec2.New(ses, cfg)
+
+	svc := ec2client()
 
 	params := &ec2.DescribeInstancesInput{
 		Filters: []*ec2.Filter{
@@ -115,7 +132,7 @@ func getSubnets() []*string {
 			log.Fatal(err)
 		}
 		for _, v := range subnets.Subnets {
-			if *v.MapPublicIpOnLaunch == publiclyAccessible {
+			if *v.MapPublicIpOnLaunch == public {
 				result = append(result, v.SubnetId)
 			}
 		}
@@ -125,16 +142,11 @@ func getSubnets() []*string {
 	for _, v := range result {
 		log.Printf(*v + " ")
 	}
-	return result
+	return result, nil
 }
 
 func deleteDatabase(db crd.Database) {
-	cfg := &aws.Config{
-		Region: aws.String("eu-west-1"),
-		CredentialsChainVerboseErrors: aws.Bool(true),
-	}
-
-	svc := rds.New(session.New(cfg))
+	svc := rdsclient()
 
 	_, err := svc.DeleteDBInstance(&rds.DeleteDBInstanceInput{
 		DBInstanceIdentifier: aws.String(db.Spec.DBName),
@@ -157,20 +169,18 @@ func deleteDatabase(db crd.Database) {
 
 }
 
-func createDatabase(db crd.Database, crdclient *client.Crdclient) {
-	subnets := getSubnets()
+func createDatabase(db crd.Database, crdclient *client.Crdclient) error {
+	subnets, err := getSubnets(db.Spec.PubliclyAccessible)
+	if err != nil {
+		return err
+	}
 	subnetDescription := "subnet for " + db.Name + " in namespace " + db.Namespace
 	subnetName := db.Name + "-subnet"
 
-	cfg := &aws.Config{
-		Region: aws.String("eu-west-1"),
-		CredentialsChainVerboseErrors: aws.Bool(true),
-	}
-
-	svc := rds.New(session.New(cfg))
+	svc := rdsclient()
 
 	sf := &rds.DescribeDBSubnetGroupsInput{DBSubnetGroupName: aws.String(subnetName)}
-	_, err := svc.DescribeDBSubnetGroups(sf)
+	_, err = svc.DescribeDBSubnetGroups(sf)
 	if err != nil {
 		// assume we didn't find it..
 		subnet := &rds.CreateDBSubnetGroupInput{
@@ -246,7 +256,7 @@ func createDatabase(db crd.Database, crdclient *client.Crdclient) {
 		serviceInterface := kubectl.CoreV1().Services(db.Namespace)
 		syncService(serviceInterface, db.Namespace, dbHostname, db.Spec.Name)
 	}(svc, crdclient, db)
-
+	return nil
 }
 
 func createService(s *v1.Service, namespace string, hostname string, internalname string) *v1.Service {
