@@ -302,11 +302,19 @@ func createService(s *v1.Service, namespace string, hostname string, internalnam
 func syncService(serviceInterface corev1.ServiceInterface, namespace, hostname string, internalname string) error {
 	s, sErr := serviceInterface.Get(hostname, metav1.GetOptions{})
 
+	create := false
 	if sErr != nil {
 		s = &v1.Service{}
+		create = true
 	}
 	s = createService(s, namespace, hostname, internalname)
-	s, err := serviceInterface.Update(s)
+	var err error
+	if create {
+		s, err = serviceInterface.Create(s)
+	} else {
+		s, err = serviceInterface.Update(s)
+	}
+
 	return err
 }
 
