@@ -1,3 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  mykey: cGFzc3dvcmRvcnNvbWV0aGluZw==
+---
 apiVersion: k8s.io/v1
 kind: Database
 metadata:
@@ -8,6 +16,24 @@ spec:
   engine: postgres
   dbname: pgsql
   name: pgsql
-  password: mysupersecretPW
+  password:
+    key: mykey
+    name: mysecret
+  username: postgres
+  size: 10
+---
+apiVersion: k8s.io/v1
+kind: Database
+metadata:
+  name: pgsql-two
+  namespace: default
+spec:
+  class: db.t2.medium
+  engine: postgres
+  dbname: pgsql-two
+  name: pgsql-two
+  password:
+    key: mykey
+    name: mysecret
   username: postgres
   size: 10

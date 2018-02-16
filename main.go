@@ -149,7 +149,7 @@ func deleteDatabase(db *crd.Database) {
 
 	// delete the service first, this way we can't get more traffic to the instance
 	serviceInterface := getKubectl().CoreV1().Services(db.Namespace)
-	err := serviceInterface.Delete(db.Spec.Name, &metav1.DeleteOptions{})
+	err := serviceInterface.Delete(db.Name, &metav1.DeleteOptions{})
 	if err != nil {
 		log.Println(err)
 	}
@@ -178,13 +178,18 @@ func deleteDatabase(db *crd.Database) {
 
 }
 
-func convertSpecToInput(v *crd.Database, subnetName string) *rds.CreateDBInstanceInput {
+func convertSpecToInput(v *crd.Database, subnetName string) (*rds.CreateDBInstanceInput, error) {
+	secret, err := getKubectl().CoreV1().Secrets(v.Namespace).Get(v.Spec.Password.Name, metav1.GetOptions{})
+	if err != nil {
+		return nil, errors.Wrap(err, fmt.Sprintf("unable to fetch secret %v", v.Spec.Password.Name))
+	}
+	password := secret.Data[v.Spec.Password.Key]
 	input := &rds.CreateDBInstanceInput{
 		AllocatedStorage:      aws.Int64(v.Spec.Size),
 		DBInstanceClass:       aws.String(v.Spec.Class),
 		DBInstanceIdentifier:  aws.String(v.Spec.DBName),
 		Engine:                aws.String(v.Spec.Engine),
-		MasterUserPassword:    aws.String(v.Spec.Password),
+		MasterUserPassword:    aws.String(string(password)),
 		MasterUsername:        aws.String(v.Spec.Username),
 		DBSubnetGroupName:     aws.String(subnetName),
 		PubliclyAccessible:    aws.Bool(v.Spec.PubliclyAccessible),
@@ -198,7 +203,7 @@ func convertSpecToInput(v *crd.Database, subnetName string) *rds.CreateDBInstanc
 	if v.Spec.Iops > 0 {
 		input.Iops = aws.Int64(v.Spec.Iops)
 	}
-	return input
+	return input, nil
 }
 
 func waitForDBState(svc *rds.RDS, db *crd.Database, status string) {
@@ -245,7 +250,10 @@ func createDatabase(db *crd.Database, crdclient *client.Crdclient) error {
 			log.Println(errors.Wrap(err, "CreateDBSubnetGroup"))
 		}
 	}
-	input := convertSpecToInput(db, subnetName)
+	input, err := convertSpecToInput(db, subnetName)
+	if err != nil {
+		return errors.Wrap(err, fmt.Sprintf("wasn't able to get the secret for db %v", db.Spec.DBName))
+	}
 
 	// search for the instance
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
@@ -275,7 +283,7 @@ func createDatabase(db *crd.Database, crdclient *client.Crdclient) error {
 	kubectl := getKubectl()
 	// create a service in kubernetes that points to the AWS RDS instance
 	serviceInterface := kubectl.CoreV1().Services(db.Namespace)
-	err = syncService(serviceInterface, db.Namespace, dbHostname, db.Spec.Name)
+	err = syncService(serviceInterface, db.Namespace, dbHostname, db.Name)
 	return err
 }
 

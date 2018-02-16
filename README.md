@@ -23,18 +23,30 @@ When the controller is running in the cluster you can deploy/crete a new databas
 file.
 
 ```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  mykey: cGFzc3dvcmRvcnNvbWV0aGluZw==
+---
 apiVersion: k8s.io/v1
 kind: Database
 metadata:
-  name: test-pgsql
+  name: pgsql
   namespace: default
-  spec:
-    class: db.t2.micro
-    engine: postgres
-    dbname: test-pgsql
-    name: test-pgsql
-    password: mysupersecretPW
-    username: postgres
+spec:
+  class: db.t2.medium
+  engine: postgres
+  dbname: pgsql
+  name: pgsql
+  password:
+    key: mykey
+    name: mysecret
+  username: postgres
+  size: 10
+ 
 ```
 
 After the deploy is done you should be able to see your database via `kubectl get databases`
