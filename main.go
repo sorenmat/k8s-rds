@@ -250,7 +250,7 @@ func createDatabase(db *crd.Database, crdclient *client.Crdclient) error {
 	// search for the instance
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
 	result2, err := svc.DescribeDBInstances(k)
-	if err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
+	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
 		// seems like we didn't find a database with this name, let's create on
 		_, err = svc.CreateDBInstance(input)
 		if err != nil {
