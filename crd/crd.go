@@ -1,6 +1,7 @@
 package crd
 
 import (
+	"k8s.io/api/core/v1"
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -33,7 +34,7 @@ func CreateCRD(clientset apiextcs.Interface) error {
 		},
 	}
 
-	_, err := clientset.Apiextensions().CustomResourceDefinitions().Create(crd)
+	_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Create(crd)
 	if err != nil && apierrors.IsAlreadyExists(err) {
 		return nil
 	}
@@ -51,18 +52,17 @@ type Database struct {
 }
 
 type DatabaseSpec struct {
-	Username           string `json:"username"`
-	Password           string `json:"password"`
-	Name               string `json:"name"`
-	DBName             string `json:"dbname"`
-	Engine             string `json:"engine"` // "postgres"
-	Class              string `json:"class"`  // like "db.t2.micro"
-	Size               int64  `json:"size"`   // size in gb
-	MultiAZ            bool   `json:"multiaz,omitempty"`
-	PubliclyAccessible bool   `json:"publicaccess,omitempty"`
-	StorageEncrypted   bool   `json:"encrypted,omitempty"`
-	StorageType        string `json:"storagetype,omitempty"`
-	Iops               int64  `json:"iops,omitempty"`
+	Username           string               `json:"username"`
+	Password           v1.SecretKeySelector `json:"password"`
+	DBName             string               `json:"dbname"`
+	Engine             string               `json:"engine"` // "postgres"
+	Class              string               `json:"class"`  // like "db.t2.micro"
+	Size               int64                `json:"size"`   // size in gb
+	MultiAZ            bool                 `json:"multiaz,omitempty"`
+	PubliclyAccessible bool                 `json:"publicaccess,omitempty"`
+	StorageEncrypted   bool                 `json:"encrypted,omitempty"`
+	StorageType        string               `json:"storagetype,omitempty"`
+	Iops               int64                `json:"iops,omitempty"`
 }
 
 type DatabaseStatus struct {
