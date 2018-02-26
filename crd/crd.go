@@ -19,7 +19,7 @@ const (
 	FullCRDName string = "databases." + CRDGroup
 )
 
-// Create the CRD resource, ignore error if it already exists
+// CreateCRD creates the CRD resource, ignore error if it already exists
 func CreateCRD(clientset apiextcs.Interface) error {
 	crd := &apiextv1beta1.CustomResourceDefinition{
 		ObjectMeta: meta_v1.ObjectMeta{Name: FullCRDName},
@@ -39,11 +39,9 @@ func CreateCRD(clientset apiextcs.Interface) error {
 		return nil
 	}
 	return err
-
-	// Note the original apiextensions example adds logic to wait for creation and exception handling
 }
 
-// Definition of our CRD Database class
+// Database is the definition of our CRD Database
 type Database struct {
 	meta_v1.TypeMeta   `json:",inline"`
 	meta_v1.ObjectMeta `json:"metadata"`
@@ -84,7 +82,6 @@ func (d *DatabaseList) DeepCopyObject() runtime.Object {
 	return d
 }
 
-// Create a  Rest client with the new CRD Schema
 var SchemeGroupVersion = schema.GroupVersion{Group: CRDGroup, Version: CRDVersion}
 
 func addKnownTypes(scheme *runtime.Scheme) error {
@@ -96,6 +93,7 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	return nil
 }
 
+// Create a Rest client with the new CRD Schema
 func NewClient(cfg *rest.Config) (*rest.RESTClient, *runtime.Scheme, error) {
 	scheme := runtime.NewScheme()
 	SchemeBuilder := runtime.NewSchemeBuilder(addKnownTypes)

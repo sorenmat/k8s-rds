@@ -64,7 +64,7 @@ func (f *Crdclient) List(opts meta_v1.ListOptions) (*crd.Database, error) {
 	return &result, err
 }
 
-// Create a new List watch for our TPR
+// Create a new List watch for our CRD
 func (f *Crdclient) NewListWatch() *cache.ListWatch {
 	return cache.NewListWatchFromClient(f.cl, f.plural, f.ns, fields.Everything())
 }
