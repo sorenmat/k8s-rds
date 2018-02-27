@@ -12,12 +12,11 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sorenmat/k8s-rds/client"
 	"github.com/sorenmat/k8s-rds/crd"
-	"k8s.io/api/core/v1"
+	"github.com/sorenmat/k8s-rds/kube"
+	"github.com/sorenmat/k8s-rds/rds"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
-	corev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/clientcmd"
@@ -46,13 +45,13 @@ func getClientConfig(kubeconfig string) (*rest.Config, error) {
 	return cfg, err
 }
 
-func getKubectl() *kubernetes.Clientset {
+func getKubectl() (*kubernetes.Clientset, error) {
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		log.Println("Appears we are not running in a cluster")
 		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig())
 		if err != nil {
-			panic(err.Error())
+			return nil, err
 		}
 	} else {
 		log.Println("Seems like we are running in a Kubernetes cluster!!")
@@ -60,9 +59,9 @@ func getKubectl() *kubernetes.Clientset {
 
 	kubectl, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		log.Fatal(errors.Wrap(err, "unable create kubectl"))
+		return nil, err
 	}
-	return kubectl
+	return kubectl, nil
 }
 
 func ec2config() *aws.Config {
@@ -85,11 +84,14 @@ func ec2client() *ec2.EC2 {
 // We do this by findind a node in the cluster, take the VPC id from that node a list
 // the security groups in the VPC
 func getSubnets(public bool) ([]*string, error) {
-	kubectl := getKubectl()
+	kubectl, err := getKubectl()
+	if err != nil {
+		return nil, err
+	}
 
 	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
 	if err != nil {
-		log.Fatal("unable to get nodes")
+		return nil, errors.Wrap(err, "unable to get nodes")
 	}
 	name := ""
 	if len(nodes.Items) > 0 {
@@ -115,7 +117,7 @@ func getSubnets(public bool) ([]*string, error) {
 
 	res, err := svc.DescribeInstances(params)
 	if err != nil {
-		log.Fatal(err)
+		return nil, fmt.Errorf("unable to describe AWS instance")
 	}
 	var result []*string
 	if len(res.Reservations) >= 1 {
@@ -123,7 +125,7 @@ func getSubnets(public bool) ([]*string, error) {
 		log.Printf("Found VPC %v will search for subnet in that VPC\n", *vpcID)
 		subnets, err := svc.DescribeSubnets(&ec2.DescribeSubnetsInput{Filters: []*ec2.Filter{{Name: aws.String("vpc-id"), Values: []*string{vpcID}}}})
 		if err != nil {
-			log.Fatal(err)
+			return nil, errors.Wrap(err, fmt.Sprintf("unable to describe subnet in VPC %v", *vpcID))
 		}
 		for _, v := range subnets.Subnets {
 			if *v.MapPublicIpOnLaunch == public {
@@ -137,45 +139,6 @@ func getSubnets(public bool) ([]*string, error) {
 		log.Printf(*v + " ")
 	}
 	return result, nil
-}
-
-// create an External nameed service object for Kubernetes
-func createService(s *v1.Service, namespace string, hostname string, internalname string) *v1.Service {
-	var ports []v1.ServicePort
-
-	ports = append(ports, v1.ServicePort{
-		Name:       fmt.Sprintf("pgsql"),
-		Port:       int32(5432),
-		TargetPort: intstr.IntOrString{IntVal: int32(5432)},
-	})
-	s.Spec.Type = "ExternalName"
-	s.Spec.ExternalName = hostname
-
-	s.Spec.Ports = ports
-	s.Name = internalname
-	s.Annotations = map[string]string{"origin": "rds"}
-	s.Namespace = namespace
-	return s
-}
-
-// syncService Update the service in Kubernetes with the new information
-func syncService(serviceInterface corev1.ServiceInterface, namespace, hostname string, internalname string) error {
-	s, sErr := serviceInterface.Get(hostname, metav1.GetOptions{})
-
-	create := false
-	if sErr != nil {
-		s = &v1.Service{}
-		create = true
-	}
-	s = createService(s, namespace, hostname, internalname)
-	var err error
-	if create {
-		s, err = serviceInterface.Create(s)
-	} else {
-		s, err = serviceInterface.Update(s)
-	}
-
-	return err
 }
 
 func main() {
@@ -214,25 +177,64 @@ func main() {
 		cache.ResourceEventHandlerFuncs{
 			AddFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
-
+				// validate dbname is only alpha numeric
 				db.Status = crd.DatabaseStatus{Message: "Creating", State: "Creating"}
-				_, err = crdclient.Update(db)
+				db, err = crdclient.Update(db)
 				if err == nil {
 					log.Println("Database CRD updated")
 				} else {
 					log.Println("Database CRD update failed: ", err)
 				}
-				rds := RDS{}
-				err := rds.CreateDatabase(db, crdclient)
+				subnets, err := getSubnets(db.Spec.PubliclyAccessible)
 				if err != nil {
 					log.Println(err)
 				}
+				r := rds.RDS{EC2config: ec2config(), Subnets: subnets}
+				kubectl, err := getKubectl()
+				if err != nil {
+					log.Println(err)
+					return
+				}
+
+				k := kube.Kube{Client: kubectl}
+
+				pw, err := k.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
+				if err != nil {
+					log.Println(err)
+				}
+				hostname, err := r.CreateDatabase(db, crdclient, pw)
+				if err != nil {
+					log.Println(err)
+				}
+				log.Printf("Creating service '%v' for %v\n", db.Name, hostname)
+				k.CreateService(db.Namespace, hostname, db.Name)
+				db.Status = crd.DatabaseStatus{Message: "Created", State: "Created"}
+				db, err = crdclient.Update(db)
+				if err != nil {
+					log.Println(err)
+				}
+				log.Printf("Creation of database %v done\n", db.Name)
 			},
 			DeleteFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
 				log.Printf("deleting database: %s \n", db.Name)
-				rds := RDS{}
-				rds.DeleteDatabase(db)
+				subnets, err := getSubnets(db.Spec.PubliclyAccessible)
+				if err != nil {
+					log.Println(err)
+				}
+				r := rds.RDS{EC2config: ec2config(), Subnets: subnets}
+				r.DeleteDatabase(db)
+				kubectl, err := getKubectl()
+				if err != nil {
+					log.Println(err)
+					return
+				}
+				k := kube.Kube{Client: kubectl}
+				err = k.DeleteService(db.Namespace, db.Name)
+				if err != nil {
+					log.Println(err)
+				}
+				log.Printf("Deletion of database %v done\n", db.Name)
 			},
 			UpdateFunc: func(oldObj, newObj interface{}) {
 			},
