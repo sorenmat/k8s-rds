@@ -61,6 +61,6 @@ test-pgsql   11h
 
 And on the AWS RDS page
 
-![subnets](docs/subnets.png "DB instance subnets")
+![subnets](docs/subnet.png "DB instance subnets")
 
 ![instances](docs/instances.png "DB instance")
