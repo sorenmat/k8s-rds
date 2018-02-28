@@ -49,7 +49,7 @@ func (r *RDS) CreateDatabase(db *crd.Database, client *client.Crdclient, passwor
 	if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", db.Spec.DBName))
 	}
-	//waitForDBState(r.rdsclient(), db, "available")
+
 	// enable backup
 	mod := &rds.ModifyDBInstanceInput{DBInstanceIdentifier: aws.String(db.Spec.DBName), BackupRetentionPeriod: aws.Int64(1)}
 	_, err = r.rdsclient().ModifyDBInstance(mod)
@@ -112,8 +112,15 @@ func (r *RDS) DeleteDatabase(db *crd.Database) {
 	if err != nil {
 		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName)))
 	} else {
-		waitForDBState(svc, db, "deleted")
-		log.Println("Deleted DB instance: ", db.Spec.DBName)
+		log.Printf("Waiting for db instance %v to be deleted\n", db.Spec.DBName)
+		time.Sleep(5 * time.Second)
+		k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
+		err = r.rdsclient().WaitUntilDBInstanceDeleted(k)
+		if err != nil {
+			log.Println(err)
+		} else {
+			log.Println("Deleted DB instance: ", db.Spec.DBName)
+		}
 	}
 
 	// delete the subnet group attached to the instance
@@ -128,31 +135,6 @@ func (r *RDS) DeleteDatabase(db *crd.Database) {
 
 func (r *RDS) rdsclient() *rds.RDS {
 	return rds.New(session.New(r.EC2config))
-}
-
-// waitForDBState wait for the RDS resource to reach a certain state
-// This will check every 5 seconds
-func waitForDBState(svc *rds.RDS, db *crd.Database, state string) error {
-	var rdsdb *rds.DBInstance
-	start := time.Now()
-	for {
-		k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
-		result2, err := svc.DescribeDBInstances(k)
-		if err != nil {
-			log.Println(err)
-			return errors.Wrap(err, fmt.Sprintf("waitForDBState could not describe the db instance %v", db.Spec.DBName))
-		}
-		rdsdb = result2.DBInstances[0]
-
-		if *rdsdb.DBInstanceStatus == state {
-			break
-		}
-		log.Printf("Wait for db status to be %v was %v\n", state, *rdsdb.DBInstanceStatus)
-		time.Sleep(5 * time.Second)
-	}
-	stop := time.Now()
-	log.Printf("Wait for change took: %v sec\n", (stop.Unix() - start.Unix()))
-	return nil
 }
 
 func convertSpecToInput(v *crd.Database, subnetName string, password string) (*rds.CreateDBInstanceInput, error) {
