@@ -9,29 +9,13 @@ data:
 apiVersion: k8s.io/v1
 kind: Database
 metadata:
-  name: pgsql
+  name: mypgsql
   namespace: default
 spec:
   class: db.t2.medium
   engine: postgres
-  dbname: pgsql
-  name: pgsql
-  password:
-    key: mykey
-    name: mysecret
-  username: postgres
-  size: 10
----
-apiVersion: k8s.io/v1
-kind: Database
-metadata:
-  name: pgsql-two
-  namespace: default
-spec:
-  class: db.t2.medium
-  engine: postgres
-  dbname: pgsql-two
-  name: pgsql-two
+  dbname: thepgsql
+  name: thatpgsql
   password:
     key: mykey
     name: mysecret
