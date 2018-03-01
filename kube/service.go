@@ -50,9 +50,9 @@ func (k *Kube) CreateService(namespace string, hostname string, internalname str
 	s = k.createServiceObj(s, namespace, hostname, internalname)
 	var err error
 	if create {
-		s, err = serviceInterface.Create(s)
+		_, err = serviceInterface.Create(s)
 	} else {
-		s, err = serviceInterface.Update(s)
+		_, err = serviceInterface.Update(s)
 	}
 
 	return err

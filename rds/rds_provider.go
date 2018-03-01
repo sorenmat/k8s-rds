@@ -22,12 +22,13 @@ type RDS struct {
 // subnets are created for the database so we can access it
 func (r *RDS) CreateDatabase(db *crd.Database, client *client.Crdclient, password string) (string, error) {
 	// Ensure that the subnets for the DB is create or updated
-	subnetName := r.ensureSubnets(db)
-
-	input, err := convertSpecToInput(db, subnetName, password)
+	log.Println("Trying to find the correct subnets")
+	subnetName, err := r.ensureSubnets(db)
 	if err != nil {
-		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to get the secret for db %v", db.Spec.DBName))
+		return "", err
 	}
+
+	input := convertSpecToInput(db, subnetName, password)
 
 	// search for the instance
 	log.Printf("Trying to find db instance %v\n", db.Spec.DBName)
@@ -38,7 +39,7 @@ func (r *RDS) CreateDatabase(db *crd.Database, client *client.Crdclient, passwor
 		// seems like we didn't find a database with this name, let's create on
 		_, err = r.rdsclient().CreateDBInstance(input)
 		if err != nil {
-			return "", (errors.Wrap(err, "CreateDBInstance"))
+			return "", errors.Wrap(err, "CreateDBInstance")
 		}
 	} else if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", db.Spec.DBName))
@@ -66,7 +67,7 @@ func (r *RDS) CreateDatabase(db *crd.Database, client *client.Crdclient, passwor
 }
 
 // ensureSubnets is ensuring that we have created or updated the subnet according to the data from the CRD object
-func (r *RDS) ensureSubnets(db *crd.Database) string {
+func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 	subnetDescription := "subnet for " + db.Name + " in namespace " + db.Namespace
 	subnetName := db.Name + "-subnet"
 
@@ -84,10 +85,10 @@ func (r *RDS) ensureSubnets(db *crd.Database) string {
 		}
 		_, err := svc.CreateDBSubnetGroup(subnet)
 		if err != nil {
-			log.Println(errors.Wrap(err, "CreateDBSubnetGroup"))
+			return "", errors.Wrap(err, "CreateDBSubnetGroup")
 		}
 	}
-	return subnetName
+	return subnetName, nil
 }
 
 func getEndpoint(dbName string, svc *rds.RDS) (string, error) {
@@ -137,7 +138,7 @@ func (r *RDS) rdsclient() *rds.RDS {
 	return rds.New(session.New(r.EC2config))
 }
 
-func convertSpecToInput(v *crd.Database, subnetName string, password string) (*rds.CreateDBInstanceInput, error) {
+func convertSpecToInput(v *crd.Database, subnetName string, password string) *rds.CreateDBInstanceInput {
 	input := &rds.CreateDBInstanceInput{
 		DBName:                aws.String(v.Spec.DBName),
 		AllocatedStorage:      aws.Int64(v.Spec.Size),
@@ -158,5 +159,5 @@ func convertSpecToInput(v *crd.Database, subnetName string, password string) (*r
 	if v.Spec.Iops > 0 {
 		input.Iops = aws.Int64(v.Spec.Iops)
 	}
-	return input, nil
+	return input
 }
