@@ -29,8 +29,7 @@ func TestConvertSpecToInput(t *testing.T) {
 			Password:           v1.SecretKeySelector{LocalObjectReference: v1.LocalObjectReference{Name: "password"}, Key: "mypassword"},
 		},
 	}
-	i, err := convertSpecToInput(db, "mysubnet", "mypassword")
-	assert.NoError(t, err)
+	i := convertSpecToInput(db, "mysubnet", "mypassword")
 	assert.Equal(t, "mydb", *i.DBName)
 	assert.Equal(t, "postgres", *i.Engine)
 	assert.Equal(t, "mypassword", *i.MasterUserPassword)

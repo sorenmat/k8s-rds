@@ -117,7 +117,7 @@ func getSubnets(public bool) ([]*string, error) {
 
 	res, err := svc.DescribeInstances(params)
 	if err != nil {
-		return nil, fmt.Errorf("unable to describe AWS instance")
+		return nil, errors.Wrap(err, "unable to describe AWS instance")
 	}
 	var result []*string
 	if len(res.Reservations) >= 1 {
@@ -181,9 +181,9 @@ func main() {
 				db.Status = crd.DatabaseStatus{Message: "Creating", State: "Creating"}
 				db, err = crdclient.Update(db)
 				if err == nil {
-					log.Println("Database CRD updated")
+					log.Println("Database CRD status updated")
 				} else {
-					log.Println("Database CRD update failed: ", err)
+					log.Println("Database CRD status update failed: ", err)
 				}
 				subnets, err := getSubnets(db.Spec.PubliclyAccessible)
 				if err != nil {
