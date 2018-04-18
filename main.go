@@ -127,9 +127,11 @@ func getSubnets(public bool) ([]*string, error) {
 		if err != nil {
 			return nil, errors.Wrap(err, fmt.Sprintf("unable to describe subnet in VPC %v", *vpcID))
 		}
-		for _, v := range subnets.Subnets {
-			if *v.MapPublicIpOnLaunch == public {
-				result = append(result, v.SubnetId)
+		for _, sn := range subnets.Subnets {
+			if *sn.MapPublicIpOnLaunch == public {
+				result = append(result, sn.SubnetId)
+			} else {
+				log.Printf("Skipping subnet %v since it's public state was %v and we were looking for %v\n", sn.SubnetId, *sn.MapPublicIpOnLaunch, public)
 			}
 		}
 
