@@ -70,3 +70,10 @@ And on the AWS RDS page
 ![subnets](docs/subnet.png "DB instance subnets")
 
 ![instances](docs/instances.png "DB instance")
+
+# TODO
+
+[X] Basic RDS support
+[ ] Cluster support
+[ ] Google Cloud SQL for PostgreSQL support
+[ ] Local PostgreSQL support
