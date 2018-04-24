@@ -73,11 +73,11 @@ And on the AWS RDS page
 
 # TODO
 
-[X] Basic RDS support
+- [X] Basic RDS support
 
-[ ] Cluster support
+- [ ] Cluster support
 
-[ ] Google Cloud SQL for PostgreSQL support
+- [ ] Google Cloud SQL for PostgreSQL support
 
-[ ] Local PostgreSQL support
+- [ ] Local PostgreSQL support
 
