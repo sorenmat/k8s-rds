@@ -151,7 +151,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, password string) *rd
 		PubliclyAccessible:    aws.Bool(v.Spec.PubliclyAccessible),
 		MultiAZ:               aws.Bool(v.Spec.MultiAZ),
 		StorageEncrypted:      aws.Bool(v.Spec.StorageEncrypted),
-		BackupRetentionPeriod: aws.Int64(0), //disable backups
+		BackupRetentionPeriod: aws.Int64(v.Spec.BackupRetentionPeriod),
 	}
 	if v.Spec.StorageType != "" {
 		input.StorageType = aws.String(v.Spec.StorageType)

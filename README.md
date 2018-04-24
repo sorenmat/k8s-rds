@@ -41,15 +41,20 @@ metadata:
   name: pgsql
   namespace: default
 spec:
-  class: db.t2.medium
-  engine: postgres
-  dbname: pgsql
-  name: pgsql
-  password:
-    key: mykey
-    name: mysecret
-  username: postgres
-  size: 10
+  class: db.t2.medium # type of the db instance
+  engine: postgres # what engine to use postgres, mysql, aurora-postgresql etc.
+  dbname: pgsql # name of the initial created database
+  name: pgsql # name of the database at the provider
+  password: # link to database secret
+    key: mykey # the key in the secret
+    name: mysecret # the name of the secret
+  username: postgres # Database username
+  size: 10 # size in BG
+  backupretentionperiod: 10 # days to keep backup, 0 means diable
+  encrypted: true # should the database be encrypted
+  iops: 1000 # number of iops
+  multiaz: true # multi AZ support
+  storagetype: gp2 # type of the underlying storage
  
 ```
 
