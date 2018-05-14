@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/rds"
 	"github.com/pkg/errors"
 	"github.com/sorenmat/k8s-rds/client"
@@ -14,8 +15,9 @@ import (
 )
 
 type RDS struct {
-	EC2config *aws.Config
-	Subnets   []*string
+	EC2 *ec2.EC2
+	//EC2config *aws.Config
+	Subnets []*string
 }
 
 // CreateDatabase creates a database from the CRD database object, is also ensures that the correct
@@ -135,7 +137,7 @@ func (r *RDS) DeleteDatabase(db *crd.Database) {
 }
 
 func (r *RDS) rdsclient() *rds.RDS {
-	return rds.New(session.New(r.EC2config))
+	return rds.New(session.New(&r.EC2.Config))
 }
 
 func convertSpecToInput(v *crd.Database, subnetName string, password string) *rds.CreateDBInstanceInput {
