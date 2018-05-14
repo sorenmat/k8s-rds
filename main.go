@@ -30,6 +30,7 @@ func home() string {
 	}
 	return home
 }
+
 func kubeconfig() string {
 	return home() + "/.kube/config"
 }
@@ -64,20 +65,41 @@ func getKubectl() (*kubernetes.Clientset, error) {
 	return kubectl, nil
 }
 
-func ec2config() *aws.Config {
+func ec2config(region string) *aws.Config {
 	return &aws.Config{
-		Region: aws.String("eu-west-1"),
+		Region: aws.String(region),
 		CredentialsChainVerboseErrors: aws.Bool(true),
 	}
 }
 
-func ec2client() *ec2.EC2 {
-	ses, err := session.NewSession(ec2config())
+func ec2client() (*ec2.EC2, error) {
+	kubectl, err := getKubectl()
+	if err != nil {
+		return nil, err
+	}
+
+	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get nodes")
+	}
+	name := ""
+	region := ""
+
+	if len(nodes.Items) > 0 {
+		// take the first one, we assume that all nodes are created in the same VPC
+		name = nodes.Items[0].Spec.ExternalID
+		region = nodes.Items[0].Labels["failure-domain.beta.kubernetes.io/region"]
+	} else {
+		return nil, fmt.Errorf("unable to find any nodes in the cluster")
+	}
+	log.Println("Found node with ID: ", name)
+
+	ses, err := session.NewSession(ec2config(region))
 	if err != nil {
 		log.Fatal("unable to create session: ", err)
 	}
-	svc := ec2.New(ses, ec2config())
-	return svc
+	svc := ec2.New(ses, ec2config(region))
+	return svc, nil
 }
 
 // getSubnets returns a list of subnets that the RDS instance should be attached to
@@ -94,6 +116,7 @@ func getSubnets(public bool) ([]*string, error) {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
 	name := ""
+
 	if len(nodes.Items) > 0 {
 		// take the first one, we assume that all nodes are created in the same VPC
 		name = nodes.Items[0].Spec.ExternalID
@@ -102,7 +125,10 @@ func getSubnets(public bool) ([]*string, error) {
 	}
 	log.Println("Found node with ID: ", name)
 
-	svc := ec2client()
+	svc, err := ec2client()
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get EC2 client")
+	}
 
 	params := &ec2.DescribeInstancesInput{
 		Filters: []*ec2.Filter{
@@ -168,6 +194,10 @@ func main() {
 		panic(err)
 	}
 
+	ec2client, err := ec2client()
+	if err != nil {
+		log.Fatal("unable to create a client for EC2")
+	}
 	// Create a CRD client interface
 	crdclient := client.CrdClient(crdcs, scheme, "default")
 
@@ -191,7 +221,8 @@ func main() {
 				if err != nil {
 					log.Println(err)
 				}
-				r := rds.RDS{EC2config: ec2config(), Subnets: subnets}
+
+				r := rds.RDS{EC2: ec2client, Subnets: subnets}
 				kubectl, err := getKubectl()
 				if err != nil {
 					log.Println(err)
@@ -224,7 +255,7 @@ func main() {
 				if err != nil {
 					log.Println(err)
 				}
-				r := rds.RDS{EC2config: ec2config(), Subnets: subnets}
+				r := rds.RDS{EC2: ec2client, Subnets: subnets}
 				r.DeleteDatabase(db)
 				kubectl, err := getKubectl()
 				if err != nil {
