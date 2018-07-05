@@ -23,7 +23,7 @@ You can start the the controller by applying `kubectl apply -f deploy/deployment
 
 ## Deploying
 
-When the controller is running in the cluster you can deploy/crete a new database by running `kubectl apply` on the following
+When the controller is running in the cluster you can deploy/create a new database by running `kubectl apply` on the following
 file.
 
 ```yaml
