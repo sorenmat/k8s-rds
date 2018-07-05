@@ -5,19 +5,18 @@ import (
 	"log"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/aws/aws-sdk-go/service/rds"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/pkg/errors"
 	"github.com/sorenmat/k8s-rds/client"
 	"github.com/sorenmat/k8s-rds/crd"
 )
 
 type RDS struct {
-	EC2 *ec2.EC2
-	//EC2config *aws.Config
-	Subnets []*string
+	EC2            *ec2.EC2
+	Subnets        []string
+	SecurityGroups []string
 }
 
 // CreateDatabase creates a database from the CRD database object, is also ensures that the correct
@@ -30,16 +29,18 @@ func (r *RDS) CreateDatabase(db *crd.Database, client *client.Crdclient, passwor
 		return "", err
 	}
 
-	input := convertSpecToInput(db, subnetName, password)
+	input := convertSpecToInput(db, subnetName, r.SecurityGroups, password)
 
 	// search for the instance
 	log.Printf("Trying to find db instance %v\n", db.Spec.DBName)
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
-	_, err = r.rdsclient().DescribeDBInstances(k)
+	res := r.rdsclient().DescribeDBInstancesRequest(k)
+	_, err = res.Send()
 	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
 		log.Printf("DB instance %v not found trying to create it\n", db.Spec.DBName)
 		// seems like we didn't find a database with this name, let's create on
-		_, err = r.rdsclient().CreateDBInstance(input)
+		res := r.rdsclient().CreateDBInstanceRequest(input)
+		_, err = res.Send()
 		if err != nil {
 			return "", errors.Wrap(err, "CreateDBInstance")
 		}
@@ -55,7 +56,8 @@ func (r *RDS) CreateDatabase(db *crd.Database, client *client.Crdclient, passwor
 
 	// enable backup
 	mod := &rds.ModifyDBInstanceInput{DBInstanceIdentifier: aws.String(db.Spec.DBName), BackupRetentionPeriod: aws.Int64(1)}
-	_, err = r.rdsclient().ModifyDBInstance(mod)
+	mres := r.rdsclient().ModifyDBInstanceRequest(mod)
+	_, err = mres.Send()
 	if err != nil {
 		return "", (errors.Wrap(err, "enable backup"))
 	}
@@ -70,22 +72,28 @@ func (r *RDS) CreateDatabase(db *crd.Database, client *client.Crdclient, passwor
 
 // ensureSubnets is ensuring that we have created or updated the subnet according to the data from the CRD object
 func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
+	if len(r.Subnets) == 0 {
+		log.Println("Error: unable to continue due to lack of subnets, perhaps we couldn't lookup the subnets")
+	}
 	subnetDescription := "subnet for " + db.Name + " in namespace " + db.Namespace
 	subnetName := db.Name + "-subnet"
 
 	svc := r.rdsclient()
 
-	sf := &rds.DescribeDBSubnetGroupsInput{DBSubnetGroupName: aws.String(subnetName)}
-	_, err := svc.DescribeDBSubnetGroups(sf)
+	sf := &rds.DescribeDBSecurityGroupsInput{DBSecurityGroupName: aws.String(subnetName)}
+	res := svc.DescribeDBSecurityGroupsRequest(sf)
+	_, err := res.Send()
+	log.Println("Subnets:", r.Subnets)
 	if err != nil {
 		// assume we didn't find it..
 		subnet := &rds.CreateDBSubnetGroupInput{
 			DBSubnetGroupDescription: aws.String(subnetDescription),
 			DBSubnetGroupName:        aws.String(subnetName),
 			SubnetIds:                r.Subnets,
-			Tags:                     []*rds.Tag{{Key: aws.String("DBName"), Value: aws.String(db.Spec.DBName)}},
+			Tags:                     []rds.Tag{{Key: aws.String("DBName"), Value: aws.String(db.Spec.DBName)}},
 		}
-		_, err := svc.CreateDBSubnetGroup(subnet)
+		res := svc.CreateDBSubnetGroupRequest(subnet)
+		_, err := res.Send()
 		if err != nil {
 			return "", errors.Wrap(err, "CreateDBSubnetGroup")
 		}
@@ -95,7 +103,8 @@ func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 
 func getEndpoint(dbName string, svc *rds.RDS) (string, error) {
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(dbName)}
-	instance, err := svc.DescribeDBInstances(k)
+	res := svc.DescribeDBInstancesRequest(k)
+	instance, err := res.Send()
 	if err != nil || len(instance.DBInstances) == 0 {
 		return "", fmt.Errorf("wasn't able to describe the db instance with id %v", dbName)
 	}
@@ -108,10 +117,11 @@ func getEndpoint(dbName string, svc *rds.RDS) (string, error) {
 func (r *RDS) DeleteDatabase(db *crd.Database) {
 	// delete the database instance
 	svc := r.rdsclient()
-	_, err := svc.DeleteDBInstance(&rds.DeleteDBInstanceInput{
+	res := svc.DeleteDBInstanceRequest(&rds.DeleteDBInstanceInput{
 		DBInstanceIdentifier: aws.String(db.Spec.DBName),
 		SkipFinalSnapshot:    aws.Bool(true),
 	})
+	_, err := res.Send()
 	if err != nil {
 		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName)))
 	} else {
@@ -128,7 +138,8 @@ func (r *RDS) DeleteDatabase(db *crd.Database) {
 
 	// delete the subnet group attached to the instance
 	subnetName := db.Name + "-subnet"
-	_, err = svc.DeleteDBSubnetGroup(&rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
+	dres := svc.DeleteDBSubnetGroupRequest(&rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
+	_, err = dres.Send()
 	if err != nil {
 		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete subnet %v", subnetName)))
 	} else {
@@ -137,15 +148,16 @@ func (r *RDS) DeleteDatabase(db *crd.Database) {
 }
 
 func (r *RDS) rdsclient() *rds.RDS {
-	return rds.New(session.New(&r.EC2.Config))
+	return rds.New(r.EC2.Config)
 }
 
-func convertSpecToInput(v *crd.Database, subnetName string, password string) *rds.CreateDBInstanceInput {
+func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
 	input := &rds.CreateDBInstanceInput{
 		DBName:                aws.String(v.Spec.DBName),
 		AllocatedStorage:      aws.Int64(v.Spec.Size),
 		DBInstanceClass:       aws.String(v.Spec.Class),
 		DBInstanceIdentifier:  aws.String(v.Spec.DBName),
+		VpcSecurityGroupIds:   securityGroups,
 		Engine:                aws.String(v.Spec.Engine),
 		MasterUserPassword:    aws.String(string(password)),
 		MasterUsername:        aws.String(v.Spec.Username),
