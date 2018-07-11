@@ -55,8 +55,8 @@ func (f *Crdclient) Get(name string) (*crd.Database, error) {
 	return &result, err
 }
 
-func (f *Crdclient) List(opts meta_v1.ListOptions) (*crd.Database, error) {
-	var result crd.Database
+func (f *Crdclient) List(opts meta_v1.ListOptions) (*crd.DatabaseList, error) {
+	var result crd.DatabaseList
 	err := f.cl.Get().
 		Namespace(f.ns).Resource(f.plural).
 		VersionedParams(&opts, f.codec).

@@ -22,8 +22,8 @@
 
 
 [[constraint]]
-  name = "github.com/aws/aws-sdk-go"
-  version = "1.12.76"
+  name = "github.com/aws/aws-sdk-go-v2"
+  version = "v2.0.0-preview.4"
 
 [[constraint]]
   branch = "master"
