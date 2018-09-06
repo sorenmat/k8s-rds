@@ -355,7 +355,7 @@ func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clien
 	if err != nil {
 		log.Println(err)
 	}
-	hostname, err := r.CreateDatabase(db, crdclient, pw)
+	hostname, err := r.CreateDatabase(db, pw)
 	if err != nil {
 		log.Println(err)
 	}
