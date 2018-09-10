@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$TRAVIS_BRANCH" == "master" ]; then
+if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     docker build -t sorenmat/k8s-rds:$TRAVIS_BUILD_NUMBER .
     docker tag sorenmat/k8s-rds:$TRAVIS_BUILD_NUMBER sorenmat/k8s-rds:latest
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
