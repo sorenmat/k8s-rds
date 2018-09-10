@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/pkg/errors"
-	"github.com/sorenmat/k8s-rds/client"
 	"github.com/sorenmat/k8s-rds/crd"
 )
 
@@ -21,7 +20,7 @@ type RDS struct {
 
 // CreateDatabase creates a database from the CRD database object, is also ensures that the correct
 // subnets are created for the database so we can access it
-func (r *RDS) CreateDatabase(db *crd.Database, client *client.Crdclient, password string) (string, error) {
+func (r *RDS) CreateDatabase(db *crd.Database, password string) (string, error) {
 	// Ensure that the subnets for the DB is create or updated
 	log.Println("Trying to find the correct subnets")
 	subnetName, err := r.ensureSubnets(db)

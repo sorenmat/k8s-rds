@@ -108,7 +108,7 @@ func ec2client() (*ec2.EC2, error) {
 // getSubnets returns a list of subnets that the RDS instance should be attached to
 // We do this by finding a node in the cluster, take the VPC id from that node a list
 // the security groups in the VPC
-func getSubnets(public bool) ([]string, error) {
+func getSubnets(svc *ec2.EC2, public bool) ([]string, error) {
 	kubectl, err := getKubectl()
 	if err != nil {
 		return nil, err
@@ -127,11 +127,6 @@ func getSubnets(public bool) ([]string, error) {
 		return nil, fmt.Errorf("unable to find any nodes in the cluster")
 	}
 	log.Printf("Taking subnets from node %v", name)
-
-	svc, err := ec2client()
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to get EC2 client")
-	}
 
 	params := &ec2.DescribeInstancesInput{
 		Filters: []ec2.Filter{
@@ -182,7 +177,7 @@ func getSubnets(public bool) ([]string, error) {
 	return result, nil
 }
 
-func getSGS() ([]string, error) {
+func getSGS(svc *ec2.EC2) ([]string, error) {
 	kubectl, err := getKubectl()
 	if err != nil {
 		return nil, err
@@ -201,11 +196,6 @@ func getSGS() ([]string, error) {
 		return nil, fmt.Errorf("unable to find any nodes in the cluster")
 	}
 	log.Printf("Taking security groups from node %v", name)
-
-	svc, err := ec2client()
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to get EC2 client")
-	}
 
 	params := &ec2.DescribeInstancesInput{
 		Filters: []ec2.Filter{
@@ -285,7 +275,7 @@ func main() {
 			DeleteFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
 				log.Printf("deleting database: %s \n", db.Name)
-				subnets, err := getSubnets(db.Spec.PubliclyAccessible)
+				subnets, err := getSubnets(ec2client, db.Spec.PubliclyAccessible)
 				if err != nil {
 					log.Println(err)
 				}
@@ -329,13 +319,13 @@ func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clien
 		log.Println("Database CRD status update failed: ", err)
 	}
 	log.Println("trying to get subnets")
-	subnets, err := getSubnets(db.Spec.PubliclyAccessible)
+	subnets, err := getSubnets(ec2client, db.Spec.PubliclyAccessible)
 	if err != nil {
 		log.Println("unable to get subnets from instance: ", err)
 		return
 	}
 	log.Println("trying to get security groups")
-	sgs, err := getSGS()
+	sgs, err := getSGS(ec2client)
 	if err != nil {
 		log.Println("unable to get security groups from instance: ", err)
 		return
@@ -355,7 +345,7 @@ func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clien
 	if err != nil {
 		log.Println(err)
 	}
-	hostname, err := r.CreateDatabase(db, crdclient, pw)
+	hostname, err := r.CreateDatabase(db, pw)
 	if err != nil {
 		log.Println(err)
 	}
