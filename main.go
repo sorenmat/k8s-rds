@@ -135,7 +135,9 @@ func main() {
 		log.Fatal("unable to create a client for EC2")
 	}
 
-	dbprovider := dbprovider.AWSDBProvider{ec2client, }
+	dbprovider := dbprovider.AWSDBProvider{
+		Client: ec2client,
+	}
 
 	// Create a CRD client interface
 	crdclient := client.CrdClient(crdcs, scheme, "default")

@@ -13,7 +13,7 @@ import (
 )
 
 type AWSDBProvider struct {
-	ec2client 	*ec2.EC2
+	Client 	*ec2.EC2
 }
 
 
