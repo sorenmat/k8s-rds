@@ -135,21 +135,21 @@ func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
 
 func (aws AWSDBProvider) CreateDatabase(kubectl *kubernetes.Clientset, publicAccessible bool, password string, db *crd.Database) (string, error){
 	log.Println("trying to get subnets")
-	subnets, err := getSubnets(kubectl, aws.ec2client, db.Spec.PubliclyAccessible)
+	subnets, err := getSubnets(kubectl, aws.Client, db.Spec.PubliclyAccessible)
 	if err != nil {
 		//TODO: Wrap error
 		log.Println("unable to get subnets from instance: ", err)
 		return "",err
 	}
 	log.Println("trying to get security groups")
-	sgs, err := getSGS(kubectl, aws.ec2client)
+	sgs, err := getSGS(kubectl, aws.Client)
 	if err != nil {
 		//TODO: Wrap error
 		log.Println("unable to get security groups from instance: ", err)
 		return "",err
 	}
 
-	r := rds.RDS{EC2: aws.ec2client, Subnets: subnets, SecurityGroups: sgs}
+	r := rds.RDS{EC2: aws.Client, Subnets: subnets, SecurityGroups: sgs}
 	hostname, err := r.CreateDatabase(db, password)
 	if err != nil {
 		//TODO: Wrap error
@@ -161,11 +161,11 @@ func (aws AWSDBProvider) CreateDatabase(kubectl *kubernetes.Clientset, publicAcc
 
 func (aws AWSDBProvider) DeleteDatabase(kubectl *kubernetes.Clientset, db *crd.Database) (error) {
 	log.Printf("deleting database: %s \n", db.Name)
-	subnets, err := getSubnets(kubectl, aws.ec2client, db.Spec.PubliclyAccessible)
+	subnets, err := getSubnets(kubectl, aws.Client, db.Spec.PubliclyAccessible)
 	if err != nil {
 		log.Println(err)
 	}
-	r := rds.RDS{EC2: aws.ec2client, Subnets: subnets}
+	r := rds.RDS{EC2: aws.Client, Subnets: subnets}
 	r.DeleteDatabase(db)
 	return nil
 }
