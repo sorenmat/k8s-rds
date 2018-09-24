@@ -6,7 +6,7 @@ import (
 )
 
 type DBProvider interface {
-	CreateDatabase(kubectl *kubernetes.Clientset, publicAccessible bool, password string, db *crd.Database) (string,error)
+	CreateDatabase(kubectl *kubernetes.Clientset, db *crd.Database) (string,error)
 	DeleteDatabase(kubectl *kubernetes.Clientset, db *crd.Database) (error)
 }
 

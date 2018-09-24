@@ -9,7 +9,7 @@ type ContainerDBProvider struct {
 	kubectl *kubernetes.Clientset
 }
 
-func (provider ContainerDBProvider) CreateDatabase(kubectl *kubernetes.Clientset, publicAccessible bool, password string, db *crd.Database) (string,error) {
+func (provider ContainerDBProvider) CreateDatabase(kubectl *kubernetes.Clientset, db *crd.Database) (string,error) {
 	return "",nil
 }
 

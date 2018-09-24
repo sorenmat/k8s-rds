@@ -65,6 +65,24 @@ func getKubectl() (*kubernetes.Clientset, error) {
 	return kubectl, nil
 }
 
+func getDBProvider() (dbprovider.DBProvider,error) {
+	if inMinikube() {
+		return dbprovider.ContainerDBProvider{},nil
+	} else {
+		ec2client, err := ec2client()
+		if err != nil {
+			log.Fatal("unable to create a client for EC2")
+		}
+
+		return dbprovider.AWSDBProvider{
+			Client: ec2client,
+		},nil
+	}
+}
+func inMinikube() bool {
+	return false
+}
+
 func ec2config(region string) *aws.Config {
 	return &aws.Config{
 		Region: region,
@@ -130,14 +148,7 @@ func main() {
 		panic(err)
 	}
 
-	ec2client, err := ec2client()
-	if err != nil {
-		log.Fatal("unable to create a client for EC2")
-	}
-
-	dbprovider := dbprovider.AWSDBProvider{
-		Client: ec2client,
-	}
+	dbprovider := getDBProvider()
 
 	// Create a CRD client interface
 	crdclient := client.CrdClient(crdcs, scheme, "default")
@@ -211,7 +222,7 @@ func handleCreateDatabase(db *crd.Database, dbprovider dbprovider.DBProvider, cr
 	}
 
 	// AWS Stuff
-	hostname,err := dbprovider.CreateDatabase(kubectl, db.Spec.PubliclyAccessible, pw, db)
+	hostname,err := dbprovider.CreateDatabase(kubectl, db)
 	// End of AWS
 
 	log.Printf("Creating service '%v' for %v\n", db.Name, hostname)

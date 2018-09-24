@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/sorenmat/k8s-rds/kube"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"github.com/pkg/errors"
 	"github.com/sorenmat/k8s-rds/crd"
@@ -133,7 +134,15 @@ func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
 	return result, nil
 }
 
-func (aws AWSDBProvider) CreateDatabase(kubectl *kubernetes.Clientset, publicAccessible bool, password string, db *crd.Database) (string, error){
+func (aws AWSDBProvider) CreateDatabase(kubectl *kubernetes.Clientset, db *crd.Database) (string, error){
+	k := kube.Kube{Client: kubectl}
+
+	password,err := k.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
+	if err != nil {
+		//TODO: Wrap error
+		return "", err
+	}
+
 	log.Println("trying to get subnets")
 	subnets, err := getSubnets(kubectl, aws.Client, db.Spec.PubliclyAccessible)
 	if err != nil {
@@ -163,7 +172,8 @@ func (aws AWSDBProvider) DeleteDatabase(kubectl *kubernetes.Clientset, db *crd.D
 	log.Printf("deleting database: %s \n", db.Name)
 	subnets, err := getSubnets(kubectl, aws.Client, db.Spec.PubliclyAccessible)
 	if err != nil {
-		log.Println(err)
+		//TODO: Wrap error
+		return err
 	}
 	r := rds.RDS{EC2: aws.Client, Subnets: subnets}
 	r.DeleteDatabase(db)
