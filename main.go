@@ -22,6 +22,8 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
+const Failed = "Failed"
+
 func home() string {
 	dir, err := homedir.Dir()
 	home, err := homedir.Expand(dir)
@@ -261,7 +263,7 @@ func main() {
 		log.Fatal("unable to create a client for EC2")
 	}
 	// Create a CRD client interface
-	crdclient := client.CrdClient(crdcs, scheme, "default")
+	crdclient := client.CrdClient(crdcs, scheme, "")
 	log.Println("Watching for database changes...")
 	_, controller := cache.NewInformer(
 		crdclient.NewListWatch(),
@@ -270,7 +272,14 @@ func main() {
 		cache.ResourceEventHandlerFuncs{
 			AddFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
-				go handleCreateDatabase(db, ec2client, crdclient)
+				client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
+				err = handleCreateDatabase(db, ec2client, client)
+				if err != nil {
+					err := updateStatus(db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, client)
+					if err != nil {
+						log.Printf("database CRD status update failed: %v", err)
+					}
+				}
 			},
 			DeleteFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
@@ -305,56 +314,67 @@ func main() {
 	select {}
 }
 
-func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *client.Crdclient) {
+func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *client.Crdclient) error {
 	if db.Status.State == "Created" {
-		log.Printf("Database %v already created, skipping...", db.Name)
-		return
+		log.Printf("database %v already created, skipping\n", db.Name)
+		return nil
 	}
 	// validate dbname is only alpha numeric
-	db.Status = crd.DatabaseStatus{Message: "Creating", State: "Creating"}
-	db, err := crdclient.Update(db)
-	if err == nil {
-		log.Println("Database CRD status updated")
-	} else {
-		log.Println("Database CRD status update failed: ", err)
+	err := updateStatus(db, crd.DatabaseStatus{Message: "Creating", State: "Creating"}, crdclient)
+	if err != nil {
+		return fmt.Errorf("database CRD status update failed: %v", err)
 	}
 	log.Println("trying to get subnets")
 	subnets, err := getSubnets(ec2client, db.Spec.PubliclyAccessible)
 	if err != nil {
-		log.Println("unable to get subnets from instance: ", err)
-		return
+		return fmt.Errorf("unable to get subnets from instance: %v", err)
+
 	}
 	log.Println("trying to get security groups")
 	sgs, err := getSGS(ec2client)
 	if err != nil {
-		log.Println("unable to get security groups from instance: ", err)
-		return
+		return fmt.Errorf("unable to get security groups from instance: %v", err)
+
 	}
 
 	r := rds.RDS{EC2: ec2client, Subnets: subnets, SecurityGroups: sgs}
 	log.Println("trying to get kubectl")
 	kubectl, err := getKubectl()
 	if err != nil {
-		log.Println(err)
-		return
+		return err
 	}
 
 	k := kube.Kube{Client: kubectl}
-	log.Println("getting secret")
+	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
 	pw, err := k.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
 	if err != nil {
-		log.Println(err)
+		return err
 	}
 	hostname, err := r.CreateDatabase(db, pw)
 	if err != nil {
-		log.Println(err)
+		return err
 	}
 	log.Printf("Creating service '%v' for %v\n", db.Name, hostname)
 	k.CreateService(db.Namespace, hostname, db.Name)
-	db.Status = crd.DatabaseStatus{Message: "Created", State: "Created"}
-	db, err = crdclient.Update(db)
+
+	err = updateStatus(db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
 	if err != nil {
-		log.Println(err)
+		return err
 	}
 	log.Printf("Creation of database %v done\n", db.Name)
+	return nil
+}
+
+func updateStatus(db *crd.Database, status crd.DatabaseStatus, crdclient *client.Crdclient) error {
+	db, err := crdclient.Get(db.Name)
+	if err != nil {
+		return err
+	}
+
+	db.Status = status
+	db, err = crdclient.Update(db)
+	if err != nil {
+		return err
+	}
+	return nil
 }
