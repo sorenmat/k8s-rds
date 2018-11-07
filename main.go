@@ -260,7 +260,7 @@ func main() {
 
 	ec2client, err := ec2client()
 	if err != nil {
-		log.Fatal("unable to create a client for EC2")
+		log.Fatal("unable to create a client for EC2 ", err)
 	}
 	// Create a CRD client interface
 	crdclient := client.CrdClient(crdcs, scheme, "")
