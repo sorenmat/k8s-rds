@@ -275,6 +275,7 @@ func main() {
 				client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
 				err = handleCreateDatabase(db, ec2client, client)
 				if err != nil {
+					log.Printf("database creation failed: %v", err)
 					err := updateStatus(db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, client)
 					if err != nil {
 						log.Printf("database CRD status update failed: %v", err)
