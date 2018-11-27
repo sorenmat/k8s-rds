@@ -32,7 +32,7 @@ func (r *RDS) CreateDatabase(db *crd.Database, password string) (string, error) 
 
 	// search for the instance
 	log.Printf("Trying to find db instance %v\n", db.Spec.DBName)
-	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
+	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
 	res := r.rdsclient().DescribeDBInstancesRequest(k)
 	_, err = res.Send()
 	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
@@ -44,25 +44,17 @@ func (r *RDS) CreateDatabase(db *crd.Database, password string) (string, error) 
 			return "", errors.Wrap(err, "CreateDBInstance")
 		}
 	} else if err != nil {
-		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", db.Spec.DBName))
+		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", input.DBInstanceIdentifier))
 	}
-	log.Printf("Waiting for db instance %v to become available\n", db.Spec.DBName)
+	log.Printf("Waiting for db instance %v to become available\n", input.DBInstanceIdentifier)
 	time.Sleep(5 * time.Second)
 	err = r.rdsclient().WaitUntilDBInstanceAvailable(k)
 	if err != nil {
-		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", db.Spec.DBName))
-	}
-
-	// enable backup
-	mod := &rds.ModifyDBInstanceInput{DBInstanceIdentifier: aws.String(db.Spec.DBName), BackupRetentionPeriod: aws.Int64(1)}
-	mres := r.rdsclient().ModifyDBInstanceRequest(mod)
-	_, err = mres.Send()
-	if err != nil {
-		return "", (errors.Wrap(err, "enable backup"))
+		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", input.DBInstanceIdentifier))
 	}
 
 	// Get the newly created database so we can get the endpoint
-	dbHostname, err := getEndpoint(db.Spec.DBName, r.rdsclient())
+	dbHostname, err := getEndpoint(input.DBInstanceIdentifier, r.rdsclient())
 	if err != nil {
 		return "", err
 	}
@@ -79,8 +71,8 @@ func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 
 	svc := r.rdsclient()
 
-	sf := &rds.DescribeDBSecurityGroupsInput{DBSecurityGroupName: aws.String(subnetName)}
-	res := svc.DescribeDBSecurityGroupsRequest(sf)
+	sf := &rds.DescribeDBSubnetGroupsInput{DBSubnetGroupName: aws.String(subnetName)}
+	res := svc.DescribeDBSubnetGroupsRequest(sf)
 	_, err := res.Send()
 	log.Println("Subnets:", r.Subnets)
 	if err != nil {
@@ -96,12 +88,14 @@ func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 		if err != nil {
 			return "", errors.Wrap(err, "CreateDBSubnetGroup")
 		}
+	} else {
+		log.Printf("Moving on seems like %v exsits", subnetName)
 	}
 	return subnetName, nil
 }
 
-func getEndpoint(dbName string, svc *rds.RDS) (string, error) {
-	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(dbName)}
+func getEndpoint(dbName *string, svc *rds.RDS) (string, error) {
+	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: dbName}
 	res := svc.DescribeDBInstancesRequest(k)
 	instance, err := res.Send()
 	if err != nil || len(instance.DBInstances) == 0 {
