@@ -155,7 +155,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 		DBName:                aws.String(v.Spec.DBName),
 		AllocatedStorage:      aws.Int64(v.Spec.Size),
 		DBInstanceClass:       aws.String(v.Spec.Class),
-		DBInstanceIdentifier:  aws.String(v.Spec.DBName),
+		DBInstanceIdentifier:  aws.String(v.Name + "-" + v.Namespace),
 		VpcSecurityGroupIds:   securityGroups,
 		Engine:                aws.String(v.Spec.Engine),
 		MasterUserPassword:    aws.String(password),
