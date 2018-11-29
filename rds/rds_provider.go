@@ -67,7 +67,7 @@ func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 		log.Println("Error: unable to continue due to lack of subnets, perhaps we couldn't lookup the subnets")
 	}
 	subnetDescription := "subnet for " + db.Name + " in namespace " + db.Namespace
-	subnetName := db.Name + "-subnet"
+	subnetName := db.Name + "-subnet-" + db.Namespace
 
 	svc := r.rdsclient()
 
