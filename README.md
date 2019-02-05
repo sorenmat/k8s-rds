@@ -21,6 +21,17 @@ The codes will search for the first node, and take the subnets from that node. A
 
 You can start the the controller by applying `kubectl apply -f deploy/deployment.yaml`
 
+### RBAC deployment
+
+To create ClusterRole and bindings, apply the following instead:
+
+```shell
+kubectl apply -f deploy/operator-cluster-role.yaml
+kubectl apply -f deploy/operator-service-account.yaml
+kubectl apply -f deploy/operator-cluster-role-binding.yaml
+kubectl apply -f deploy/deployment-rbac.yaml
+```
+
 ## Deploying
 
 When the controller is running in the cluster you can deploy/create a new database by running `kubectl apply` on the following
