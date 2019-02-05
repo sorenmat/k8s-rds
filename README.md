@@ -62,18 +62,69 @@ spec:
   username: postgres # Database username
   size: 10 # size in BG
   backupretentionperiod: 10 # days to keep backup, 0 means diable
+  parametergroup: default.postgres10
   encrypted: true # should the database be encrypted
   iops: 1000 # number of iops
   multiaz: true # multi AZ support
   storagetype: gp2 # type of the underlying storage
- 
 ```
+
+Note that `backupretentionperiod` may be:
+- 0: backup are disabled
+- unspecified: default value (1) is used
+
+See AWS reference documentation for details.
+
 
 After the deploy is done you should be able to see your database via `kubectl get databases`
 
 ```shell
 NAME         AGE
 test-pgsql   11h
+```
+
+### Restore from Snapshot
+
+If you use the `dbsnapshotidentifier` spec, it will create the database instance from the specified snapshot.
+
+In this case, note that:
+- `username` cannot be changed from snapshot original username and is not taken in account
+- `encrypted` cannot be changed from snapshot orignial encryption and is not taken in account
+- `password` may be empty (or unspecified): it will keep the password from snapshot
+- `size` may be 0 (or unspecified): it will keep the original size from snapshot
+- `backupretentionperiod` may be unspecified: it will keep the original retention period from snapshot
+
+Any of following options need to be applied once database instance has been restored if specified:
+- `password`
+- `size`
+- `backupretentionperiod`
+
+### Subnets and Security Group Ids
+
+By default, subnets are detected automatically from cluster and a dedicated Database Subnet group is created and deleted by the operator.
+
+You can override this by:
+* specifying a list of VPC subnets (at least 2)
+```yaml
+spec:
+  subnets:
+  - subnet-0a378a72330fea864
+  - subnet-0c4fb739e201fc2a3
+  - subnet-0739bd9fa24055c4b
+```
+A dedicated Database Subnet group is still created / deleted by the operator.
+
+* specifying directly a Database Subnet group that you manage (the operator will not try to create or delete it):
+```yaml
+spec:
+  subnetgroup: rds-subnet-group
+```
+
+Security group ids are also detected automatically and you can override with the following spec:
+```yaml
+spec:
+  securitygroups:
+  - sg-13cbg6c2
 ```
 
 And on the AWS RDS page
@@ -85,6 +136,8 @@ And on the AWS RDS page
 # TODO
 
 - [X] Basic RDS support
+
+- [X] Basic RDS support (Restore from snapshot)
 
 - [ ] Cluster support
 

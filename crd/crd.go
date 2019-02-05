@@ -54,15 +54,20 @@ type DatabaseSpec struct {
 	Username              string               `json:"username"`
 	Password              v1.SecretKeySelector `json:"password"`
 	DBName                string               `json:"dbname"`
-	Engine                string               `json:"engine"` // "postgres"
-	Class                 string               `json:"class"`  // like "db.t2.micro"
-	Size                  int64                `json:"size"`   // size in gb
+	DBSnapshotIdentifier  string               `json:"dbsnapshotidentifier,omitempty"` // "rds:...." will trigger a restore snapshot
+	Engine                string               `json:"engine"`                         // "postgres"
+	Class                 string               `json:"class"`                          // like "db.t2.micro"
+	Size                  int64                `json:"size"`                           // size in gb
 	MultiAZ               bool                 `json:"multiaz,omitempty"`
 	PubliclyAccessible    bool                 `json:"publicaccess,omitempty"`
+	SecurityGroups        []string             `json:"securitygroups"`
+	Subnets               []string             `json:"subnets"`
+	DBSubnetGroupName     string               `json:"subnetgroup,omitempty"`    // DB subnet group name
+	DBParameterGroupName  string               `json:"parametergroup,omitempty"` // DB parameter group name
 	StorageEncrypted      bool                 `json:"encrypted,omitempty"`
 	StorageType           string               `json:"storagetype,omitempty"`
 	Iops                  int64                `json:"iops,omitempty"`
-	BackupRetentionPeriod int64                `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
+	BackupRetentionPeriod *int64               `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
 }
 
 type DatabaseStatus struct {

@@ -285,9 +285,13 @@ func main() {
 			DeleteFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
 				log.Printf("deleting database: %s \n", db.Name)
-				subnets, err := getSubnets(ec2client, db.Spec.PubliclyAccessible)
-				if err != nil {
-					log.Println(err)
+				subnets := db.Spec.Subnets
+				if db.Spec.DBSubnetGroupName == "" && len(subnets) < 2 {
+					log.Println("trying to get subnets")
+					subnets, err = getSubnets(ec2client, db.Spec.PubliclyAccessible)
+					if err != nil {
+						log.Println(err)
+					}
 				}
 				r := rds.RDS{EC2: ec2client, Subnets: subnets}
 				r.DeleteDatabase(db)
@@ -325,17 +329,21 @@ func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clien
 	if err != nil {
 		return fmt.Errorf("database CRD status update failed: %v", err)
 	}
-	log.Println("trying to get subnets")
-	subnets, err := getSubnets(ec2client, db.Spec.PubliclyAccessible)
-	if err != nil {
-		return fmt.Errorf("unable to get subnets from instance: %v", err)
-
+	subnets := db.Spec.Subnets
+	if db.Spec.DBSubnetGroupName == "" && len(subnets) < 2 {
+		log.Println("trying to get subnets")
+		subnets, err = getSubnets(ec2client, db.Spec.PubliclyAccessible)
+		if err != nil {
+			return fmt.Errorf("unable to get subnets from instance: %v", err)
+		}
 	}
-	log.Println("trying to get security groups")
-	sgs, err := getSGS(ec2client)
-	if err != nil {
-		return fmt.Errorf("unable to get security groups from instance: %v", err)
-
+	sgs := db.Spec.SecurityGroups
+	if len(sgs) == 0 {
+		log.Println("trying to get security groups")
+		sgs, err = getSGS(ec2client)
+		if err != nil {
+			return fmt.Errorf("unable to get security groups from instance: %v", err)
+		}
 	}
 
 	r := rds.RDS{EC2: ec2client, Subnets: subnets, SecurityGroups: sgs}
@@ -346,10 +354,14 @@ func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clien
 	}
 
 	k := kube.Kube{Client: kubectl}
-	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
-	pw, err := k.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
-	if err != nil {
-		return err
+
+	pw := ""
+	if db.Spec.Password.Name != "" && db.Spec.Password.Key != "" {
+		log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
+		pw, err = k.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
+		if err != nil {
+			return err
+		}
 	}
 	hostname, err := r.CreateDatabase(db, pw)
 	if err != nil {
