@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: k8s-rds
-  namespace: default  
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -18,4 +18,6 @@ spec:
         imagePullPolicy: Always
         name: k8s-rds
       restartPolicy: Always
-
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
