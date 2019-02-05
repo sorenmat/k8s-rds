@@ -66,6 +66,54 @@ func (c *IoT) AcceptCertificateTransferRequest(input *AcceptCertificateTransferI
 	return AcceptCertificateTransferRequest{Request: req, Input: input, Copy: c.AcceptCertificateTransferRequest}
 }
 
+const opAddThingToBillingGroup = "AddThingToBillingGroup"
+
+// AddThingToBillingGroupRequest is a API request type for the AddThingToBillingGroup API operation.
+type AddThingToBillingGroupRequest struct {
+	*aws.Request
+	Input *AddThingToBillingGroupInput
+	Copy  func(*AddThingToBillingGroupInput) AddThingToBillingGroupRequest
+}
+
+// Send marshals and sends the AddThingToBillingGroup API request.
+func (r AddThingToBillingGroupRequest) Send() (*AddThingToBillingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*AddThingToBillingGroupOutput), nil
+}
+
+// AddThingToBillingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Adds a thing to a billing group.
+//
+//    // Example sending a request using the AddThingToBillingGroupRequest method.
+//    req := client.AddThingToBillingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) AddThingToBillingGroupRequest(input *AddThingToBillingGroupInput) AddThingToBillingGroupRequest {
+	op := &aws.Operation{
+		Name:       opAddThingToBillingGroup,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/billing-groups/addThingToBillingGroup",
+	}
+
+	if input == nil {
+		input = &AddThingToBillingGroupInput{}
+	}
+
+	output := &AddThingToBillingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return AddThingToBillingGroupRequest{Request: req, Input: input, Copy: c.AddThingToBillingGroupRequest}
+}
+
 const opAddThingToThingGroup = "AddThingToThingGroup"
 
 // AddThingToThingGroupRequest is a API request type for the AddThingToThingGroup API operation.
@@ -276,6 +324,56 @@ func (c *IoT) AttachPrincipalPolicyRequest(input *AttachPrincipalPolicyInput) At
 	return AttachPrincipalPolicyRequest{Request: req, Input: input, Copy: c.AttachPrincipalPolicyRequest}
 }
 
+const opAttachSecurityProfile = "AttachSecurityProfile"
+
+// AttachSecurityProfileRequest is a API request type for the AttachSecurityProfile API operation.
+type AttachSecurityProfileRequest struct {
+	*aws.Request
+	Input *AttachSecurityProfileInput
+	Copy  func(*AttachSecurityProfileInput) AttachSecurityProfileRequest
+}
+
+// Send marshals and sends the AttachSecurityProfile API request.
+func (r AttachSecurityProfileRequest) Send() (*AttachSecurityProfileOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*AttachSecurityProfileOutput), nil
+}
+
+// AttachSecurityProfileRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Associates a Device Defender security profile with a thing group or with
+// this account. Each thing group or account can have up to five security profiles
+// associated with it.
+//
+//    // Example sending a request using the AttachSecurityProfileRequest method.
+//    req := client.AttachSecurityProfileRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) AttachSecurityProfileRequest(input *AttachSecurityProfileInput) AttachSecurityProfileRequest {
+	op := &aws.Operation{
+		Name:       opAttachSecurityProfile,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/security-profiles/{securityProfileName}/targets",
+	}
+
+	if input == nil {
+		input = &AttachSecurityProfileInput{}
+	}
+
+	output := &AttachSecurityProfileOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return AttachSecurityProfileRequest{Request: req, Input: input, Copy: c.AttachSecurityProfileRequest}
+}
+
 const opAttachThingPrincipal = "AttachThingPrincipal"
 
 // AttachThingPrincipalRequest is a API request type for the AttachThingPrincipal API operation.
@@ -322,6 +420,56 @@ func (c *IoT) AttachThingPrincipalRequest(input *AttachThingPrincipalInput) Atta
 	output.responseMetadata = aws.Response{Request: req}
 
 	return AttachThingPrincipalRequest{Request: req, Input: input, Copy: c.AttachThingPrincipalRequest}
+}
+
+const opCancelAuditTask = "CancelAuditTask"
+
+// CancelAuditTaskRequest is a API request type for the CancelAuditTask API operation.
+type CancelAuditTaskRequest struct {
+	*aws.Request
+	Input *CancelAuditTaskInput
+	Copy  func(*CancelAuditTaskInput) CancelAuditTaskRequest
+}
+
+// Send marshals and sends the CancelAuditTask API request.
+func (r CancelAuditTaskRequest) Send() (*CancelAuditTaskOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CancelAuditTaskOutput), nil
+}
+
+// CancelAuditTaskRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Cancels an audit that is in progress. The audit can be either scheduled or
+// on-demand. If the audit is not in progress, an "InvalidRequestException"
+// occurs.
+//
+//    // Example sending a request using the CancelAuditTaskRequest method.
+//    req := client.CancelAuditTaskRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) CancelAuditTaskRequest(input *CancelAuditTaskInput) CancelAuditTaskRequest {
+	op := &aws.Operation{
+		Name:       opCancelAuditTask,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/audit/tasks/{taskId}/cancel",
+	}
+
+	if input == nil {
+		input = &CancelAuditTaskInput{}
+	}
+
+	output := &CancelAuditTaskOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CancelAuditTaskRequest{Request: req, Input: input, Copy: c.CancelAuditTaskRequest}
 }
 
 const opCancelCertificateTransfer = "CancelCertificateTransfer"
@@ -431,6 +579,56 @@ func (c *IoT) CancelJobRequest(input *CancelJobInput) CancelJobRequest {
 	return CancelJobRequest{Request: req, Input: input, Copy: c.CancelJobRequest}
 }
 
+const opCancelJobExecution = "CancelJobExecution"
+
+// CancelJobExecutionRequest is a API request type for the CancelJobExecution API operation.
+type CancelJobExecutionRequest struct {
+	*aws.Request
+	Input *CancelJobExecutionInput
+	Copy  func(*CancelJobExecutionInput) CancelJobExecutionRequest
+}
+
+// Send marshals and sends the CancelJobExecution API request.
+func (r CancelJobExecutionRequest) Send() (*CancelJobExecutionOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CancelJobExecutionOutput), nil
+}
+
+// CancelJobExecutionRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Cancels the execution of a job for a given thing.
+//
+//    // Example sending a request using the CancelJobExecutionRequest method.
+//    req := client.CancelJobExecutionRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) CancelJobExecutionRequest(input *CancelJobExecutionInput) CancelJobExecutionRequest {
+	op := &aws.Operation{
+		Name:       opCancelJobExecution,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/things/{thingName}/jobs/{jobId}/cancel",
+	}
+
+	if input == nil {
+		input = &CancelJobExecutionInput{}
+	}
+
+	output := &CancelJobExecutionOutput{}
+	req := c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CancelJobExecutionRequest{Request: req, Input: input, Copy: c.CancelJobExecutionRequest}
+}
+
 const opClearDefaultAuthorizer = "ClearDefaultAuthorizer"
 
 // ClearDefaultAuthorizerRequest is a API request type for the ClearDefaultAuthorizer API operation.
@@ -527,6 +725,54 @@ func (c *IoT) CreateAuthorizerRequest(input *CreateAuthorizerInput) CreateAuthor
 	return CreateAuthorizerRequest{Request: req, Input: input, Copy: c.CreateAuthorizerRequest}
 }
 
+const opCreateBillingGroup = "CreateBillingGroup"
+
+// CreateBillingGroupRequest is a API request type for the CreateBillingGroup API operation.
+type CreateBillingGroupRequest struct {
+	*aws.Request
+	Input *CreateBillingGroupInput
+	Copy  func(*CreateBillingGroupInput) CreateBillingGroupRequest
+}
+
+// Send marshals and sends the CreateBillingGroup API request.
+func (r CreateBillingGroupRequest) Send() (*CreateBillingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CreateBillingGroupOutput), nil
+}
+
+// CreateBillingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Creates a billing group.
+//
+//    // Example sending a request using the CreateBillingGroupRequest method.
+//    req := client.CreateBillingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) CreateBillingGroupRequest(input *CreateBillingGroupInput) CreateBillingGroupRequest {
+	op := &aws.Operation{
+		Name:       opCreateBillingGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/billing-groups/{billingGroupName}",
+	}
+
+	if input == nil {
+		input = &CreateBillingGroupInput{}
+	}
+
+	output := &CreateBillingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CreateBillingGroupRequest{Request: req, Input: input, Copy: c.CreateBillingGroupRequest}
+}
+
 const opCreateCertificateFromCsr = "CreateCertificateFromCsr"
 
 // CreateCertificateFromCsrRequest is a API request type for the CreateCertificateFromCsr API operation.
@@ -614,6 +860,54 @@ func (c *IoT) CreateCertificateFromCsrRequest(input *CreateCertificateFromCsrInp
 	output.responseMetadata = aws.Response{Request: req}
 
 	return CreateCertificateFromCsrRequest{Request: req, Input: input, Copy: c.CreateCertificateFromCsrRequest}
+}
+
+const opCreateDynamicThingGroup = "CreateDynamicThingGroup"
+
+// CreateDynamicThingGroupRequest is a API request type for the CreateDynamicThingGroup API operation.
+type CreateDynamicThingGroupRequest struct {
+	*aws.Request
+	Input *CreateDynamicThingGroupInput
+	Copy  func(*CreateDynamicThingGroupInput) CreateDynamicThingGroupRequest
+}
+
+// Send marshals and sends the CreateDynamicThingGroup API request.
+func (r CreateDynamicThingGroupRequest) Send() (*CreateDynamicThingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CreateDynamicThingGroupOutput), nil
+}
+
+// CreateDynamicThingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Creates a dynamic thing group.
+//
+//    // Example sending a request using the CreateDynamicThingGroupRequest method.
+//    req := client.CreateDynamicThingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) CreateDynamicThingGroupRequest(input *CreateDynamicThingGroupInput) CreateDynamicThingGroupRequest {
+	op := &aws.Operation{
+		Name:       opCreateDynamicThingGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/dynamic-thing-groups/{thingGroupName}",
+	}
+
+	if input == nil {
+		input = &CreateDynamicThingGroupInput{}
+	}
+
+	output := &CreateDynamicThingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CreateDynamicThingGroupRequest{Request: req, Input: input, Copy: c.CreateDynamicThingGroupRequest}
 }
 
 const opCreateJob = "CreateJob"
@@ -919,6 +1213,102 @@ func (c *IoT) CreateRoleAliasRequest(input *CreateRoleAliasInput) CreateRoleAlia
 	return CreateRoleAliasRequest{Request: req, Input: input, Copy: c.CreateRoleAliasRequest}
 }
 
+const opCreateScheduledAudit = "CreateScheduledAudit"
+
+// CreateScheduledAuditRequest is a API request type for the CreateScheduledAudit API operation.
+type CreateScheduledAuditRequest struct {
+	*aws.Request
+	Input *CreateScheduledAuditInput
+	Copy  func(*CreateScheduledAuditInput) CreateScheduledAuditRequest
+}
+
+// Send marshals and sends the CreateScheduledAudit API request.
+func (r CreateScheduledAuditRequest) Send() (*CreateScheduledAuditOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CreateScheduledAuditOutput), nil
+}
+
+// CreateScheduledAuditRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Creates a scheduled audit that is run at a specified time interval.
+//
+//    // Example sending a request using the CreateScheduledAuditRequest method.
+//    req := client.CreateScheduledAuditRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) CreateScheduledAuditRequest(input *CreateScheduledAuditInput) CreateScheduledAuditRequest {
+	op := &aws.Operation{
+		Name:       opCreateScheduledAudit,
+		HTTPMethod: "POST",
+		HTTPPath:   "/audit/scheduledaudits/{scheduledAuditName}",
+	}
+
+	if input == nil {
+		input = &CreateScheduledAuditInput{}
+	}
+
+	output := &CreateScheduledAuditOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CreateScheduledAuditRequest{Request: req, Input: input, Copy: c.CreateScheduledAuditRequest}
+}
+
+const opCreateSecurityProfile = "CreateSecurityProfile"
+
+// CreateSecurityProfileRequest is a API request type for the CreateSecurityProfile API operation.
+type CreateSecurityProfileRequest struct {
+	*aws.Request
+	Input *CreateSecurityProfileInput
+	Copy  func(*CreateSecurityProfileInput) CreateSecurityProfileRequest
+}
+
+// Send marshals and sends the CreateSecurityProfile API request.
+func (r CreateSecurityProfileRequest) Send() (*CreateSecurityProfileOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CreateSecurityProfileOutput), nil
+}
+
+// CreateSecurityProfileRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Creates a Device Defender security profile.
+//
+//    // Example sending a request using the CreateSecurityProfileRequest method.
+//    req := client.CreateSecurityProfileRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) CreateSecurityProfileRequest(input *CreateSecurityProfileInput) CreateSecurityProfileRequest {
+	op := &aws.Operation{
+		Name:       opCreateSecurityProfile,
+		HTTPMethod: "POST",
+		HTTPPath:   "/security-profiles/{securityProfileName}",
+	}
+
+	if input == nil {
+		input = &CreateSecurityProfileInput{}
+	}
+
+	output := &CreateSecurityProfileOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CreateSecurityProfileRequest{Request: req, Input: input, Copy: c.CreateSecurityProfileRequest}
+}
+
 const opCreateStream = "CreateStream"
 
 // CreateStreamRequest is a API request type for the CreateStream API operation.
@@ -997,6 +1387,9 @@ func (r CreateThingRequest) Send() (*CreateThingOutput, error) {
 //
 // Creates a thing record in the registry.
 //
+// This is a control plane operation. See Authorization (http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html)
+// for information about authorizing control plane actions.
+//
 //    // Example sending a request using the CreateThingRequest method.
 //    req := client.CreateThingRequest(params)
 //    resp, err := req.Send()
@@ -1044,6 +1437,9 @@ func (r CreateThingGroupRequest) Send() (*CreateThingGroupOutput, error) {
 // AWS IoT.
 //
 // Create a thing group.
+//
+// This is a control plane operation. See Authorization (http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html)
+// for information about authorizing control plane actions.
 //
 //    // Example sending a request using the CreateThingGroupRequest method.
 //    req := client.CreateThingGroupRequest(params)
@@ -1169,6 +1565,56 @@ func (c *IoT) CreateTopicRuleRequest(input *CreateTopicRuleInput) CreateTopicRul
 	return CreateTopicRuleRequest{Request: req, Input: input, Copy: c.CreateTopicRuleRequest}
 }
 
+const opDeleteAccountAuditConfiguration = "DeleteAccountAuditConfiguration"
+
+// DeleteAccountAuditConfigurationRequest is a API request type for the DeleteAccountAuditConfiguration API operation.
+type DeleteAccountAuditConfigurationRequest struct {
+	*aws.Request
+	Input *DeleteAccountAuditConfigurationInput
+	Copy  func(*DeleteAccountAuditConfigurationInput) DeleteAccountAuditConfigurationRequest
+}
+
+// Send marshals and sends the DeleteAccountAuditConfiguration API request.
+func (r DeleteAccountAuditConfigurationRequest) Send() (*DeleteAccountAuditConfigurationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteAccountAuditConfigurationOutput), nil
+}
+
+// DeleteAccountAuditConfigurationRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Restores the default settings for Device Defender audits for this account.
+// Any configuration data you entered is deleted and all audit checks are reset
+// to disabled.
+//
+//    // Example sending a request using the DeleteAccountAuditConfigurationRequest method.
+//    req := client.DeleteAccountAuditConfigurationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DeleteAccountAuditConfigurationRequest(input *DeleteAccountAuditConfigurationInput) DeleteAccountAuditConfigurationRequest {
+	op := &aws.Operation{
+		Name:       opDeleteAccountAuditConfiguration,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/audit/configuration",
+	}
+
+	if input == nil {
+		input = &DeleteAccountAuditConfigurationInput{}
+	}
+
+	output := &DeleteAccountAuditConfigurationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteAccountAuditConfigurationRequest{Request: req, Input: input, Copy: c.DeleteAccountAuditConfigurationRequest}
+}
+
 const opDeleteAuthorizer = "DeleteAuthorizer"
 
 // DeleteAuthorizerRequest is a API request type for the DeleteAuthorizer API operation.
@@ -1215,6 +1661,54 @@ func (c *IoT) DeleteAuthorizerRequest(input *DeleteAuthorizerInput) DeleteAuthor
 	output.responseMetadata = aws.Response{Request: req}
 
 	return DeleteAuthorizerRequest{Request: req, Input: input, Copy: c.DeleteAuthorizerRequest}
+}
+
+const opDeleteBillingGroup = "DeleteBillingGroup"
+
+// DeleteBillingGroupRequest is a API request type for the DeleteBillingGroup API operation.
+type DeleteBillingGroupRequest struct {
+	*aws.Request
+	Input *DeleteBillingGroupInput
+	Copy  func(*DeleteBillingGroupInput) DeleteBillingGroupRequest
+}
+
+// Send marshals and sends the DeleteBillingGroup API request.
+func (r DeleteBillingGroupRequest) Send() (*DeleteBillingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteBillingGroupOutput), nil
+}
+
+// DeleteBillingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Deletes the billing group.
+//
+//    // Example sending a request using the DeleteBillingGroupRequest method.
+//    req := client.DeleteBillingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DeleteBillingGroupRequest(input *DeleteBillingGroupInput) DeleteBillingGroupRequest {
+	op := &aws.Operation{
+		Name:       opDeleteBillingGroup,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/billing-groups/{billingGroupName}",
+	}
+
+	if input == nil {
+		input = &DeleteBillingGroupInput{}
+	}
+
+	output := &DeleteBillingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteBillingGroupRequest{Request: req, Input: input, Copy: c.DeleteBillingGroupRequest}
 }
 
 const opDeleteCACertificate = "DeleteCACertificate"
@@ -1318,6 +1812,54 @@ func (c *IoT) DeleteCertificateRequest(input *DeleteCertificateInput) DeleteCert
 	output.responseMetadata = aws.Response{Request: req}
 
 	return DeleteCertificateRequest{Request: req, Input: input, Copy: c.DeleteCertificateRequest}
+}
+
+const opDeleteDynamicThingGroup = "DeleteDynamicThingGroup"
+
+// DeleteDynamicThingGroupRequest is a API request type for the DeleteDynamicThingGroup API operation.
+type DeleteDynamicThingGroupRequest struct {
+	*aws.Request
+	Input *DeleteDynamicThingGroupInput
+	Copy  func(*DeleteDynamicThingGroupInput) DeleteDynamicThingGroupRequest
+}
+
+// Send marshals and sends the DeleteDynamicThingGroup API request.
+func (r DeleteDynamicThingGroupRequest) Send() (*DeleteDynamicThingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteDynamicThingGroupOutput), nil
+}
+
+// DeleteDynamicThingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Deletes a dynamic thing group.
+//
+//    // Example sending a request using the DeleteDynamicThingGroupRequest method.
+//    req := client.DeleteDynamicThingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DeleteDynamicThingGroupRequest(input *DeleteDynamicThingGroupInput) DeleteDynamicThingGroupRequest {
+	op := &aws.Operation{
+		Name:       opDeleteDynamicThingGroup,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/dynamic-thing-groups/{thingGroupName}",
+	}
+
+	if input == nil {
+		input = &DeleteDynamicThingGroupInput{}
+	}
+
+	output := &DeleteDynamicThingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteDynamicThingGroupRequest{Request: req, Input: input, Copy: c.DeleteDynamicThingGroupRequest}
 }
 
 const opDeleteJob = "DeleteJob"
@@ -1686,6 +2228,102 @@ func (c *IoT) DeleteRoleAliasRequest(input *DeleteRoleAliasInput) DeleteRoleAlia
 	return DeleteRoleAliasRequest{Request: req, Input: input, Copy: c.DeleteRoleAliasRequest}
 }
 
+const opDeleteScheduledAudit = "DeleteScheduledAudit"
+
+// DeleteScheduledAuditRequest is a API request type for the DeleteScheduledAudit API operation.
+type DeleteScheduledAuditRequest struct {
+	*aws.Request
+	Input *DeleteScheduledAuditInput
+	Copy  func(*DeleteScheduledAuditInput) DeleteScheduledAuditRequest
+}
+
+// Send marshals and sends the DeleteScheduledAudit API request.
+func (r DeleteScheduledAuditRequest) Send() (*DeleteScheduledAuditOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteScheduledAuditOutput), nil
+}
+
+// DeleteScheduledAuditRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Deletes a scheduled audit.
+//
+//    // Example sending a request using the DeleteScheduledAuditRequest method.
+//    req := client.DeleteScheduledAuditRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DeleteScheduledAuditRequest(input *DeleteScheduledAuditInput) DeleteScheduledAuditRequest {
+	op := &aws.Operation{
+		Name:       opDeleteScheduledAudit,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/audit/scheduledaudits/{scheduledAuditName}",
+	}
+
+	if input == nil {
+		input = &DeleteScheduledAuditInput{}
+	}
+
+	output := &DeleteScheduledAuditOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteScheduledAuditRequest{Request: req, Input: input, Copy: c.DeleteScheduledAuditRequest}
+}
+
+const opDeleteSecurityProfile = "DeleteSecurityProfile"
+
+// DeleteSecurityProfileRequest is a API request type for the DeleteSecurityProfile API operation.
+type DeleteSecurityProfileRequest struct {
+	*aws.Request
+	Input *DeleteSecurityProfileInput
+	Copy  func(*DeleteSecurityProfileInput) DeleteSecurityProfileRequest
+}
+
+// Send marshals and sends the DeleteSecurityProfile API request.
+func (r DeleteSecurityProfileRequest) Send() (*DeleteSecurityProfileOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteSecurityProfileOutput), nil
+}
+
+// DeleteSecurityProfileRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Deletes a Device Defender security profile.
+//
+//    // Example sending a request using the DeleteSecurityProfileRequest method.
+//    req := client.DeleteSecurityProfileRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DeleteSecurityProfileRequest(input *DeleteSecurityProfileInput) DeleteSecurityProfileRequest {
+	op := &aws.Operation{
+		Name:       opDeleteSecurityProfile,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/security-profiles/{securityProfileName}",
+	}
+
+	if input == nil {
+		input = &DeleteSecurityProfileInput{}
+	}
+
+	output := &DeleteSecurityProfileOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteSecurityProfileRequest{Request: req, Input: input, Copy: c.DeleteSecurityProfileRequest}
+}
+
 const opDeleteStream = "DeleteStream"
 
 // DeleteStreamRequest is a API request type for the DeleteStream API operation.
@@ -1756,7 +2394,8 @@ func (r DeleteThingRequest) Send() (*DeleteThingOutput, error) {
 // DeleteThingRequest returns a request value for making API operation for
 // AWS IoT.
 //
-// Deletes the specified thing.
+// Deletes the specified thing. Returns successfully with no error if the deletion
+// is successful or you specify a thing that doesn't exist.
 //
 //    // Example sending a request using the DeleteThingRequest method.
 //    req := client.DeleteThingRequest(params)
@@ -1852,7 +2491,7 @@ func (r DeleteThingTypeRequest) Send() (*DeleteThingTypeOutput, error) {
 // DeleteThingTypeRequest returns a request value for making API operation for
 // AWS IoT.
 //
-// Deletes the specified thing type . You cannot delete a thing type if it has
+// Deletes the specified thing type. You cannot delete a thing type if it has
 // things associated with it. To delete a thing type, first mark it as deprecated
 // by calling DeprecateThingType, then remove any associated things by calling
 // UpdateThing to change the thing type on any associated thing, and finally
@@ -2031,6 +2670,104 @@ func (c *IoT) DeprecateThingTypeRequest(input *DeprecateThingTypeInput) Deprecat
 	return DeprecateThingTypeRequest{Request: req, Input: input, Copy: c.DeprecateThingTypeRequest}
 }
 
+const opDescribeAccountAuditConfiguration = "DescribeAccountAuditConfiguration"
+
+// DescribeAccountAuditConfigurationRequest is a API request type for the DescribeAccountAuditConfiguration API operation.
+type DescribeAccountAuditConfigurationRequest struct {
+	*aws.Request
+	Input *DescribeAccountAuditConfigurationInput
+	Copy  func(*DescribeAccountAuditConfigurationInput) DescribeAccountAuditConfigurationRequest
+}
+
+// Send marshals and sends the DescribeAccountAuditConfiguration API request.
+func (r DescribeAccountAuditConfigurationRequest) Send() (*DescribeAccountAuditConfigurationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeAccountAuditConfigurationOutput), nil
+}
+
+// DescribeAccountAuditConfigurationRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Gets information about the Device Defender audit settings for this account.
+// Settings include how audit notifications are sent and which audit checks
+// are enabled or disabled.
+//
+//    // Example sending a request using the DescribeAccountAuditConfigurationRequest method.
+//    req := client.DescribeAccountAuditConfigurationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DescribeAccountAuditConfigurationRequest(input *DescribeAccountAuditConfigurationInput) DescribeAccountAuditConfigurationRequest {
+	op := &aws.Operation{
+		Name:       opDescribeAccountAuditConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/audit/configuration",
+	}
+
+	if input == nil {
+		input = &DescribeAccountAuditConfigurationInput{}
+	}
+
+	output := &DescribeAccountAuditConfigurationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeAccountAuditConfigurationRequest{Request: req, Input: input, Copy: c.DescribeAccountAuditConfigurationRequest}
+}
+
+const opDescribeAuditTask = "DescribeAuditTask"
+
+// DescribeAuditTaskRequest is a API request type for the DescribeAuditTask API operation.
+type DescribeAuditTaskRequest struct {
+	*aws.Request
+	Input *DescribeAuditTaskInput
+	Copy  func(*DescribeAuditTaskInput) DescribeAuditTaskRequest
+}
+
+// Send marshals and sends the DescribeAuditTask API request.
+func (r DescribeAuditTaskRequest) Send() (*DescribeAuditTaskOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeAuditTaskOutput), nil
+}
+
+// DescribeAuditTaskRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Gets information about a Device Defender audit.
+//
+//    // Example sending a request using the DescribeAuditTaskRequest method.
+//    req := client.DescribeAuditTaskRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DescribeAuditTaskRequest(input *DescribeAuditTaskInput) DescribeAuditTaskRequest {
+	op := &aws.Operation{
+		Name:       opDescribeAuditTask,
+		HTTPMethod: "GET",
+		HTTPPath:   "/audit/tasks/{taskId}",
+	}
+
+	if input == nil {
+		input = &DescribeAuditTaskInput{}
+	}
+
+	output := &DescribeAuditTaskOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeAuditTaskRequest{Request: req, Input: input, Copy: c.DescribeAuditTaskRequest}
+}
+
 const opDescribeAuthorizer = "DescribeAuthorizer"
 
 // DescribeAuthorizerRequest is a API request type for the DescribeAuthorizer API operation.
@@ -2077,6 +2814,54 @@ func (c *IoT) DescribeAuthorizerRequest(input *DescribeAuthorizerInput) Describe
 	output.responseMetadata = aws.Response{Request: req}
 
 	return DescribeAuthorizerRequest{Request: req, Input: input, Copy: c.DescribeAuthorizerRequest}
+}
+
+const opDescribeBillingGroup = "DescribeBillingGroup"
+
+// DescribeBillingGroupRequest is a API request type for the DescribeBillingGroup API operation.
+type DescribeBillingGroupRequest struct {
+	*aws.Request
+	Input *DescribeBillingGroupInput
+	Copy  func(*DescribeBillingGroupInput) DescribeBillingGroupRequest
+}
+
+// Send marshals and sends the DescribeBillingGroup API request.
+func (r DescribeBillingGroupRequest) Send() (*DescribeBillingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeBillingGroupOutput), nil
+}
+
+// DescribeBillingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Returns information about a billing group.
+//
+//    // Example sending a request using the DescribeBillingGroupRequest method.
+//    req := client.DescribeBillingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DescribeBillingGroupRequest(input *DescribeBillingGroupInput) DescribeBillingGroupRequest {
+	op := &aws.Operation{
+		Name:       opDescribeBillingGroup,
+		HTTPMethod: "GET",
+		HTTPPath:   "/billing-groups/{billingGroupName}",
+	}
+
+	if input == nil {
+		input = &DescribeBillingGroupInput{}
+	}
+
+	output := &DescribeBillingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeBillingGroupRequest{Request: req, Input: input, Copy: c.DescribeBillingGroupRequest}
 }
 
 const opDescribeCACertificate = "DescribeCACertificate"
@@ -2511,6 +3296,102 @@ func (c *IoT) DescribeRoleAliasRequest(input *DescribeRoleAliasInput) DescribeRo
 	return DescribeRoleAliasRequest{Request: req, Input: input, Copy: c.DescribeRoleAliasRequest}
 }
 
+const opDescribeScheduledAudit = "DescribeScheduledAudit"
+
+// DescribeScheduledAuditRequest is a API request type for the DescribeScheduledAudit API operation.
+type DescribeScheduledAuditRequest struct {
+	*aws.Request
+	Input *DescribeScheduledAuditInput
+	Copy  func(*DescribeScheduledAuditInput) DescribeScheduledAuditRequest
+}
+
+// Send marshals and sends the DescribeScheduledAudit API request.
+func (r DescribeScheduledAuditRequest) Send() (*DescribeScheduledAuditOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeScheduledAuditOutput), nil
+}
+
+// DescribeScheduledAuditRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Gets information about a scheduled audit.
+//
+//    // Example sending a request using the DescribeScheduledAuditRequest method.
+//    req := client.DescribeScheduledAuditRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DescribeScheduledAuditRequest(input *DescribeScheduledAuditInput) DescribeScheduledAuditRequest {
+	op := &aws.Operation{
+		Name:       opDescribeScheduledAudit,
+		HTTPMethod: "GET",
+		HTTPPath:   "/audit/scheduledaudits/{scheduledAuditName}",
+	}
+
+	if input == nil {
+		input = &DescribeScheduledAuditInput{}
+	}
+
+	output := &DescribeScheduledAuditOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeScheduledAuditRequest{Request: req, Input: input, Copy: c.DescribeScheduledAuditRequest}
+}
+
+const opDescribeSecurityProfile = "DescribeSecurityProfile"
+
+// DescribeSecurityProfileRequest is a API request type for the DescribeSecurityProfile API operation.
+type DescribeSecurityProfileRequest struct {
+	*aws.Request
+	Input *DescribeSecurityProfileInput
+	Copy  func(*DescribeSecurityProfileInput) DescribeSecurityProfileRequest
+}
+
+// Send marshals and sends the DescribeSecurityProfile API request.
+func (r DescribeSecurityProfileRequest) Send() (*DescribeSecurityProfileOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeSecurityProfileOutput), nil
+}
+
+// DescribeSecurityProfileRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Gets information about a Device Defender security profile.
+//
+//    // Example sending a request using the DescribeSecurityProfileRequest method.
+//    req := client.DescribeSecurityProfileRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DescribeSecurityProfileRequest(input *DescribeSecurityProfileInput) DescribeSecurityProfileRequest {
+	op := &aws.Operation{
+		Name:       opDescribeSecurityProfile,
+		HTTPMethod: "GET",
+		HTTPPath:   "/security-profiles/{securityProfileName}",
+	}
+
+	if input == nil {
+		input = &DescribeSecurityProfileInput{}
+	}
+
+	output := &DescribeSecurityProfileOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeSecurityProfileRequest{Request: req, Input: input, Copy: c.DescribeSecurityProfileRequest}
+}
+
 const opDescribeStream = "DescribeStream"
 
 // DescribeStreamRequest is a API request type for the DescribeStream API operation.
@@ -2856,6 +3737,55 @@ func (c *IoT) DetachPrincipalPolicyRequest(input *DetachPrincipalPolicyInput) De
 	return DetachPrincipalPolicyRequest{Request: req, Input: input, Copy: c.DetachPrincipalPolicyRequest}
 }
 
+const opDetachSecurityProfile = "DetachSecurityProfile"
+
+// DetachSecurityProfileRequest is a API request type for the DetachSecurityProfile API operation.
+type DetachSecurityProfileRequest struct {
+	*aws.Request
+	Input *DetachSecurityProfileInput
+	Copy  func(*DetachSecurityProfileInput) DetachSecurityProfileRequest
+}
+
+// Send marshals and sends the DetachSecurityProfile API request.
+func (r DetachSecurityProfileRequest) Send() (*DetachSecurityProfileOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DetachSecurityProfileOutput), nil
+}
+
+// DetachSecurityProfileRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Disassociates a Device Defender security profile from a thing group or from
+// this account.
+//
+//    // Example sending a request using the DetachSecurityProfileRequest method.
+//    req := client.DetachSecurityProfileRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DetachSecurityProfileRequest(input *DetachSecurityProfileInput) DetachSecurityProfileRequest {
+	op := &aws.Operation{
+		Name:       opDetachSecurityProfile,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/security-profiles/{securityProfileName}/targets",
+	}
+
+	if input == nil {
+		input = &DetachSecurityProfileInput{}
+	}
+
+	output := &DetachSecurityProfileOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DetachSecurityProfileRequest{Request: req, Input: input, Copy: c.DetachSecurityProfileRequest}
+}
+
 const opDetachThingPrincipal = "DetachThingPrincipal"
 
 // DetachThingPrincipalRequest is a API request type for the DetachThingPrincipal API operation.
@@ -2879,6 +3809,9 @@ func (r DetachThingPrincipalRequest) Send() (*DetachThingPrincipalOutput, error)
 // AWS IoT.
 //
 // Detaches the specified principal from the specified thing.
+//
+// This call is asynchronous. It might take several seconds for the detachment
+// to propagate.
 //
 //    // Example sending a request using the DetachThingPrincipalRequest method.
 //    req := client.DetachThingPrincipalRequest(params)
@@ -3026,7 +3959,8 @@ func (r GetEffectivePoliciesRequest) Send() (*GetEffectivePoliciesOutput, error)
 // GetEffectivePoliciesRequest returns a request value for making API operation for
 // AWS IoT.
 //
-// Gets effective policies.
+// Gets a list of the policies that have an effect on the authorization behavior
+// of the specified device when it connects to the AWS IoT device gateway.
 //
 //    // Example sending a request using the GetEffectivePoliciesRequest method.
 //    req := client.GetEffectivePoliciesRequest(params)
@@ -3171,6 +4105,8 @@ func (r GetLoggingOptionsRequest) Send() (*GetLoggingOptionsOutput, error) {
 // AWS IoT.
 //
 // Gets the logging options.
+//
+// NOTE: use of this command is not recommended. Use GetV2LoggingOptions instead.
 //
 //    // Example sending a request using the GetLoggingOptionsRequest method.
 //    req := client.GetLoggingOptionsRequest(params)
@@ -3485,6 +4421,54 @@ func (c *IoT) GetV2LoggingOptionsRequest(input *GetV2LoggingOptionsInput) GetV2L
 	return GetV2LoggingOptionsRequest{Request: req, Input: input, Copy: c.GetV2LoggingOptionsRequest}
 }
 
+const opListActiveViolations = "ListActiveViolations"
+
+// ListActiveViolationsRequest is a API request type for the ListActiveViolations API operation.
+type ListActiveViolationsRequest struct {
+	*aws.Request
+	Input *ListActiveViolationsInput
+	Copy  func(*ListActiveViolationsInput) ListActiveViolationsRequest
+}
+
+// Send marshals and sends the ListActiveViolations API request.
+func (r ListActiveViolationsRequest) Send() (*ListActiveViolationsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListActiveViolationsOutput), nil
+}
+
+// ListActiveViolationsRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the active violations for a given Device Defender security profile.
+//
+//    // Example sending a request using the ListActiveViolationsRequest method.
+//    req := client.ListActiveViolationsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListActiveViolationsRequest(input *ListActiveViolationsInput) ListActiveViolationsRequest {
+	op := &aws.Operation{
+		Name:       opListActiveViolations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/active-violations",
+	}
+
+	if input == nil {
+		input = &ListActiveViolationsInput{}
+	}
+
+	output := &ListActiveViolationsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListActiveViolationsRequest{Request: req, Input: input, Copy: c.ListActiveViolationsRequest}
+}
+
 const opListAttachedPolicies = "ListAttachedPolicies"
 
 // ListAttachedPoliciesRequest is a API request type for the ListAttachedPolicies API operation.
@@ -3533,6 +4517,105 @@ func (c *IoT) ListAttachedPoliciesRequest(input *ListAttachedPoliciesInput) List
 	return ListAttachedPoliciesRequest{Request: req, Input: input, Copy: c.ListAttachedPoliciesRequest}
 }
 
+const opListAuditFindings = "ListAuditFindings"
+
+// ListAuditFindingsRequest is a API request type for the ListAuditFindings API operation.
+type ListAuditFindingsRequest struct {
+	*aws.Request
+	Input *ListAuditFindingsInput
+	Copy  func(*ListAuditFindingsInput) ListAuditFindingsRequest
+}
+
+// Send marshals and sends the ListAuditFindings API request.
+func (r ListAuditFindingsRequest) Send() (*ListAuditFindingsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListAuditFindingsOutput), nil
+}
+
+// ListAuditFindingsRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the findings (results) of a Device Defender audit or of the audits
+// performed during a specified time period. (Findings are retained for 180
+// days.)
+//
+//    // Example sending a request using the ListAuditFindingsRequest method.
+//    req := client.ListAuditFindingsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListAuditFindingsRequest(input *ListAuditFindingsInput) ListAuditFindingsRequest {
+	op := &aws.Operation{
+		Name:       opListAuditFindings,
+		HTTPMethod: "POST",
+		HTTPPath:   "/audit/findings",
+	}
+
+	if input == nil {
+		input = &ListAuditFindingsInput{}
+	}
+
+	output := &ListAuditFindingsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListAuditFindingsRequest{Request: req, Input: input, Copy: c.ListAuditFindingsRequest}
+}
+
+const opListAuditTasks = "ListAuditTasks"
+
+// ListAuditTasksRequest is a API request type for the ListAuditTasks API operation.
+type ListAuditTasksRequest struct {
+	*aws.Request
+	Input *ListAuditTasksInput
+	Copy  func(*ListAuditTasksInput) ListAuditTasksRequest
+}
+
+// Send marshals and sends the ListAuditTasks API request.
+func (r ListAuditTasksRequest) Send() (*ListAuditTasksOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListAuditTasksOutput), nil
+}
+
+// ListAuditTasksRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the Device Defender audits that have been performed during a given
+// time period.
+//
+//    // Example sending a request using the ListAuditTasksRequest method.
+//    req := client.ListAuditTasksRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListAuditTasksRequest(input *ListAuditTasksInput) ListAuditTasksRequest {
+	op := &aws.Operation{
+		Name:       opListAuditTasks,
+		HTTPMethod: "GET",
+		HTTPPath:   "/audit/tasks",
+	}
+
+	if input == nil {
+		input = &ListAuditTasksInput{}
+	}
+
+	output := &ListAuditTasksOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListAuditTasksRequest{Request: req, Input: input, Copy: c.ListAuditTasksRequest}
+}
+
 const opListAuthorizers = "ListAuthorizers"
 
 // ListAuthorizersRequest is a API request type for the ListAuthorizers API operation.
@@ -3579,6 +4662,54 @@ func (c *IoT) ListAuthorizersRequest(input *ListAuthorizersInput) ListAuthorizer
 	output.responseMetadata = aws.Response{Request: req}
 
 	return ListAuthorizersRequest{Request: req, Input: input, Copy: c.ListAuthorizersRequest}
+}
+
+const opListBillingGroups = "ListBillingGroups"
+
+// ListBillingGroupsRequest is a API request type for the ListBillingGroups API operation.
+type ListBillingGroupsRequest struct {
+	*aws.Request
+	Input *ListBillingGroupsInput
+	Copy  func(*ListBillingGroupsInput) ListBillingGroupsRequest
+}
+
+// Send marshals and sends the ListBillingGroups API request.
+func (r ListBillingGroupsRequest) Send() (*ListBillingGroupsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListBillingGroupsOutput), nil
+}
+
+// ListBillingGroupsRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the billing groups you have created.
+//
+//    // Example sending a request using the ListBillingGroupsRequest method.
+//    req := client.ListBillingGroupsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListBillingGroupsRequest(input *ListBillingGroupsInput) ListBillingGroupsRequest {
+	op := &aws.Operation{
+		Name:       opListBillingGroups,
+		HTTPMethod: "GET",
+		HTTPPath:   "/billing-groups",
+	}
+
+	if input == nil {
+		input = &ListBillingGroupsInput{}
+	}
+
+	output := &ListBillingGroupsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListBillingGroupsRequest{Request: req, Input: input, Copy: c.ListBillingGroupsRequest}
 }
 
 const opListCACertificates = "ListCACertificates"
@@ -4318,6 +5449,152 @@ func (c *IoT) ListRoleAliasesRequest(input *ListRoleAliasesInput) ListRoleAliase
 	return ListRoleAliasesRequest{Request: req, Input: input, Copy: c.ListRoleAliasesRequest}
 }
 
+const opListScheduledAudits = "ListScheduledAudits"
+
+// ListScheduledAuditsRequest is a API request type for the ListScheduledAudits API operation.
+type ListScheduledAuditsRequest struct {
+	*aws.Request
+	Input *ListScheduledAuditsInput
+	Copy  func(*ListScheduledAuditsInput) ListScheduledAuditsRequest
+}
+
+// Send marshals and sends the ListScheduledAudits API request.
+func (r ListScheduledAuditsRequest) Send() (*ListScheduledAuditsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListScheduledAuditsOutput), nil
+}
+
+// ListScheduledAuditsRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists all of your scheduled audits.
+//
+//    // Example sending a request using the ListScheduledAuditsRequest method.
+//    req := client.ListScheduledAuditsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListScheduledAuditsRequest(input *ListScheduledAuditsInput) ListScheduledAuditsRequest {
+	op := &aws.Operation{
+		Name:       opListScheduledAudits,
+		HTTPMethod: "GET",
+		HTTPPath:   "/audit/scheduledaudits",
+	}
+
+	if input == nil {
+		input = &ListScheduledAuditsInput{}
+	}
+
+	output := &ListScheduledAuditsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListScheduledAuditsRequest{Request: req, Input: input, Copy: c.ListScheduledAuditsRequest}
+}
+
+const opListSecurityProfiles = "ListSecurityProfiles"
+
+// ListSecurityProfilesRequest is a API request type for the ListSecurityProfiles API operation.
+type ListSecurityProfilesRequest struct {
+	*aws.Request
+	Input *ListSecurityProfilesInput
+	Copy  func(*ListSecurityProfilesInput) ListSecurityProfilesRequest
+}
+
+// Send marshals and sends the ListSecurityProfiles API request.
+func (r ListSecurityProfilesRequest) Send() (*ListSecurityProfilesOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListSecurityProfilesOutput), nil
+}
+
+// ListSecurityProfilesRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the Device Defender security profiles you have created. You can use
+// filters to list only those security profiles associated with a thing group
+// or only those associated with your account.
+//
+//    // Example sending a request using the ListSecurityProfilesRequest method.
+//    req := client.ListSecurityProfilesRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListSecurityProfilesRequest(input *ListSecurityProfilesInput) ListSecurityProfilesRequest {
+	op := &aws.Operation{
+		Name:       opListSecurityProfiles,
+		HTTPMethod: "GET",
+		HTTPPath:   "/security-profiles",
+	}
+
+	if input == nil {
+		input = &ListSecurityProfilesInput{}
+	}
+
+	output := &ListSecurityProfilesOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListSecurityProfilesRequest{Request: req, Input: input, Copy: c.ListSecurityProfilesRequest}
+}
+
+const opListSecurityProfilesForTarget = "ListSecurityProfilesForTarget"
+
+// ListSecurityProfilesForTargetRequest is a API request type for the ListSecurityProfilesForTarget API operation.
+type ListSecurityProfilesForTargetRequest struct {
+	*aws.Request
+	Input *ListSecurityProfilesForTargetInput
+	Copy  func(*ListSecurityProfilesForTargetInput) ListSecurityProfilesForTargetRequest
+}
+
+// Send marshals and sends the ListSecurityProfilesForTarget API request.
+func (r ListSecurityProfilesForTargetRequest) Send() (*ListSecurityProfilesForTargetOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListSecurityProfilesForTargetOutput), nil
+}
+
+// ListSecurityProfilesForTargetRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the Device Defender security profiles attached to a target (thing group).
+//
+//    // Example sending a request using the ListSecurityProfilesForTargetRequest method.
+//    req := client.ListSecurityProfilesForTargetRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListSecurityProfilesForTargetRequest(input *ListSecurityProfilesForTargetInput) ListSecurityProfilesForTargetRequest {
+	op := &aws.Operation{
+		Name:       opListSecurityProfilesForTarget,
+		HTTPMethod: "GET",
+		HTTPPath:   "/security-profiles-for-target",
+	}
+
+	if input == nil {
+		input = &ListSecurityProfilesForTargetInput{}
+	}
+
+	output := &ListSecurityProfilesForTargetOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListSecurityProfilesForTargetRequest{Request: req, Input: input, Copy: c.ListSecurityProfilesForTargetRequest}
+}
+
 const opListStreams = "ListStreams"
 
 // ListStreamsRequest is a API request type for the ListStreams API operation.
@@ -4366,6 +5643,54 @@ func (c *IoT) ListStreamsRequest(input *ListStreamsInput) ListStreamsRequest {
 	return ListStreamsRequest{Request: req, Input: input, Copy: c.ListStreamsRequest}
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest is a API request type for the ListTagsForResource API operation.
+type ListTagsForResourceRequest struct {
+	*aws.Request
+	Input *ListTagsForResourceInput
+	Copy  func(*ListTagsForResourceInput) ListTagsForResourceRequest
+}
+
+// Send marshals and sends the ListTagsForResource API request.
+func (r ListTagsForResourceRequest) Send() (*ListTagsForResourceOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListTagsForResourceOutput), nil
+}
+
+// ListTagsForResourceRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the tags (metadata) you have assigned to the resource.
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req := client.ListTagsForResourceRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListTagsForResourceRequest(input *ListTagsForResourceInput) ListTagsForResourceRequest {
+	op := &aws.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "GET",
+		HTTPPath:   "/tags",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output := &ListTagsForResourceOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListTagsForResourceRequest{Request: req, Input: input, Copy: c.ListTagsForResourceRequest}
+}
+
 const opListTargetsForPolicy = "ListTargetsForPolicy"
 
 // ListTargetsForPolicyRequest is a API request type for the ListTargetsForPolicy API operation.
@@ -4412,6 +5737,55 @@ func (c *IoT) ListTargetsForPolicyRequest(input *ListTargetsForPolicyInput) List
 	output.responseMetadata = aws.Response{Request: req}
 
 	return ListTargetsForPolicyRequest{Request: req, Input: input, Copy: c.ListTargetsForPolicyRequest}
+}
+
+const opListTargetsForSecurityProfile = "ListTargetsForSecurityProfile"
+
+// ListTargetsForSecurityProfileRequest is a API request type for the ListTargetsForSecurityProfile API operation.
+type ListTargetsForSecurityProfileRequest struct {
+	*aws.Request
+	Input *ListTargetsForSecurityProfileInput
+	Copy  func(*ListTargetsForSecurityProfileInput) ListTargetsForSecurityProfileRequest
+}
+
+// Send marshals and sends the ListTargetsForSecurityProfile API request.
+func (r ListTargetsForSecurityProfileRequest) Send() (*ListTargetsForSecurityProfileOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListTargetsForSecurityProfileOutput), nil
+}
+
+// ListTargetsForSecurityProfileRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the targets (thing groups) associated with a given Device Defender
+// security profile.
+//
+//    // Example sending a request using the ListTargetsForSecurityProfileRequest method.
+//    req := client.ListTargetsForSecurityProfileRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListTargetsForSecurityProfileRequest(input *ListTargetsForSecurityProfileInput) ListTargetsForSecurityProfileRequest {
+	op := &aws.Operation{
+		Name:       opListTargetsForSecurityProfile,
+		HTTPMethod: "GET",
+		HTTPPath:   "/security-profiles/{securityProfileName}/targets",
+	}
+
+	if input == nil {
+		input = &ListTargetsForSecurityProfileInput{}
+	}
+
+	output := &ListTargetsForSecurityProfileOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListTargetsForSecurityProfileRequest{Request: req, Input: input, Copy: c.ListTargetsForSecurityProfileRequest}
 }
 
 const opListThingGroups = "ListThingGroups"
@@ -4753,6 +6127,54 @@ func (c *IoT) ListThingsRequest(input *ListThingsInput) ListThingsRequest {
 	return ListThingsRequest{Request: req, Input: input, Copy: c.ListThingsRequest}
 }
 
+const opListThingsInBillingGroup = "ListThingsInBillingGroup"
+
+// ListThingsInBillingGroupRequest is a API request type for the ListThingsInBillingGroup API operation.
+type ListThingsInBillingGroupRequest struct {
+	*aws.Request
+	Input *ListThingsInBillingGroupInput
+	Copy  func(*ListThingsInBillingGroupInput) ListThingsInBillingGroupRequest
+}
+
+// Send marshals and sends the ListThingsInBillingGroup API request.
+func (r ListThingsInBillingGroupRequest) Send() (*ListThingsInBillingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListThingsInBillingGroupOutput), nil
+}
+
+// ListThingsInBillingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the things you have added to the given billing group.
+//
+//    // Example sending a request using the ListThingsInBillingGroupRequest method.
+//    req := client.ListThingsInBillingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListThingsInBillingGroupRequest(input *ListThingsInBillingGroupInput) ListThingsInBillingGroupRequest {
+	op := &aws.Operation{
+		Name:       opListThingsInBillingGroup,
+		HTTPMethod: "GET",
+		HTTPPath:   "/billing-groups/{billingGroupName}/things",
+	}
+
+	if input == nil {
+		input = &ListThingsInBillingGroupInput{}
+	}
+
+	output := &ListThingsInBillingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListThingsInBillingGroupRequest{Request: req, Input: input, Copy: c.ListThingsInBillingGroupRequest}
+}
+
 const opListThingsInThingGroup = "ListThingsInThingGroup"
 
 // ListThingsInThingGroupRequest is a API request type for the ListThingsInThingGroup API operation.
@@ -4895,6 +6317,56 @@ func (c *IoT) ListV2LoggingLevelsRequest(input *ListV2LoggingLevelsInput) ListV2
 	output.responseMetadata = aws.Response{Request: req}
 
 	return ListV2LoggingLevelsRequest{Request: req, Input: input, Copy: c.ListV2LoggingLevelsRequest}
+}
+
+const opListViolationEvents = "ListViolationEvents"
+
+// ListViolationEventsRequest is a API request type for the ListViolationEvents API operation.
+type ListViolationEventsRequest struct {
+	*aws.Request
+	Input *ListViolationEventsInput
+	Copy  func(*ListViolationEventsInput) ListViolationEventsRequest
+}
+
+// Send marshals and sends the ListViolationEvents API request.
+func (r ListViolationEventsRequest) Send() (*ListViolationEventsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListViolationEventsOutput), nil
+}
+
+// ListViolationEventsRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Lists the Device Defender security profile violations discovered during the
+// given time period. You can use filters to limit the results to those alerts
+// issued for a particular security profile, behavior or thing (device).
+//
+//    // Example sending a request using the ListViolationEventsRequest method.
+//    req := client.ListViolationEventsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListViolationEventsRequest(input *ListViolationEventsInput) ListViolationEventsRequest {
+	op := &aws.Operation{
+		Name:       opListViolationEvents,
+		HTTPMethod: "GET",
+		HTTPPath:   "/violation-events",
+	}
+
+	if input == nil {
+		input = &ListViolationEventsInput{}
+	}
+
+	output := &ListViolationEventsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListViolationEventsRequest{Request: req, Input: input, Copy: c.ListViolationEventsRequest}
 }
 
 const opRegisterCACertificate = "RegisterCACertificate"
@@ -5105,6 +6577,54 @@ func (c *IoT) RejectCertificateTransferRequest(input *RejectCertificateTransferI
 	output.responseMetadata = aws.Response{Request: req}
 
 	return RejectCertificateTransferRequest{Request: req, Input: input, Copy: c.RejectCertificateTransferRequest}
+}
+
+const opRemoveThingFromBillingGroup = "RemoveThingFromBillingGroup"
+
+// RemoveThingFromBillingGroupRequest is a API request type for the RemoveThingFromBillingGroup API operation.
+type RemoveThingFromBillingGroupRequest struct {
+	*aws.Request
+	Input *RemoveThingFromBillingGroupInput
+	Copy  func(*RemoveThingFromBillingGroupInput) RemoveThingFromBillingGroupRequest
+}
+
+// Send marshals and sends the RemoveThingFromBillingGroup API request.
+func (r RemoveThingFromBillingGroupRequest) Send() (*RemoveThingFromBillingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*RemoveThingFromBillingGroupOutput), nil
+}
+
+// RemoveThingFromBillingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Removes the given thing from the billing group.
+//
+//    // Example sending a request using the RemoveThingFromBillingGroupRequest method.
+//    req := client.RemoveThingFromBillingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) RemoveThingFromBillingGroupRequest(input *RemoveThingFromBillingGroupInput) RemoveThingFromBillingGroupRequest {
+	op := &aws.Operation{
+		Name:       opRemoveThingFromBillingGroup,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/billing-groups/removeThingFromBillingGroup",
+	}
+
+	if input == nil {
+		input = &RemoveThingFromBillingGroupInput{}
+	}
+
+	output := &RemoveThingFromBillingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return RemoveThingFromBillingGroupRequest{Request: req, Input: input, Copy: c.RemoveThingFromBillingGroupRequest}
 }
 
 const opRemoveThingFromThingGroup = "RemoveThingFromThingGroup"
@@ -5381,6 +6901,8 @@ func (r SetLoggingOptionsRequest) Send() (*SetLoggingOptionsOutput, error) {
 //
 // Sets the logging options.
 //
+// NOTE: use of this command is not recommended. Use SetV2LoggingOptions instead.
+//
 //    // Example sending a request using the SetLoggingOptionsRequest method.
 //    req := client.SetLoggingOptionsRequest(params)
 //    resp, err := req.Send()
@@ -5507,6 +7029,54 @@ func (c *IoT) SetV2LoggingOptionsRequest(input *SetV2LoggingOptionsInput) SetV2L
 	return SetV2LoggingOptionsRequest{Request: req, Input: input, Copy: c.SetV2LoggingOptionsRequest}
 }
 
+const opStartOnDemandAuditTask = "StartOnDemandAuditTask"
+
+// StartOnDemandAuditTaskRequest is a API request type for the StartOnDemandAuditTask API operation.
+type StartOnDemandAuditTaskRequest struct {
+	*aws.Request
+	Input *StartOnDemandAuditTaskInput
+	Copy  func(*StartOnDemandAuditTaskInput) StartOnDemandAuditTaskRequest
+}
+
+// Send marshals and sends the StartOnDemandAuditTask API request.
+func (r StartOnDemandAuditTaskRequest) Send() (*StartOnDemandAuditTaskOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StartOnDemandAuditTaskOutput), nil
+}
+
+// StartOnDemandAuditTaskRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Starts an on-demand Device Defender audit.
+//
+//    // Example sending a request using the StartOnDemandAuditTaskRequest method.
+//    req := client.StartOnDemandAuditTaskRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) StartOnDemandAuditTaskRequest(input *StartOnDemandAuditTaskInput) StartOnDemandAuditTaskRequest {
+	op := &aws.Operation{
+		Name:       opStartOnDemandAuditTask,
+		HTTPMethod: "POST",
+		HTTPPath:   "/audit/tasks",
+	}
+
+	if input == nil {
+		input = &StartOnDemandAuditTaskInput{}
+	}
+
+	output := &StartOnDemandAuditTaskOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StartOnDemandAuditTaskRequest{Request: req, Input: input, Copy: c.StartOnDemandAuditTaskRequest}
+}
+
 const opStartThingRegistrationTask = "StartThingRegistrationTask"
 
 // StartThingRegistrationTaskRequest is a API request type for the StartThingRegistrationTask API operation.
@@ -5603,6 +7173,55 @@ func (c *IoT) StopThingRegistrationTaskRequest(input *StopThingRegistrationTaskI
 	return StopThingRegistrationTaskRequest{Request: req, Input: input, Copy: c.StopThingRegistrationTaskRequest}
 }
 
+const opTagResource = "TagResource"
+
+// TagResourceRequest is a API request type for the TagResource API operation.
+type TagResourceRequest struct {
+	*aws.Request
+	Input *TagResourceInput
+	Copy  func(*TagResourceInput) TagResourceRequest
+}
+
+// Send marshals and sends the TagResource API request.
+func (r TagResourceRequest) Send() (*TagResourceOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*TagResourceOutput), nil
+}
+
+// TagResourceRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Adds to or modifies the tags of the given resource. Tags are metadata which
+// can be used to manage a resource.
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req := client.TagResourceRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) TagResourceRequest(input *TagResourceInput) TagResourceRequest {
+	op := &aws.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/tags",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output := &TagResourceOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return TagResourceRequest{Request: req, Input: input, Copy: c.TagResourceRequest}
+}
+
 const opTestAuthorization = "TestAuthorization"
 
 // TestAuthorizationRequest is a API request type for the TestAuthorization API operation.
@@ -5625,7 +7244,9 @@ func (r TestAuthorizationRequest) Send() (*TestAuthorizationOutput, error) {
 // TestAuthorizationRequest returns a request value for making API operation for
 // AWS IoT.
 //
-// Test custom authorization.
+// Tests if a specified principal is authorized to perform an AWS IoT action
+// on a specified resource. Use this to test and debug the authorization behavior
+// of devices that connect to the AWS IoT device gateway.
 //
 //    // Example sending a request using the TestAuthorizationRequest method.
 //    req := client.TestAuthorizationRequest(params)
@@ -5673,7 +7294,9 @@ func (r TestInvokeAuthorizerRequest) Send() (*TestInvokeAuthorizerOutput, error)
 // TestInvokeAuthorizerRequest returns a request value for making API operation for
 // AWS IoT.
 //
-// Invoke the specified custom authorizer for testing purposes.
+// Tests a custom authorization behavior by invoking a specified custom authorizer.
+// Use this to test and debug the custom authorization behavior of devices that
+// connect to the AWS IoT device gateway.
 //
 //    // Example sending a request using the TestInvokeAuthorizerRequest method.
 //    req := client.TestInvokeAuthorizerRequest(params)
@@ -5758,6 +7381,104 @@ func (c *IoT) TransferCertificateRequest(input *TransferCertificateInput) Transf
 	return TransferCertificateRequest{Request: req, Input: input, Copy: c.TransferCertificateRequest}
 }
 
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest is a API request type for the UntagResource API operation.
+type UntagResourceRequest struct {
+	*aws.Request
+	Input *UntagResourceInput
+	Copy  func(*UntagResourceInput) UntagResourceRequest
+}
+
+// Send marshals and sends the UntagResource API request.
+func (r UntagResourceRequest) Send() (*UntagResourceOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*UntagResourceOutput), nil
+}
+
+// UntagResourceRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Removes the given tags (metadata) from the resource.
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req := client.UntagResourceRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) UntagResourceRequest(input *UntagResourceInput) UntagResourceRequest {
+	op := &aws.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/untag",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output := &UntagResourceOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return UntagResourceRequest{Request: req, Input: input, Copy: c.UntagResourceRequest}
+}
+
+const opUpdateAccountAuditConfiguration = "UpdateAccountAuditConfiguration"
+
+// UpdateAccountAuditConfigurationRequest is a API request type for the UpdateAccountAuditConfiguration API operation.
+type UpdateAccountAuditConfigurationRequest struct {
+	*aws.Request
+	Input *UpdateAccountAuditConfigurationInput
+	Copy  func(*UpdateAccountAuditConfigurationInput) UpdateAccountAuditConfigurationRequest
+}
+
+// Send marshals and sends the UpdateAccountAuditConfiguration API request.
+func (r UpdateAccountAuditConfigurationRequest) Send() (*UpdateAccountAuditConfigurationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*UpdateAccountAuditConfigurationOutput), nil
+}
+
+// UpdateAccountAuditConfigurationRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Configures or reconfigures the Device Defender audit settings for this account.
+// Settings include how audit notifications are sent and which audit checks
+// are enabled or disabled.
+//
+//    // Example sending a request using the UpdateAccountAuditConfigurationRequest method.
+//    req := client.UpdateAccountAuditConfigurationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) UpdateAccountAuditConfigurationRequest(input *UpdateAccountAuditConfigurationInput) UpdateAccountAuditConfigurationRequest {
+	op := &aws.Operation{
+		Name:       opUpdateAccountAuditConfiguration,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/audit/configuration",
+	}
+
+	if input == nil {
+		input = &UpdateAccountAuditConfigurationInput{}
+	}
+
+	output := &UpdateAccountAuditConfigurationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return UpdateAccountAuditConfigurationRequest{Request: req, Input: input, Copy: c.UpdateAccountAuditConfigurationRequest}
+}
+
 const opUpdateAuthorizer = "UpdateAuthorizer"
 
 // UpdateAuthorizerRequest is a API request type for the UpdateAuthorizer API operation.
@@ -5804,6 +7525,54 @@ func (c *IoT) UpdateAuthorizerRequest(input *UpdateAuthorizerInput) UpdateAuthor
 	output.responseMetadata = aws.Response{Request: req}
 
 	return UpdateAuthorizerRequest{Request: req, Input: input, Copy: c.UpdateAuthorizerRequest}
+}
+
+const opUpdateBillingGroup = "UpdateBillingGroup"
+
+// UpdateBillingGroupRequest is a API request type for the UpdateBillingGroup API operation.
+type UpdateBillingGroupRequest struct {
+	*aws.Request
+	Input *UpdateBillingGroupInput
+	Copy  func(*UpdateBillingGroupInput) UpdateBillingGroupRequest
+}
+
+// Send marshals and sends the UpdateBillingGroup API request.
+func (r UpdateBillingGroupRequest) Send() (*UpdateBillingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*UpdateBillingGroupOutput), nil
+}
+
+// UpdateBillingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Updates information about the billing group.
+//
+//    // Example sending a request using the UpdateBillingGroupRequest method.
+//    req := client.UpdateBillingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) UpdateBillingGroupRequest(input *UpdateBillingGroupInput) UpdateBillingGroupRequest {
+	op := &aws.Operation{
+		Name:       opUpdateBillingGroup,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/billing-groups/{billingGroupName}",
+	}
+
+	if input == nil {
+		input = &UpdateBillingGroupInput{}
+	}
+
+	output := &UpdateBillingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return UpdateBillingGroupRequest{Request: req, Input: input, Copy: c.UpdateBillingGroupRequest}
 }
 
 const opUpdateCACertificate = "UpdateCACertificate"
@@ -5912,6 +7681,54 @@ func (c *IoT) UpdateCertificateRequest(input *UpdateCertificateInput) UpdateCert
 	return UpdateCertificateRequest{Request: req, Input: input, Copy: c.UpdateCertificateRequest}
 }
 
+const opUpdateDynamicThingGroup = "UpdateDynamicThingGroup"
+
+// UpdateDynamicThingGroupRequest is a API request type for the UpdateDynamicThingGroup API operation.
+type UpdateDynamicThingGroupRequest struct {
+	*aws.Request
+	Input *UpdateDynamicThingGroupInput
+	Copy  func(*UpdateDynamicThingGroupInput) UpdateDynamicThingGroupRequest
+}
+
+// Send marshals and sends the UpdateDynamicThingGroup API request.
+func (r UpdateDynamicThingGroupRequest) Send() (*UpdateDynamicThingGroupOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*UpdateDynamicThingGroupOutput), nil
+}
+
+// UpdateDynamicThingGroupRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Updates a dynamic thing group.
+//
+//    // Example sending a request using the UpdateDynamicThingGroupRequest method.
+//    req := client.UpdateDynamicThingGroupRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) UpdateDynamicThingGroupRequest(input *UpdateDynamicThingGroupInput) UpdateDynamicThingGroupRequest {
+	op := &aws.Operation{
+		Name:       opUpdateDynamicThingGroup,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/dynamic-thing-groups/{thingGroupName}",
+	}
+
+	if input == nil {
+		input = &UpdateDynamicThingGroupInput{}
+	}
+
+	output := &UpdateDynamicThingGroupOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return UpdateDynamicThingGroupRequest{Request: req, Input: input, Copy: c.UpdateDynamicThingGroupRequest}
+}
+
 const opUpdateEventConfigurations = "UpdateEventConfigurations"
 
 // UpdateEventConfigurationsRequest is a API request type for the UpdateEventConfigurations API operation.
@@ -6008,6 +7825,56 @@ func (c *IoT) UpdateIndexingConfigurationRequest(input *UpdateIndexingConfigurat
 	return UpdateIndexingConfigurationRequest{Request: req, Input: input, Copy: c.UpdateIndexingConfigurationRequest}
 }
 
+const opUpdateJob = "UpdateJob"
+
+// UpdateJobRequest is a API request type for the UpdateJob API operation.
+type UpdateJobRequest struct {
+	*aws.Request
+	Input *UpdateJobInput
+	Copy  func(*UpdateJobInput) UpdateJobRequest
+}
+
+// Send marshals and sends the UpdateJob API request.
+func (r UpdateJobRequest) Send() (*UpdateJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*UpdateJobOutput), nil
+}
+
+// UpdateJobRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Updates supported fields of the specified job.
+//
+//    // Example sending a request using the UpdateJobRequest method.
+//    req := client.UpdateJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) UpdateJobRequest(input *UpdateJobInput) UpdateJobRequest {
+	op := &aws.Operation{
+		Name:       opUpdateJob,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/jobs/{jobId}",
+	}
+
+	if input == nil {
+		input = &UpdateJobInput{}
+	}
+
+	output := &UpdateJobOutput{}
+	req := c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return UpdateJobRequest{Request: req, Input: input, Copy: c.UpdateJobRequest}
+}
+
 const opUpdateRoleAlias = "UpdateRoleAlias"
 
 // UpdateRoleAliasRequest is a API request type for the UpdateRoleAlias API operation.
@@ -6054,6 +7921,103 @@ func (c *IoT) UpdateRoleAliasRequest(input *UpdateRoleAliasInput) UpdateRoleAlia
 	output.responseMetadata = aws.Response{Request: req}
 
 	return UpdateRoleAliasRequest{Request: req, Input: input, Copy: c.UpdateRoleAliasRequest}
+}
+
+const opUpdateScheduledAudit = "UpdateScheduledAudit"
+
+// UpdateScheduledAuditRequest is a API request type for the UpdateScheduledAudit API operation.
+type UpdateScheduledAuditRequest struct {
+	*aws.Request
+	Input *UpdateScheduledAuditInput
+	Copy  func(*UpdateScheduledAuditInput) UpdateScheduledAuditRequest
+}
+
+// Send marshals and sends the UpdateScheduledAudit API request.
+func (r UpdateScheduledAuditRequest) Send() (*UpdateScheduledAuditOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*UpdateScheduledAuditOutput), nil
+}
+
+// UpdateScheduledAuditRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Updates a scheduled audit, including what checks are performed and how often
+// the audit takes place.
+//
+//    // Example sending a request using the UpdateScheduledAuditRequest method.
+//    req := client.UpdateScheduledAuditRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) UpdateScheduledAuditRequest(input *UpdateScheduledAuditInput) UpdateScheduledAuditRequest {
+	op := &aws.Operation{
+		Name:       opUpdateScheduledAudit,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/audit/scheduledaudits/{scheduledAuditName}",
+	}
+
+	if input == nil {
+		input = &UpdateScheduledAuditInput{}
+	}
+
+	output := &UpdateScheduledAuditOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return UpdateScheduledAuditRequest{Request: req, Input: input, Copy: c.UpdateScheduledAuditRequest}
+}
+
+const opUpdateSecurityProfile = "UpdateSecurityProfile"
+
+// UpdateSecurityProfileRequest is a API request type for the UpdateSecurityProfile API operation.
+type UpdateSecurityProfileRequest struct {
+	*aws.Request
+	Input *UpdateSecurityProfileInput
+	Copy  func(*UpdateSecurityProfileInput) UpdateSecurityProfileRequest
+}
+
+// Send marshals and sends the UpdateSecurityProfile API request.
+func (r UpdateSecurityProfileRequest) Send() (*UpdateSecurityProfileOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*UpdateSecurityProfileOutput), nil
+}
+
+// UpdateSecurityProfileRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Updates a Device Defender security profile.
+//
+//    // Example sending a request using the UpdateSecurityProfileRequest method.
+//    req := client.UpdateSecurityProfileRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) UpdateSecurityProfileRequest(input *UpdateSecurityProfileInput) UpdateSecurityProfileRequest {
+	op := &aws.Operation{
+		Name:       opUpdateSecurityProfile,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/security-profiles/{securityProfileName}",
+	}
+
+	if input == nil {
+		input = &UpdateSecurityProfileInput{}
+	}
+
+	output := &UpdateSecurityProfileOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return UpdateSecurityProfileRequest{Request: req, Input: input, Copy: c.UpdateSecurityProfileRequest}
 }
 
 const opUpdateStream = "UpdateStream"
@@ -6248,6 +8212,210 @@ func (c *IoT) UpdateThingGroupsForThingRequest(input *UpdateThingGroupsForThingI
 	return UpdateThingGroupsForThingRequest{Request: req, Input: input, Copy: c.UpdateThingGroupsForThingRequest}
 }
 
+const opValidateSecurityProfileBehaviors = "ValidateSecurityProfileBehaviors"
+
+// ValidateSecurityProfileBehaviorsRequest is a API request type for the ValidateSecurityProfileBehaviors API operation.
+type ValidateSecurityProfileBehaviorsRequest struct {
+	*aws.Request
+	Input *ValidateSecurityProfileBehaviorsInput
+	Copy  func(*ValidateSecurityProfileBehaviorsInput) ValidateSecurityProfileBehaviorsRequest
+}
+
+// Send marshals and sends the ValidateSecurityProfileBehaviors API request.
+func (r ValidateSecurityProfileBehaviorsRequest) Send() (*ValidateSecurityProfileBehaviorsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ValidateSecurityProfileBehaviorsOutput), nil
+}
+
+// ValidateSecurityProfileBehaviorsRequest returns a request value for making API operation for
+// AWS IoT.
+//
+// Validates a Device Defender security profile behaviors specification.
+//
+//    // Example sending a request using the ValidateSecurityProfileBehaviorsRequest method.
+//    req := client.ValidateSecurityProfileBehaviorsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ValidateSecurityProfileBehaviorsRequest(input *ValidateSecurityProfileBehaviorsInput) ValidateSecurityProfileBehaviorsRequest {
+	op := &aws.Operation{
+		Name:       opValidateSecurityProfileBehaviors,
+		HTTPMethod: "POST",
+		HTTPPath:   "/security-profile-behaviors/validate",
+	}
+
+	if input == nil {
+		input = &ValidateSecurityProfileBehaviorsInput{}
+	}
+
+	output := &ValidateSecurityProfileBehaviorsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ValidateSecurityProfileBehaviorsRequest{Request: req, Input: input, Copy: c.ValidateSecurityProfileBehaviorsRequest}
+}
+
+// Details of abort criteria to abort the job.
+type AbortConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The list of abort criteria to define rules to abort the job.
+	//
+	// CriteriaList is a required field
+	CriteriaList []AbortCriteria `locationName:"criteriaList" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s AbortConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AbortConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AbortConfig) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "AbortConfig"}
+
+	if s.CriteriaList == nil {
+		invalidParams.Add(aws.NewErrParamRequired("CriteriaList"))
+	}
+	if s.CriteriaList != nil && len(s.CriteriaList) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("CriteriaList", 1))
+	}
+	if s.CriteriaList != nil {
+		for i, v := range s.CriteriaList {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CriteriaList", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AbortConfig) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.CriteriaList) > 0 {
+		v := s.CriteriaList
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "criteriaList", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// Details of abort criteria to define rules to abort the job.
+type AbortCriteria struct {
+	_ struct{} `type:"structure"`
+
+	// The type of abort action to initiate a job abort.
+	//
+	// Action is a required field
+	Action AbortAction `locationName:"action" type:"string" required:"true" enum:"true"`
+
+	// The type of job execution failure to define a rule to initiate a job abort.
+	//
+	// FailureType is a required field
+	FailureType JobExecutionFailureType `locationName:"failureType" type:"string" required:"true" enum:"true"`
+
+	// Minimum number of executed things before evaluating an abort rule.
+	//
+	// MinNumberOfExecutedThings is a required field
+	MinNumberOfExecutedThings *int64 `locationName:"minNumberOfExecutedThings" min:"1" type:"integer" required:"true"`
+
+	// The threshold as a percentage of the total number of executed things that
+	// will initiate a job abort.
+	//
+	// AWS IoT supports up to two digits after the decimal (for example, 10.9 and
+	// 10.99, but not 10.999).
+	//
+	// ThresholdPercentage is a required field
+	ThresholdPercentage *float64 `locationName:"thresholdPercentage" type:"double" required:"true"`
+}
+
+// String returns the string representation
+func (s AbortCriteria) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AbortCriteria) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AbortCriteria) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "AbortCriteria"}
+	if len(s.Action) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("Action"))
+	}
+	if len(s.FailureType) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("FailureType"))
+	}
+
+	if s.MinNumberOfExecutedThings == nil {
+		invalidParams.Add(aws.NewErrParamRequired("MinNumberOfExecutedThings"))
+	}
+	if s.MinNumberOfExecutedThings != nil && *s.MinNumberOfExecutedThings < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MinNumberOfExecutedThings", 1))
+	}
+
+	if s.ThresholdPercentage == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ThresholdPercentage"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AbortCriteria) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.Action) > 0 {
+		v := s.Action
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "action", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.FailureType) > 0 {
+		v := s.FailureType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "failureType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.MinNumberOfExecutedThings != nil {
+		v := *s.MinNumberOfExecutedThings
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "minNumberOfExecutedThings", protocol.Int64Value(v), metadata)
+	}
+	if s.ThresholdPercentage != nil {
+		v := *s.ThresholdPercentage
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thresholdPercentage", protocol.Float64Value(v), metadata)
+	}
+	return nil
+}
+
 // The input for the AcceptCertificateTransfer operation.
 type AcceptCertificateTransferInput struct {
 	_ struct{} `type:"structure"`
@@ -6360,6 +8528,9 @@ type Action struct {
 	// Sends message data to an AWS IoT Analytics channel.
 	IotAnalytics *IotAnalyticsAction `locationName:"iotAnalytics" type:"structure"`
 
+	// Sends an input to an AWS IoT Events detector.
+	IotEvents *IotEventsAction `locationName:"iotEvents" type:"structure"`
+
 	// Write data to an Amazon Kinesis stream.
 	Kinesis *KinesisAction `locationName:"kinesis" type:"structure"`
 
@@ -6380,6 +8551,9 @@ type Action struct {
 
 	// Publish to an Amazon SQS queue.
 	Sqs *SqsAction `locationName:"sqs" type:"structure"`
+
+	// Starts execution of a Step Functions state machine.
+	StepFunctions *StepFunctionsAction `locationName:"stepFunctions" type:"structure"`
 }
 
 // String returns the string representation
@@ -6425,6 +8599,11 @@ func (s *Action) Validate() error {
 			invalidParams.AddNested("Firehose", err.(aws.ErrInvalidParams))
 		}
 	}
+	if s.IotEvents != nil {
+		if err := s.IotEvents.Validate(); err != nil {
+			invalidParams.AddNested("IotEvents", err.(aws.ErrInvalidParams))
+		}
+	}
 	if s.Kinesis != nil {
 		if err := s.Kinesis.Validate(); err != nil {
 			invalidParams.AddNested("Kinesis", err.(aws.ErrInvalidParams))
@@ -6458,6 +8637,11 @@ func (s *Action) Validate() error {
 	if s.Sqs != nil {
 		if err := s.Sqs.Validate(); err != nil {
 			invalidParams.AddNested("Sqs", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.StepFunctions != nil {
+		if err := s.StepFunctions.Validate(); err != nil {
+			invalidParams.AddNested("StepFunctions", err.(aws.ErrInvalidParams))
 		}
 	}
 
@@ -6511,6 +8695,12 @@ func (s Action) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "iotAnalytics", v, metadata)
 	}
+	if s.IotEvents != nil {
+		v := s.IotEvents
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "iotEvents", v, metadata)
+	}
 	if s.Kinesis != nil {
 		v := s.Kinesis
 
@@ -6553,11 +8743,204 @@ func (s Action) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "sqs", v, metadata)
 	}
+	if s.StepFunctions != nil {
+		v := s.StepFunctions
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "stepFunctions", v, metadata)
+	}
+	return nil
+}
+
+// Information about an active Device Defender security profile behavior violation.
+type ActiveViolation struct {
+	_ struct{} `type:"structure"`
+
+	// The behavior which is being violated.
+	Behavior *Behavior `locationName:"behavior" type:"structure"`
+
+	// The time the most recent violation occurred.
+	LastViolationTime *time.Time `locationName:"lastViolationTime" type:"timestamp" timestampFormat:"unix"`
+
+	// The value of the metric (the measurement) which caused the most recent violation.
+	LastViolationValue *MetricValue `locationName:"lastViolationValue" type:"structure"`
+
+	// The security profile whose behavior is in violation.
+	SecurityProfileName *string `locationName:"securityProfileName" min:"1" type:"string"`
+
+	// The name of the thing responsible for the active violation.
+	ThingName *string `locationName:"thingName" min:"1" type:"string"`
+
+	// The ID of the active violation.
+	ViolationId *string `locationName:"violationId" min:"1" type:"string"`
+
+	// The time the violation started.
+	ViolationStartTime *time.Time `locationName:"violationStartTime" type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s ActiveViolation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ActiveViolation) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ActiveViolation) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Behavior != nil {
+		v := s.Behavior
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "behavior", v, metadata)
+	}
+	if s.LastViolationTime != nil {
+		v := *s.LastViolationTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "lastViolationTime", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.LastViolationValue != nil {
+		v := s.LastViolationValue
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "lastViolationValue", v, metadata)
+	}
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingName != nil {
+		v := *s.ThingName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ViolationId != nil {
+		v := *s.ViolationId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "violationId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ViolationStartTime != nil {
+		v := *s.ViolationStartTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "violationStartTime", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	return nil
+}
+
+type AddThingToBillingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the billing group.
+	BillingGroupArn *string `locationName:"billingGroupArn" type:"string"`
+
+	// The name of the billing group.
+	BillingGroupName *string `locationName:"billingGroupName" min:"1" type:"string"`
+
+	// The ARN of the thing to be added to the billing group.
+	ThingArn *string `locationName:"thingArn" type:"string"`
+
+	// The name of the thing to be added to the billing group.
+	ThingName *string `locationName:"thingName" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s AddThingToBillingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddThingToBillingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddThingToBillingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "AddThingToBillingGroupInput"}
+	if s.BillingGroupName != nil && len(*s.BillingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("BillingGroupName", 1))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ThingName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AddThingToBillingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.BillingGroupArn != nil {
+		v := *s.BillingGroupArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingArn != nil {
+		v := *s.ThingArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingName != nil {
+		v := *s.ThingName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type AddThingToBillingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s AddThingToBillingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddThingToBillingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s AddThingToBillingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AddThingToBillingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
 type AddThingToThingGroupInput struct {
 	_ struct{} `type:"structure"`
+
+	// Override dynamic thing groups with static thing groups when 10-group limit
+	// is reached. If a thing belongs to 10 thing groups, and one or more of those
+	// groups are dynamic thing groups, adding a thing to a static group removes
+	// the thing from the last dynamic group.
+	OverrideDynamicGroups *bool `locationName:"overrideDynamicGroups" type:"boolean"`
 
 	// The ARN of the thing to add to a group.
 	ThingArn *string `locationName:"thingArn" type:"string"`
@@ -6601,6 +8984,12 @@ func (s *AddThingToThingGroupInput) Validate() error {
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s AddThingToThingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
 
+	if s.OverrideDynamicGroups != nil {
+		v := *s.OverrideDynamicGroups
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "overrideDynamicGroups", protocol.BoolValue(v), metadata)
+	}
 	if s.ThingArn != nil {
 		v := *s.ThingArn
 
@@ -6651,6 +9040,70 @@ func (s AddThingToThingGroupOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s AddThingToThingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+// A structure containing the alert target ARN and the role ARN.
+type AlertTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the notification target to which alerts are sent.
+	//
+	// AlertTargetArn is a required field
+	AlertTargetArn *string `locationName:"alertTargetArn" type:"string" required:"true"`
+
+	// The ARN of the role that grants permission to send alerts to the notification
+	// target.
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AlertTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AlertTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AlertTarget) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "AlertTarget"}
+
+	if s.AlertTargetArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("AlertTargetArn"))
+	}
+
+	if s.RoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("RoleArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AlertTarget) MarshalFields(e protocol.FieldEncoder) error {
+	if s.AlertTargetArn != nil {
+		v := *s.AlertTargetArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "alertTargetArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
 	return nil
 }
 
@@ -6832,7 +9285,8 @@ type AttachPolicyInput struct {
 	// PolicyName is a required field
 	PolicyName *string `location:"uri" locationName:"policyName" min:"1" type:"string" required:"true"`
 
-	// The identity to which the policy is attached.
+	// The identity (https://docs.aws.amazon.com/iot/latest/developerguide/iot-security-identity.html)
+	// to which the policy is attached.
 	//
 	// Target is a required field
 	Target *string `locationName:"target" type:"string" required:"true"`
@@ -7004,6 +9458,95 @@ func (s AttachPrincipalPolicyOutput) MarshalFields(e protocol.FieldEncoder) erro
 	return nil
 }
 
+type AttachSecurityProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// The security profile that is attached.
+	//
+	// SecurityProfileName is a required field
+	SecurityProfileName *string `location:"uri" locationName:"securityProfileName" min:"1" type:"string" required:"true"`
+
+	// The ARN of the target (thing group) to which the security profile is attached.
+	//
+	// SecurityProfileTargetArn is a required field
+	SecurityProfileTargetArn *string `location:"querystring" locationName:"securityProfileTargetArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AttachSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AttachSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AttachSecurityProfileInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "AttachSecurityProfileInput"}
+
+	if s.SecurityProfileName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileName"))
+	}
+	if s.SecurityProfileName != nil && len(*s.SecurityProfileName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityProfileName", 1))
+	}
+
+	if s.SecurityProfileTargetArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileTargetArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AttachSecurityProfileInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileTargetArn != nil {
+		v := *s.SecurityProfileTargetArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "securityProfileTargetArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type AttachSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s AttachSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AttachSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s AttachSecurityProfileOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AttachSecurityProfileOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
 // The input for the AttachThingPrincipal operation.
 type AttachThingPrincipalInput struct {
 	_ struct{} `type:"structure"`
@@ -7143,6 +9686,327 @@ func (s AttributePayload) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "merge", protocol.BoolValue(v), metadata)
+	}
+	return nil
+}
+
+// Which audit checks are enabled and disabled for this account.
+type AuditCheckConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// True if this audit check is enabled for this account.
+	Enabled *bool `locationName:"enabled" type:"boolean"`
+}
+
+// String returns the string representation
+func (s AuditCheckConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AuditCheckConfiguration) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AuditCheckConfiguration) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Enabled != nil {
+		v := *s.Enabled
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "enabled", protocol.BoolValue(v), metadata)
+	}
+	return nil
+}
+
+// Information about the audit check.
+type AuditCheckDetails struct {
+	_ struct{} `type:"structure"`
+
+	// True if the check completed and found all resources compliant.
+	CheckCompliant *bool `locationName:"checkCompliant" type:"boolean"`
+
+	// The completion status of this check, one of "IN_PROGRESS", "WAITING_FOR_DATA_COLLECTION",
+	// "CANCELED", "COMPLETED_COMPLIANT", "COMPLETED_NON_COMPLIANT", or "FAILED".
+	CheckRunStatus AuditCheckRunStatus `locationName:"checkRunStatus" type:"string" enum:"true"`
+
+	// The code of any error encountered when performing this check during this
+	// audit. One of "INSUFFICIENT_PERMISSIONS", or "AUDIT_CHECK_DISABLED".
+	ErrorCode *string `locationName:"errorCode" type:"string"`
+
+	// The message associated with any error encountered when performing this check
+	// during this audit.
+	Message *string `locationName:"message" type:"string"`
+
+	// The number of resources that the check found non-compliant.
+	NonCompliantResourcesCount *int64 `locationName:"nonCompliantResourcesCount" type:"long"`
+
+	// The number of resources on which the check was performed.
+	TotalResourcesCount *int64 `locationName:"totalResourcesCount" type:"long"`
+}
+
+// String returns the string representation
+func (s AuditCheckDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AuditCheckDetails) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AuditCheckDetails) MarshalFields(e protocol.FieldEncoder) error {
+	if s.CheckCompliant != nil {
+		v := *s.CheckCompliant
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "checkCompliant", protocol.BoolValue(v), metadata)
+	}
+	if len(s.CheckRunStatus) > 0 {
+		v := s.CheckRunStatus
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "checkRunStatus", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.ErrorCode != nil {
+		v := *s.ErrorCode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "errorCode", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Message != nil {
+		v := *s.Message
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "message", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.NonCompliantResourcesCount != nil {
+		v := *s.NonCompliantResourcesCount
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nonCompliantResourcesCount", protocol.Int64Value(v), metadata)
+	}
+	if s.TotalResourcesCount != nil {
+		v := *s.TotalResourcesCount
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "totalResourcesCount", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+// The findings (results) of the audit.
+type AuditFinding struct {
+	_ struct{} `type:"structure"`
+
+	// The audit check that generated this result.
+	CheckName *string `locationName:"checkName" type:"string"`
+
+	// The time the result (finding) was discovered.
+	FindingTime *time.Time `locationName:"findingTime" type:"timestamp" timestampFormat:"unix"`
+
+	// The resource that was found to be non-compliant with the audit check.
+	NonCompliantResource *NonCompliantResource `locationName:"nonCompliantResource" type:"structure"`
+
+	// The reason the resource was non-compliant.
+	ReasonForNonCompliance *string `locationName:"reasonForNonCompliance" type:"string"`
+
+	// A code which indicates the reason that the resource was non-compliant.
+	ReasonForNonComplianceCode *string `locationName:"reasonForNonComplianceCode" type:"string"`
+
+	// The list of related resources.
+	RelatedResources []RelatedResource `locationName:"relatedResources" type:"list"`
+
+	// The severity of the result (finding).
+	Severity AuditFindingSeverity `locationName:"severity" type:"string" enum:"true"`
+
+	// The ID of the audit that generated this result (finding)
+	TaskId *string `locationName:"taskId" min:"1" type:"string"`
+
+	// The time the audit started.
+	TaskStartTime *time.Time `locationName:"taskStartTime" type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s AuditFinding) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AuditFinding) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AuditFinding) MarshalFields(e protocol.FieldEncoder) error {
+	if s.CheckName != nil {
+		v := *s.CheckName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "checkName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.FindingTime != nil {
+		v := *s.FindingTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "findingTime", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.NonCompliantResource != nil {
+		v := s.NonCompliantResource
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "nonCompliantResource", v, metadata)
+	}
+	if s.ReasonForNonCompliance != nil {
+		v := *s.ReasonForNonCompliance
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "reasonForNonCompliance", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ReasonForNonComplianceCode != nil {
+		v := *s.ReasonForNonComplianceCode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "reasonForNonComplianceCode", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.RelatedResources) > 0 {
+		v := s.RelatedResources
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "relatedResources", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if len(s.Severity) > 0 {
+		v := s.Severity
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "severity", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.TaskId != nil {
+		v := *s.TaskId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.TaskStartTime != nil {
+		v := *s.TaskStartTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskStartTime", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	return nil
+}
+
+// Information about the targets to which audit notifications are sent.
+type AuditNotificationTarget struct {
+	_ struct{} `type:"structure"`
+
+	// True if notifications to the target are enabled.
+	Enabled *bool `locationName:"enabled" type:"boolean"`
+
+	// The ARN of the role that grants permission to send notifications to the target.
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string"`
+
+	// The ARN of the target (SNS topic) to which audit notifications are sent.
+	TargetArn *string `locationName:"targetArn" type:"string"`
+}
+
+// String returns the string representation
+func (s AuditNotificationTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AuditNotificationTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AuditNotificationTarget) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "AuditNotificationTarget"}
+	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("RoleArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AuditNotificationTarget) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Enabled != nil {
+		v := *s.Enabled
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "enabled", protocol.BoolValue(v), metadata)
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.TargetArn != nil {
+		v := *s.TargetArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "targetArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// The audits that were performed.
+type AuditTaskMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of this audit.
+	TaskId *string `locationName:"taskId" min:"1" type:"string"`
+
+	// The status of this audit: one of "IN_PROGRESS", "COMPLETED", "FAILED" or
+	// "CANCELED".
+	TaskStatus AuditTaskStatus `locationName:"taskStatus" type:"string" enum:"true"`
+
+	// The type of this audit: one of "ON_DEMAND_AUDIT_TASK" or "SCHEDULED_AUDIT_TASK".
+	TaskType AuditTaskType `locationName:"taskType" type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s AuditTaskMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AuditTaskMetadata) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AuditTaskMetadata) MarshalFields(e protocol.FieldEncoder) error {
+	if s.TaskId != nil {
+		v := *s.TaskId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.TaskStatus) > 0 {
+		v := s.TaskStatus
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskStatus", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.TaskType) > 0 {
+		v := s.TaskType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
 	return nil
 }
@@ -7402,6 +10266,221 @@ func (s AuthorizerSummary) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Configuration for the rollout of OTA updates.
+type AwsJobExecutionsRolloutConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of OTA update job executions started per minute.
+	MaximumPerMinute *int64 `locationName:"maximumPerMinute" min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s AwsJobExecutionsRolloutConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AwsJobExecutionsRolloutConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AwsJobExecutionsRolloutConfig) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "AwsJobExecutionsRolloutConfig"}
+	if s.MaximumPerMinute != nil && *s.MaximumPerMinute < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaximumPerMinute", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s AwsJobExecutionsRolloutConfig) MarshalFields(e protocol.FieldEncoder) error {
+	if s.MaximumPerMinute != nil {
+		v := *s.MaximumPerMinute
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "maximumPerMinute", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+// A Device Defender security profile behavior.
+type Behavior struct {
+	_ struct{} `type:"structure"`
+
+	// The criteria that determine if a device is behaving normally in regard to
+	// the metric.
+	Criteria *BehaviorCriteria `locationName:"criteria" type:"structure"`
+
+	// What is measured by the behavior.
+	Metric *string `locationName:"metric" type:"string"`
+
+	// The name you have given to the behavior.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s Behavior) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Behavior) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Behavior) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "Behavior"}
+
+	if s.Name == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Behavior) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Criteria != nil {
+		v := s.Criteria
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "criteria", v, metadata)
+	}
+	if s.Metric != nil {
+		v := *s.Metric
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "metric", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Name != nil {
+		v := *s.Name
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// The criteria by which the behavior is determined to be normal.
+type BehaviorCriteria struct {
+	_ struct{} `type:"structure"`
+
+	// The operator that relates the thing measured (metric) to the criteria (value).
+	ComparisonOperator ComparisonOperator `locationName:"comparisonOperator" type:"string" enum:"true"`
+
+	// Use this to specify the period of time over which the behavior is evaluated,
+	// for those criteria which have a time dimension (for example, NUM_MESSAGES_SENT).
+	DurationSeconds *int64 `locationName:"durationSeconds" type:"integer"`
+
+	// The value to be compared with the metric.
+	Value *MetricValue `locationName:"value" type:"structure"`
+}
+
+// String returns the string representation
+func (s BehaviorCriteria) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BehaviorCriteria) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s BehaviorCriteria) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.ComparisonOperator) > 0 {
+		v := s.ComparisonOperator
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "comparisonOperator", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.DurationSeconds != nil {
+		v := *s.DurationSeconds
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "durationSeconds", protocol.Int64Value(v), metadata)
+	}
+	if s.Value != nil {
+		v := s.Value
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "value", v, metadata)
+	}
+	return nil
+}
+
+// Additional information about the billing group.
+type BillingGroupMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The date the billing group was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s BillingGroupMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BillingGroupMetadata) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s BillingGroupMetadata) MarshalFields(e protocol.FieldEncoder) error {
+	if s.CreationDate != nil {
+		v := *s.CreationDate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "creationDate", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	return nil
+}
+
+// The properties of a billing group.
+type BillingGroupProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the billing group.
+	BillingGroupDescription *string `locationName:"billingGroupDescription" type:"string"`
+}
+
+// String returns the string representation
+func (s BillingGroupProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BillingGroupProperties) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s BillingGroupProperties) MarshalFields(e protocol.FieldEncoder) error {
+	if s.BillingGroupDescription != nil {
+		v := *s.BillingGroupDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 // A CA certificate.
 type CACertificate struct {
 	_ struct{} `type:"structure"`
@@ -7490,10 +10569,13 @@ type CACertificateDescription struct {
 	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
 
 	// The owner of the CA certificate.
-	OwnedBy *string `locationName:"ownedBy" type:"string"`
+	OwnedBy *string `locationName:"ownedBy" min:"12" type:"string"`
 
 	// The status of a CA certificate.
 	Status CACertificateStatus `locationName:"status" type:"string" enum:"true"`
+
+	// When the CA certificate is valid.
+	Validity *CertificateValidity `locationName:"validity" type:"structure"`
 }
 
 // String returns the string representation
@@ -7568,6 +10650,87 @@ func (s CACertificateDescription) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "status", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
+	if s.Validity != nil {
+		v := s.Validity
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "validity", v, metadata)
+	}
+	return nil
+}
+
+type CancelAuditTaskInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the audit you want to cancel. You can only cancel an audit that
+	// is "IN_PROGRESS".
+	//
+	// TaskId is a required field
+	TaskId *string `location:"uri" locationName:"taskId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelAuditTaskInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelAuditTaskInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelAuditTaskInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CancelAuditTaskInput"}
+
+	if s.TaskId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("TaskId"))
+	}
+	if s.TaskId != nil && len(*s.TaskId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("TaskId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CancelAuditTaskInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.TaskId != nil {
+		v := *s.TaskId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "taskId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type CancelAuditTaskOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s CancelAuditTaskOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelAuditTaskOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CancelAuditTaskOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CancelAuditTaskOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -7647,16 +10810,170 @@ func (s CancelCertificateTransferOutput) MarshalFields(e protocol.FieldEncoder) 
 	return nil
 }
 
+type CancelJobExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) The expected current version of the job execution. Each time you
+	// update the job execution, its version is incremented. If the version of the
+	// job execution stored in Jobs does not match, the update is rejected with
+	// a VersionMismatch error, and an ErrorResponse that contains the current job
+	// execution status data is returned. (This makes it unnecessary to perform
+	// a separate DescribeJobExecution request in order to obtain the job execution
+	// status data.)
+	ExpectedVersion *int64 `locationName:"expectedVersion" type:"long"`
+
+	// (Optional) If true the job execution will be canceled if it has status IN_PROGRESS
+	// or QUEUED, otherwise the job execution will be canceled only if it has status
+	// QUEUED. If you attempt to cancel a job execution that is IN_PROGRESS, and
+	// you do not set force to true, then an InvalidStateTransitionException will
+	// be thrown. The default is false.
+	//
+	// Canceling a job execution which is "IN_PROGRESS", will cause the device to
+	// be unable to update the job execution status. Use caution and ensure that
+	// the device is able to recover to a valid state.
+	Force *bool `location:"querystring" locationName:"force" type:"boolean"`
+
+	// The ID of the job to be canceled.
+	//
+	// JobId is a required field
+	JobId *string `location:"uri" locationName:"jobId" min:"1" type:"string" required:"true"`
+
+	// A collection of name/value pairs that describe the status of the job execution.
+	// If not specified, the statusDetails are unchanged. You can specify at most
+	// 10 name/value pairs.
+	StatusDetails map[string]string `locationName:"statusDetails" type:"map"`
+
+	// The name of the thing whose execution of the job will be canceled.
+	//
+	// ThingName is a required field
+	ThingName *string `location:"uri" locationName:"thingName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelJobExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelJobExecutionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelJobExecutionInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CancelJobExecutionInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if s.ThingName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ThingName"))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ThingName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CancelJobExecutionInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.ExpectedVersion != nil {
+		v := *s.ExpectedVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "expectedVersion", protocol.Int64Value(v), metadata)
+	}
+	if len(s.StatusDetails) > 0 {
+		v := s.StatusDetails
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "statusDetails", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
+
+	}
+	if s.JobId != nil {
+		v := *s.JobId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "jobId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingName != nil {
+		v := *s.ThingName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "thingName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Force != nil {
+		v := *s.Force
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "force", protocol.BoolValue(v), metadata)
+	}
+	return nil
+}
+
+type CancelJobExecutionOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s CancelJobExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelJobExecutionOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CancelJobExecutionOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CancelJobExecutionOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
 type CancelJobInput struct {
 	_ struct{} `type:"structure"`
 
 	// An optional comment string describing why the job was canceled.
 	Comment *string `locationName:"comment" type:"string"`
 
+	// (Optional) If true job executions with status "IN_PROGRESS" and "QUEUED"
+	// are canceled, otherwise only job executions with status "QUEUED" are canceled.
+	// The default is false.
+	//
+	// Canceling a job which is "IN_PROGRESS", will cause a device which is executing
+	// the job to be unable to update the job execution status. Use caution and
+	// ensure that each device executing a job which is canceled is able to recover
+	// to a valid state.
+	Force *bool `location:"querystring" locationName:"force" type:"boolean"`
+
 	// The unique identifier you assigned to this job when it was created.
 	//
 	// JobId is a required field
 	JobId *string `location:"uri" locationName:"jobId" min:"1" type:"string" required:"true"`
+
+	// (Optional)A reason code string that explains why the job was canceled.
+	ReasonCode *string `locationName:"reasonCode" type:"string"`
 }
 
 // String returns the string representation
@@ -7695,11 +11012,23 @@ func (s CancelJobInput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "comment", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	if s.ReasonCode != nil {
+		v := *s.ReasonCode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "reasonCode", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
 	if s.JobId != nil {
 		v := *s.JobId
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.PathTarget, "jobId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Force != nil {
+		v := *s.Force
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "force", protocol.BoolValue(v), metadata)
 	}
 	return nil
 }
@@ -7845,16 +11174,19 @@ type CertificateDescription struct {
 	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
 
 	// The ID of the AWS account that owns the certificate.
-	OwnedBy *string `locationName:"ownedBy" type:"string"`
+	OwnedBy *string `locationName:"ownedBy" min:"12" type:"string"`
 
 	// The ID of the AWS account of the previous owner of the certificate.
-	PreviousOwnedBy *string `locationName:"previousOwnedBy" type:"string"`
+	PreviousOwnedBy *string `locationName:"previousOwnedBy" min:"12" type:"string"`
 
 	// The status of the certificate.
 	Status CertificateStatus `locationName:"status" type:"string" enum:"true"`
 
 	// The transfer data.
 	TransferData *TransferData `locationName:"transferData" type:"structure"`
+
+	// When the certificate is valid.
+	Validity *CertificateValidity `locationName:"validity" type:"structure"`
 }
 
 // String returns the string representation
@@ -7940,6 +11272,50 @@ func (s CertificateDescription) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "transferData", v, metadata)
+	}
+	if s.Validity != nil {
+		v := s.Validity
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "validity", v, metadata)
+	}
+	return nil
+}
+
+// When the certificate is valid.
+type CertificateValidity struct {
+	_ struct{} `type:"structure"`
+
+	// The certificate is not valid after this date.
+	NotAfter *time.Time `locationName:"notAfter" type:"timestamp" timestampFormat:"unix"`
+
+	// The certificate is not valid before this date.
+	NotBefore *time.Time `locationName:"notBefore" type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s CertificateValidity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CertificateValidity) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CertificateValidity) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NotAfter != nil {
+		v := *s.NotAfter
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "notAfter", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.NotBefore != nil {
+		v := *s.NotBefore
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "notBefore", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
 	}
 	return nil
 }
@@ -8204,6 +11580,9 @@ type CodeSigning struct {
 
 	// A custom method for code signing a file.
 	CustomCodeSigning *CustomCodeSigning `locationName:"customCodeSigning" type:"structure"`
+
+	// Describes the code-signing job.
+	StartSigningJobParameter *StartSigningJobParameter `locationName:"startSigningJobParameter" type:"structure"`
 }
 
 // String returns the string representation
@@ -8219,9 +11598,9 @@ func (s CodeSigning) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CodeSigning) Validate() error {
 	invalidParams := aws.ErrInvalidParams{Context: "CodeSigning"}
-	if s.CustomCodeSigning != nil {
-		if err := s.CustomCodeSigning.Validate(); err != nil {
-			invalidParams.AddNested("CustomCodeSigning", err.(aws.ErrInvalidParams))
+	if s.StartSigningJobParameter != nil {
+		if err := s.StartSigningJobParameter.Validate(); err != nil {
+			invalidParams.AddNested("StartSigningJobParameter", err.(aws.ErrInvalidParams))
 		}
 	}
 
@@ -8245,6 +11624,12 @@ func (s CodeSigning) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "customCodeSigning", v, metadata)
 	}
+	if s.StartSigningJobParameter != nil {
+		v := s.StartSigningJobParameter
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "startSigningJobParameter", v, metadata)
+	}
 	return nil
 }
 
@@ -8257,9 +11642,6 @@ type CodeSigningCertificateChain struct {
 
 	// A base64 encoded binary representation of the code signing certificate chain.
 	InlineDocument *string `locationName:"inlineDocument" type:"string"`
-
-	// A stream of the certificate chain files.
-	Stream *Stream `locationName:"stream" type:"structure"`
 }
 
 // String returns the string representation
@@ -8270,21 +11652,6 @@ func (s CodeSigningCertificateChain) String() string {
 // GoString returns the string representation
 func (s CodeSigningCertificateChain) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CodeSigningCertificateChain) Validate() error {
-	invalidParams := aws.ErrInvalidParams{Context: "CodeSigningCertificateChain"}
-	if s.Stream != nil {
-		if err := s.Stream.Validate(); err != nil {
-			invalidParams.AddNested("Stream", err.(aws.ErrInvalidParams))
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
@@ -8301,12 +11668,6 @@ func (s CodeSigningCertificateChain) MarshalFields(e protocol.FieldEncoder) erro
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "inlineDocument", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
-	if s.Stream != nil {
-		v := s.Stream
-
-		metadata := protocol.Metadata{}
-		e.SetFields(protocol.BodyTarget, "stream", v, metadata)
-	}
 	return nil
 }
 
@@ -8318,9 +11679,6 @@ type CodeSigningSignature struct {
 	//
 	// InlineDocument is automatically base64 encoded/decoded by the SDK.
 	InlineDocument []byte `locationName:"inlineDocument" type:"blob"`
-
-	// A stream of the code signing signature.
-	Stream *Stream `locationName:"stream" type:"structure"`
 }
 
 // String returns the string representation
@@ -8333,21 +11691,6 @@ func (s CodeSigningSignature) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CodeSigningSignature) Validate() error {
-	invalidParams := aws.ErrInvalidParams{Context: "CodeSigningSignature"}
-	if s.Stream != nil {
-		if err := s.Stream.Validate(); err != nil {
-			invalidParams.AddNested("Stream", err.(aws.ErrInvalidParams))
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s CodeSigningSignature) MarshalFields(e protocol.FieldEncoder) error {
 	if s.InlineDocument != nil {
@@ -8355,12 +11698,6 @@ func (s CodeSigningSignature) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "inlineDocument", protocol.QuotedValue{ValueMarshaler: protocol.BytesValue(v)}, metadata)
-	}
-	if s.Stream != nil {
-		v := s.Stream
-
-		metadata := protocol.Metadata{}
-		e.SetFields(protocol.BodyTarget, "stream", v, metadata)
 	}
 	return nil
 }
@@ -8550,6 +11887,131 @@ func (s CreateAuthorizerOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type CreateBillingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name you wish to give to the billing group.
+	//
+	// BillingGroupName is a required field
+	BillingGroupName *string `location:"uri" locationName:"billingGroupName" min:"1" type:"string" required:"true"`
+
+	// The properties of the billing group.
+	BillingGroupProperties *BillingGroupProperties `locationName:"billingGroupProperties" type:"structure"`
+
+	// Metadata which can be used to manage the billing group.
+	Tags []Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation
+func (s CreateBillingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateBillingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateBillingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CreateBillingGroupInput"}
+
+	if s.BillingGroupName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("BillingGroupName"))
+	}
+	if s.BillingGroupName != nil && len(*s.BillingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("BillingGroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateBillingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.BillingGroupProperties != nil {
+		v := s.BillingGroupProperties
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "billingGroupProperties", v, metadata)
+	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tags", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type CreateBillingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The ARN of the billing group.
+	BillingGroupArn *string `locationName:"billingGroupArn" type:"string"`
+
+	// The ID of the billing group.
+	BillingGroupId *string `locationName:"billingGroupId" min:"1" type:"string"`
+
+	// The name you gave to the billing group.
+	BillingGroupName *string `locationName:"billingGroupName" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateBillingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateBillingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CreateBillingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateBillingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.BillingGroupArn != nil {
+		v := *s.BillingGroupArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.BillingGroupId != nil {
+		v := *s.BillingGroupId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 // The input for the CreateCertificateFromCsr operation.
 type CreateCertificateFromCsrInput struct {
 	_ struct{} `type:"structure"`
@@ -8664,17 +12126,226 @@ func (s CreateCertificateFromCsrOutput) MarshalFields(e protocol.FieldEncoder) e
 	return nil
 }
 
+type CreateDynamicThingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The dynamic thing group index name.
+	//
+	// Currently one index is supported: "AWS_Things".
+	IndexName *string `locationName:"indexName" min:"1" type:"string"`
+
+	// The dynamic thing group search query string.
+	//
+	// See Query Syntax (http://docs.aws.amazon.com/iot/latest/developerguide/query-syntax.html)
+	// for information about query string syntax.
+	//
+	// QueryString is a required field
+	QueryString *string `locationName:"queryString" min:"1" type:"string" required:"true"`
+
+	// The dynamic thing group query version.
+	//
+	// Currently one query version is supported: "2017-09-30". If not specified,
+	// the query version defaults to this value.
+	QueryVersion *string `locationName:"queryVersion" type:"string"`
+
+	// Metadata which can be used to manage the dynamic thing group.
+	Tags []Tag `locationName:"tags" type:"list"`
+
+	// The dynamic thing group name to create.
+	//
+	// ThingGroupName is a required field
+	ThingGroupName *string `location:"uri" locationName:"thingGroupName" min:"1" type:"string" required:"true"`
+
+	// The dynamic thing group properties.
+	ThingGroupProperties *ThingGroupProperties `locationName:"thingGroupProperties" type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateDynamicThingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateDynamicThingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateDynamicThingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CreateDynamicThingGroupInput"}
+	if s.IndexName != nil && len(*s.IndexName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("IndexName", 1))
+	}
+
+	if s.QueryString == nil {
+		invalidParams.Add(aws.NewErrParamRequired("QueryString"))
+	}
+	if s.QueryString != nil && len(*s.QueryString) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("QueryString", 1))
+	}
+
+	if s.ThingGroupName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ThingGroupName"))
+	}
+	if s.ThingGroupName != nil && len(*s.ThingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ThingGroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateDynamicThingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.IndexName != nil {
+		v := *s.IndexName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "indexName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.QueryString != nil {
+		v := *s.QueryString
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "queryString", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.QueryVersion != nil {
+		v := *s.QueryVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "queryVersion", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tags", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.ThingGroupProperties != nil {
+		v := s.ThingGroupProperties
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "thingGroupProperties", v, metadata)
+	}
+	if s.ThingGroupName != nil {
+		v := *s.ThingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "thingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type CreateDynamicThingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The dynamic thing group index name.
+	IndexName *string `locationName:"indexName" min:"1" type:"string"`
+
+	// The dynamic thing group search query string.
+	QueryString *string `locationName:"queryString" min:"1" type:"string"`
+
+	// The dynamic thing group query version.
+	QueryVersion *string `locationName:"queryVersion" type:"string"`
+
+	// The dynamic thing group ARN.
+	ThingGroupArn *string `locationName:"thingGroupArn" type:"string"`
+
+	// The dynamic thing group ID.
+	ThingGroupId *string `locationName:"thingGroupId" min:"1" type:"string"`
+
+	// The dynamic thing group name.
+	ThingGroupName *string `locationName:"thingGroupName" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateDynamicThingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateDynamicThingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CreateDynamicThingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateDynamicThingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.IndexName != nil {
+		v := *s.IndexName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "indexName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.QueryString != nil {
+		v := *s.QueryString
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "queryString", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.QueryVersion != nil {
+		v := *s.QueryVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "queryVersion", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingGroupArn != nil {
+		v := *s.ThingGroupArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingGroupArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingGroupId != nil {
+		v := *s.ThingGroupId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingGroupId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingGroupName != nil {
+		v := *s.ThingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 type CreateJobInput struct {
 	_ struct{} `type:"structure"`
+
+	// Allows you to create criteria to abort a job.
+	AbortConfig *AbortConfig `locationName:"abortConfig" type:"structure"`
 
 	// A short text description of the job.
 	Description *string `locationName:"description" type:"string"`
 
 	// The job document.
+	//
+	// If the job document resides in an S3 bucket, you must use a placeholder link
+	// when specifying the document.
+	//
+	// The placeholder link is of the following form:
+	//
+	// ${aws:iot:s3-presigned-url:https://s3.amazonaws.com/bucket/key}
+	//
+	// where bucket is your bucket name and key is the object in the bucket to which
+	// you are linking.
 	Document *string `locationName:"document" type:"string"`
-
-	// Parameters for the job document.
-	DocumentParameters map[string]string `locationName:"documentParameters" type:"map"`
 
 	// An S3 link to the job document.
 	DocumentSource *string `locationName:"documentSource" min:"1" type:"string"`
@@ -8691,6 +12362,9 @@ type CreateJobInput struct {
 	// Configuration information for pre-signed S3 URLs.
 	PresignedUrlConfig *PresignedUrlConfig `locationName:"presignedUrlConfig" type:"structure"`
 
+	// Metadata which can be used to manage the job.
+	Tags []Tag `locationName:"tags" type:"list"`
+
 	// Specifies whether the job will continue to run (CONTINUOUS), or will be complete
 	// after all those things specified as targets have completed the job (SNAPSHOT).
 	// If continuous, the job may also be run on a thing when a change is detected
@@ -8703,6 +12377,12 @@ type CreateJobInput struct {
 	//
 	// Targets is a required field
 	Targets []string `locationName:"targets" min:"1" type:"list" required:"true"`
+
+	// Specifies the amount of time each device has to finish its execution of the
+	// job. The timer is started when the job execution status is set to IN_PROGRESS.
+	// If the job execution status is not set to another terminal state before the
+	// time expires, it will be automatically set to TIMED_OUT.
+	TimeoutConfig *TimeoutConfig `locationName:"timeoutConfig" type:"structure"`
 }
 
 // String returns the string representation
@@ -8735,6 +12415,11 @@ func (s *CreateJobInput) Validate() error {
 	if s.Targets != nil && len(s.Targets) < 1 {
 		invalidParams.Add(aws.NewErrParamMinLen("Targets", 1))
 	}
+	if s.AbortConfig != nil {
+		if err := s.AbortConfig.Validate(); err != nil {
+			invalidParams.AddNested("AbortConfig", err.(aws.ErrInvalidParams))
+		}
+	}
 	if s.JobExecutionsRolloutConfig != nil {
 		if err := s.JobExecutionsRolloutConfig.Validate(); err != nil {
 			invalidParams.AddNested("JobExecutionsRolloutConfig", err.(aws.ErrInvalidParams))
@@ -8755,6 +12440,12 @@ func (s *CreateJobInput) Validate() error {
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s CreateJobInput) MarshalFields(e protocol.FieldEncoder) error {
 
+	if s.AbortConfig != nil {
+		v := s.AbortConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "abortConfig", v, metadata)
+	}
 	if s.Description != nil {
 		v := *s.Description
 
@@ -8766,18 +12457,6 @@ func (s CreateJobInput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "document", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
-	}
-	if len(s.DocumentParameters) > 0 {
-		v := s.DocumentParameters
-
-		metadata := protocol.Metadata{}
-		ms0 := e.Map(protocol.BodyTarget, "documentParameters", metadata)
-		ms0.Start()
-		for k1, v1 := range v {
-			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
-		}
-		ms0.End()
-
 	}
 	if s.DocumentSource != nil {
 		v := *s.DocumentSource
@@ -8797,6 +12476,18 @@ func (s CreateJobInput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "presignedUrlConfig", v, metadata)
 	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tags", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
 	if len(s.TargetSelection) > 0 {
 		v := s.TargetSelection
 
@@ -8814,6 +12505,12 @@ func (s CreateJobInput) MarshalFields(e protocol.FieldEncoder) error {
 		}
 		ls0.End()
 
+	}
+	if s.TimeoutConfig != nil {
+		v := s.TimeoutConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "timeoutConfig", v, metadata)
 	}
 	if s.JobId != nil {
 		v := *s.JobId
@@ -8977,6 +12674,9 @@ type CreateOTAUpdateInput struct {
 	// A list of additional OTA update parameters which are name-value pairs.
 	AdditionalParameters map[string]string `locationName:"additionalParameters" type:"map"`
 
+	// Configuration for the rollout of OTA updates.
+	AwsJobExecutionsRolloutConfig *AwsJobExecutionsRolloutConfig `locationName:"awsJobExecutionsRolloutConfig" type:"structure"`
+
 	// The description of the OTA update.
 	Description *string `locationName:"description" type:"string"`
 
@@ -9050,6 +12750,11 @@ func (s *CreateOTAUpdateInput) Validate() error {
 	if s.Targets != nil && len(s.Targets) < 1 {
 		invalidParams.Add(aws.NewErrParamMinLen("Targets", 1))
 	}
+	if s.AwsJobExecutionsRolloutConfig != nil {
+		if err := s.AwsJobExecutionsRolloutConfig.Validate(); err != nil {
+			invalidParams.AddNested("AwsJobExecutionsRolloutConfig", err.(aws.ErrInvalidParams))
+		}
+	}
 	if s.Files != nil {
 		for i, v := range s.Files {
 			if err := v.Validate(); err != nil {
@@ -9078,6 +12783,12 @@ func (s CreateOTAUpdateInput) MarshalFields(e protocol.FieldEncoder) error {
 		}
 		ms0.End()
 
+	}
+	if s.AwsJobExecutionsRolloutConfig != nil {
+		v := s.AwsJobExecutionsRolloutConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "awsJobExecutionsRolloutConfig", v, metadata)
 	}
 	if s.Description != nil {
 		v := *s.Description
@@ -9591,6 +13302,320 @@ func (s CreateRoleAliasOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type CreateScheduledAuditInput struct {
+	_ struct{} `type:"structure"`
+
+	// The day of the month on which the scheduled audit takes place. Can be "1"
+	// through "31" or "LAST". This field is required if the "frequency" parameter
+	// is set to "MONTHLY". If days 29-31 are specified, and the month does not
+	// have that many days, the audit takes place on the "LAST" day of the month.
+	DayOfMonth *string `locationName:"dayOfMonth" type:"string"`
+
+	// The day of the week on which the scheduled audit takes place. Can be one
+	// of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT". This field is required
+	// if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".
+	DayOfWeek DayOfWeek `locationName:"dayOfWeek" type:"string" enum:"true"`
+
+	// How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY",
+	// "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined
+	// by the system.
+	//
+	// Frequency is a required field
+	Frequency AuditFrequency `locationName:"frequency" type:"string" required:"true" enum:"true"`
+
+	// The name you want to give to the scheduled audit. (Max. 128 chars)
+	//
+	// ScheduledAuditName is a required field
+	ScheduledAuditName *string `location:"uri" locationName:"scheduledAuditName" min:"1" type:"string" required:"true"`
+
+	// Which checks are performed during the scheduled audit. Checks must be enabled
+	// for your account. (Use DescribeAccountAuditConfiguration to see the list
+	// of all checks including those that are enabled or UpdateAccountAuditConfiguration
+	// to select which checks are enabled.)
+	//
+	// TargetCheckNames is a required field
+	TargetCheckNames []string `locationName:"targetCheckNames" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateScheduledAuditInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateScheduledAuditInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateScheduledAuditInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CreateScheduledAuditInput"}
+	if len(s.Frequency) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("Frequency"))
+	}
+
+	if s.ScheduledAuditName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ScheduledAuditName"))
+	}
+	if s.ScheduledAuditName != nil && len(*s.ScheduledAuditName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ScheduledAuditName", 1))
+	}
+
+	if s.TargetCheckNames == nil {
+		invalidParams.Add(aws.NewErrParamRequired("TargetCheckNames"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateScheduledAuditInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.DayOfMonth != nil {
+		v := *s.DayOfMonth
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "dayOfMonth", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.DayOfWeek) > 0 {
+		v := s.DayOfWeek
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "dayOfWeek", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.Frequency) > 0 {
+		v := s.Frequency
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "frequency", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.TargetCheckNames) > 0 {
+		v := s.TargetCheckNames
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "targetCheckNames", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	if s.ScheduledAuditName != nil {
+		v := *s.ScheduledAuditName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "scheduledAuditName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type CreateScheduledAuditOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The ARN of the scheduled audit.
+	ScheduledAuditArn *string `locationName:"scheduledAuditArn" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateScheduledAuditOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateScheduledAuditOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CreateScheduledAuditOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateScheduledAuditOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.ScheduledAuditArn != nil {
+		v := *s.ScheduledAuditArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "scheduledAuditArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type CreateSecurityProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the destinations to which alerts are sent. (Alerts are always sent
+	// to the console.) Alerts are generated when a device (thing) violates a behavior.
+	AlertTargets map[string]AlertTarget `locationName:"alertTargets" type:"map"`
+
+	// Specifies the behaviors that, when violated by a device (thing), cause an
+	// alert.
+	//
+	// Behaviors is a required field
+	Behaviors []Behavior `locationName:"behaviors" type:"list" required:"true"`
+
+	// A description of the security profile.
+	SecurityProfileDescription *string `locationName:"securityProfileDescription" type:"string"`
+
+	// The name you are giving to the security profile.
+	//
+	// SecurityProfileName is a required field
+	SecurityProfileName *string `location:"uri" locationName:"securityProfileName" min:"1" type:"string" required:"true"`
+
+	// Metadata which can be used to manage the security profile.
+	Tags []Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation
+func (s CreateSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateSecurityProfileInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CreateSecurityProfileInput"}
+
+	if s.Behaviors == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Behaviors"))
+	}
+
+	if s.SecurityProfileName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileName"))
+	}
+	if s.SecurityProfileName != nil && len(*s.SecurityProfileName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityProfileName", 1))
+	}
+	if s.AlertTargets != nil {
+		for i, v := range s.AlertTargets {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AlertTargets", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Behaviors != nil {
+		for i, v := range s.Behaviors {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Behaviors", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateSecurityProfileInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if len(s.AlertTargets) > 0 {
+		v := s.AlertTargets
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "alertTargets", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetFields(k1, v1)
+		}
+		ms0.End()
+
+	}
+	if len(s.Behaviors) > 0 {
+		v := s.Behaviors
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "behaviors", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.SecurityProfileDescription != nil {
+		v := *s.SecurityProfileDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tags", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type CreateSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The ARN of the security profile.
+	SecurityProfileArn *string `locationName:"securityProfileArn" type:"string"`
+
+	// The name you gave to the security profile.
+	SecurityProfileName *string `locationName:"securityProfileName" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CreateSecurityProfileOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateSecurityProfileOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.SecurityProfileArn != nil {
+		v := *s.SecurityProfileArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 type CreateStreamInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9766,6 +13791,9 @@ type CreateThingGroupInput struct {
 	// The name of the parent thing group.
 	ParentGroupName *string `locationName:"parentGroupName" min:"1" type:"string"`
 
+	// Metadata which can be used to manage the thing group.
+	Tags []Tag `locationName:"tags" type:"list"`
+
 	// The thing group name to create.
 	//
 	// ThingGroupName is a required field
@@ -9813,6 +13841,18 @@ func (s CreateThingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "parentGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tags", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
 	}
 	if s.ThingGroupProperties != nil {
 		v := s.ThingGroupProperties
@@ -9892,6 +13932,9 @@ type CreateThingInput struct {
 	// {\"attributes\":{\"string1\":\"string2\"}}
 	AttributePayload *AttributePayload `locationName:"attributePayload" type:"structure"`
 
+	// The name of the billing group the thing will be added to.
+	BillingGroupName *string `locationName:"billingGroupName" min:"1" type:"string"`
+
 	// The name of the thing to create.
 	//
 	// ThingName is a required field
@@ -9914,6 +13957,9 @@ func (s CreateThingInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateThingInput) Validate() error {
 	invalidParams := aws.ErrInvalidParams{Context: "CreateThingInput"}
+	if s.BillingGroupName != nil && len(*s.BillingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("BillingGroupName", 1))
+	}
 
 	if s.ThingName == nil {
 		invalidParams.Add(aws.NewErrParamRequired("ThingName"))
@@ -9939,6 +13985,12 @@ func (s CreateThingInput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "attributePayload", v, metadata)
+	}
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	if s.ThingTypeName != nil {
 		v := *s.ThingTypeName
@@ -10013,6 +14065,9 @@ func (s CreateThingOutput) MarshalFields(e protocol.FieldEncoder) error {
 type CreateThingTypeInput struct {
 	_ struct{} `type:"structure"`
 
+	// Metadata which can be used to manage the thing type.
+	Tags []Tag `locationName:"tags" type:"list"`
+
 	// The name of the thing type.
 	//
 	// ThingTypeName is a required field
@@ -10054,6 +14109,18 @@ func (s *CreateThingTypeInput) Validate() error {
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s CreateThingTypeInput) MarshalFields(e protocol.FieldEncoder) error {
 
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tags", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
 	if s.ThingTypeProperties != nil {
 		v := s.ThingTypeProperties
 
@@ -10245,26 +14312,6 @@ func (s CustomCodeSigning) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *CustomCodeSigning) Validate() error {
-	invalidParams := aws.ErrInvalidParams{Context: "CustomCodeSigning"}
-	if s.CertificateChain != nil {
-		if err := s.CertificateChain.Validate(); err != nil {
-			invalidParams.AddNested("CertificateChain", err.(aws.ErrInvalidParams))
-		}
-	}
-	if s.Signature != nil {
-		if err := s.Signature.Validate(); err != nil {
-			invalidParams.AddNested("Signature", err.(aws.ErrInvalidParams))
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s CustomCodeSigning) MarshalFields(e protocol.FieldEncoder) error {
 	if s.CertificateChain != nil {
@@ -10291,6 +14338,61 @@ func (s CustomCodeSigning) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "signatureAlgorithm", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	return nil
+}
+
+type DeleteAccountAuditConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// If true, all scheduled audits are deleted.
+	DeleteScheduledAudits *bool `location:"querystring" locationName:"deleteScheduledAudits" type:"boolean"`
+}
+
+// String returns the string representation
+func (s DeleteAccountAuditConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAccountAuditConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteAccountAuditConfigurationInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.DeleteScheduledAudits != nil {
+		v := *s.DeleteScheduledAudits
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "deleteScheduledAudits", protocol.BoolValue(v), metadata)
+	}
+	return nil
+}
+
+type DeleteAccountAuditConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteAccountAuditConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAccountAuditConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteAccountAuditConfigurationOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteAccountAuditConfigurationOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -10365,6 +14467,91 @@ func (s DeleteAuthorizerOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s DeleteAuthorizerOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+type DeleteBillingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the billing group.
+	//
+	// BillingGroupName is a required field
+	BillingGroupName *string `location:"uri" locationName:"billingGroupName" min:"1" type:"string" required:"true"`
+
+	// The expected version of the billing group. If the version of the billing
+	// group does not match the expected version specified in the request, the DeleteBillingGroup
+	// request is rejected with a VersionConflictException.
+	ExpectedVersion *int64 `location:"querystring" locationName:"expectedVersion" type:"long"`
+}
+
+// String returns the string representation
+func (s DeleteBillingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBillingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteBillingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteBillingGroupInput"}
+
+	if s.BillingGroupName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("BillingGroupName"))
+	}
+	if s.BillingGroupName != nil && len(*s.BillingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("BillingGroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteBillingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ExpectedVersion != nil {
+		v := *s.ExpectedVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "expectedVersion", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+type DeleteBillingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteBillingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBillingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteBillingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteBillingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -10527,6 +14714,89 @@ func (s DeleteCertificateOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s DeleteCertificateOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+type DeleteDynamicThingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The expected version of the dynamic thing group to delete.
+	ExpectedVersion *int64 `location:"querystring" locationName:"expectedVersion" type:"long"`
+
+	// The name of the dynamic thing group to delete.
+	//
+	// ThingGroupName is a required field
+	ThingGroupName *string `location:"uri" locationName:"thingGroupName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteDynamicThingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDynamicThingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteDynamicThingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteDynamicThingGroupInput"}
+
+	if s.ThingGroupName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ThingGroupName"))
+	}
+	if s.ThingGroupName != nil && len(*s.ThingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ThingGroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteDynamicThingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.ThingGroupName != nil {
+		v := *s.ThingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "thingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ExpectedVersion != nil {
+		v := *s.ExpectedVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "expectedVersion", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+type DeleteDynamicThingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteDynamicThingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDynamicThingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteDynamicThingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteDynamicThingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -10754,6 +15024,14 @@ func (s DeleteJobOutput) MarshalFields(e protocol.FieldEncoder) error {
 type DeleteOTAUpdateInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies if the stream associated with an OTA update should be deleted when
+	// the OTA update is deleted.
+	DeleteStream *bool `location:"querystring" locationName:"deleteStream" type:"boolean"`
+
+	// Specifies if the AWS Job associated with the OTA update should be deleted
+	// with the OTA update is deleted.
+	ForceDeleteAWSJob *bool `location:"querystring" locationName:"forceDeleteAWSJob" type:"boolean"`
+
 	// The OTA update ID to delete.
 	//
 	// OtaUpdateId is a required field
@@ -10795,6 +15073,18 @@ func (s DeleteOTAUpdateInput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.PathTarget, "otaUpdateId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.DeleteStream != nil {
+		v := *s.DeleteStream
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "deleteStream", protocol.BoolValue(v), metadata)
+	}
+	if s.ForceDeleteAWSJob != nil {
+		v := *s.ForceDeleteAWSJob
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "forceDeleteAWSJob", protocol.BoolValue(v), metadata)
 	}
 	return nil
 }
@@ -11109,6 +15399,165 @@ func (s DeleteRoleAliasOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s DeleteRoleAliasOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+type DeleteScheduledAuditInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the scheduled audit you want to delete.
+	//
+	// ScheduledAuditName is a required field
+	ScheduledAuditName *string `location:"uri" locationName:"scheduledAuditName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteScheduledAuditInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteScheduledAuditInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteScheduledAuditInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteScheduledAuditInput"}
+
+	if s.ScheduledAuditName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ScheduledAuditName"))
+	}
+	if s.ScheduledAuditName != nil && len(*s.ScheduledAuditName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ScheduledAuditName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteScheduledAuditInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.ScheduledAuditName != nil {
+		v := *s.ScheduledAuditName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "scheduledAuditName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type DeleteScheduledAuditOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteScheduledAuditOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteScheduledAuditOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteScheduledAuditOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteScheduledAuditOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+type DeleteSecurityProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// The expected version of the security profile. A new version is generated
+	// whenever the security profile is updated. If you specify a value that is
+	// different than the actual version, a VersionConflictException is thrown.
+	ExpectedVersion *int64 `location:"querystring" locationName:"expectedVersion" type:"long"`
+
+	// The name of the security profile to be deleted.
+	//
+	// SecurityProfileName is a required field
+	SecurityProfileName *string `location:"uri" locationName:"securityProfileName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteSecurityProfileInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteSecurityProfileInput"}
+
+	if s.SecurityProfileName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileName"))
+	}
+	if s.SecurityProfileName != nil && len(*s.SecurityProfileName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityProfileName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteSecurityProfileInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ExpectedVersion != nil {
+		v := *s.ExpectedVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "expectedVersion", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+type DeleteSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteSecurityProfileOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteSecurityProfileOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -11718,6 +16167,231 @@ func (s DeprecateThingTypeOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type DescribeAccountAuditConfigurationInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeAccountAuditConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAccountAuditConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeAccountAuditConfigurationInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	return nil
+}
+
+type DescribeAccountAuditConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// Which audit checks are enabled and disabled for this account.
+	AuditCheckConfigurations map[string]AuditCheckConfiguration `locationName:"auditCheckConfigurations" type:"map"`
+
+	// Information about the targets to which audit notifications are sent for this
+	// account.
+	AuditNotificationTargetConfigurations map[string]AuditNotificationTarget `locationName:"auditNotificationTargetConfigurations" type:"map"`
+
+	// The ARN of the role that grants permission to AWS IoT to access information
+	// about your devices, policies, certificates and other items as necessary when
+	// performing an audit.
+	//
+	// On the first call to UpdateAccountAuditConfiguration this parameter is required.
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAccountAuditConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAccountAuditConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeAccountAuditConfigurationOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeAccountAuditConfigurationOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.AuditCheckConfigurations) > 0 {
+		v := s.AuditCheckConfigurations
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "auditCheckConfigurations", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetFields(k1, v1)
+		}
+		ms0.End()
+
+	}
+	if len(s.AuditNotificationTargetConfigurations) > 0 {
+		v := s.AuditNotificationTargetConfigurations
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "auditNotificationTargetConfigurations", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetFields(k1, v1)
+		}
+		ms0.End()
+
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type DescribeAuditTaskInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the audit whose information you want to get.
+	//
+	// TaskId is a required field
+	TaskId *string `location:"uri" locationName:"taskId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeAuditTaskInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAuditTaskInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAuditTaskInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeAuditTaskInput"}
+
+	if s.TaskId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("TaskId"))
+	}
+	if s.TaskId != nil && len(*s.TaskId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("TaskId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeAuditTaskInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.TaskId != nil {
+		v := *s.TaskId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "taskId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type DescribeAuditTaskOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// Detailed information about each check performed during this audit.
+	AuditDetails map[string]AuditCheckDetails `locationName:"auditDetails" type:"map"`
+
+	// The name of the scheduled audit (only if the audit was a scheduled audit).
+	ScheduledAuditName *string `locationName:"scheduledAuditName" min:"1" type:"string"`
+
+	// The time the audit started.
+	TaskStartTime *time.Time `locationName:"taskStartTime" type:"timestamp" timestampFormat:"unix"`
+
+	// Statistical information about the audit.
+	TaskStatistics *TaskStatistics `locationName:"taskStatistics" type:"structure"`
+
+	// The status of the audit: one of "IN_PROGRESS", "COMPLETED", "FAILED", or
+	// "CANCELED".
+	TaskStatus AuditTaskStatus `locationName:"taskStatus" type:"string" enum:"true"`
+
+	// The type of audit: "ON_DEMAND_AUDIT_TASK" or "SCHEDULED_AUDIT_TASK".
+	TaskType AuditTaskType `locationName:"taskType" type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s DescribeAuditTaskOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAuditTaskOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeAuditTaskOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeAuditTaskOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.AuditDetails) > 0 {
+		v := s.AuditDetails
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "auditDetails", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetFields(k1, v1)
+		}
+		ms0.End()
+
+	}
+	if s.ScheduledAuditName != nil {
+		v := *s.ScheduledAuditName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "scheduledAuditName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.TaskStartTime != nil {
+		v := *s.TaskStartTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskStartTime", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.TaskStatistics != nil {
+		v := s.TaskStatistics
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "taskStatistics", v, metadata)
+	}
+	if len(s.TaskStatus) > 0 {
+		v := s.TaskStatus
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskStatus", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.TaskType) > 0 {
+		v := s.TaskType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	return nil
+}
+
 type DescribeAuthorizerInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11797,6 +16471,134 @@ func (s DescribeAuthorizerOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "authorizerDescription", v, metadata)
+	}
+	return nil
+}
+
+type DescribeBillingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the billing group.
+	//
+	// BillingGroupName is a required field
+	BillingGroupName *string `location:"uri" locationName:"billingGroupName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeBillingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeBillingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeBillingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeBillingGroupInput"}
+
+	if s.BillingGroupName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("BillingGroupName"))
+	}
+	if s.BillingGroupName != nil && len(*s.BillingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("BillingGroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeBillingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type DescribeBillingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The ARN of the billing group.
+	BillingGroupArn *string `locationName:"billingGroupArn" type:"string"`
+
+	// The ID of the billing group.
+	BillingGroupId *string `locationName:"billingGroupId" min:"1" type:"string"`
+
+	// Additional information about the billing group.
+	BillingGroupMetadata *BillingGroupMetadata `locationName:"billingGroupMetadata" type:"structure"`
+
+	// The name of the billing group.
+	BillingGroupName *string `locationName:"billingGroupName" min:"1" type:"string"`
+
+	// The properties of the billing group.
+	BillingGroupProperties *BillingGroupProperties `locationName:"billingGroupProperties" type:"structure"`
+
+	// The version of the billing group.
+	Version *int64 `locationName:"version" type:"long"`
+}
+
+// String returns the string representation
+func (s DescribeBillingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeBillingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeBillingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeBillingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.BillingGroupArn != nil {
+		v := *s.BillingGroupArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.BillingGroupId != nil {
+		v := *s.BillingGroupId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.BillingGroupMetadata != nil {
+		v := s.BillingGroupMetadata
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "billingGroupMetadata", v, metadata)
+	}
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.BillingGroupProperties != nil {
+		v := s.BillingGroupProperties
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "billingGroupProperties", v, metadata)
+	}
+	if s.Version != nil {
+		v := *s.Version
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "version", protocol.Int64Value(v), metadata)
 	}
 	return nil
 }
@@ -12040,7 +16842,16 @@ func (s DescribeDefaultAuthorizerOutput) MarshalFields(e protocol.FieldEncoder) 
 type DescribeEndpointInput struct {
 	_ struct{} `type:"structure"`
 
-	// The endpoint type.
+	// The endpoint type. Valid endpoint types include:
+	//
+	//    * iot:Data - Returns a VeriSign signed data endpoint.
+	//
+	//    * iot:Data-ATS - Returns an ATS signed data endpoint.
+	//
+	//    * iot:CredentialProvider - Returns an AWS IoT credentials provider API
+	//    endpoint.
+	//
+	//    * iot:Jobs - Returns an AWS IoT device management Jobs API endpoint.
 	EndpointType *string `location:"querystring" locationName:"endpointType" type:"string"`
 }
 
@@ -12243,9 +17054,16 @@ type DescribeIndexOutput struct {
 	// Contains a value that specifies the type of indexing performed. Valid values
 	// are:
 	//
-	// REGISTRY – Your thing index will contain only registry data.
+	//    * REGISTRY – Your thing index will contain only registry data.
 	//
-	// REGISTRY_AND_SHADOW - Your thing index will contain registry and shadow data.
+	//    * REGISTRY_AND_SHADOW - Your thing index will contain registry data and
+	//    shadow data.
+	//
+	//    * REGISTRY_AND_CONNECTIVITY_STATUS - Your thing index will contain registry
+	//    data and thing connectivity status data.
+	//
+	//    * REGISTRY_AND_SHADOW_AND_CONNECTIVITY_STATUS - Your thing index will
+	//    contain registry data, shadow data, and thing connectivity status data.
 	Schema *string `locationName:"schema" type:"string"`
 }
 
@@ -12573,6 +17391,308 @@ func (s DescribeRoleAliasOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type DescribeScheduledAuditInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the scheduled audit whose information you want to get.
+	//
+	// ScheduledAuditName is a required field
+	ScheduledAuditName *string `location:"uri" locationName:"scheduledAuditName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeScheduledAuditInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeScheduledAuditInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeScheduledAuditInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeScheduledAuditInput"}
+
+	if s.ScheduledAuditName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ScheduledAuditName"))
+	}
+	if s.ScheduledAuditName != nil && len(*s.ScheduledAuditName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ScheduledAuditName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeScheduledAuditInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.ScheduledAuditName != nil {
+		v := *s.ScheduledAuditName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "scheduledAuditName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type DescribeScheduledAuditOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The day of the month on which the scheduled audit takes place. Will be "1"
+	// through "31" or "LAST". If days 29-31 are specified, and the month does not
+	// have that many days, the audit takes place on the "LAST" day of the month.
+	DayOfMonth *string `locationName:"dayOfMonth" type:"string"`
+
+	// The day of the week on which the scheduled audit takes place. One of "SUN",
+	// "MON", "TUE", "WED", "THU", "FRI" or "SAT".
+	DayOfWeek DayOfWeek `locationName:"dayOfWeek" type:"string" enum:"true"`
+
+	// How often the scheduled audit takes place. One of "DAILY", "WEEKLY", "BIWEEKLY"
+	// or "MONTHLY". The actual start time of each audit is determined by the system.
+	Frequency AuditFrequency `locationName:"frequency" type:"string" enum:"true"`
+
+	// The ARN of the scheduled audit.
+	ScheduledAuditArn *string `locationName:"scheduledAuditArn" type:"string"`
+
+	// The name of the scheduled audit.
+	ScheduledAuditName *string `locationName:"scheduledAuditName" min:"1" type:"string"`
+
+	// Which checks are performed during the scheduled audit. (Note that checks
+	// must be enabled for your account. (Use DescribeAccountAuditConfiguration
+	// to see the list of all checks including those that are enabled or UpdateAccountAuditConfiguration
+	// to select which checks are enabled.)
+	TargetCheckNames []string `locationName:"targetCheckNames" type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeScheduledAuditOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeScheduledAuditOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeScheduledAuditOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeScheduledAuditOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.DayOfMonth != nil {
+		v := *s.DayOfMonth
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "dayOfMonth", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.DayOfWeek) > 0 {
+		v := s.DayOfWeek
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "dayOfWeek", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.Frequency) > 0 {
+		v := s.Frequency
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "frequency", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.ScheduledAuditArn != nil {
+		v := *s.ScheduledAuditArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "scheduledAuditArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ScheduledAuditName != nil {
+		v := *s.ScheduledAuditName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "scheduledAuditName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.TargetCheckNames) > 0 {
+		v := s.TargetCheckNames
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "targetCheckNames", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+type DescribeSecurityProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the security profile whose information you want to get.
+	//
+	// SecurityProfileName is a required field
+	SecurityProfileName *string `location:"uri" locationName:"securityProfileName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeSecurityProfileInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeSecurityProfileInput"}
+
+	if s.SecurityProfileName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileName"))
+	}
+	if s.SecurityProfileName != nil && len(*s.SecurityProfileName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityProfileName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeSecurityProfileInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type DescribeSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// Where the alerts are sent. (Alerts are always sent to the console.)
+	AlertTargets map[string]AlertTarget `locationName:"alertTargets" type:"map"`
+
+	// Specifies the behaviors that, when violated by a device (thing), cause an
+	// alert.
+	Behaviors []Behavior `locationName:"behaviors" type:"list"`
+
+	// The time the security profile was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+
+	// The time the security profile was last modified.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
+
+	// The ARN of the security profile.
+	SecurityProfileArn *string `locationName:"securityProfileArn" type:"string"`
+
+	// A description of the security profile (associated with the security profile
+	// when it was created or updated).
+	SecurityProfileDescription *string `locationName:"securityProfileDescription" type:"string"`
+
+	// The name of the security profile.
+	SecurityProfileName *string `locationName:"securityProfileName" min:"1" type:"string"`
+
+	// The version of the security profile. A new version is generated whenever
+	// the security profile is updated.
+	Version *int64 `locationName:"version" type:"long"`
+}
+
+// String returns the string representation
+func (s DescribeSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeSecurityProfileOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeSecurityProfileOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.AlertTargets) > 0 {
+		v := s.AlertTargets
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "alertTargets", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetFields(k1, v1)
+		}
+		ms0.End()
+
+	}
+	if len(s.Behaviors) > 0 {
+		v := s.Behaviors
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "behaviors", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.CreationDate != nil {
+		v := *s.CreationDate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "creationDate", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.LastModifiedDate != nil {
+		v := *s.LastModifiedDate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "lastModifiedDate", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.SecurityProfileArn != nil {
+		v := *s.SecurityProfileArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileDescription != nil {
+		v := *s.SecurityProfileDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Version != nil {
+		v := *s.Version
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "version", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
 type DescribeStreamInput struct {
 	_ struct{} `type:"structure"`
 
@@ -12709,6 +17829,18 @@ type DescribeThingGroupOutput struct {
 
 	responseMetadata aws.Response
 
+	// The dynamic thing group index name.
+	IndexName *string `locationName:"indexName" min:"1" type:"string"`
+
+	// The dynamic thing group search query string.
+	QueryString *string `locationName:"queryString" min:"1" type:"string"`
+
+	// The dynamic thing group query version.
+	QueryVersion *string `locationName:"queryVersion" type:"string"`
+
+	// The dynamic thing group status.
+	Status DynamicGroupStatus `locationName:"status" type:"string" enum:"true"`
+
 	// The thing group ARN.
 	ThingGroupArn *string `locationName:"thingGroupArn" type:"string"`
 
@@ -12745,6 +17877,30 @@ func (s DescribeThingGroupOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s DescribeThingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.IndexName != nil {
+		v := *s.IndexName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "indexName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.QueryString != nil {
+		v := *s.QueryString
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "queryString", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.QueryVersion != nil {
+		v := *s.QueryVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "queryVersion", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Status) > 0 {
+		v := s.Status
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "status", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
 	if s.ThingGroupArn != nil {
 		v := *s.ThingGroupArn
 
@@ -12842,6 +17998,9 @@ type DescribeThingOutput struct {
 	// The thing attributes.
 	Attributes map[string]string `locationName:"attributes" type:"map"`
 
+	// The name of the billing group the thing belongs to.
+	BillingGroupName *string `locationName:"billingGroupName" min:"1" type:"string"`
+
 	// The default client ID.
 	DefaultClientId *string `locationName:"defaultClientId" type:"string"`
 
@@ -12893,6 +18052,12 @@ func (s DescribeThingOutput) MarshalFields(e protocol.FieldEncoder) error {
 		}
 		ms0.End()
 
+	}
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	if s.DefaultClientId != nil {
 		v := *s.DefaultClientId
@@ -13236,6 +18401,50 @@ func (s DescribeThingTypeOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Describes the location of the updated firmware.
+type Destination struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the location in S3 of the updated firmware.
+	S3Destination *S3Destination `locationName:"s3Destination" type:"structure"`
+}
+
+// String returns the string representation
+func (s Destination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Destination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Destination) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "Destination"}
+	if s.S3Destination != nil {
+		if err := s.S3Destination.Validate(); err != nil {
+			invalidParams.AddNested("S3Destination", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Destination) MarshalFields(e protocol.FieldEncoder) error {
+	if s.S3Destination != nil {
+		v := s.S3Destination
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "s3Destination", v, metadata)
+	}
+	return nil
+}
+
 type DetachPolicyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13415,6 +18624,95 @@ func (s DetachPrincipalPolicyOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s DetachPrincipalPolicyOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+type DetachSecurityProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// The security profile that is detached.
+	//
+	// SecurityProfileName is a required field
+	SecurityProfileName *string `location:"uri" locationName:"securityProfileName" min:"1" type:"string" required:"true"`
+
+	// The ARN of the thing group from which the security profile is detached.
+	//
+	// SecurityProfileTargetArn is a required field
+	SecurityProfileTargetArn *string `location:"querystring" locationName:"securityProfileTargetArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DetachSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DetachSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DetachSecurityProfileInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DetachSecurityProfileInput"}
+
+	if s.SecurityProfileName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileName"))
+	}
+	if s.SecurityProfileName != nil && len(*s.SecurityProfileName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityProfileName", 1))
+	}
+
+	if s.SecurityProfileTargetArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileTargetArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DetachSecurityProfileInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileTargetArn != nil {
+		v := *s.SecurityProfileTargetArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "securityProfileTargetArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type DetachSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DetachSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DetachSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DetachSecurityProfileOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DetachSecurityProfileOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -14111,6 +19409,155 @@ func (s ExplicitDeny) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Allows you to create an exponential rate of rollout for a job.
+type ExponentialRolloutRate struct {
+	_ struct{} `type:"structure"`
+
+	// The minimum number of things that will be notified of a pending job, per
+	// minute at the start of job rollout. This parameter allows you to define the
+	// initial rate of rollout.
+	//
+	// BaseRatePerMinute is a required field
+	BaseRatePerMinute *int64 `locationName:"baseRatePerMinute" min:"1" type:"integer" required:"true"`
+
+	// The exponential factor to increase the rate of rollout for a job.
+	//
+	// IncrementFactor is a required field
+	IncrementFactor *float64 `locationName:"incrementFactor" min:"1" type:"double" required:"true"`
+
+	// The criteria to initiate the increase in rate of rollout for a job.
+	//
+	// AWS IoT supports up to one digit after the decimal (for example, 1.5, but
+	// not 1.55).
+	//
+	// RateIncreaseCriteria is a required field
+	RateIncreaseCriteria *RateIncreaseCriteria `locationName:"rateIncreaseCriteria" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s ExponentialRolloutRate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ExponentialRolloutRate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExponentialRolloutRate) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ExponentialRolloutRate"}
+
+	if s.BaseRatePerMinute == nil {
+		invalidParams.Add(aws.NewErrParamRequired("BaseRatePerMinute"))
+	}
+	if s.BaseRatePerMinute != nil && *s.BaseRatePerMinute < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("BaseRatePerMinute", 1))
+	}
+
+	if s.IncrementFactor == nil {
+		invalidParams.Add(aws.NewErrParamRequired("IncrementFactor"))
+	}
+	if s.IncrementFactor != nil && *s.IncrementFactor < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("IncrementFactor", 1))
+	}
+
+	if s.RateIncreaseCriteria == nil {
+		invalidParams.Add(aws.NewErrParamRequired("RateIncreaseCriteria"))
+	}
+	if s.RateIncreaseCriteria != nil {
+		if err := s.RateIncreaseCriteria.Validate(); err != nil {
+			invalidParams.AddNested("RateIncreaseCriteria", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ExponentialRolloutRate) MarshalFields(e protocol.FieldEncoder) error {
+	if s.BaseRatePerMinute != nil {
+		v := *s.BaseRatePerMinute
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "baseRatePerMinute", protocol.Int64Value(v), metadata)
+	}
+	if s.IncrementFactor != nil {
+		v := *s.IncrementFactor
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "incrementFactor", protocol.Float64Value(v), metadata)
+	}
+	if s.RateIncreaseCriteria != nil {
+		v := s.RateIncreaseCriteria
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "rateIncreaseCriteria", v, metadata)
+	}
+	return nil
+}
+
+// The location of the OTA update.
+type FileLocation struct {
+	_ struct{} `type:"structure"`
+
+	// The location of the updated firmware in S3.
+	S3Location *S3Location `locationName:"s3Location" type:"structure"`
+
+	// The stream that contains the OTA update.
+	Stream *Stream `locationName:"stream" type:"structure"`
+}
+
+// String returns the string representation
+func (s FileLocation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FileLocation) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FileLocation) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "FileLocation"}
+	if s.S3Location != nil {
+		if err := s.S3Location.Validate(); err != nil {
+			invalidParams.AddNested("S3Location", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.Stream != nil {
+		if err := s.Stream.Validate(); err != nil {
+			invalidParams.AddNested("Stream", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s FileLocation) MarshalFields(e protocol.FieldEncoder) error {
+	if s.S3Location != nil {
+		v := s.S3Location
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "s3Location", v, metadata)
+	}
+	if s.Stream != nil {
+		v := s.Stream
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "stream", v, metadata)
+	}
+	return nil
+}
+
 // Describes an action that writes data to an Amazon Kinesis Firehose stream.
 type FirehoseAction struct {
 	_ struct{} `type:"structure"`
@@ -14308,6 +19755,9 @@ type GetIndexingConfigurationOutput struct {
 
 	responseMetadata aws.Response
 
+	// The index configuration.
+	ThingGroupIndexingConfiguration *ThingGroupIndexingConfiguration `locationName:"thingGroupIndexingConfiguration" type:"structure"`
+
 	// Thing indexing configuration.
 	ThingIndexingConfiguration *ThingIndexingConfiguration `locationName:"thingIndexingConfiguration" type:"structure"`
 }
@@ -14329,6 +19779,12 @@ func (s GetIndexingConfigurationOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s GetIndexingConfigurationOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.ThingGroupIndexingConfiguration != nil {
+		v := s.ThingGroupIndexingConfiguration
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "thingGroupIndexingConfiguration", v, metadata)
+	}
 	if s.ThingIndexingConfiguration != nil {
 		v := s.ThingIndexingConfiguration
 
@@ -15220,9 +20676,86 @@ func (s IotAnalyticsAction) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Sends an input to an AWS IoT Events detector.
+type IotEventsAction struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the AWS IoT Events input.
+	//
+	// InputName is a required field
+	InputName *string `locationName:"inputName" min:"1" type:"string" required:"true"`
+
+	// [Optional] Use this to ensure that only one input (message) with a given
+	// messageId will be processed by an AWS IoT Events detector.
+	MessageId *string `locationName:"messageId" type:"string"`
+
+	// The ARN of the role that grants AWS IoT permission to send an input to an
+	// AWS IoT Events detector. ("Action":"iotevents:BatchPutMessage").
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s IotEventsAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IotEventsAction) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IotEventsAction) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "IotEventsAction"}
+
+	if s.InputName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("InputName"))
+	}
+	if s.InputName != nil && len(*s.InputName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("InputName", 1))
+	}
+
+	if s.RoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("RoleArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s IotEventsAction) MarshalFields(e protocol.FieldEncoder) error {
+	if s.InputName != nil {
+		v := *s.InputName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "inputName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.MessageId != nil {
+		v := *s.MessageId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "messageId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 // The Job object contains details about a job.
 type Job struct {
 	_ struct{} `type:"structure"`
+
+	// Configuration for criteria to abort the job.
+	AbortConfig *AbortConfig `locationName:"abortConfig" type:"structure"`
 
 	// If the job was updated, describes the reason for the update.
 	Comment *string `locationName:"comment" type:"string"`
@@ -15236,8 +20769,9 @@ type Job struct {
 	// A short text description of the job.
 	Description *string `locationName:"description" type:"string"`
 
-	// The parameters specified for the job document.
-	DocumentParameters map[string]string `locationName:"documentParameters" type:"map"`
+	// Will be true if the job was canceled with the optional force parameter set
+	// to true.
+	ForceCanceled *bool `locationName:"forceCanceled" type:"boolean"`
 
 	// An ARN identifying the job with format "arn:aws:iot:region:account:job/jobId".
 	JobArn *string `locationName:"jobArn" type:"string"`
@@ -15257,7 +20791,11 @@ type Job struct {
 	// Configuration for pre-signed S3 URLs.
 	PresignedUrlConfig *PresignedUrlConfig `locationName:"presignedUrlConfig" type:"structure"`
 
-	// The status of the job, one of IN_PROGRESS, CANCELED, or COMPLETED.
+	// If the job was updated, provides the reason code for the update.
+	ReasonCode *string `locationName:"reasonCode" type:"string"`
+
+	// The status of the job, one of IN_PROGRESS, CANCELED, DELETION_IN_PROGRESS
+	// or COMPLETED.
 	Status JobStatus `locationName:"status" type:"string" enum:"true"`
 
 	// Specifies whether the job will continue to run (CONTINUOUS), or will be complete
@@ -15270,6 +20808,12 @@ type Job struct {
 
 	// A list of IoT things and thing groups to which the job should be sent.
 	Targets []string `locationName:"targets" min:"1" type:"list"`
+
+	// Specifies the amount of time each device has to finish its execution of the
+	// job. A timer is started when the job execution status is set to IN_PROGRESS.
+	// If the job execution status is not set to another terminal state before the
+	// timer expires, it will be automatically set to TIMED_OUT.
+	TimeoutConfig *TimeoutConfig `locationName:"timeoutConfig" type:"structure"`
 }
 
 // String returns the string representation
@@ -15284,6 +20828,12 @@ func (s Job) GoString() string {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s Job) MarshalFields(e protocol.FieldEncoder) error {
+	if s.AbortConfig != nil {
+		v := s.AbortConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "abortConfig", v, metadata)
+	}
 	if s.Comment != nil {
 		v := *s.Comment
 
@@ -15308,17 +20858,11 @@ func (s Job) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "description", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
-	if len(s.DocumentParameters) > 0 {
-		v := s.DocumentParameters
+	if s.ForceCanceled != nil {
+		v := *s.ForceCanceled
 
 		metadata := protocol.Metadata{}
-		ms0 := e.Map(protocol.BodyTarget, "documentParameters", metadata)
-		ms0.Start()
-		for k1, v1 := range v {
-			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
-		}
-		ms0.End()
-
+		e.SetValue(protocol.BodyTarget, "forceCanceled", protocol.BoolValue(v), metadata)
 	}
 	if s.JobArn != nil {
 		v := *s.JobArn
@@ -15356,6 +20900,12 @@ func (s Job) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "presignedUrlConfig", v, metadata)
 	}
+	if s.ReasonCode != nil {
+		v := *s.ReasonCode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "reasonCode", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
 	if len(s.Status) > 0 {
 		v := s.Status
 
@@ -15380,6 +20930,12 @@ func (s Job) MarshalFields(e protocol.FieldEncoder) error {
 		ls0.End()
 
 	}
+	if s.TimeoutConfig != nil {
+		v := s.TimeoutConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "timeoutConfig", v, metadata)
+	}
 	return nil
 }
 
@@ -15388,10 +20944,21 @@ func (s Job) MarshalFields(e protocol.FieldEncoder) error {
 type JobExecution struct {
 	_ struct{} `type:"structure"`
 
+	// The estimated number of seconds that remain before the job execution status
+	// will be changed to TIMED_OUT. The timeout interval can be anywhere between
+	// 1 minute and 7 days (1 to 10080 minutes). The actual job execution timeout
+	// can occur up to 60 seconds later than the estimated duration. This value
+	// will not be included if the job execution has reached a terminal status.
+	ApproximateSecondsBeforeTimedOut *int64 `locationName:"approximateSecondsBeforeTimedOut" type:"long"`
+
 	// A string (consisting of the digits "0" through "9") which identifies this
 	// particular job execution on this particular device. It can be used in commands
 	// which return or update job execution information.
 	ExecutionNumber *int64 `locationName:"executionNumber" type:"long"`
+
+	// Will be true if the job execution was canceled with the optional force parameter
+	// set to true.
+	ForceCanceled *bool `locationName:"forceCanceled" type:"boolean"`
 
 	// The unique identifier you assigned to the job when it was created.
 	JobId *string `locationName:"jobId" min:"1" type:"string"`
@@ -15406,8 +20973,8 @@ type JobExecution struct {
 	// The time, in milliseconds since the epoch, when the job execution started.
 	StartedAt *time.Time `locationName:"startedAt" type:"timestamp" timestampFormat:"unix"`
 
-	// The status of the job execution (IN_PROGRESS, QUEUED, FAILED, SUCCESS, CANCELED,
-	// or REJECTED).
+	// The status of the job execution (IN_PROGRESS, QUEUED, FAILED, SUCCEEDED,
+	// TIMED_OUT, CANCELED, or REJECTED).
 	Status JobExecutionStatus `locationName:"status" type:"string" enum:"true"`
 
 	// A collection of name/value pairs that describe the status of the job execution.
@@ -15415,6 +20982,10 @@ type JobExecution struct {
 
 	// The ARN of the thing on which the job execution is running.
 	ThingArn *string `locationName:"thingArn" type:"string"`
+
+	// The version of the job execution. Job execution versions are incremented
+	// each time they are updated by a device.
+	VersionNumber *int64 `locationName:"versionNumber" type:"long"`
 }
 
 // String returns the string representation
@@ -15429,11 +21000,23 @@ func (s JobExecution) GoString() string {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s JobExecution) MarshalFields(e protocol.FieldEncoder) error {
+	if s.ApproximateSecondsBeforeTimedOut != nil {
+		v := *s.ApproximateSecondsBeforeTimedOut
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "approximateSecondsBeforeTimedOut", protocol.Int64Value(v), metadata)
+	}
 	if s.ExecutionNumber != nil {
 		v := *s.ExecutionNumber
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "executionNumber", protocol.Int64Value(v), metadata)
+	}
+	if s.ForceCanceled != nil {
+		v := *s.ForceCanceled
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "forceCanceled", protocol.BoolValue(v), metadata)
 	}
 	if s.JobId != nil {
 		v := *s.JobId
@@ -15476,6 +21059,12 @@ func (s JobExecution) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "thingArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.VersionNumber != nil {
+		v := *s.VersionNumber
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "versionNumber", protocol.Int64Value(v), metadata)
 	}
 	return nil
 }
@@ -15663,6 +21252,10 @@ func (s JobExecutionSummaryForThing) MarshalFields(e protocol.FieldEncoder) erro
 type JobExecutionsRolloutConfig struct {
 	_ struct{} `type:"structure"`
 
+	// The rate of increase for a job rollout. This parameter allows you to define
+	// an exponential rate for a job rollout.
+	ExponentialRate *ExponentialRolloutRate `locationName:"exponentialRate" type:"structure"`
+
 	// The maximum number of things that will be notified of a pending job, per
 	// minute. This parameter allows you to create a staged rollout.
 	MaximumPerMinute *int64 `locationName:"maximumPerMinute" min:"1" type:"integer"`
@@ -15684,6 +21277,11 @@ func (s *JobExecutionsRolloutConfig) Validate() error {
 	if s.MaximumPerMinute != nil && *s.MaximumPerMinute < 1 {
 		invalidParams.Add(aws.NewErrParamMinValue("MaximumPerMinute", 1))
 	}
+	if s.ExponentialRate != nil {
+		if err := s.ExponentialRate.Validate(); err != nil {
+			invalidParams.AddNested("ExponentialRate", err.(aws.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -15693,6 +21291,12 @@ func (s *JobExecutionsRolloutConfig) Validate() error {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s JobExecutionsRolloutConfig) MarshalFields(e protocol.FieldEncoder) error {
+	if s.ExponentialRate != nil {
+		v := s.ExponentialRate
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "exponentialRate", v, metadata)
+	}
 	if s.MaximumPerMinute != nil {
 		v := *s.MaximumPerMinute
 
@@ -15729,7 +21333,12 @@ type JobProcessDetails struct {
 	// The number of things which successfully completed the job.
 	NumberOfSucceededThings *int64 `locationName:"numberOfSucceededThings" type:"integer"`
 
-	// The devices on which the job is executing.
+	// The number of things whose job execution status is TIMED_OUT.
+	NumberOfTimedOutThings *int64 `locationName:"numberOfTimedOutThings" type:"integer"`
+
+	// The target devices to which the job execution is being rolled out. This value
+	// will be null after the job execution has finished rolling out to all the
+	// target devices.
 	ProcessingTargets []string `locationName:"processingTargets" type:"list"`
 }
 
@@ -15786,6 +21395,12 @@ func (s JobProcessDetails) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "numberOfSucceededThings", protocol.Int64Value(v), metadata)
+	}
+	if s.NumberOfTimedOutThings != nil {
+		v := *s.NumberOfTimedOutThings
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "numberOfTimedOutThings", protocol.Int64Value(v), metadata)
 	}
 	if len(s.ProcessingTargets) > 0 {
 		v := s.ProcessingTargets
@@ -16051,6 +21666,133 @@ func (s LambdaAction) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type ListActiveViolationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return at one time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The name of the Device Defender security profile for which violations are
+	// listed.
+	SecurityProfileName *string `location:"querystring" locationName:"securityProfileName" min:"1" type:"string"`
+
+	// The name of the thing whose active violations are listed.
+	ThingName *string `location:"querystring" locationName:"thingName" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListActiveViolationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListActiveViolationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListActiveViolationsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListActiveViolationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.SecurityProfileName != nil && len(*s.SecurityProfileName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityProfileName", 1))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ThingName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListActiveViolationsInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingName != nil {
+		v := *s.ThingName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "thingName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListActiveViolationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The list of active violations.
+	ActiveViolations []ActiveViolation `locationName:"activeViolations" type:"list"`
+
+	// A token that can be used to retrieve the next set of results, or null if
+	// there are no additional results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListActiveViolationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListActiveViolationsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListActiveViolationsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListActiveViolationsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.ActiveViolations) > 0 {
+		v := s.ActiveViolations
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "activeViolations", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 type ListAttachedPoliciesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16177,6 +21919,318 @@ func (s ListAttachedPoliciesOutput) MarshalFields(e protocol.FieldEncoder) error
 	return nil
 }
 
+type ListAuditFindingsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A filter to limit results to the findings for the specified audit check.
+	CheckName *string `locationName:"checkName" type:"string"`
+
+	// A filter to limit results to those found before the specified time. You must
+	// specify either the startTime and endTime or the taskId, but not both.
+	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"unix"`
+
+	// The maximum number of results to return at one time. The default is 25.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// Information identifying the non-compliant resource.
+	ResourceIdentifier *ResourceIdentifier `locationName:"resourceIdentifier" type:"structure"`
+
+	// A filter to limit results to those found after the specified time. You must
+	// specify either the startTime and endTime or the taskId, but not both.
+	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"unix"`
+
+	// A filter to limit results to the audit with the specified ID. You must specify
+	// either the taskId or the startTime and endTime, but not both.
+	TaskId *string `locationName:"taskId" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListAuditFindingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAuditFindingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAuditFindingsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListAuditFindingsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.TaskId != nil && len(*s.TaskId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("TaskId", 1))
+	}
+	if s.ResourceIdentifier != nil {
+		if err := s.ResourceIdentifier.Validate(); err != nil {
+			invalidParams.AddNested("ResourceIdentifier", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListAuditFindingsInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.CheckName != nil {
+		v := *s.CheckName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "checkName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.EndTime != nil {
+		v := *s.EndTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "endTime", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ResourceIdentifier != nil {
+		v := s.ResourceIdentifier
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "resourceIdentifier", v, metadata)
+	}
+	if s.StartTime != nil {
+		v := *s.StartTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "startTime", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.TaskId != nil {
+		v := *s.TaskId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListAuditFindingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The findings (results) of the audit.
+	Findings []AuditFinding `locationName:"findings" type:"list"`
+
+	// A token that can be used to retrieve the next set of results, or null if
+	// there are no additional results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListAuditFindingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAuditFindingsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListAuditFindingsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListAuditFindingsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.Findings) > 0 {
+		v := s.Findings
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "findings", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListAuditTasksInput struct {
+	_ struct{} `type:"structure"`
+
+	// The end of the time period.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `location:"querystring" locationName:"endTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+
+	// The maximum number of results to return at one time. The default is 25.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The beginning of the time period. Note that audit information is retained
+	// for a limited time (180 days). Requesting a start time prior to what is retained
+	// results in an "InvalidRequestException".
+	//
+	// StartTime is a required field
+	StartTime *time.Time `location:"querystring" locationName:"startTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+
+	// A filter to limit the output to audits with the specified completion status:
+	// can be one of "IN_PROGRESS", "COMPLETED", "FAILED" or "CANCELED".
+	TaskStatus AuditTaskStatus `location:"querystring" locationName:"taskStatus" type:"string" enum:"true"`
+
+	// A filter to limit the output to the specified type of audit: can be one of
+	// "ON_DEMAND_AUDIT_TASK" or "SCHEDULED__AUDIT_TASK".
+	TaskType AuditTaskType `location:"querystring" locationName:"taskType" type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s ListAuditTasksInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAuditTasksInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAuditTasksInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListAuditTasksInput"}
+
+	if s.EndTime == nil {
+		invalidParams.Add(aws.NewErrParamRequired("EndTime"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if s.StartTime == nil {
+		invalidParams.Add(aws.NewErrParamRequired("StartTime"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListAuditTasksInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.EndTime != nil {
+		v := *s.EndTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "endTime", protocol.TimeValue{V: v, Format: protocol.RFC822TimeFromat}, metadata)
+	}
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.StartTime != nil {
+		v := *s.StartTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "startTime", protocol.TimeValue{V: v, Format: protocol.RFC822TimeFromat}, metadata)
+	}
+	if len(s.TaskStatus) > 0 {
+		v := s.TaskStatus
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "taskStatus", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.TaskType) > 0 {
+		v := s.TaskType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "taskType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	return nil
+}
+
+type ListAuditTasksOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A token that can be used to retrieve the next set of results, or null if
+	// there are no additional results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The audits that were performed during the specified time period.
+	Tasks []AuditTaskMetadata `locationName:"tasks" type:"list"`
+}
+
+// String returns the string representation
+func (s ListAuditTasksOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAuditTasksOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListAuditTasksOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListAuditTasksOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Tasks) > 0 {
+		v := s.Tasks
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tasks", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
 type ListAuthorizersInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16292,6 +22346,120 @@ func (s ListAuthorizersOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "nextMarker", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListBillingGroupsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return per request.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// Limit the results to billing groups whose names have the given prefix.
+	NamePrefixFilter *string `location:"querystring" locationName:"namePrefixFilter" min:"1" type:"string"`
+
+	// The token to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListBillingGroupsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListBillingGroupsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListBillingGroupsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListBillingGroupsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NamePrefixFilter != nil && len(*s.NamePrefixFilter) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("NamePrefixFilter", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListBillingGroupsInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NamePrefixFilter != nil {
+		v := *s.NamePrefixFilter
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "namePrefixFilter", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListBillingGroupsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The list of billing groups.
+	BillingGroups []GroupNameAndArn `locationName:"billingGroups" type:"list"`
+
+	// The token used to get the next set of results, or null if there are no additional
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListBillingGroupsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListBillingGroupsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListBillingGroupsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListBillingGroupsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.BillingGroups) > 0 {
+		v := s.BillingGroups
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "billingGroups", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	return nil
 }
@@ -17863,8 +24031,7 @@ type ListPrincipalThingsInput struct {
 	// The maximum number of results to return in this operation.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
-	// The token used to get the next set of results, or null if there are no additional
-	// results.
+	// The token to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
 	// The principal.
@@ -18086,6 +24253,337 @@ func (s ListRoleAliasesOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type ListScheduledAuditsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return at one time. The default is 25.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListScheduledAuditsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListScheduledAuditsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListScheduledAuditsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListScheduledAuditsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListScheduledAuditsInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListScheduledAuditsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A token that can be used to retrieve the next set of results, or null if
+	// there are no additional results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The list of scheduled audits.
+	ScheduledAudits []ScheduledAuditMetadata `locationName:"scheduledAudits" type:"list"`
+}
+
+// String returns the string representation
+func (s ListScheduledAuditsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListScheduledAuditsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListScheduledAuditsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListScheduledAuditsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.ScheduledAudits) > 0 {
+		v := s.ScheduledAudits
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "scheduledAudits", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+type ListSecurityProfilesForTargetInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return at one time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// If true, return child groups as well.
+	Recursive *bool `location:"querystring" locationName:"recursive" type:"boolean"`
+
+	// The ARN of the target (thing group) whose attached security profiles you
+	// want to get.
+	//
+	// SecurityProfileTargetArn is a required field
+	SecurityProfileTargetArn *string `location:"querystring" locationName:"securityProfileTargetArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListSecurityProfilesForTargetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSecurityProfilesForTargetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSecurityProfilesForTargetInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListSecurityProfilesForTargetInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if s.SecurityProfileTargetArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileTargetArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListSecurityProfilesForTargetInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Recursive != nil {
+		v := *s.Recursive
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "recursive", protocol.BoolValue(v), metadata)
+	}
+	if s.SecurityProfileTargetArn != nil {
+		v := *s.SecurityProfileTargetArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "securityProfileTargetArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListSecurityProfilesForTargetOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A token that can be used to retrieve the next set of results, or null if
+	// there are no additional results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of security profiles and their associated targets.
+	SecurityProfileTargetMappings []SecurityProfileTargetMapping `locationName:"securityProfileTargetMappings" type:"list"`
+}
+
+// String returns the string representation
+func (s ListSecurityProfilesForTargetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSecurityProfilesForTargetOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListSecurityProfilesForTargetOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListSecurityProfilesForTargetOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.SecurityProfileTargetMappings) > 0 {
+		v := s.SecurityProfileTargetMappings
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "securityProfileTargetMappings", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+type ListSecurityProfilesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return at one time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListSecurityProfilesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSecurityProfilesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSecurityProfilesInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListSecurityProfilesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListSecurityProfilesInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListSecurityProfilesOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A token that can be used to retrieve the next set of results, or null if
+	// there are no additional results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of security profile identifiers (names and ARNs).
+	SecurityProfileIdentifiers []SecurityProfileIdentifier `locationName:"securityProfileIdentifiers" type:"list"`
+}
+
+// String returns the string representation
+func (s ListSecurityProfilesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSecurityProfilesOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListSecurityProfilesOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListSecurityProfilesOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.SecurityProfileIdentifiers) > 0 {
+		v := s.SecurityProfileIdentifiers
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "securityProfileIdentifiers", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
 type ListStreamsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -18186,6 +24684,111 @@ func (s ListStreamsOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		ls0 := e.List(protocol.BodyTarget, "streams", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The ARN of the resource.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"querystring" locationName:"resourceArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+
+	if s.ResourceArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ResourceArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListTagsForResourceInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ResourceArn != nil {
+		v := *s.ResourceArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "resourceArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The token used to get the next set of results, or null if there are no additional
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The list of tags assigned to the resource.
+	Tags []Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListTagsForResourceOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListTagsForResourceOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tags", metadata)
 		ls0.Start()
 		for _, v1 := range v {
 			ls0.ListAddFields(v1)
@@ -18315,14 +24918,133 @@ func (s ListTargetsForPolicyOutput) MarshalFields(e protocol.FieldEncoder) error
 	return nil
 }
 
+type ListTargetsForSecurityProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return at one time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The security profile.
+	//
+	// SecurityProfileName is a required field
+	SecurityProfileName *string `location:"uri" locationName:"securityProfileName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListTargetsForSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTargetsForSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTargetsForSecurityProfileInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListTargetsForSecurityProfileInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if s.SecurityProfileName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileName"))
+	}
+	if s.SecurityProfileName != nil && len(*s.SecurityProfileName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityProfileName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListTargetsForSecurityProfileInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListTargetsForSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A token that can be used to retrieve the next set of results, or null if
+	// there are no additional results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The thing groups to which the security profile is attached.
+	SecurityProfileTargets []SecurityProfileTarget `locationName:"securityProfileTargets" type:"list"`
+}
+
+// String returns the string representation
+func (s ListTargetsForSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTargetsForSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListTargetsForSecurityProfileOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListTargetsForSecurityProfileOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.SecurityProfileTargets) > 0 {
+		v := s.SecurityProfileTargets
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "securityProfileTargets", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
 type ListThingGroupsForThingInput struct {
 	_ struct{} `type:"structure"`
 
 	// The maximum number of results to return at one time.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
-	// The token used to get the next set of results, or null if there are no additional
-	// results.
+	// The token to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
 	// The thing name.
@@ -18445,8 +25167,7 @@ type ListThingGroupsInput struct {
 	// A filter that limits the results to those with the specified name prefix.
 	NamePrefixFilter *string `location:"querystring" locationName:"namePrefixFilter" min:"1" type:"string"`
 
-	// The token used to get the next set of results, or null if there are no additional
-	// results.
+	// The token to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
 	// A filter that limits the results to those with the specified parent group.
@@ -18748,7 +25469,8 @@ type ListThingRegistrationTaskReportsOutput struct {
 
 	responseMetadata aws.Response
 
-	// The token to retrieve the next set of results.
+	// The token used to get the next set of results, or null if there are no additional
+	// results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
 	// The type of task report.
@@ -18808,8 +25530,7 @@ type ListThingRegistrationTasksInput struct {
 	// The maximum number of results to return at one time.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
-	// The token used to get the next set of results, or null if there are no additional
-	// results.
+	// The token to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
 	// The status of the bulk thing provisioning task.
@@ -18921,8 +25642,7 @@ type ListThingTypesInput struct {
 	// The maximum number of results to return in this operation.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
-	// The token for the next set of results, or null if there are no additional
-	// results.
+	// The token to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
 	// The name of the thing type.
@@ -19031,14 +25751,133 @@ func (s ListThingTypesOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type ListThingsInBillingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the billing group.
+	//
+	// BillingGroupName is a required field
+	BillingGroupName *string `location:"uri" locationName:"billingGroupName" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return per request.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListThingsInBillingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListThingsInBillingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListThingsInBillingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListThingsInBillingGroupInput"}
+
+	if s.BillingGroupName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("BillingGroupName"))
+	}
+	if s.BillingGroupName != nil && len(*s.BillingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("BillingGroupName", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListThingsInBillingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListThingsInBillingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The token used to get the next set of results, or null if there are no additional
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of things in the billing group.
+	Things []string `locationName:"things" type:"list"`
+}
+
+// String returns the string representation
+func (s ListThingsInBillingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListThingsInBillingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListThingsInBillingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListThingsInBillingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Things) > 0 {
+		v := s.Things
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "things", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
 type ListThingsInThingGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The maximum number of results to return at one time.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
-	// The token used to get the next set of results, or null if there are no additional
-	// results.
+	// The token to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
 	// When true, list things in this thing group and in all child groups as well.
@@ -19174,8 +26013,7 @@ type ListThingsInput struct {
 	// The maximum number of results to return in this operation.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
-	// The token used to get the next set of results, or null if there are no additional
-	// results.
+	// The token to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
 	// The name of the thing type used to search for things.
@@ -19529,6 +26367,165 @@ func (s ListV2LoggingLevelsOutput) MarshalFields(e protocol.FieldEncoder) error 
 	return nil
 }
 
+type ListViolationEventsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The end time for the alerts to be listed.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `location:"querystring" locationName:"endTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+
+	// The maximum number of results to return at one time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// A filter to limit results to those alerts generated by the specified security
+	// profile.
+	SecurityProfileName *string `location:"querystring" locationName:"securityProfileName" min:"1" type:"string"`
+
+	// The start time for the alerts to be listed.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `location:"querystring" locationName:"startTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+
+	// A filter to limit results to those alerts caused by the specified thing.
+	ThingName *string `location:"querystring" locationName:"thingName" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListViolationEventsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListViolationEventsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListViolationEventsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListViolationEventsInput"}
+
+	if s.EndTime == nil {
+		invalidParams.Add(aws.NewErrParamRequired("EndTime"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.SecurityProfileName != nil && len(*s.SecurityProfileName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityProfileName", 1))
+	}
+
+	if s.StartTime == nil {
+		invalidParams.Add(aws.NewErrParamRequired("StartTime"))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ThingName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListViolationEventsInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.EndTime != nil {
+		v := *s.EndTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "endTime", protocol.TimeValue{V: v, Format: protocol.RFC822TimeFromat}, metadata)
+	}
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.StartTime != nil {
+		v := *s.StartTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "startTime", protocol.TimeValue{V: v, Format: protocol.RFC822TimeFromat}, metadata)
+	}
+	if s.ThingName != nil {
+		v := *s.ThingName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "thingName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type ListViolationEventsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A token that can be used to retrieve the next set of results, or null if
+	// there are no additional results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The security profile violation alerts issued for this account during the
+	// given time frame, potentially filtered by security profile, behavior violated,
+	// or thing (device) violating.
+	ViolationEvents []ViolationEvent `locationName:"violationEvents" type:"list"`
+}
+
+// String returns the string representation
+func (s ListViolationEventsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListViolationEventsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListViolationEventsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListViolationEventsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.ViolationEvents) > 0 {
+		v := s.ViolationEvents
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "violationEvents", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
 // A log target.
 type LogTarget struct {
 	_ struct{} `type:"structure"`
@@ -19674,6 +26671,121 @@ func (s LoggingOptionsPayload) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// The value to be compared with the metric.
+type MetricValue struct {
+	_ struct{} `type:"structure"`
+
+	// If the comparisonOperator calls for a set of CIDRs, use this to specify that
+	// set to be compared with the metric.
+	Cidrs []string `locationName:"cidrs" type:"list"`
+
+	// If the comparisonOperator calls for a numeric value, use this to specify
+	// that numeric value to be compared with the metric.
+	Count *int64 `locationName:"count" type:"long"`
+
+	// If the comparisonOperator calls for a set of ports, use this to specify that
+	// set to be compared with the metric.
+	Ports []int64 `locationName:"ports" type:"list"`
+}
+
+// String returns the string representation
+func (s MetricValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MetricValue) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s MetricValue) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.Cidrs) > 0 {
+		v := s.Cidrs
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "cidrs", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	if s.Count != nil {
+		v := *s.Count
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "count", protocol.Int64Value(v), metadata)
+	}
+	if len(s.Ports) > 0 {
+		v := s.Ports
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "ports", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.Int64Value(v1))
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// Information about the resource that was non-compliant with the audit check.
+type NonCompliantResource struct {
+	_ struct{} `type:"structure"`
+
+	// Additional information about the non-compliant resource.
+	AdditionalInfo map[string]string `locationName:"additionalInfo" type:"map"`
+
+	// Information identifying the non-compliant resource.
+	ResourceIdentifier *ResourceIdentifier `locationName:"resourceIdentifier" type:"structure"`
+
+	// The type of the non-compliant resource.
+	ResourceType ResourceType `locationName:"resourceType" type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s NonCompliantResource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NonCompliantResource) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s NonCompliantResource) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.AdditionalInfo) > 0 {
+		v := s.AdditionalInfo
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "additionalInfo", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
+
+	}
+	if s.ResourceIdentifier != nil {
+		v := s.ResourceIdentifier
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "resourceIdentifier", v, metadata)
+	}
+	if len(s.ResourceType) > 0 {
+		v := s.ResourceType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "resourceType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	return nil
+}
+
 // Describes a file to be associated with an OTA update.
 type OTAUpdateFile struct {
 	_ struct{} `type:"structure"`
@@ -19684,11 +26796,11 @@ type OTAUpdateFile struct {
 	// The code signing method of the file.
 	CodeSigning *CodeSigning `locationName:"codeSigning" type:"structure"`
 
+	// The location of the updated firmware.
+	FileLocation *FileLocation `locationName:"fileLocation" type:"structure"`
+
 	// The name of the file.
 	FileName *string `locationName:"fileName" type:"string"`
-
-	// The source of the file.
-	FileSource *Stream `locationName:"fileSource" type:"structure"`
 
 	// The file version.
 	FileVersion *string `locationName:"fileVersion" type:"string"`
@@ -19712,9 +26824,9 @@ func (s *OTAUpdateFile) Validate() error {
 			invalidParams.AddNested("CodeSigning", err.(aws.ErrInvalidParams))
 		}
 	}
-	if s.FileSource != nil {
-		if err := s.FileSource.Validate(); err != nil {
-			invalidParams.AddNested("FileSource", err.(aws.ErrInvalidParams))
+	if s.FileLocation != nil {
+		if err := s.FileLocation.Validate(); err != nil {
+			invalidParams.AddNested("FileLocation", err.(aws.ErrInvalidParams))
 		}
 	}
 
@@ -19744,17 +26856,17 @@ func (s OTAUpdateFile) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "codeSigning", v, metadata)
 	}
+	if s.FileLocation != nil {
+		v := s.FileLocation
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "fileLocation", v, metadata)
+	}
 	if s.FileName != nil {
 		v := *s.FileName
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "fileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
-	}
-	if s.FileSource != nil {
-		v := s.FileSource
-
-		metadata := protocol.Metadata{}
-		e.SetFields(protocol.BodyTarget, "fileSource", v, metadata)
 	}
 	if s.FileVersion != nil {
 		v := *s.FileVersion
@@ -19777,6 +26889,9 @@ type OTAUpdateInfo struct {
 
 	// The AWS IoT job ID associated with the OTA update.
 	AwsIotJobId *string `locationName:"awsIotJobId" type:"string"`
+
+	// Configuration for the rollout of OTA updates.
+	AwsJobExecutionsRolloutConfig *AwsJobExecutionsRolloutConfig `locationName:"awsJobExecutionsRolloutConfig" type:"structure"`
 
 	// The date when the OTA update was created.
 	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
@@ -19849,6 +26964,12 @@ func (s OTAUpdateInfo) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "awsIotJobId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.AwsJobExecutionsRolloutConfig != nil {
+		v := s.AwsJobExecutionsRolloutConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "awsJobExecutionsRolloutConfig", v, metadata)
 	}
 	if s.CreationDate != nil {
 		v := *s.CreationDate
@@ -19992,7 +27113,7 @@ type OutgoingCertificate struct {
 	TransferMessage *string `locationName:"transferMessage" type:"string"`
 
 	// The AWS account to which the transfer was made.
-	TransferredTo *string `locationName:"transferredTo" type:"string"`
+	TransferredTo *string `locationName:"transferredTo" min:"12" type:"string"`
 }
 
 // String returns the string representation
@@ -20131,6 +27252,57 @@ func (s PolicyVersion) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Information about the version of the policy associated with the resource.
+type PolicyVersionIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the policy.
+	PolicyName *string `locationName:"policyName" min:"1" type:"string"`
+
+	// The ID of the version of the policy associated with the resource.
+	PolicyVersionId *string `locationName:"policyVersionId" type:"string"`
+}
+
+// String returns the string representation
+func (s PolicyVersionIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PolicyVersionIdentifier) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PolicyVersionIdentifier) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "PolicyVersionIdentifier"}
+	if s.PolicyName != nil && len(*s.PolicyName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("PolicyName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s PolicyVersionIdentifier) MarshalFields(e protocol.FieldEncoder) error {
+	if s.PolicyName != nil {
+		v := *s.PolicyName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "policyName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.PolicyVersionId != nil {
+		v := *s.PolicyVersionId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "policyVersionId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 // Configuration for pre-signed S3 URLs.
 type PresignedUrlConfig struct {
 	_ struct{} `type:"structure"`
@@ -20231,6 +27403,63 @@ func (s PutItemInput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "tableName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Allows you to define a criteria to initiate the increase in rate of rollout
+// for a job.
+type RateIncreaseCriteria struct {
+	_ struct{} `type:"structure"`
+
+	// The threshold for number of notified things that will initiate the increase
+	// in rate of rollout.
+	NumberOfNotifiedThings *int64 `locationName:"numberOfNotifiedThings" min:"1" type:"integer"`
+
+	// The threshold for number of succeeded things that will initiate the increase
+	// in rate of rollout.
+	NumberOfSucceededThings *int64 `locationName:"numberOfSucceededThings" min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s RateIncreaseCriteria) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RateIncreaseCriteria) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RateIncreaseCriteria) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "RateIncreaseCriteria"}
+	if s.NumberOfNotifiedThings != nil && *s.NumberOfNotifiedThings < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("NumberOfNotifiedThings", 1))
+	}
+	if s.NumberOfSucceededThings != nil && *s.NumberOfSucceededThings < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("NumberOfSucceededThings", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s RateIncreaseCriteria) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NumberOfNotifiedThings != nil {
+		v := *s.NumberOfNotifiedThings
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "numberOfNotifiedThings", protocol.Int64Value(v), metadata)
+	}
+	if s.NumberOfSucceededThings != nil {
+		v := *s.NumberOfSucceededThings
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "numberOfSucceededThings", protocol.Int64Value(v), metadata)
 	}
 	return nil
 }
@@ -20570,7 +27799,7 @@ type RegisterThingOutput struct {
 
 	responseMetadata aws.Response
 
-	// The PEM of a certificate.
+	// .
 	CertificatePem *string `locationName:"certificatePem" min:"1" type:"string"`
 
 	// ARNs for the generated resources.
@@ -20748,6 +27977,157 @@ func (s RejectCertificateTransferOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s RejectCertificateTransferOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+// Information about a related resource.
+type RelatedResource struct {
+	_ struct{} `type:"structure"`
+
+	// Additional information about the resource.
+	AdditionalInfo map[string]string `locationName:"additionalInfo" type:"map"`
+
+	// Information identifying the resource.
+	ResourceIdentifier *ResourceIdentifier `locationName:"resourceIdentifier" type:"structure"`
+
+	// The type of resource.
+	ResourceType ResourceType `locationName:"resourceType" type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s RelatedResource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RelatedResource) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s RelatedResource) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.AdditionalInfo) > 0 {
+		v := s.AdditionalInfo
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "additionalInfo", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
+
+	}
+	if s.ResourceIdentifier != nil {
+		v := s.ResourceIdentifier
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "resourceIdentifier", v, metadata)
+	}
+	if len(s.ResourceType) > 0 {
+		v := s.ResourceType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "resourceType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	return nil
+}
+
+type RemoveThingFromBillingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the billing group.
+	BillingGroupArn *string `locationName:"billingGroupArn" type:"string"`
+
+	// The name of the billing group.
+	BillingGroupName *string `locationName:"billingGroupName" min:"1" type:"string"`
+
+	// The ARN of the thing to be removed from the billing group.
+	ThingArn *string `locationName:"thingArn" type:"string"`
+
+	// The name of the thing to be removed from the billing group.
+	ThingName *string `locationName:"thingName" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s RemoveThingFromBillingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveThingFromBillingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RemoveThingFromBillingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "RemoveThingFromBillingGroupInput"}
+	if s.BillingGroupName != nil && len(*s.BillingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("BillingGroupName", 1))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ThingName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s RemoveThingFromBillingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.BillingGroupArn != nil {
+		v := *s.BillingGroupArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingArn != nil {
+		v := *s.ThingArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingName != nil {
+		v := *s.ThingName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type RemoveThingFromBillingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s RemoveThingFromBillingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveThingFromBillingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s RemoveThingFromBillingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s RemoveThingFromBillingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -21004,6 +28384,104 @@ func (s RepublishAction) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Information identifying the non-compliant resource.
+type ResourceIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// The account with which the resource is associated.
+	Account *string `locationName:"account" min:"12" type:"string"`
+
+	// The ID of the CA certificate used to authorize the certificate.
+	CaCertificateId *string `locationName:"caCertificateId" min:"64" type:"string"`
+
+	// The client ID.
+	ClientId *string `locationName:"clientId" type:"string"`
+
+	// The ID of the Cognito Identity Pool.
+	CognitoIdentityPoolId *string `locationName:"cognitoIdentityPoolId" type:"string"`
+
+	// The ID of the certificate attached to the resource.
+	DeviceCertificateId *string `locationName:"deviceCertificateId" min:"64" type:"string"`
+
+	// The version of the policy associated with the resource.
+	PolicyVersionIdentifier *PolicyVersionIdentifier `locationName:"policyVersionIdentifier" type:"structure"`
+}
+
+// String returns the string representation
+func (s ResourceIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceIdentifier) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ResourceIdentifier) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ResourceIdentifier"}
+	if s.Account != nil && len(*s.Account) < 12 {
+		invalidParams.Add(aws.NewErrParamMinLen("Account", 12))
+	}
+	if s.CaCertificateId != nil && len(*s.CaCertificateId) < 64 {
+		invalidParams.Add(aws.NewErrParamMinLen("CaCertificateId", 64))
+	}
+	if s.DeviceCertificateId != nil && len(*s.DeviceCertificateId) < 64 {
+		invalidParams.Add(aws.NewErrParamMinLen("DeviceCertificateId", 64))
+	}
+	if s.PolicyVersionIdentifier != nil {
+		if err := s.PolicyVersionIdentifier.Validate(); err != nil {
+			invalidParams.AddNested("PolicyVersionIdentifier", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ResourceIdentifier) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Account != nil {
+		v := *s.Account
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "account", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.CaCertificateId != nil {
+		v := *s.CaCertificateId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "caCertificateId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ClientId != nil {
+		v := *s.ClientId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "clientId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.CognitoIdentityPoolId != nil {
+		v := *s.CognitoIdentityPoolId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "cognitoIdentityPoolId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.DeviceCertificateId != nil {
+		v := *s.DeviceCertificateId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "deviceCertificateId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.PolicyVersionIdentifier != nil {
+		v := s.PolicyVersionIdentifier
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "policyVersionIdentifier", v, metadata)
+	}
+	return nil
+}
+
 // Role alias description.
 type RoleAliasDescription struct {
 	_ struct{} `type:"structure"`
@@ -21018,7 +28496,7 @@ type RoleAliasDescription struct {
 	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
 
 	// The role alias owner.
-	Owner *string `locationName:"owner" type:"string"`
+	Owner *string `locationName:"owner" min:"12" type:"string"`
 
 	// The role alias.
 	RoleAlias *string `locationName:"roleAlias" min:"1" type:"string"`
@@ -21172,21 +28650,68 @@ func (s S3Action) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
-// The location in S3 the contains the files to stream.
+// Describes the location of updated firmware in S3.
+type S3Destination struct {
+	_ struct{} `type:"structure"`
+
+	// The S3 bucket that contains the updated firmware.
+	Bucket *string `locationName:"bucket" min:"1" type:"string"`
+
+	// The S3 prefix.
+	Prefix *string `locationName:"prefix" type:"string"`
+}
+
+// String returns the string representation
+func (s S3Destination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s S3Destination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3Destination) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "S3Destination"}
+	if s.Bucket != nil && len(*s.Bucket) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("Bucket", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s S3Destination) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Bucket != nil {
+		v := *s.Bucket
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "bucket", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Prefix != nil {
+		v := *s.Prefix
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "prefix", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// The S3 location.
 type S3Location struct {
 	_ struct{} `type:"structure"`
 
-	// The S3 bucket that contains the file to stream.
-	//
-	// Bucket is a required field
-	Bucket *string `locationName:"bucket" min:"1" type:"string" required:"true"`
+	// The S3 bucket.
+	Bucket *string `locationName:"bucket" min:"1" type:"string"`
 
-	// The name of the file within the S3 bucket to stream.
-	//
-	// Key is a required field
-	Key *string `locationName:"key" min:"1" type:"string" required:"true"`
+	// The S3 key.
+	Key *string `locationName:"key" min:"1" type:"string"`
 
-	// The file version.
+	// The S3 bucket version.
 	Version *string `locationName:"version" type:"string"`
 }
 
@@ -21203,16 +28728,8 @@ func (s S3Location) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *S3Location) Validate() error {
 	invalidParams := aws.ErrInvalidParams{Context: "S3Location"}
-
-	if s.Bucket == nil {
-		invalidParams.Add(aws.NewErrParamRequired("Bucket"))
-	}
 	if s.Bucket != nil && len(*s.Bucket) < 1 {
 		invalidParams.Add(aws.NewErrParamMinLen("Bucket", 1))
-	}
-
-	if s.Key == nil {
-		invalidParams.Add(aws.NewErrParamRequired("Key"))
 	}
 	if s.Key != nil && len(*s.Key) < 1 {
 		invalidParams.Add(aws.NewErrParamMinLen("Key", 1))
@@ -21309,6 +28826,74 @@ func (s SalesforceAction) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "url", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Information about the scheduled audit.
+type ScheduledAuditMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The day of the month on which the scheduled audit is run (if the frequency
+	// is "MONTHLY"). If days 29-31 are specified, and the month does not have that
+	// many days, the audit takes place on the "LAST" day of the month.
+	DayOfMonth *string `locationName:"dayOfMonth" type:"string"`
+
+	// The day of the week on which the scheduled audit is run (if the frequency
+	// is "WEEKLY" or "BIWEEKLY").
+	DayOfWeek DayOfWeek `locationName:"dayOfWeek" type:"string" enum:"true"`
+
+	// How often the scheduled audit takes place.
+	Frequency AuditFrequency `locationName:"frequency" type:"string" enum:"true"`
+
+	// The ARN of the scheduled audit.
+	ScheduledAuditArn *string `locationName:"scheduledAuditArn" type:"string"`
+
+	// The name of the scheduled audit.
+	ScheduledAuditName *string `locationName:"scheduledAuditName" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ScheduledAuditMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScheduledAuditMetadata) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ScheduledAuditMetadata) MarshalFields(e protocol.FieldEncoder) error {
+	if s.DayOfMonth != nil {
+		v := *s.DayOfMonth
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "dayOfMonth", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.DayOfWeek) > 0 {
+		v := s.DayOfWeek
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "dayOfWeek", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.Frequency) > 0 {
+		v := s.Frequency
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "frequency", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.ScheduledAuditArn != nil {
+		v := *s.ScheduledAuditArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "scheduledAuditArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ScheduledAuditName != nil {
+		v := *s.ScheduledAuditName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "scheduledAuditName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	return nil
 }
@@ -21413,6 +28998,9 @@ type SearchIndexOutput struct {
 	// results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
+	// The thing groups that match the search query.
+	ThingGroups []ThingGroupDocument `locationName:"thingGroups" type:"list"`
+
 	// The things that match the search query.
 	Things []ThingDocument `locationName:"things" type:"list"`
 }
@@ -21440,6 +29028,18 @@ func (s SearchIndexOutput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	if len(s.ThingGroups) > 0 {
+		v := s.ThingGroups
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "thingGroups", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
 	if len(s.Things) > 0 {
 		v := s.Things
 
@@ -21451,6 +29051,117 @@ func (s SearchIndexOutput) MarshalFields(e protocol.FieldEncoder) error {
 		}
 		ls0.End()
 
+	}
+	return nil
+}
+
+// Identifying information for a Device Defender security profile.
+type SecurityProfileIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the security profile.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The name you have given to the security profile.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s SecurityProfileIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SecurityProfileIdentifier) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s SecurityProfileIdentifier) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Arn != nil {
+		v := *s.Arn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Name != nil {
+		v := *s.Name
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// A target to which an alert is sent when a security profile behavior is violated.
+type SecurityProfileTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the security profile.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s SecurityProfileTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SecurityProfileTarget) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s SecurityProfileTarget) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Arn != nil {
+		v := *s.Arn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Information about a security profile and the target associated with it.
+type SecurityProfileTargetMapping struct {
+	_ struct{} `type:"structure"`
+
+	// Information that identifies the security profile.
+	SecurityProfileIdentifier *SecurityProfileIdentifier `locationName:"securityProfileIdentifier" type:"structure"`
+
+	// Information about the target (thing group) associated with the security profile.
+	Target *SecurityProfileTarget `locationName:"target" type:"structure"`
+}
+
+// String returns the string representation
+func (s SecurityProfileTargetMapping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SecurityProfileTargetMapping) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s SecurityProfileTargetMapping) MarshalFields(e protocol.FieldEncoder) error {
+	if s.SecurityProfileIdentifier != nil {
+		v := s.SecurityProfileIdentifier
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "securityProfileIdentifier", v, metadata)
+	}
+	if s.Target != nil {
+		v := s.Target
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "target", v, metadata)
 	}
 	return nil
 }
@@ -21810,10 +29521,10 @@ type SetV2LoggingOptionsInput struct {
 	// The default logging level.
 	DefaultLogLevel LogLevel `locationName:"defaultLogLevel" type:"string" enum:"true"`
 
-	// Set to true to disable all logs, otherwise set to false.
+	// If true all logs are disabled. The default is false.
 	DisableAllLogs *bool `locationName:"disableAllLogs" type:"boolean"`
 
-	// The role ARN that allows IoT to write to Cloudwatch logs.
+	// The ARN of the role that allows IoT to write to Cloudwatch logs.
 	RoleArn *string `locationName:"roleArn" type:"string"`
 }
 
@@ -21877,13 +29588,60 @@ func (s SetV2LoggingOptionsOutput) MarshalFields(e protocol.FieldEncoder) error 
 	return nil
 }
 
+// Describes the code-signing profile.
+type SigningProfileParameter struct {
+	_ struct{} `type:"structure"`
+
+	// Certificate ARN.
+	CertificateArn *string `locationName:"certificateArn" type:"string"`
+
+	// The location of the code-signing certificate on your device.
+	CertificatePathOnDevice *string `locationName:"certificatePathOnDevice" type:"string"`
+
+	// The hardware platform of your device.
+	Platform *string `locationName:"platform" type:"string"`
+}
+
+// String returns the string representation
+func (s SigningProfileParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SigningProfileParameter) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s SigningProfileParameter) MarshalFields(e protocol.FieldEncoder) error {
+	if s.CertificateArn != nil {
+		v := *s.CertificateArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "certificateArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.CertificatePathOnDevice != nil {
+		v := *s.CertificatePathOnDevice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "certificatePathOnDevice", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Platform != nil {
+		v := *s.Platform
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "platform", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 // Describes an action to publish to an Amazon SNS topic.
 type SnsAction struct {
 	_ struct{} `type:"structure"`
 
-	// The message format of the message to publish. Optional. Accepted values are
-	// "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this
-	// setting to determine if the payload should be parsed and relevant platform-specific
+	// (Optional) The message format of the message to publish. Accepted values
+	// are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses
+	// this setting to determine if the payload should be parsed and relevant platform-specific
 	// bits of the payload should be extracted. To read more about SNS message formats,
 	// see http://docs.aws.amazon.com/sns/latest/dg/json-formats.html (http://docs.aws.amazon.com/sns/latest/dg/json-formats.html)
 	// refer to their official documentation.
@@ -22020,6 +29778,157 @@ func (s SqsAction) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type StartOnDemandAuditTaskInput struct {
+	_ struct{} `type:"structure"`
+
+	// Which checks are performed during the audit. The checks you specify must
+	// be enabled for your account or an exception occurs. Use DescribeAccountAuditConfiguration
+	// to see the list of all checks including those that are enabled or UpdateAccountAuditConfiguration
+	// to select which checks are enabled.
+	//
+	// TargetCheckNames is a required field
+	TargetCheckNames []string `locationName:"targetCheckNames" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s StartOnDemandAuditTaskInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartOnDemandAuditTaskInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartOnDemandAuditTaskInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StartOnDemandAuditTaskInput"}
+
+	if s.TargetCheckNames == nil {
+		invalidParams.Add(aws.NewErrParamRequired("TargetCheckNames"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s StartOnDemandAuditTaskInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if len(s.TargetCheckNames) > 0 {
+		v := s.TargetCheckNames
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "targetCheckNames", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+type StartOnDemandAuditTaskOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The ID of the on-demand audit you started.
+	TaskId *string `locationName:"taskId" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s StartOnDemandAuditTaskOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartOnDemandAuditTaskOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StartOnDemandAuditTaskOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s StartOnDemandAuditTaskOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.TaskId != nil {
+		v := *s.TaskId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "taskId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Information required to start a signing job.
+type StartSigningJobParameter struct {
+	_ struct{} `type:"structure"`
+
+	// The location to write the code-signed file.
+	Destination *Destination `locationName:"destination" type:"structure"`
+
+	// The code-signing profile name.
+	SigningProfileName *string `locationName:"signingProfileName" type:"string"`
+
+	// Describes the code-signing profile.
+	SigningProfileParameter *SigningProfileParameter `locationName:"signingProfileParameter" type:"structure"`
+}
+
+// String returns the string representation
+func (s StartSigningJobParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSigningJobParameter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartSigningJobParameter) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StartSigningJobParameter"}
+	if s.Destination != nil {
+		if err := s.Destination.Validate(); err != nil {
+			invalidParams.AddNested("Destination", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s StartSigningJobParameter) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Destination != nil {
+		v := s.Destination
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "destination", v, metadata)
+	}
+	if s.SigningProfileName != nil {
+		v := *s.SigningProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "signingProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SigningProfileParameter != nil {
+		v := s.SigningProfileParameter
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "signingProfileParameter", v, metadata)
+	}
+	return nil
+}
+
 type StartThingRegistrationTaskInput struct {
 	_ struct{} `type:"structure"`
 
@@ -22152,6 +30061,78 @@ func (s StartThingRegistrationTaskOutput) MarshalFields(e protocol.FieldEncoder)
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "taskId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Starts execution of a Step Functions state machine.
+type StepFunctionsAction struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) A name will be given to the state machine execution consisting
+	// of this prefix followed by a UUID. Step Functions automatically creates a
+	// unique name for each state machine execution if one is not provided.
+	ExecutionNamePrefix *string `locationName:"executionNamePrefix" type:"string"`
+
+	// The ARN of the role that grants IoT permission to start execution of a state
+	// machine ("Action":"states:StartExecution").
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
+
+	// The name of the Step Functions state machine whose execution will be started.
+	//
+	// StateMachineName is a required field
+	StateMachineName *string `locationName:"stateMachineName" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StepFunctionsAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StepFunctionsAction) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StepFunctionsAction) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StepFunctionsAction"}
+
+	if s.RoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("RoleArn"))
+	}
+
+	if s.StateMachineName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("StateMachineName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s StepFunctionsAction) MarshalFields(e protocol.FieldEncoder) error {
+	if s.ExecutionNamePrefix != nil {
+		v := *s.ExecutionNamePrefix
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "executionNamePrefix", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.StateMachineName != nil {
+		v := *s.StateMachineName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "stateMachineName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	return nil
 }
@@ -22481,6 +30462,219 @@ func (s StreamSummary) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "streamVersion", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+// A set of key/value pairs that are used to manage the resource.
+type Tag struct {
+	_ struct{} `type:"structure"`
+
+	// The tag's key.
+	Key *string `type:"string"`
+
+	// The tag's value.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Tag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Tag) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Tag) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Key != nil {
+		v := *s.Key
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "Key", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Value != nil {
+		v := *s.Value
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "Value", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the resource.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `locationName:"resourceArn" type:"string" required:"true"`
+
+	// The new or modified tags for the resource.
+	//
+	// Tags is a required field
+	Tags []Tag `locationName:"tags" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "TagResourceInput"}
+
+	if s.ResourceArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ResourceArn"))
+	}
+
+	if s.Tags == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Tags"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s TagResourceInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.ResourceArn != nil {
+		v := *s.ResourceArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "resourceArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tags", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s TagResourceOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s TagResourceOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+// Statistics for the checks performed during the audit.
+type TaskStatistics struct {
+	_ struct{} `type:"structure"`
+
+	// The number of checks that did not run because the audit was canceled.
+	CanceledChecks *int64 `locationName:"canceledChecks" type:"integer"`
+
+	// The number of checks that found compliant resources.
+	CompliantChecks *int64 `locationName:"compliantChecks" type:"integer"`
+
+	// The number of checks
+	FailedChecks *int64 `locationName:"failedChecks" type:"integer"`
+
+	// The number of checks in progress.
+	InProgressChecks *int64 `locationName:"inProgressChecks" type:"integer"`
+
+	// The number of checks that found non-compliant resources.
+	NonCompliantChecks *int64 `locationName:"nonCompliantChecks" type:"integer"`
+
+	// The number of checks in this audit.
+	TotalChecks *int64 `locationName:"totalChecks" type:"integer"`
+
+	// The number of checks waiting for data collection.
+	WaitingForDataCollectionChecks *int64 `locationName:"waitingForDataCollectionChecks" type:"integer"`
+}
+
+// String returns the string representation
+func (s TaskStatistics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TaskStatistics) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s TaskStatistics) MarshalFields(e protocol.FieldEncoder) error {
+	if s.CanceledChecks != nil {
+		v := *s.CanceledChecks
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "canceledChecks", protocol.Int64Value(v), metadata)
+	}
+	if s.CompliantChecks != nil {
+		v := *s.CompliantChecks
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "compliantChecks", protocol.Int64Value(v), metadata)
+	}
+	if s.FailedChecks != nil {
+		v := *s.FailedChecks
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "failedChecks", protocol.Int64Value(v), metadata)
+	}
+	if s.InProgressChecks != nil {
+		v := *s.InProgressChecks
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "inProgressChecks", protocol.Int64Value(v), metadata)
+	}
+	if s.NonCompliantChecks != nil {
+		v := *s.NonCompliantChecks
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nonCompliantChecks", protocol.Int64Value(v), metadata)
+	}
+	if s.TotalChecks != nil {
+		v := *s.TotalChecks
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "totalChecks", protocol.Int64Value(v), metadata)
+	}
+	if s.WaitingForDataCollectionChecks != nil {
+		v := *s.WaitingForDataCollectionChecks
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "waitingForDataCollectionChecks", protocol.Int64Value(v), metadata)
 	}
 	return nil
 }
@@ -22874,12 +31068,56 @@ func (s ThingAttribute) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// The connectivity status of the thing.
+type ThingConnectivity struct {
+	_ struct{} `type:"structure"`
+
+	// True if the thing is connected to the AWS IoT service, false if it is not
+	// connected.
+	Connected *bool `locationName:"connected" type:"boolean"`
+
+	// The epoch time (in milliseconds) when the thing last connected or disconnected.
+	// Note that if the thing has been disconnected for more than a few weeks, the
+	// time value can be missing.
+	Timestamp *int64 `locationName:"timestamp" type:"long"`
+}
+
+// String returns the string representation
+func (s ThingConnectivity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ThingConnectivity) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ThingConnectivity) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Connected != nil {
+		v := *s.Connected
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "connected", protocol.BoolValue(v), metadata)
+	}
+	if s.Timestamp != nil {
+		v := *s.Timestamp
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "timestamp", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
 // The thing search index document.
 type ThingDocument struct {
 	_ struct{} `type:"structure"`
 
 	// The attributes.
 	Attributes map[string]string `locationName:"attributes" type:"map"`
+
+	// Indicates whether or not the thing is connected to the AWS IoT service.
+	Connectivity *ThingConnectivity `locationName:"connectivity" type:"structure"`
 
 	// The shadow.
 	Shadow *string `locationName:"shadow" type:"string"`
@@ -22921,6 +31159,12 @@ func (s ThingDocument) MarshalFields(e protocol.FieldEncoder) error {
 		ms0.End()
 
 	}
+	if s.Connectivity != nil {
+		v := s.Connectivity
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "connectivity", v, metadata)
+	}
 	if s.Shadow != nil {
 		v := *s.Shadow
 
@@ -22956,6 +31200,127 @@ func (s ThingDocument) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "thingTypeName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// The thing group search index document.
+type ThingGroupDocument struct {
+	_ struct{} `type:"structure"`
+
+	// The thing group attributes.
+	Attributes map[string]string `locationName:"attributes" type:"map"`
+
+	// Parent group names.
+	ParentGroupNames []string `locationName:"parentGroupNames" type:"list"`
+
+	// The thing group description.
+	ThingGroupDescription *string `locationName:"thingGroupDescription" type:"string"`
+
+	// The thing group ID.
+	ThingGroupId *string `locationName:"thingGroupId" min:"1" type:"string"`
+
+	// The thing group name.
+	ThingGroupName *string `locationName:"thingGroupName" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ThingGroupDocument) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ThingGroupDocument) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ThingGroupDocument) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.Attributes) > 0 {
+		v := s.Attributes
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "attributes", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
+
+	}
+	if len(s.ParentGroupNames) > 0 {
+		v := s.ParentGroupNames
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "parentGroupNames", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	if s.ThingGroupDescription != nil {
+		v := *s.ThingGroupDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingGroupDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingGroupId != nil {
+		v := *s.ThingGroupId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingGroupId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingGroupName != nil {
+		v := *s.ThingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Thing group indexing configuration.
+type ThingGroupIndexingConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Thing group indexing mode.
+	//
+	// ThingGroupIndexingMode is a required field
+	ThingGroupIndexingMode ThingGroupIndexingMode `locationName:"thingGroupIndexingMode" type:"string" required:"true" enum:"true"`
+}
+
+// String returns the string representation
+func (s ThingGroupIndexingConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ThingGroupIndexingConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ThingGroupIndexingConfiguration) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ThingGroupIndexingConfiguration"}
+	if len(s.ThingGroupIndexingMode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("ThingGroupIndexingMode"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ThingGroupIndexingConfiguration) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.ThingGroupIndexingMode) > 0 {
+		v := s.ThingGroupIndexingMode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingGroupIndexingMode", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
 	return nil
 }
@@ -23051,9 +31416,19 @@ func (s ThingGroupProperties) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
-// Thing indexing configuration.
+// The thing indexing configuration. For more information, see Managing Thing
+// Indexing (https://docs.aws.amazon.com/iot/latest/developerguide/managing-index.html).
 type ThingIndexingConfiguration struct {
 	_ struct{} `type:"structure"`
+
+	// Thing connectivity indexing mode. Valid values are:
+	//
+	//    * STATUS – Your thing index will contain connectivity status. In order
+	//    to enable thing connectivity indexing, thingIndexMode must not be set
+	//    to OFF.
+	//
+	//    * OFF - Thing connectivity status indexing is disabled.
+	ThingConnectivityIndexingMode ThingConnectivityIndexingMode `locationName:"thingConnectivityIndexingMode" type:"string" enum:"true"`
 
 	// Thing indexing mode. Valid values are:
 	//
@@ -23063,7 +31438,9 @@ type ThingIndexingConfiguration struct {
 	//    data.
 	//
 	//    * OFF - Thing indexing is disabled.
-	ThingIndexingMode ThingIndexingMode `locationName:"thingIndexingMode" type:"string" enum:"true"`
+	//
+	// ThingIndexingMode is a required field
+	ThingIndexingMode ThingIndexingMode `locationName:"thingIndexingMode" type:"string" required:"true" enum:"true"`
 }
 
 // String returns the string representation
@@ -23076,8 +31453,27 @@ func (s ThingIndexingConfiguration) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ThingIndexingConfiguration) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ThingIndexingConfiguration"}
+	if len(s.ThingIndexingMode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("ThingIndexingMode"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s ThingIndexingConfiguration) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.ThingConnectivityIndexingMode) > 0 {
+		v := s.ThingConnectivityIndexingMode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingConnectivityIndexingMode", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
 	if len(s.ThingIndexingMode) > 0 {
 		v := s.ThingIndexingMode
 
@@ -23236,6 +31632,43 @@ func (s ThingTypeProperties) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "thingTypeDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Specifies the amount of time each device has to finish its execution of the
+// job. A timer is started when the job execution status is set to IN_PROGRESS.
+// If the job execution status is not set to another terminal state before the
+// timer expires, it will be automatically set to TIMED_OUT.
+type TimeoutConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the amount of time, in minutes, this device has to finish execution
+	// of this job. The timeout interval can be anywhere between 1 minute and 7
+	// days (1 to 10080 minutes). The in progress timer can't be updated and will
+	// apply to all job executions for the job. Whenever a job execution remains
+	// in the IN_PROGRESS status for longer than this interval, the job execution
+	// will fail and switch to the terminal TIMED_OUT status.
+	InProgressTimeoutInMinutes *int64 `locationName:"inProgressTimeoutInMinutes" type:"long"`
+}
+
+// String returns the string representation
+func (s TimeoutConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TimeoutConfig) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s TimeoutConfig) MarshalFields(e protocol.FieldEncoder) error {
+	if s.InProgressTimeoutInMinutes != nil {
+		v := *s.InProgressTimeoutInMinutes
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "inProgressTimeoutInMinutes", protocol.Int64Value(v), metadata)
 	}
 	return nil
 }
@@ -23533,7 +31966,7 @@ type TransferCertificateInput struct {
 	// The AWS account.
 	//
 	// TargetAwsAccount is a required field
-	TargetAwsAccount *string `location:"querystring" locationName:"targetAwsAccount" type:"string" required:"true"`
+	TargetAwsAccount *string `location:"querystring" locationName:"targetAwsAccount" min:"12" type:"string" required:"true"`
 
 	// The transfer message.
 	TransferMessage *string `locationName:"transferMessage" type:"string"`
@@ -23562,6 +31995,9 @@ func (s *TransferCertificateInput) Validate() error {
 
 	if s.TargetAwsAccount == nil {
 		invalidParams.Add(aws.NewErrParamRequired("TargetAwsAccount"))
+	}
+	if s.TargetAwsAccount != nil && len(*s.TargetAwsAccount) < 12 {
+		invalidParams.Add(aws.NewErrParamMinLen("TargetAwsAccount", 12))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -23692,6 +32128,218 @@ func (s TransferData) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "transferMessage", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	return nil
+}
+
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the resource.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `locationName:"resourceArn" type:"string" required:"true"`
+
+	// A list of the keys of the tags to be removed from the resource.
+	//
+	// TagKeys is a required field
+	TagKeys []string `locationName:"tagKeys" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UntagResourceInput"}
+
+	if s.ResourceArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ResourceArn"))
+	}
+
+	if s.TagKeys == nil {
+		invalidParams.Add(aws.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UntagResourceInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.ResourceArn != nil {
+		v := *s.ResourceArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "resourceArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.TagKeys) > 0 {
+		v := s.TagKeys
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "tagKeys", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s UntagResourceOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UntagResourceOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+type UpdateAccountAuditConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies which audit checks are enabled and disabled for this account. Use
+	// DescribeAccountAuditConfiguration to see the list of all checks including
+	// those that are currently enabled.
+	//
+	// Note that some data collection may begin immediately when certain checks
+	// are enabled. When a check is disabled, any data collected so far in relation
+	// to the check is deleted.
+	//
+	// You cannot disable a check if it is used by any scheduled audit. You must
+	// first delete the check from the scheduled audit or delete the scheduled audit
+	// itself.
+	//
+	// On the first call to UpdateAccountAuditConfiguration this parameter is required
+	// and must specify at least one enabled check.
+	AuditCheckConfigurations map[string]AuditCheckConfiguration `locationName:"auditCheckConfigurations" type:"map"`
+
+	// Information about the targets to which audit notifications are sent.
+	AuditNotificationTargetConfigurations map[string]AuditNotificationTarget `locationName:"auditNotificationTargetConfigurations" type:"map"`
+
+	// The ARN of the role that grants permission to AWS IoT to access information
+	// about your devices, policies, certificates and other items as necessary when
+	// performing an audit.
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateAccountAuditConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAccountAuditConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateAccountAuditConfigurationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UpdateAccountAuditConfigurationInput"}
+	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("RoleArn", 20))
+	}
+	if s.AuditNotificationTargetConfigurations != nil {
+		for i, v := range s.AuditNotificationTargetConfigurations {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AuditNotificationTargetConfigurations", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateAccountAuditConfigurationInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if len(s.AuditCheckConfigurations) > 0 {
+		v := s.AuditCheckConfigurations
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "auditCheckConfigurations", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetFields(k1, v1)
+		}
+		ms0.End()
+
+	}
+	if len(s.AuditNotificationTargetConfigurations) > 0 {
+		v := s.AuditNotificationTargetConfigurations
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "auditNotificationTargetConfigurations", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetFields(k1, v1)
+		}
+		ms0.End()
+
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type UpdateAccountAuditConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s UpdateAccountAuditConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAccountAuditConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s UpdateAccountAuditConfigurationOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateAccountAuditConfigurationOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -23828,6 +32476,115 @@ func (s UpdateAuthorizerOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "authorizerName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type UpdateBillingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the billing group.
+	//
+	// BillingGroupName is a required field
+	BillingGroupName *string `location:"uri" locationName:"billingGroupName" min:"1" type:"string" required:"true"`
+
+	// The properties of the billing group.
+	//
+	// BillingGroupProperties is a required field
+	BillingGroupProperties *BillingGroupProperties `locationName:"billingGroupProperties" type:"structure" required:"true"`
+
+	// The expected version of the billing group. If the version of the billing
+	// group does not match the expected version specified in the request, the UpdateBillingGroup
+	// request is rejected with a VersionConflictException.
+	ExpectedVersion *int64 `locationName:"expectedVersion" type:"long"`
+}
+
+// String returns the string representation
+func (s UpdateBillingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateBillingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateBillingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UpdateBillingGroupInput"}
+
+	if s.BillingGroupName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("BillingGroupName"))
+	}
+	if s.BillingGroupName != nil && len(*s.BillingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("BillingGroupName", 1))
+	}
+
+	if s.BillingGroupProperties == nil {
+		invalidParams.Add(aws.NewErrParamRequired("BillingGroupProperties"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateBillingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.BillingGroupProperties != nil {
+		v := s.BillingGroupProperties
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "billingGroupProperties", v, metadata)
+	}
+	if s.ExpectedVersion != nil {
+		v := *s.ExpectedVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "expectedVersion", protocol.Int64Value(v), metadata)
+	}
+	if s.BillingGroupName != nil {
+		v := *s.BillingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "billingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type UpdateBillingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The latest version of the billing group.
+	Version *int64 `locationName:"version" type:"long"`
+}
+
+// String returns the string representation
+func (s UpdateBillingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateBillingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s UpdateBillingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateBillingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Version != nil {
+		v := *s.Version
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "version", protocol.Int64Value(v), metadata)
 	}
 	return nil
 }
@@ -24049,6 +32806,151 @@ func (s UpdateCertificateOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type UpdateDynamicThingGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The expected version of the dynamic thing group to update.
+	ExpectedVersion *int64 `locationName:"expectedVersion" type:"long"`
+
+	// The dynamic thing group index to update.
+	//
+	// Currently one index is supported: 'AWS_Things'.
+	IndexName *string `locationName:"indexName" min:"1" type:"string"`
+
+	// The dynamic thing group search query string to update.
+	QueryString *string `locationName:"queryString" min:"1" type:"string"`
+
+	// The dynamic thing group query version to update.
+	//
+	// Currently one query version is supported: "2017-09-30". If not specified,
+	// the query version defaults to this value.
+	QueryVersion *string `locationName:"queryVersion" type:"string"`
+
+	// The name of the dynamic thing group to update.
+	//
+	// ThingGroupName is a required field
+	ThingGroupName *string `location:"uri" locationName:"thingGroupName" min:"1" type:"string" required:"true"`
+
+	// The dynamic thing group properties to update.
+	//
+	// ThingGroupProperties is a required field
+	ThingGroupProperties *ThingGroupProperties `locationName:"thingGroupProperties" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateDynamicThingGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDynamicThingGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateDynamicThingGroupInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UpdateDynamicThingGroupInput"}
+	if s.IndexName != nil && len(*s.IndexName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("IndexName", 1))
+	}
+	if s.QueryString != nil && len(*s.QueryString) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("QueryString", 1))
+	}
+
+	if s.ThingGroupName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ThingGroupName"))
+	}
+	if s.ThingGroupName != nil && len(*s.ThingGroupName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ThingGroupName", 1))
+	}
+
+	if s.ThingGroupProperties == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ThingGroupProperties"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateDynamicThingGroupInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.ExpectedVersion != nil {
+		v := *s.ExpectedVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "expectedVersion", protocol.Int64Value(v), metadata)
+	}
+	if s.IndexName != nil {
+		v := *s.IndexName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "indexName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.QueryString != nil {
+		v := *s.QueryString
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "queryString", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.QueryVersion != nil {
+		v := *s.QueryVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "queryVersion", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingGroupProperties != nil {
+		v := s.ThingGroupProperties
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "thingGroupProperties", v, metadata)
+	}
+	if s.ThingGroupName != nil {
+		v := *s.ThingGroupName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "thingGroupName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type UpdateDynamicThingGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The dynamic thing group version.
+	Version *int64 `locationName:"version" type:"long"`
+}
+
+// String returns the string representation
+func (s UpdateDynamicThingGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateDynamicThingGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s UpdateDynamicThingGroupOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateDynamicThingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Version != nil {
+		v := *s.Version
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "version", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
 type UpdateEventConfigurationsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -24113,6 +33015,9 @@ func (s UpdateEventConfigurationsOutput) MarshalFields(e protocol.FieldEncoder) 
 type UpdateIndexingConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Thing group indexing configuration.
+	ThingGroupIndexingConfiguration *ThingGroupIndexingConfiguration `locationName:"thingGroupIndexingConfiguration" type:"structure"`
+
 	// Thing indexing configuration.
 	ThingIndexingConfiguration *ThingIndexingConfiguration `locationName:"thingIndexingConfiguration" type:"structure"`
 }
@@ -24127,9 +33032,35 @@ func (s UpdateIndexingConfigurationInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateIndexingConfigurationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UpdateIndexingConfigurationInput"}
+	if s.ThingGroupIndexingConfiguration != nil {
+		if err := s.ThingGroupIndexingConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ThingGroupIndexingConfiguration", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.ThingIndexingConfiguration != nil {
+		if err := s.ThingIndexingConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ThingIndexingConfiguration", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s UpdateIndexingConfigurationInput) MarshalFields(e protocol.FieldEncoder) error {
 
+	if s.ThingGroupIndexingConfiguration != nil {
+		v := s.ThingGroupIndexingConfiguration
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "thingGroupIndexingConfiguration", v, metadata)
+	}
 	if s.ThingIndexingConfiguration != nil {
 		v := s.ThingIndexingConfiguration
 
@@ -24162,6 +33093,143 @@ func (s UpdateIndexingConfigurationOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s UpdateIndexingConfigurationOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
+type UpdateJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// Allows you to create criteria to abort a job.
+	AbortConfig *AbortConfig `locationName:"abortConfig" type:"structure"`
+
+	// A short text description of the job.
+	Description *string `locationName:"description" type:"string"`
+
+	// Allows you to create a staged rollout of the job.
+	JobExecutionsRolloutConfig *JobExecutionsRolloutConfig `locationName:"jobExecutionsRolloutConfig" type:"structure"`
+
+	// The ID of the job to be updated.
+	//
+	// JobId is a required field
+	JobId *string `location:"uri" locationName:"jobId" min:"1" type:"string" required:"true"`
+
+	// Configuration information for pre-signed S3 URLs.
+	PresignedUrlConfig *PresignedUrlConfig `locationName:"presignedUrlConfig" type:"structure"`
+
+	// Specifies the amount of time each device has to finish its execution of the
+	// job. The timer is started when the job execution status is set to IN_PROGRESS.
+	// If the job execution status is not set to another terminal state before the
+	// time expires, it will be automatically set to TIMED_OUT.
+	TimeoutConfig *TimeoutConfig `locationName:"timeoutConfig" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UpdateJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+	if s.AbortConfig != nil {
+		if err := s.AbortConfig.Validate(); err != nil {
+			invalidParams.AddNested("AbortConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.JobExecutionsRolloutConfig != nil {
+		if err := s.JobExecutionsRolloutConfig.Validate(); err != nil {
+			invalidParams.AddNested("JobExecutionsRolloutConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.PresignedUrlConfig != nil {
+		if err := s.PresignedUrlConfig.Validate(); err != nil {
+			invalidParams.AddNested("PresignedUrlConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateJobInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.AbortConfig != nil {
+		v := s.AbortConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "abortConfig", v, metadata)
+	}
+	if s.Description != nil {
+		v := *s.Description
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "description", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.JobExecutionsRolloutConfig != nil {
+		v := s.JobExecutionsRolloutConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "jobExecutionsRolloutConfig", v, metadata)
+	}
+	if s.PresignedUrlConfig != nil {
+		v := s.PresignedUrlConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "presignedUrlConfig", v, metadata)
+	}
+	if s.TimeoutConfig != nil {
+		v := s.TimeoutConfig
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "timeoutConfig", v, metadata)
+	}
+	if s.JobId != nil {
+		v := *s.JobId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "jobId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type UpdateJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s UpdateJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s UpdateJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateJobOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -24277,6 +33345,365 @@ func (s UpdateRoleAliasOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "roleAliasArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type UpdateScheduledAuditInput struct {
+	_ struct{} `type:"structure"`
+
+	// The day of the month on which the scheduled audit takes place. Can be "1"
+	// through "31" or "LAST". This field is required if the "frequency" parameter
+	// is set to "MONTHLY". If days 29-31 are specified, and the month does not
+	// have that many days, the audit takes place on the "LAST" day of the month.
+	DayOfMonth *string `locationName:"dayOfMonth" type:"string"`
+
+	// The day of the week on which the scheduled audit takes place. Can be one
+	// of "SUN", "MON", "TUE", "WED", "THU", "FRI" or "SAT". This field is required
+	// if the "frequency" parameter is set to "WEEKLY" or "BIWEEKLY".
+	DayOfWeek DayOfWeek `locationName:"dayOfWeek" type:"string" enum:"true"`
+
+	// How often the scheduled audit takes place. Can be one of "DAILY", "WEEKLY",
+	// "BIWEEKLY" or "MONTHLY". The actual start time of each audit is determined
+	// by the system.
+	Frequency AuditFrequency `locationName:"frequency" type:"string" enum:"true"`
+
+	// The name of the scheduled audit. (Max. 128 chars)
+	//
+	// ScheduledAuditName is a required field
+	ScheduledAuditName *string `location:"uri" locationName:"scheduledAuditName" min:"1" type:"string" required:"true"`
+
+	// Which checks are performed during the scheduled audit. Checks must be enabled
+	// for your account. (Use DescribeAccountAuditConfiguration to see the list
+	// of all checks including those that are enabled or UpdateAccountAuditConfiguration
+	// to select which checks are enabled.)
+	TargetCheckNames []string `locationName:"targetCheckNames" type:"list"`
+}
+
+// String returns the string representation
+func (s UpdateScheduledAuditInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateScheduledAuditInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateScheduledAuditInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UpdateScheduledAuditInput"}
+
+	if s.ScheduledAuditName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ScheduledAuditName"))
+	}
+	if s.ScheduledAuditName != nil && len(*s.ScheduledAuditName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ScheduledAuditName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateScheduledAuditInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if s.DayOfMonth != nil {
+		v := *s.DayOfMonth
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "dayOfMonth", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.DayOfWeek) > 0 {
+		v := s.DayOfWeek
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "dayOfWeek", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.Frequency) > 0 {
+		v := s.Frequency
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "frequency", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.TargetCheckNames) > 0 {
+		v := s.TargetCheckNames
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "targetCheckNames", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	if s.ScheduledAuditName != nil {
+		v := *s.ScheduledAuditName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "scheduledAuditName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type UpdateScheduledAuditOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The ARN of the scheduled audit.
+	ScheduledAuditArn *string `locationName:"scheduledAuditArn" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateScheduledAuditOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateScheduledAuditOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s UpdateScheduledAuditOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateScheduledAuditOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.ScheduledAuditArn != nil {
+		v := *s.ScheduledAuditArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "scheduledAuditArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type UpdateSecurityProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// Where the alerts are sent. (Alerts are always sent to the console.)
+	AlertTargets map[string]AlertTarget `locationName:"alertTargets" type:"map"`
+
+	// Specifies the behaviors that, when violated by a device (thing), cause an
+	// alert.
+	Behaviors []Behavior `locationName:"behaviors" type:"list"`
+
+	// The expected version of the security profile. A new version is generated
+	// whenever the security profile is updated. If you specify a value that is
+	// different than the actual version, a VersionConflictException is thrown.
+	ExpectedVersion *int64 `location:"querystring" locationName:"expectedVersion" type:"long"`
+
+	// A description of the security profile.
+	SecurityProfileDescription *string `locationName:"securityProfileDescription" type:"string"`
+
+	// The name of the security profile you want to update.
+	//
+	// SecurityProfileName is a required field
+	SecurityProfileName *string `location:"uri" locationName:"securityProfileName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateSecurityProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateSecurityProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateSecurityProfileInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UpdateSecurityProfileInput"}
+
+	if s.SecurityProfileName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SecurityProfileName"))
+	}
+	if s.SecurityProfileName != nil && len(*s.SecurityProfileName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityProfileName", 1))
+	}
+	if s.AlertTargets != nil {
+		for i, v := range s.AlertTargets {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AlertTargets", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Behaviors != nil {
+		for i, v := range s.Behaviors {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Behaviors", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateSecurityProfileInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if len(s.AlertTargets) > 0 {
+		v := s.AlertTargets
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "alertTargets", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetFields(k1, v1)
+		}
+		ms0.End()
+
+	}
+	if len(s.Behaviors) > 0 {
+		v := s.Behaviors
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "behaviors", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.SecurityProfileDescription != nil {
+		v := *s.SecurityProfileDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ExpectedVersion != nil {
+		v := *s.ExpectedVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "expectedVersion", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+type UpdateSecurityProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// Where the alerts are sent. (Alerts are always sent to the console.)
+	AlertTargets map[string]AlertTarget `locationName:"alertTargets" type:"map"`
+
+	// Specifies the behaviors that, when violated by a device (thing), cause an
+	// alert.
+	Behaviors []Behavior `locationName:"behaviors" type:"list"`
+
+	// The time the security profile was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+
+	// The time the security profile was last modified.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
+
+	// The ARN of the security profile that was updated.
+	SecurityProfileArn *string `locationName:"securityProfileArn" type:"string"`
+
+	// The description of the security profile.
+	SecurityProfileDescription *string `locationName:"securityProfileDescription" type:"string"`
+
+	// The name of the security profile that was updated.
+	SecurityProfileName *string `locationName:"securityProfileName" min:"1" type:"string"`
+
+	// The updated version of the security profile.
+	Version *int64 `locationName:"version" type:"long"`
+}
+
+// String returns the string representation
+func (s UpdateSecurityProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateSecurityProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s UpdateSecurityProfileOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s UpdateSecurityProfileOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.AlertTargets) > 0 {
+		v := s.AlertTargets
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "alertTargets", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetFields(k1, v1)
+		}
+		ms0.End()
+
+	}
+	if len(s.Behaviors) > 0 {
+		v := s.Behaviors
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "behaviors", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	if s.CreationDate != nil {
+		v := *s.CreationDate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "creationDate", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.LastModifiedDate != nil {
+		v := *s.LastModifiedDate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "lastModifiedDate", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if s.SecurityProfileArn != nil {
+		v := *s.SecurityProfileArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileDescription != nil {
+		v := *s.SecurityProfileDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Version != nil {
+		v := *s.Version
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "version", protocol.Int64Value(v), metadata)
 	}
 	return nil
 }
@@ -24549,6 +33976,12 @@ func (s UpdateThingGroupOutput) MarshalFields(e protocol.FieldEncoder) error {
 type UpdateThingGroupsForThingInput struct {
 	_ struct{} `type:"structure"`
 
+	// Override dynamic thing groups with static thing groups when 10-group limit
+	// is reached. If a thing belongs to 10 thing groups, and one or more of those
+	// groups are dynamic thing groups, adding a thing to a static group removes
+	// the thing from the last dynamic group.
+	OverrideDynamicGroups *bool `locationName:"overrideDynamicGroups" type:"boolean"`
+
 	// The groups to which the thing will be added.
 	ThingGroupsToAdd []string `locationName:"thingGroupsToAdd" type:"list"`
 
@@ -24585,6 +34018,12 @@ func (s *UpdateThingGroupsForThingInput) Validate() error {
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s UpdateThingGroupsForThingInput) MarshalFields(e protocol.FieldEncoder) error {
 
+	if s.OverrideDynamicGroups != nil {
+		v := *s.OverrideDynamicGroups
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "overrideDynamicGroups", protocol.BoolValue(v), metadata)
+	}
 	if len(s.ThingGroupsToAdd) > 0 {
 		v := s.ThingGroupsToAdd
 
@@ -24766,6 +34205,243 @@ func (s UpdateThingOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+type ValidateSecurityProfileBehaviorsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the behaviors that, when violated by a device (thing), cause an
+	// alert.
+	//
+	// Behaviors is a required field
+	Behaviors []Behavior `locationName:"behaviors" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s ValidateSecurityProfileBehaviorsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ValidateSecurityProfileBehaviorsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ValidateSecurityProfileBehaviorsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ValidateSecurityProfileBehaviorsInput"}
+
+	if s.Behaviors == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Behaviors"))
+	}
+	if s.Behaviors != nil {
+		for i, v := range s.Behaviors {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Behaviors", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ValidateSecurityProfileBehaviorsInput) MarshalFields(e protocol.FieldEncoder) error {
+
+	if len(s.Behaviors) > 0 {
+		v := s.Behaviors
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "behaviors", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+type ValidateSecurityProfileBehaviorsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// True if the behaviors were valid.
+	Valid *bool `locationName:"valid" type:"boolean"`
+
+	// The list of any errors found in the behaviors.
+	ValidationErrors []ValidationError `locationName:"validationErrors" type:"list"`
+}
+
+// String returns the string representation
+func (s ValidateSecurityProfileBehaviorsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ValidateSecurityProfileBehaviorsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ValidateSecurityProfileBehaviorsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ValidateSecurityProfileBehaviorsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Valid != nil {
+		v := *s.Valid
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "valid", protocol.BoolValue(v), metadata)
+	}
+	if len(s.ValidationErrors) > 0 {
+		v := s.ValidationErrors
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "validationErrors", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// Information about an error found in a behavior specification.
+type ValidationError struct {
+	_ struct{} `type:"structure"`
+
+	// The description of an error found in the behaviors.
+	ErrorMessage *string `locationName:"errorMessage" type:"string"`
+}
+
+// String returns the string representation
+func (s ValidationError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ValidationError) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ValidationError) MarshalFields(e protocol.FieldEncoder) error {
+	if s.ErrorMessage != nil {
+		v := *s.ErrorMessage
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "errorMessage", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Information about a Device Defender security profile behavior violation.
+type ViolationEvent struct {
+	_ struct{} `type:"structure"`
+
+	// The behavior which was violated.
+	Behavior *Behavior `locationName:"behavior" type:"structure"`
+
+	// The value of the metric (the measurement).
+	MetricValue *MetricValue `locationName:"metricValue" type:"structure"`
+
+	// The name of the security profile whose behavior was violated.
+	SecurityProfileName *string `locationName:"securityProfileName" min:"1" type:"string"`
+
+	// The name of the thing responsible for the violation event.
+	ThingName *string `locationName:"thingName" min:"1" type:"string"`
+
+	// The time the violation event occurred.
+	ViolationEventTime *time.Time `locationName:"violationEventTime" type:"timestamp" timestampFormat:"unix"`
+
+	// The type of violation event.
+	ViolationEventType ViolationEventType `locationName:"violationEventType" type:"string" enum:"true"`
+
+	// The ID of the violation event.
+	ViolationId *string `locationName:"violationId" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ViolationEvent) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ViolationEvent) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ViolationEvent) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Behavior != nil {
+		v := s.Behavior
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "behavior", v, metadata)
+	}
+	if s.MetricValue != nil {
+		v := s.MetricValue
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "metricValue", v, metadata)
+	}
+	if s.SecurityProfileName != nil {
+		v := *s.SecurityProfileName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "securityProfileName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ThingName != nil {
+		v := *s.ThingName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "thingName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ViolationEventTime != nil {
+		v := *s.ViolationEventTime
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "violationEventTime", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
+	if len(s.ViolationEventType) > 0 {
+		v := s.ViolationEventType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "violationEventType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.ViolationId != nil {
+		v := *s.ViolationId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "violationId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+type AbortAction string
+
+// Enum values for AbortAction
+const (
+	AbortActionCancel AbortAction = "CANCEL"
+)
+
+func (enum AbortAction) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum AbortAction) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type ActionType string
 
 // Enum values for ActionType
@@ -24781,6 +34457,134 @@ func (enum ActionType) MarshalValue() (string, error) {
 }
 
 func (enum ActionType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// The type of alert target: one of "SNS".
+type AlertTargetType string
+
+// Enum values for AlertTargetType
+const (
+	AlertTargetTypeSns AlertTargetType = "SNS"
+)
+
+func (enum AlertTargetType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum AlertTargetType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type AuditCheckRunStatus string
+
+// Enum values for AuditCheckRunStatus
+const (
+	AuditCheckRunStatusInProgress               AuditCheckRunStatus = "IN_PROGRESS"
+	AuditCheckRunStatusWaitingForDataCollection AuditCheckRunStatus = "WAITING_FOR_DATA_COLLECTION"
+	AuditCheckRunStatusCanceled                 AuditCheckRunStatus = "CANCELED"
+	AuditCheckRunStatusCompletedCompliant       AuditCheckRunStatus = "COMPLETED_COMPLIANT"
+	AuditCheckRunStatusCompletedNonCompliant    AuditCheckRunStatus = "COMPLETED_NON_COMPLIANT"
+	AuditCheckRunStatusFailed                   AuditCheckRunStatus = "FAILED"
+)
+
+func (enum AuditCheckRunStatus) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum AuditCheckRunStatus) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type AuditFindingSeverity string
+
+// Enum values for AuditFindingSeverity
+const (
+	AuditFindingSeverityCritical AuditFindingSeverity = "CRITICAL"
+	AuditFindingSeverityHigh     AuditFindingSeverity = "HIGH"
+	AuditFindingSeverityMedium   AuditFindingSeverity = "MEDIUM"
+	AuditFindingSeverityLow      AuditFindingSeverity = "LOW"
+)
+
+func (enum AuditFindingSeverity) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum AuditFindingSeverity) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type AuditFrequency string
+
+// Enum values for AuditFrequency
+const (
+	AuditFrequencyDaily    AuditFrequency = "DAILY"
+	AuditFrequencyWeekly   AuditFrequency = "WEEKLY"
+	AuditFrequencyBiweekly AuditFrequency = "BIWEEKLY"
+	AuditFrequencyMonthly  AuditFrequency = "MONTHLY"
+)
+
+func (enum AuditFrequency) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum AuditFrequency) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type AuditNotificationType string
+
+// Enum values for AuditNotificationType
+const (
+	AuditNotificationTypeSns AuditNotificationType = "SNS"
+)
+
+func (enum AuditNotificationType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum AuditNotificationType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type AuditTaskStatus string
+
+// Enum values for AuditTaskStatus
+const (
+	AuditTaskStatusInProgress AuditTaskStatus = "IN_PROGRESS"
+	AuditTaskStatusCompleted  AuditTaskStatus = "COMPLETED"
+	AuditTaskStatusFailed     AuditTaskStatus = "FAILED"
+	AuditTaskStatusCanceled   AuditTaskStatus = "CANCELED"
+)
+
+func (enum AuditTaskStatus) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum AuditTaskStatus) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type AuditTaskType string
+
+// Enum values for AuditTaskType
+const (
+	AuditTaskTypeOnDemandAuditTask  AuditTaskType = "ON_DEMAND_AUDIT_TASK"
+	AuditTaskTypeScheduledAuditTask AuditTaskType = "SCHEDULED_AUDIT_TASK"
+)
+
+func (enum AuditTaskType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum AuditTaskType) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }
@@ -24898,6 +34702,69 @@ func (enum CertificateStatus) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
+type ComparisonOperator string
+
+// Enum values for ComparisonOperator
+const (
+	ComparisonOperatorLessThan          ComparisonOperator = "less-than"
+	ComparisonOperatorLessThanEquals    ComparisonOperator = "less-than-equals"
+	ComparisonOperatorGreaterThan       ComparisonOperator = "greater-than"
+	ComparisonOperatorGreaterThanEquals ComparisonOperator = "greater-than-equals"
+	ComparisonOperatorInCidrSet         ComparisonOperator = "in-cidr-set"
+	ComparisonOperatorNotInCidrSet      ComparisonOperator = "not-in-cidr-set"
+	ComparisonOperatorInPortSet         ComparisonOperator = "in-port-set"
+	ComparisonOperatorNotInPortSet      ComparisonOperator = "not-in-port-set"
+)
+
+func (enum ComparisonOperator) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ComparisonOperator) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type DayOfWeek string
+
+// Enum values for DayOfWeek
+const (
+	DayOfWeekSun DayOfWeek = "SUN"
+	DayOfWeekMon DayOfWeek = "MON"
+	DayOfWeekTue DayOfWeek = "TUE"
+	DayOfWeekWed DayOfWeek = "WED"
+	DayOfWeekThu DayOfWeek = "THU"
+	DayOfWeekFri DayOfWeek = "FRI"
+	DayOfWeekSat DayOfWeek = "SAT"
+)
+
+func (enum DayOfWeek) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum DayOfWeek) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type DynamicGroupStatus string
+
+// Enum values for DynamicGroupStatus
+const (
+	DynamicGroupStatusActive     DynamicGroupStatus = "ACTIVE"
+	DynamicGroupStatusBuilding   DynamicGroupStatus = "BUILDING"
+	DynamicGroupStatusRebuilding DynamicGroupStatus = "REBUILDING"
+)
+
+func (enum DynamicGroupStatus) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum DynamicGroupStatus) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type DynamoKeyType string
 
 // Enum values for DynamoKeyType
@@ -24927,6 +34794,9 @@ const (
 	EventTypeThingTypeAssociation EventType = "THING_TYPE_ASSOCIATION"
 	EventTypeJob                  EventType = "JOB"
 	EventTypeJobExecution         EventType = "JOB_EXECUTION"
+	EventTypePolicy               EventType = "POLICY"
+	EventTypeCertificate          EventType = "CERTIFICATE"
+	EventTypeCaCertificate        EventType = "CA_CERTIFICATE"
 )
 
 func (enum EventType) MarshalValue() (string, error) {
@@ -24956,6 +34826,25 @@ func (enum IndexStatus) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
+type JobExecutionFailureType string
+
+// Enum values for JobExecutionFailureType
+const (
+	JobExecutionFailureTypeFailed   JobExecutionFailureType = "FAILED"
+	JobExecutionFailureTypeRejected JobExecutionFailureType = "REJECTED"
+	JobExecutionFailureTypeTimedOut JobExecutionFailureType = "TIMED_OUT"
+	JobExecutionFailureTypeAll      JobExecutionFailureType = "ALL"
+)
+
+func (enum JobExecutionFailureType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum JobExecutionFailureType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type JobExecutionStatus string
 
 // Enum values for JobExecutionStatus
@@ -24964,6 +34853,7 @@ const (
 	JobExecutionStatusInProgress JobExecutionStatus = "IN_PROGRESS"
 	JobExecutionStatusSucceeded  JobExecutionStatus = "SUCCEEDED"
 	JobExecutionStatusFailed     JobExecutionStatus = "FAILED"
+	JobExecutionStatusTimedOut   JobExecutionStatus = "TIMED_OUT"
 	JobExecutionStatusRejected   JobExecutionStatus = "REJECTED"
 	JobExecutionStatusRemoved    JobExecutionStatus = "REMOVED"
 	JobExecutionStatusCanceled   JobExecutionStatus = "CANCELED"
@@ -25087,6 +34977,27 @@ func (enum ReportType) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
+type ResourceType string
+
+// Enum values for ResourceType
+const (
+	ResourceTypeDeviceCertificate   ResourceType = "DEVICE_CERTIFICATE"
+	ResourceTypeCaCertificate       ResourceType = "CA_CERTIFICATE"
+	ResourceTypeIotPolicy           ResourceType = "IOT_POLICY"
+	ResourceTypeCognitoIdentityPool ResourceType = "COGNITO_IDENTITY_POOL"
+	ResourceTypeClientId            ResourceType = "CLIENT_ID"
+	ResourceTypeAccountSettings     ResourceType = "ACCOUNT_SETTINGS"
+)
+
+func (enum ResourceType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ResourceType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type Status string
 
 // Enum values for Status
@@ -25124,6 +35035,40 @@ func (enum TargetSelection) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
+type ThingConnectivityIndexingMode string
+
+// Enum values for ThingConnectivityIndexingMode
+const (
+	ThingConnectivityIndexingModeOff    ThingConnectivityIndexingMode = "OFF"
+	ThingConnectivityIndexingModeStatus ThingConnectivityIndexingMode = "STATUS"
+)
+
+func (enum ThingConnectivityIndexingMode) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ThingConnectivityIndexingMode) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type ThingGroupIndexingMode string
+
+// Enum values for ThingGroupIndexingMode
+const (
+	ThingGroupIndexingModeOff ThingGroupIndexingMode = "OFF"
+	ThingGroupIndexingModeOn  ThingGroupIndexingMode = "ON"
+)
+
+func (enum ThingGroupIndexingMode) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ThingGroupIndexingMode) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type ThingIndexingMode string
 
 // Enum values for ThingIndexingMode
@@ -25138,6 +35083,24 @@ func (enum ThingIndexingMode) MarshalValue() (string, error) {
 }
 
 func (enum ThingIndexingMode) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type ViolationEventType string
+
+// Enum values for ViolationEventType
+const (
+	ViolationEventTypeInAlarm          ViolationEventType = "in-alarm"
+	ViolationEventTypeAlarmCleared     ViolationEventType = "alarm-cleared"
+	ViolationEventTypeAlarmInvalidated ViolationEventType = "alarm-invalidated"
+)
+
+func (enum ViolationEventType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ViolationEventType) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }

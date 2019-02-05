@@ -366,6 +366,9 @@ func (r CreateConfigurationTemplateRequest) Send() (*UpdateConfigurationTemplate
 // application and are used to deploy different versions of the application
 // with the same configuration settings.
 //
+// Templates aren't associated with any environment. The EnvironmentName response
+// element is always null.
+//
 // Related Topics
 //
 //    * DescribeConfigurationOptions
@@ -1478,8 +1481,8 @@ func (r DescribeInstancesHealthRequest) Send() (*DescribeInstancesHealthOutput, 
 // DescribeInstancesHealthRequest returns a request value for making API operation for
 // AWS Elastic Beanstalk.
 //
-// Retrives detailed information about the health of instances in your AWS Elastic
-// Beanstalk. This operation requires enhanced health reporting (http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html).
+// Retrieves detailed information about the health of instances in your AWS
+// Elastic Beanstalk. This operation requires enhanced health reporting (http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html).
 //
 //    // Example sending a request using the DescribeInstancesHealthRequest method.
 //    req := client.DescribeInstancesHealthRequest(params)
@@ -2580,6 +2583,14 @@ type ApplicationResourceLifecycleConfig struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of an IAM service role that Elastic Beanstalk has permission to assume.
+	//
+	// The ServiceRole property is required the first time that you provide a VersionLifecycleConfig
+	// for the application in one of the supporting calls (CreateApplication or
+	// UpdateApplicationResourceLifecycle). After you provide it once, in either
+	// one of the calls, Elastic Beanstalk persists the Service Role with the application,
+	// and you don't need to specify it again in subsequent UpdateApplicationResourceLifecycle
+	// calls. You can, however, specify it in subsequent calls to change the Service
+	// Role to another value.
 	ServiceRole *string `type:"string"`
 
 	// The application version lifecycle configuration.
@@ -2642,7 +2653,25 @@ type ApplicationVersionDescription struct {
 	// S3.
 	SourceBundle *S3Location `type:"structure"`
 
-	// The processing status of the application version.
+	// The processing status of the application version. Reflects the state of the
+	// application version during its creation. Many of the values are only applicable
+	// if you specified True for the Process parameter of the CreateApplicationVersion
+	// action. The following list describes the possible values.
+	//
+	//    * Unprocessed – Application version wasn't pre-processed or validated.
+	//    Elastic Beanstalk will validate configuration files during deployment
+	//    of the application version to an environment.
+	//
+	//    * Processing – Elastic Beanstalk is currently processing the application
+	//    version.
+	//
+	//    * Building – Application version is currently undergoing an AWS CodeBuild
+	//    build.
+	//
+	//    * Processed – Elastic Beanstalk was successfully pre-processed and validated.
+	//
+	//    * Failed – Either the AWS CodeBuild build failed or configuration files
+	//    didn't pass validation. This application version isn't usable.
 	Status ApplicationVersionStatus `type:"string" enum:"true"`
 
 	// A unique identifier for the application version.
@@ -2894,10 +2923,14 @@ func (s Builder) GoString() string {
 type CPUUtilization struct {
 	_ struct{} `type:"structure"`
 
+	// Available on Linux environments only.
+	//
 	// Percentage of time that the CPU has spent in the I/O Wait state over the
 	// last 10 seconds.
 	IOWait *float64 `type:"double"`
 
+	// Available on Linux environments only.
+	//
 	// Percentage of time that the CPU has spent in the IRQ state over the last
 	// 10 seconds.
 	IRQ *float64 `type:"double"`
@@ -2906,14 +2939,26 @@ type CPUUtilization struct {
 	// 10 seconds.
 	Idle *float64 `type:"double"`
 
+	// Available on Linux environments only.
+	//
 	// Percentage of time that the CPU has spent in the Nice state over the last
 	// 10 seconds.
 	Nice *float64 `type:"double"`
 
+	// Available on Windows environments only.
+	//
+	// Percentage of time that the CPU has spent in the Privileged state over the
+	// last 10 seconds.
+	Privileged *float64 `type:"double"`
+
+	// Available on Linux environments only.
+	//
 	// Percentage of time that the CPU has spent in the SoftIRQ state over the last
 	// 10 seconds.
 	SoftIRQ *float64 `type:"double"`
 
+	// Available on Linux environments only.
+	//
 	// Percentage of time that the CPU has spent in the System state over the last
 	// 10 seconds.
 	System *float64 `type:"double"`
@@ -3259,10 +3304,14 @@ type CreateApplicationVersionInput struct {
 	// Describes this version.
 	Description *string `type:"string"`
 
-	// Preprocesses and validates the environment manifest (env.yaml) and configuration
+	// Pre-processes and validates the environment manifest (env.yaml) and configuration
 	// files (*.config files in the .ebextensions folder) in the source bundle.
 	// Validating configuration files can identify issues prior to deploying the
 	// application version to an environment.
+	//
+	// You must turn processing on for application versions that you create using
+	// AWS CodeBuild or AWS CodeCommit. For application versions built from a source
+	// bundle in Amazon S3, processing is optional.
 	//
 	// The Process option validates Elastic Beanstalk configuration files. It doesn't
 	// validate your application's configuration files, like proxy server or Docker
@@ -3504,6 +3553,9 @@ type CreateEnvironmentInput struct {
 	// This is an alternative to specifying a template name. If specified, AWS Elastic
 	// Beanstalk sets the configuration values to the default values associated
 	// with the specified solution stack.
+	//
+	// For a list of current solution stacks, see Elastic Beanstalk Supported Platforms
+	// (http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.platforms.html).
 	SolutionStackName *string `type:"string"`
 
 	// This specifies the tags applied to resources in the environment.
@@ -5028,6 +5080,10 @@ type DescribeInstancesHealthOutput struct {
 	responseMetadata aws.Response
 
 	// Detailed health information about each instance.
+	//
+	// The output differs slightly between Linux and Windows environments. There
+	// is a difference in the members that are supported under the <CPUUtilization>
+	// type.
 	InstanceHealthList []SingleInstanceHealth `type:"list"`
 
 	// Pagination token for the next page of results, if available.
@@ -5106,7 +5162,11 @@ type EnvironmentInfoDescription struct {
 	// The type of information retrieved.
 	InfoType EnvironmentInfoType `type:"string" enum:"true"`
 
-	// The retrieved information.
+	// The retrieved information. Currently contains a presigned Amazon S3 URL.
+	// The files are deleted after 15 minutes.
+	//
+	// Anyone in possession of this URL can access the files before they are deleted.
+	// Make the URL available only to trusted parties.
 	Message *string `type:"string"`
 
 	// The time stamp when this information was retrieved.
@@ -5166,6 +5226,9 @@ type EnvironmentResourceDescription struct {
 	// The Auto Scaling launch configurations in use by this environment.
 	LaunchConfigurations []LaunchConfiguration `type:"list"`
 
+	// The Amazon EC2 launch templates in use by this environment.
+	LaunchTemplates []LaunchTemplate `type:"list"`
+
 	// The LoadBalancers in use by this environment.
 	LoadBalancers []LoadBalancer `type:"list"`
 
@@ -5212,12 +5275,28 @@ type EnvironmentTier struct {
 	_ struct{} `type:"structure"`
 
 	// The name of this environment tier.
+	//
+	// Valid values:
+	//
+	//    * For Web server tier – WebServer
+	//
+	//    * For Worker tier – Worker
 	Name *string `type:"string"`
 
 	// The type of this environment tier.
+	//
+	// Valid values:
+	//
+	//    * For Web server tier – Standard
+	//
+	//    * For Worker tier – SQS/HTTP
 	Type *string `type:"string"`
 
-	// The version of this environment tier.
+	// The version of this environment tier. When you don't set a value to it, Elastic
+	// Beanstalk uses the latest compatible worker tier version.
+	//
+	// This member is deprecated. Any specific version that you set may become out
+	// of date. We recommend leaving it unspecified.
 	Version *string `type:"string"`
 }
 
@@ -5405,6 +5484,25 @@ func (s LaunchConfiguration) String() string {
 
 // GoString returns the string representation
 func (s LaunchConfiguration) GoString() string {
+	return s.String()
+}
+
+// Describes an Amazon EC2 launch template.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/elasticbeanstalk-2010-12-01/LaunchTemplate
+type LaunchTemplate struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the launch template.
+	Id *string `type:"string"`
+}
+
+// String returns the string representation
+func (s LaunchTemplate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LaunchTemplate) GoString() string {
 	return s.String()
 }
 
@@ -7447,7 +7545,7 @@ type UpdateEnvironmentOutput struct {
 	//
 	//    * Grey: Default health for a new environment. The environment is not fully
 	//    launched and health checks have not started or health checks are suspended
-	//    during an UpdateEnvironment or RestartEnvironement request.
+	//    during an UpdateEnvironment or RestartEnvironment request.
 	//
 	// Default: Grey
 	Health EnvironmentHealth `type:"string" enum:"true"`
@@ -7885,14 +7983,15 @@ type EnvironmentHealthStatus string
 
 // Enum values for EnvironmentHealthStatus
 const (
-	EnvironmentHealthStatusNoData   EnvironmentHealthStatus = "NoData"
-	EnvironmentHealthStatusUnknown  EnvironmentHealthStatus = "Unknown"
-	EnvironmentHealthStatusPending  EnvironmentHealthStatus = "Pending"
-	EnvironmentHealthStatusOk       EnvironmentHealthStatus = "Ok"
-	EnvironmentHealthStatusInfo     EnvironmentHealthStatus = "Info"
-	EnvironmentHealthStatusWarning  EnvironmentHealthStatus = "Warning"
-	EnvironmentHealthStatusDegraded EnvironmentHealthStatus = "Degraded"
-	EnvironmentHealthStatusSevere   EnvironmentHealthStatus = "Severe"
+	EnvironmentHealthStatusNoData    EnvironmentHealthStatus = "NoData"
+	EnvironmentHealthStatusUnknown   EnvironmentHealthStatus = "Unknown"
+	EnvironmentHealthStatusPending   EnvironmentHealthStatus = "Pending"
+	EnvironmentHealthStatusOk        EnvironmentHealthStatus = "Ok"
+	EnvironmentHealthStatusInfo      EnvironmentHealthStatus = "Info"
+	EnvironmentHealthStatusWarning   EnvironmentHealthStatus = "Warning"
+	EnvironmentHealthStatusDegraded  EnvironmentHealthStatus = "Degraded"
+	EnvironmentHealthStatusSevere    EnvironmentHealthStatus = "Severe"
+	EnvironmentHealthStatusSuspended EnvironmentHealthStatus = "Suspended"
 )
 
 func (enum EnvironmentHealthStatus) MarshalValue() (string, error) {

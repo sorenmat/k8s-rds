@@ -92,6 +92,8 @@ type GlueAPI interface {
 
 	CreateScriptRequest(*glue.CreateScriptInput) glue.CreateScriptRequest
 
+	CreateSecurityConfigurationRequest(*glue.CreateSecurityConfigurationInput) glue.CreateSecurityConfigurationRequest
+
 	CreateTableRequest(*glue.CreateTableInput) glue.CreateTableRequest
 
 	CreateTriggerRequest(*glue.CreateTriggerInput) glue.CreateTriggerRequest
@@ -111,6 +113,10 @@ type GlueAPI interface {
 	DeleteJobRequest(*glue.DeleteJobInput) glue.DeleteJobRequest
 
 	DeletePartitionRequest(*glue.DeletePartitionInput) glue.DeletePartitionRequest
+
+	DeleteResourcePolicyRequest(*glue.DeleteResourcePolicyInput) glue.DeleteResourcePolicyRequest
+
+	DeleteSecurityConfigurationRequest(*glue.DeleteSecurityConfigurationInput) glue.DeleteSecurityConfigurationRequest
 
 	DeleteTableRequest(*glue.DeleteTableInput) glue.DeleteTableRequest
 
@@ -135,6 +141,8 @@ type GlueAPI interface {
 	GetCrawlerMetricsRequest(*glue.GetCrawlerMetricsInput) glue.GetCrawlerMetricsRequest
 
 	GetCrawlersRequest(*glue.GetCrawlersInput) glue.GetCrawlersRequest
+
+	GetDataCatalogEncryptionSettingsRequest(*glue.GetDataCatalogEncryptionSettingsInput) glue.GetDataCatalogEncryptionSettingsRequest
 
 	GetDatabaseRequest(*glue.GetDatabaseInput) glue.GetDatabaseRequest
 
@@ -162,6 +170,12 @@ type GlueAPI interface {
 
 	GetPlanRequest(*glue.GetPlanInput) glue.GetPlanRequest
 
+	GetResourcePolicyRequest(*glue.GetResourcePolicyInput) glue.GetResourcePolicyRequest
+
+	GetSecurityConfigurationRequest(*glue.GetSecurityConfigurationInput) glue.GetSecurityConfigurationRequest
+
+	GetSecurityConfigurationsRequest(*glue.GetSecurityConfigurationsInput) glue.GetSecurityConfigurationsRequest
+
 	GetTableRequest(*glue.GetTableInput) glue.GetTableRequest
 
 	GetTableVersionRequest(*glue.GetTableVersionInput) glue.GetTableVersionRequest
@@ -179,6 +193,10 @@ type GlueAPI interface {
 	GetUserDefinedFunctionsRequest(*glue.GetUserDefinedFunctionsInput) glue.GetUserDefinedFunctionsRequest
 
 	ImportCatalogToGlueRequest(*glue.ImportCatalogToGlueInput) glue.ImportCatalogToGlueRequest
+
+	PutDataCatalogEncryptionSettingsRequest(*glue.PutDataCatalogEncryptionSettingsInput) glue.PutDataCatalogEncryptionSettingsRequest
+
+	PutResourcePolicyRequest(*glue.PutResourcePolicyInput) glue.PutResourcePolicyRequest
 
 	ResetJobBookmarkRequest(*glue.ResetJobBookmarkInput) glue.ResetJobBookmarkRequest
 

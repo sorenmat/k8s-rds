@@ -2742,7 +2742,7 @@ func (r DescribeUserPoolClientRequest) Send() (*DescribeUserPoolClientOutput, er
 // Amazon Cognito Identity Provider.
 //
 // Client method for returning the configuration information and metadata of
-// the specified user pool client.
+// the specified user pool app client.
 //
 //    // Example sending a request using the DescribeUserPoolClientRequest method.
 //    req := client.DescribeUserPoolClientRequest(params)
@@ -4793,7 +4793,9 @@ func (r UpdateUserPoolRequest) Send() (*UpdateUserPoolOutput, error) {
 // UpdateUserPoolRequest returns a request value for making API operation for
 // Amazon Cognito Identity Provider.
 //
-// Updates the specified user pool with the specified attributes.
+// Updates the specified user pool with the specified attributes. If you don't
+// provide a value for an attribute, it will be set to the default value. You
+// can get a list of the current user pool settings with .
 //
 //    // Example sending a request using the UpdateUserPoolRequest method.
 //    req := client.UpdateUserPoolRequest(params)
@@ -4843,8 +4845,10 @@ func (r UpdateUserPoolClientRequest) Send() (*UpdateUserPoolClientOutput, error)
 // UpdateUserPoolClientRequest returns a request value for making API operation for
 // Amazon Cognito Identity Provider.
 //
-// Allows the developer to update the specified user pool client and password
-// policy.
+// Updates the specified user pool app client with the specified attributes.
+// If you don't provide a value for an attribute, it will be set to the default
+// value. You can get a list of the current user pool app client settings with
+// .
 //
 //    // Example sending a request using the UpdateUserPoolClientRequest method.
 //    req := client.UpdateUserPoolClientRequest(params)
@@ -4870,6 +4874,84 @@ func (c *CognitoIdentityProvider) UpdateUserPoolClientRequest(input *UpdateUserP
 	output.responseMetadata = aws.Response{Request: req}
 
 	return UpdateUserPoolClientRequest{Request: req, Input: input, Copy: c.UpdateUserPoolClientRequest}
+}
+
+const opUpdateUserPoolDomain = "UpdateUserPoolDomain"
+
+// UpdateUserPoolDomainRequest is a API request type for the UpdateUserPoolDomain API operation.
+type UpdateUserPoolDomainRequest struct {
+	*aws.Request
+	Input *UpdateUserPoolDomainInput
+	Copy  func(*UpdateUserPoolDomainInput) UpdateUserPoolDomainRequest
+}
+
+// Send marshals and sends the UpdateUserPoolDomain API request.
+func (r UpdateUserPoolDomainRequest) Send() (*UpdateUserPoolDomainOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*UpdateUserPoolDomainOutput), nil
+}
+
+// UpdateUserPoolDomainRequest returns a request value for making API operation for
+// Amazon Cognito Identity Provider.
+//
+// Updates the Secure Sockets Layer (SSL) certificate for the custom domain
+// for your user pool.
+//
+// You can use this operation to provide the Amazon Resource Name (ARN) of a
+// new certificate to Amazon Cognito. You cannot use it to change the domain
+// for a user pool.
+//
+// A custom domain is used to host the Amazon Cognito hosted UI, which provides
+// sign-up and sign-in pages for your application. When you set up a custom
+// domain, you provide a certificate that you manage with AWS Certificate Manager
+// (ACM). When necessary, you can use this operation to change the certificate
+// that you applied to your custom domain.
+//
+// Usually, this is unnecessary following routine certificate renewal with ACM.
+// When you renew your existing certificate in ACM, the ARN for your certificate
+// remains the same, and your custom domain uses the new certificate automatically.
+//
+// However, if you replace your existing certificate with a new one, ACM gives
+// the new certificate a new ARN. To apply the new certificate to your custom
+// domain, you must provide this ARN to Amazon Cognito.
+//
+// When you add your new certificate in ACM, you must choose US East (N. Virginia)
+// as the AWS Region.
+//
+// After you submit your request, Amazon Cognito requires up to 1 hour to distribute
+// your new certificate to your custom domain.
+//
+// For more information about adding a custom domain to your user pool, see
+// Using Your Own Domain for the Hosted UI (http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html).
+//
+//    // Example sending a request using the UpdateUserPoolDomainRequest method.
+//    req := client.UpdateUserPoolDomainRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-idp-2016-04-18/UpdateUserPoolDomain
+func (c *CognitoIdentityProvider) UpdateUserPoolDomainRequest(input *UpdateUserPoolDomainInput) UpdateUserPoolDomainRequest {
+	op := &aws.Operation{
+		Name:       opUpdateUserPoolDomain,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateUserPoolDomainInput{}
+	}
+
+	output := &UpdateUserPoolDomainOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return UpdateUserPoolDomainRequest{Request: req, Input: input, Copy: c.UpdateUserPoolDomainRequest}
 }
 
 const opVerifySoftwareToken = "VerifySoftwareToken"
@@ -8916,11 +8998,14 @@ type CreateUserPoolClientInput struct {
 	//
 	//    * Be registered with the authorization server.
 	//
-	//    * Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).
-	//
 	//    * Not include a fragment component.
 	//
 	// See OAuth 2.0 - Redirection Endpoint (https://tools.ietf.org/html/rfc6749#section-3.1.2).
+	//
+	// Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing
+	// purposes only.
+	//
+	// App callback URLs such as myapp://example are also supported.
 	CallbackURLs []string `type:"list"`
 
 	// The client name for the user pool client you would like to create.
@@ -8936,11 +9021,14 @@ type CreateUserPoolClientInput struct {
 	//
 	//    * Be registered with the authorization server.
 	//
-	//    * Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).
-	//
 	//    * Not include a fragment component.
 	//
 	// See OAuth 2.0 - Redirection Endpoint (https://tools.ietf.org/html/rfc6749#section-3.1.2).
+	//
+	// Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing
+	// purposes only.
+	//
+	// App callback URLs such as myapp://example are also supported.
 	DefaultRedirectURI *string `min:"1" type:"string"`
 
 	// The explicit authentication flows.
@@ -8969,7 +9057,15 @@ type CreateUserPoolClientInput struct {
 	// UserPoolId is a required field
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 
-	// The write attributes.
+	// The user pool attributes that the app client can write to.
+	//
+	// If your app client allows users to sign in through an identity provider,
+	// this array must include all attributes that are mapped to identity provider
+	// attributes. Amazon Cognito updates mapped attributes when users sign in to
+	// your application through an identity provider. If your app client lacks write
+	// access to a mapped attribute, Amazon Cognito throws an error when it attempts
+	// to update the attribute. For more information, see Specifying Identity Provider
+	// Attribute Mappings for Your User Pool (http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html).
 	WriteAttributes []string `type:"list"`
 }
 
@@ -9045,6 +9141,17 @@ func (s CreateUserPoolClientOutput) SDKResponseMetadata() aws.Response {
 type CreateUserPoolDomainInput struct {
 	_ struct{} `type:"structure"`
 
+	// The configuration for a custom domain that hosts the sign-up and sign-in
+	// webpages for your application.
+	//
+	// Provide this parameter only if you want to use a custom domain for your user
+	// pool. Otherwise, you can exclude this parameter and use the Amazon Cognito
+	// hosted domain instead.
+	//
+	// For more information about the hosted domain and custom domains, see Configuring
+	// a User Pool Domain (http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-assign-domain.html).
+	CustomDomainConfig *CustomDomainConfigType `type:"structure"`
+
 	// The domain string.
 	//
 	// Domain is a required field
@@ -9083,6 +9190,11 @@ func (s *CreateUserPoolDomainInput) Validate() error {
 	if s.UserPoolId != nil && len(*s.UserPoolId) < 1 {
 		invalidParams.Add(aws.NewErrParamMinLen("UserPoolId", 1))
 	}
+	if s.CustomDomainConfig != nil {
+		if err := s.CustomDomainConfig.Validate(); err != nil {
+			invalidParams.AddNested("CustomDomainConfig", err.(aws.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -9095,6 +9207,10 @@ type CreateUserPoolDomainOutput struct {
 	_ struct{} `type:"structure"`
 
 	responseMetadata aws.Response
+
+	// The Amazon CloudFront endpoint that you use as the target of the alias that
+	// you set up with your Domain Name Service (DNS) provider.
+	CloudFrontDomain *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -9301,6 +9417,46 @@ func (s CreateUserPoolOutput) GoString() string {
 // SDKResponseMetdata return sthe response metadata for the API.
 func (s CreateUserPoolOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
+}
+
+// The configuration for a custom domain that hosts the sign-up and sign-in
+// webpages for your application.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-idp-2016-04-18/CustomDomainConfigType
+type CustomDomainConfigType struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of an AWS Certificate Manager SSL certificate.
+	// You use this certificate for the subdomain of your custom domain.
+	//
+	// CertificateArn is a required field
+	CertificateArn *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CustomDomainConfigType) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CustomDomainConfigType) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomDomainConfigType) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CustomDomainConfigType"}
+
+	if s.CertificateArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("CertificateArn"))
+	}
+	if s.CertificateArn != nil && len(*s.CertificateArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("CertificateArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-idp-2016-04-18/DeleteGroupRequest
@@ -10433,7 +10589,11 @@ type DomainDescriptionType struct {
 	AWSAccountId *string `type:"string"`
 
 	// The ARN of the CloudFront distribution.
-	CloudFrontDistribution *string `min:"20" type:"string"`
+	CloudFrontDistribution *string `type:"string"`
+
+	// The configuration for a custom domain that hosts the sign-up and sign-in
+	// webpages for your application.
+	CustomDomainConfig *CustomDomainConfigType `type:"structure"`
 
 	// The domain string.
 	Domain *string `min:"1" type:"string"`
@@ -12496,9 +12656,9 @@ type ListUsersInput struct {
 	//
 	//    * preferred_username
 	//
-	//    * cognito:user_status (called Enabled in the Console) (case-sensitive)
+	//    * cognito:user_status (called Status in the Console) (case-insensitive)
 	//
-	//    * status (case-insensitive)
+	//    * status (called Enabled in the Console) (case-sensitive)
 	//
 	//    * sub
 	//
@@ -13332,6 +13492,13 @@ type SchemaAttributeType struct {
 	DeveloperOnlyAttribute *bool `type:"boolean"`
 
 	// Specifies whether the value of the attribute can be changed.
+	//
+	// For any user pool attribute that's mapped to an identity provider attribute,
+	// you must set this parameter to true. Amazon Cognito updates mapped attributes
+	// when users sign in to your application through an identity provider. If an
+	// attribute is immutable, Amazon Cognito throws an error when it attempts to
+	// update the attribute. For more information, see Specifying Identity Provider
+	// Attribute Mappings for Your User Pool (http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html).
 	Mutable *bool `type:"boolean"`
 
 	// A schema attribute of the name type.
@@ -14796,11 +14963,14 @@ type UpdateUserPoolClientInput struct {
 	//
 	//    * Be registered with the authorization server.
 	//
-	//    * Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).
-	//
 	//    * Not include a fragment component.
 	//
 	// See OAuth 2.0 - Redirection Endpoint (https://tools.ietf.org/html/rfc6749#section-3.1.2).
+	//
+	// Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing
+	// purposes only.
+	//
+	// App callback URLs such as myapp://example are also supported.
 	CallbackURLs []string `type:"list"`
 
 	// The ID of the client associated with the user pool.
@@ -14819,11 +14989,14 @@ type UpdateUserPoolClientInput struct {
 	//
 	//    * Be registered with the authorization server.
 	//
-	//    * Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).
-	//
 	//    * Not include a fragment component.
 	//
 	// See OAuth 2.0 - Redirection Endpoint (https://tools.ietf.org/html/rfc6749#section-3.1.2).
+	//
+	// Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing
+	// purposes only.
+	//
+	// App callback URLs such as myapp://example are also supported.
 	DefaultRedirectURI *string `min:"1" type:"string"`
 
 	// Explicit authentication flows.
@@ -14923,6 +15096,105 @@ func (s UpdateUserPoolClientOutput) GoString() string {
 
 // SDKResponseMetdata return sthe response metadata for the API.
 func (s UpdateUserPoolClientOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// The UpdateUserPoolDomain request input.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-idp-2016-04-18/UpdateUserPoolDomainRequest
+type UpdateUserPoolDomainInput struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration for a custom domain that hosts the sign-up and sign-in
+	// pages for your application. Use this object to specify an SSL certificate
+	// that is managed by ACM.
+	//
+	// CustomDomainConfig is a required field
+	CustomDomainConfig *CustomDomainConfigType `type:"structure" required:"true"`
+
+	// The domain name for the custom domain that hosts the sign-up and sign-in
+	// pages for your application. For example: auth.example.com.
+	//
+	// This string can include only lowercase letters, numbers, and hyphens. Do
+	// not use a hyphen for the first or last character. Use periods to separate
+	// subdomain names.
+	//
+	// Domain is a required field
+	Domain *string `min:"1" type:"string" required:"true"`
+
+	// The ID of the user pool that is associated with the custom domain that you
+	// are updating the certificate for.
+	//
+	// UserPoolId is a required field
+	UserPoolId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateUserPoolDomainInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateUserPoolDomainInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateUserPoolDomainInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UpdateUserPoolDomainInput"}
+
+	if s.CustomDomainConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("CustomDomainConfig"))
+	}
+
+	if s.Domain == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("Domain", 1))
+	}
+
+	if s.UserPoolId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("UserPoolId"))
+	}
+	if s.UserPoolId != nil && len(*s.UserPoolId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("UserPoolId", 1))
+	}
+	if s.CustomDomainConfig != nil {
+		if err := s.CustomDomainConfig.Validate(); err != nil {
+			invalidParams.AddNested("CustomDomainConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// The UpdateUserPoolDomain response output.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-idp-2016-04-18/UpdateUserPoolDomainResponse
+type UpdateUserPoolDomainOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The Amazon CloudFront endpoint that Amazon Cognito set up when you added
+	// the custom domain to your user pool.
+	CloudFrontDomain *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateUserPoolDomainOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateUserPoolDomainOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s UpdateUserPoolDomainOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
@@ -15285,11 +15557,14 @@ type UserPoolClientType struct {
 	//
 	//    * Be registered with the authorization server.
 	//
-	//    * Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).
-	//
 	//    * Not include a fragment component.
 	//
 	// See OAuth 2.0 - Redirection Endpoint (https://tools.ietf.org/html/rfc6749#section-3.1.2).
+	//
+	// Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing
+	// purposes only.
+	//
+	// App callback URLs such as myapp://example are also supported.
 	CallbackURLs []string `type:"list"`
 
 	// The ID of the client associated with the user pool.
@@ -15312,11 +15587,14 @@ type UserPoolClientType struct {
 	//
 	//    * Be registered with the authorization server.
 	//
-	//    * Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).
-	//
 	//    * Not include a fragment component.
 	//
 	// See OAuth 2.0 - Redirection Endpoint (https://tools.ietf.org/html/rfc6749#section-3.1.2).
+	//
+	// Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing
+	// purposes only.
+	//
+	// App callback URLs such as myapp://example are also supported.
 	DefaultRedirectURI *string `min:"1" type:"string"`
 
 	// The explicit authentication flows.
@@ -15443,6 +15721,8 @@ type UserPoolType struct {
 
 	// The date the user pool was created.
 	CreationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	CustomDomain *string `min:"1" type:"string"`
 
 	// The device configuration.
 	DeviceConfiguration *DeviceConfigurationType `type:"structure"`

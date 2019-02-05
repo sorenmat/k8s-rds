@@ -9,6 +9,7 @@
 package acmpcaiface
 
 import (
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/acmpca"
 )
 
@@ -86,6 +87,8 @@ type ACMPCAAPI interface {
 
 	ListTagsRequest(*acmpca.ListTagsInput) acmpca.ListTagsRequest
 
+	RestoreCertificateAuthorityRequest(*acmpca.RestoreCertificateAuthorityInput) acmpca.RestoreCertificateAuthorityRequest
+
 	RevokeCertificateRequest(*acmpca.RevokeCertificateInput) acmpca.RevokeCertificateRequest
 
 	TagCertificateAuthorityRequest(*acmpca.TagCertificateAuthorityInput) acmpca.TagCertificateAuthorityRequest
@@ -93,6 +96,15 @@ type ACMPCAAPI interface {
 	UntagCertificateAuthorityRequest(*acmpca.UntagCertificateAuthorityInput) acmpca.UntagCertificateAuthorityRequest
 
 	UpdateCertificateAuthorityRequest(*acmpca.UpdateCertificateAuthorityInput) acmpca.UpdateCertificateAuthorityRequest
+
+	WaitUntilAuditReportCreated(*acmpca.DescribeCertificateAuthorityAuditReportInput) error
+	WaitUntilAuditReportCreatedWithContext(aws.Context, *acmpca.DescribeCertificateAuthorityAuditReportInput, ...aws.WaiterOption) error
+
+	WaitUntilCertificateAuthorityCSRCreated(*acmpca.GetCertificateAuthorityCsrInput) error
+	WaitUntilCertificateAuthorityCSRCreatedWithContext(aws.Context, *acmpca.GetCertificateAuthorityCsrInput, ...aws.WaiterOption) error
+
+	WaitUntilCertificateIssued(*acmpca.GetCertificateInput) error
+	WaitUntilCertificateIssuedWithContext(aws.Context, *acmpca.GetCertificateInput, ...aws.WaiterOption) error
 }
 
 var _ ACMPCAAPI = (*acmpca.ACMPCA)(nil)

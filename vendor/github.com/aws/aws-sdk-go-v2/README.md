@@ -10,7 +10,7 @@ We'll be expanding out the [Issues] and [Projects] sections with additional chan
 
 ## Getting started
 
-The best way to get started working with the SDK is to use `go get` to add the SDK to your Go Workspace manually.
+The best way to get started working with the SDK is to use `go get` to add the SDK to your Go Workspace or application using Go modules.
 
 ```sh
 go get github.com/aws/aws-sdk-go-v2
@@ -30,6 +30,8 @@ This example shows how you can use the v2 SDK to make an API request using the S
 package main
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/endpoints"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
@@ -68,9 +70,9 @@ func main() {
 
 ## Feedback and contributing
 
-The v2 SDK will use [GitHub issues] to track feature requests and issues with the SDK. In addition, we'll use GitHub [Projects] to track large tasks spanning multiple pull requests, such as refactoring the SDK's internal request lifecycle. You can provide feedback to us in several ways. 
+The v2 SDK will use GitHub [Issues] to track feature requests and issues with the SDK. In addition, we'll use GitHub [Projects] to track large tasks spanning multiple pull requests, such as refactoring the SDK's internal request lifecycle. You can provide feedback to us in several ways. 
 
-**GitHub issues**. To provide feedback using GitHub [Issues] on the SDK. This is the preferred mechanism to give feedback so that other users can engage in the conversation, +1 issues, etc. Issues you open will be evaluated, and included in our roadmap for the GA launch.
+**GitHub issues**. To provide feedback or report bugs, file GitHub [Issues] on the SDK. This is the preferred mechanism to give feedback so that other users can engage in the conversation, +1 issues, etc. Issues you open will be evaluated, and included in our roadmap for the GA launch.
 
 **Gitter channel**. For more informal discussions or general feedback, check out our [Gitter channel] for the SDK. The [Gitter channel] is also a great place to ask general questions, and find help to get started with the 2.0 SDK Developer Preview.
 

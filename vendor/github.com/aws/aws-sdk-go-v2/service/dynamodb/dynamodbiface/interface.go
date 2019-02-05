@@ -83,6 +83,8 @@ type DynamoDBAPI interface {
 
 	DescribeContinuousBackupsRequest(*dynamodb.DescribeContinuousBackupsInput) dynamodb.DescribeContinuousBackupsRequest
 
+	DescribeEndpointsRequest(*dynamodb.DescribeEndpointsInput) dynamodb.DescribeEndpointsRequest
+
 	DescribeGlobalTableRequest(*dynamodb.DescribeGlobalTableInput) dynamodb.DescribeGlobalTableRequest
 
 	DescribeGlobalTableSettingsRequest(*dynamodb.DescribeGlobalTableSettingsInput) dynamodb.DescribeGlobalTableSettingsRequest
@@ -114,6 +116,10 @@ type DynamoDBAPI interface {
 	ScanRequest(*dynamodb.ScanInput) dynamodb.ScanRequest
 
 	TagResourceRequest(*dynamodb.TagResourceInput) dynamodb.TagResourceRequest
+
+	TransactGetItemsRequest(*dynamodb.TransactGetItemsInput) dynamodb.TransactGetItemsRequest
+
+	TransactWriteItemsRequest(*dynamodb.TransactWriteItemsInput) dynamodb.TransactWriteItemsRequest
 
 	UntagResourceRequest(*dynamodb.UntagResourceInput) dynamodb.UntagResourceRequest
 

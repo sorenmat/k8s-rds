@@ -3,9 +3,12 @@
 package mq
 
 import (
+	"time"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/internal/awsutil"
 	"github.com/aws/aws-sdk-go-v2/private/protocol"
+	"github.com/aws/aws-sdk-go-v2/private/protocol/restjson"
 )
 
 const opCreateBroker = "CreateBroker"
@@ -81,8 +84,7 @@ func (r CreateConfigurationRequest) Send() (*CreateConfigurationOutput, error) {
 // AmazonMQ.
 //
 // Creates a new configuration for the specified configuration name. Amazon
-// MQ uses the default configuration (the engine type and version). Note: If
-// the configuration name already exists, Amazon MQ doesn't create a configuration.
+// MQ uses the default configuration (the engine type and version).
 //
 //    // Example sending a request using the CreateConfigurationRequest method.
 //    req := client.CreateConfigurationRequest(params)
@@ -108,6 +110,58 @@ func (c *MQ) CreateConfigurationRequest(input *CreateConfigurationInput) CreateC
 	output.responseMetadata = aws.Response{Request: req}
 
 	return CreateConfigurationRequest{Request: req, Input: input, Copy: c.CreateConfigurationRequest}
+}
+
+const opCreateTags = "CreateTags"
+
+// CreateTagsRequest is a API request type for the CreateTags API operation.
+type CreateTagsRequest struct {
+	*aws.Request
+	Input *CreateTagsInput
+	Copy  func(*CreateTagsInput) CreateTagsRequest
+}
+
+// Send marshals and sends the CreateTags API request.
+func (r CreateTagsRequest) Send() (*CreateTagsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CreateTagsOutput), nil
+}
+
+// CreateTagsRequest returns a request value for making API operation for
+// AmazonMQ.
+//
+// Add a tag to a resource.
+//
+//    // Example sending a request using the CreateTagsRequest method.
+//    req := client.CreateTagsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/CreateTags
+func (c *MQ) CreateTagsRequest(input *CreateTagsInput) CreateTagsRequest {
+	op := &aws.Operation{
+		Name:       opCreateTags,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/tags/{resource-arn}",
+	}
+
+	if input == nil {
+		input = &CreateTagsInput{}
+	}
+
+	output := &CreateTagsOutput{}
+	req := c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CreateTagsRequest{Request: req, Input: input, Copy: c.CreateTagsRequest}
 }
 
 const opCreateUser = "CreateUser"
@@ -208,6 +262,58 @@ func (c *MQ) DeleteBrokerRequest(input *DeleteBrokerInput) DeleteBrokerRequest {
 	output.responseMetadata = aws.Response{Request: req}
 
 	return DeleteBrokerRequest{Request: req, Input: input, Copy: c.DeleteBrokerRequest}
+}
+
+const opDeleteTags = "DeleteTags"
+
+// DeleteTagsRequest is a API request type for the DeleteTags API operation.
+type DeleteTagsRequest struct {
+	*aws.Request
+	Input *DeleteTagsInput
+	Copy  func(*DeleteTagsInput) DeleteTagsRequest
+}
+
+// Send marshals and sends the DeleteTags API request.
+func (r DeleteTagsRequest) Send() (*DeleteTagsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteTagsOutput), nil
+}
+
+// DeleteTagsRequest returns a request value for making API operation for
+// AmazonMQ.
+//
+// Remove a tag from a resource.
+//
+//    // Example sending a request using the DeleteTagsRequest method.
+//    req := client.DeleteTagsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/DeleteTags
+func (c *MQ) DeleteTagsRequest(input *DeleteTagsInput) DeleteTagsRequest {
+	op := &aws.Operation{
+		Name:       opDeleteTags,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v1/tags/{resource-arn}",
+	}
+
+	if input == nil {
+		input = &DeleteTagsInput{}
+	}
+
+	output := &DeleteTagsOutput{}
+	req := c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteTagsRequest{Request: req, Input: input, Copy: c.DeleteTagsRequest}
 }
 
 const opDeleteUser = "DeleteUser"
@@ -610,6 +716,56 @@ func (c *MQ) ListConfigurationsRequest(input *ListConfigurationsInput) ListConfi
 	return ListConfigurationsRequest{Request: req, Input: input, Copy: c.ListConfigurationsRequest}
 }
 
+const opListTags = "ListTags"
+
+// ListTagsRequest is a API request type for the ListTags API operation.
+type ListTagsRequest struct {
+	*aws.Request
+	Input *ListTagsInput
+	Copy  func(*ListTagsInput) ListTagsRequest
+}
+
+// Send marshals and sends the ListTags API request.
+func (r ListTagsRequest) Send() (*ListTagsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListTagsOutput), nil
+}
+
+// ListTagsRequest returns a request value for making API operation for
+// AmazonMQ.
+//
+// Lists tags for a resource.
+//
+//    // Example sending a request using the ListTagsRequest method.
+//    req := client.ListTagsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/ListTags
+func (c *MQ) ListTagsRequest(input *ListTagsInput) ListTagsRequest {
+	op := &aws.Operation{
+		Name:       opListTags,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/tags/{resource-arn}",
+	}
+
+	if input == nil {
+		input = &ListTagsInput{}
+	}
+
+	output := &ListTagsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListTagsRequest{Request: req, Input: input, Copy: c.ListTagsRequest}
+}
+
 const opListUsers = "ListUsers"
 
 // ListUsersRequest is a API request type for the ListUsers API operation.
@@ -870,6 +1026,9 @@ type BrokerInstance struct {
 
 	// The broker's wire-level protocol endpoints.
 	Endpoints []string `locationName:"endpoints" type:"list"`
+
+	// The IP address of the Elastic Network Interface (ENI) attached to the broker.
+	IpAddress *string `locationName:"ipAddress" type:"string"`
 }
 
 // String returns the string representation
@@ -902,6 +1061,12 @@ func (s BrokerInstance) MarshalFields(e protocol.FieldEncoder) error {
 		ls0.End()
 
 	}
+	if s.IpAddress != nil {
+		v := *s.IpAddress
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "ipAddress", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
 	return nil
 }
 
@@ -922,17 +1087,16 @@ type BrokerSummary struct {
 	// characters.
 	BrokerName *string `locationName:"brokerName" type:"string"`
 
-	// The status of the broker. Possible values: CREATION_IN_PROGRESS, CREATION_FAILED,
-	// DELETION_IN_PROGRESS, RUNNING, REBOOT_IN_PROGRESS
+	// The status of the broker.
 	BrokerState BrokerState `locationName:"brokerState" type:"string" enum:"true"`
 
-	// Required. The deployment mode of the broker. Possible values: SINGLE_INSTANCE,
-	// ACTIVE_STANDBY_MULTI_AZ SINGLE_INSTANCE creates a single-instance broker
-	// in a single Availability Zone. ACTIVE_STANDBY_MULTI_AZ creates an active/standby
-	// broker for high availability.
+	// The time when the broker was created.
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"unix"`
+
+	// Required. The deployment mode of the broker.
 	DeploymentMode DeploymentMode `locationName:"deploymentMode" type:"string" enum:"true"`
 
-	// The broker's instance type. Possible values: mq.t2.micro, mq.m4.large
+	// The broker's instance type.
 	HostInstanceType *string `locationName:"hostInstanceType" type:"string"`
 }
 
@@ -972,6 +1136,12 @@ func (s BrokerSummary) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "brokerState", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
+	if s.Created != nil {
+		v := *s.Created
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "created", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
 	if len(s.DeploymentMode) > 0 {
 		v := s.DeploymentMode
 
@@ -995,6 +1165,9 @@ type Configuration struct {
 	// Required. The ARN of the configuration.
 	Arn *string `locationName:"arn" type:"string"`
 
+	// Required. The date and time of the configuration revision.
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"unix"`
+
 	// Required. The description of the configuration.
 	Description *string `locationName:"description" type:"string"`
 
@@ -1002,7 +1175,8 @@ type Configuration struct {
 	// only ACTIVEMQ.
 	EngineType EngineType `locationName:"engineType" type:"string" enum:"true"`
 
-	// Required. The version of the broker engine.
+	// Required. The version of the broker engine. For a list of supported engine
+	// versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html
 	EngineVersion *string `locationName:"engineVersion" type:"string"`
 
 	// Required. The unique ID that Amazon MQ generates for the configuration.
@@ -1015,6 +1189,9 @@ type Configuration struct {
 	// characters, dashes, periods, underscores, and tildes (- . _ ~). This value
 	// must be 1-150 characters long.
 	Name *string `locationName:"name" type:"string"`
+
+	// The list of all tags associated with this configuration.
+	Tags map[string]string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -1034,6 +1211,12 @@ func (s Configuration) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Created != nil {
+		v := *s.Created
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "created", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
 	}
 	if s.Description != nil {
 		v := *s.Description
@@ -1071,6 +1254,18 @@ func (s Configuration) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "tags", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
+
+	}
 	return nil
 }
 
@@ -1082,7 +1277,7 @@ type ConfigurationId struct {
 	// Required. The unique ID that Amazon MQ generates for the configuration.
 	Id *string `locationName:"id" type:"string"`
 
-	// The Universally Unique Identifier (UUID) of the request.
+	// The revision number of the configuration.
 	Revision *int64 `locationName:"revision" type:"integer"`
 }
 
@@ -1118,10 +1313,13 @@ func (s ConfigurationId) MarshalFields(e protocol.FieldEncoder) error {
 type ConfigurationRevision struct {
 	_ struct{} `type:"structure"`
 
+	// Required. The date and time of the configuration revision.
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"unix"`
+
 	// The description of the configuration revision.
 	Description *string `locationName:"description" type:"string"`
 
-	// Required. The revision of the configuration.
+	// Required. The revision number of the configuration.
 	Revision *int64 `locationName:"revision" type:"integer"`
 }
 
@@ -1137,6 +1335,12 @@ func (s ConfigurationRevision) GoString() string {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s ConfigurationRevision) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Created != nil {
+		v := *s.Created
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "created", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
 	if s.Description != nil {
 		v := *s.Description
 
@@ -1219,9 +1423,7 @@ type CreateBrokerInput struct {
 
 	CreatorRequestId *string `locationName:"creatorRequestId" type:"string" idempotencyToken:"true"`
 
-	// The deployment mode of the broker. Possible values: SINGLE_INSTANCE, ACTIVE_STANDBY_MULTI_AZ
-	// SINGLE_INSTANCE creates a single-instance broker in a single Availability
-	// Zone. ACTIVE_STANDBY_MULTI_AZ creates an active/standby broker for high availability.
+	// The deployment mode of the broker.
 	DeploymentMode DeploymentMode `locationName:"deploymentMode" type:"string" enum:"true"`
 
 	// The type of broker engine. Note: Currently, Amazon MQ supports only ActiveMQ.
@@ -1230,6 +1432,9 @@ type CreateBrokerInput struct {
 	EngineVersion *string `locationName:"engineVersion" type:"string"`
 
 	HostInstanceType *string `locationName:"hostInstanceType" type:"string"`
+
+	// The list of information about logs to be enabled for the specified broker.
+	Logs *Logs `locationName:"logs" type:"structure"`
 
 	// The scheduled time period relative to UTC during which Amazon MQ begins to
 	// apply pending updates or patches to the broker.
@@ -1240,6 +1445,8 @@ type CreateBrokerInput struct {
 	SecurityGroups []string `locationName:"securityGroups" type:"list"`
 
 	SubnetIds []string `locationName:"subnetIds" type:"list"`
+
+	Tags map[string]string `locationName:"tags" type:"map"`
 
 	Users []User `locationName:"users" type:"list"`
 }
@@ -1312,6 +1519,12 @@ func (s CreateBrokerInput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "hostInstanceType", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	if s.Logs != nil {
+		v := s.Logs
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "logs", v, metadata)
+	}
 	if s.MaintenanceWindowStartTime != nil {
 		v := s.MaintenanceWindowStartTime
 
@@ -1346,6 +1559,18 @@ func (s CreateBrokerInput) MarshalFields(e protocol.FieldEncoder) error {
 			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
 		}
 		ls0.End()
+
+	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "tags", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
 
 	}
 	if len(s.Users) > 0 {
@@ -1416,6 +1641,8 @@ type CreateConfigurationInput struct {
 	EngineVersion *string `locationName:"engineVersion" type:"string"`
 
 	Name *string `locationName:"name" type:"string"`
+
+	Tags map[string]string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -1450,6 +1677,18 @@ func (s CreateConfigurationInput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "tags", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
+
+	}
 	return nil
 }
 
@@ -1460,6 +1699,8 @@ type CreateConfigurationOutput struct {
 	responseMetadata aws.Response
 
 	Arn *string `locationName:"arn" type:"string"`
+
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"unix"`
 
 	Id *string `locationName:"id" type:"string"`
 
@@ -1492,6 +1733,12 @@ func (s CreateConfigurationOutput) MarshalFields(e protocol.FieldEncoder) error 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	if s.Created != nil {
+		v := *s.Created
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "created", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
 	if s.Id != nil {
 		v := *s.Id
 
@@ -1510,6 +1757,92 @@ func (s CreateConfigurationOutput) MarshalFields(e protocol.FieldEncoder) error 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/CreateTagsRequest
+type CreateTagsInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resource-arn" type:"string" required:"true"`
+
+	Tags map[string]string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s CreateTagsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateTagsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateTagsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CreateTagsInput"}
+
+	if s.ResourceArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ResourceArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateTagsInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "tags", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
+
+	}
+	if s.ResourceArn != nil {
+		v := *s.ResourceArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "resource-arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/CreateTagsOutput
+type CreateTagsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s CreateTagsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateTagsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CreateTagsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s CreateTagsOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
@@ -1708,6 +2041,97 @@ func (s DeleteBrokerOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/DeleteTagsRequest
+type DeleteTagsInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resource-arn" type:"string" required:"true"`
+
+	// TagKeys is a required field
+	TagKeys []string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteTagsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteTagsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteTagsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteTagsInput"}
+
+	if s.ResourceArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ResourceArn"))
+	}
+
+	if s.TagKeys == nil {
+		invalidParams.Add(aws.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteTagsInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.ResourceArn != nil {
+		v := *s.ResourceArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "resource-arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.TagKeys) > 0 {
+		v := s.TagKeys
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.QueryTarget, "tagKeys", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/DeleteTagsOutput
+type DeleteTagsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteTagsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteTagsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteTagsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteTagsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/DeleteUserRequest
 type DeleteUserInput struct {
 	_ struct{} `type:"structure"`
@@ -1854,16 +2278,15 @@ type DescribeBrokerOutput struct {
 
 	BrokerName *string `locationName:"brokerName" type:"string"`
 
-	// The status of the broker. Possible values: CREATION_IN_PROGRESS, CREATION_FAILED,
-	// DELETION_IN_PROGRESS, RUNNING, REBOOT_IN_PROGRESS
+	// The status of the broker.
 	BrokerState BrokerState `locationName:"brokerState" type:"string" enum:"true"`
 
 	// Broker configuration information
 	Configurations *Configurations `locationName:"configurations" type:"structure"`
 
-	// The deployment mode of the broker. Possible values: SINGLE_INSTANCE, ACTIVE_STANDBY_MULTI_AZ
-	// SINGLE_INSTANCE creates a single-instance broker in a single Availability
-	// Zone. ACTIVE_STANDBY_MULTI_AZ creates an active/standby broker for high availability.
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"unix"`
+
+	// The deployment mode of the broker.
 	DeploymentMode DeploymentMode `locationName:"deploymentMode" type:"string" enum:"true"`
 
 	// The type of broker engine. Note: Currently, Amazon MQ supports only ActiveMQ.
@@ -1873,15 +2296,23 @@ type DescribeBrokerOutput struct {
 
 	HostInstanceType *string `locationName:"hostInstanceType" type:"string"`
 
+	// The list of information about logs currently enabled and pending to be deployed
+	// for the specified broker.
+	Logs *LogsSummary `locationName:"logs" type:"structure"`
+
 	// The scheduled time period relative to UTC during which Amazon MQ begins to
 	// apply pending updates or patches to the broker.
 	MaintenanceWindowStartTime *WeeklyStartTime `locationName:"maintenanceWindowStartTime" type:"structure"`
+
+	PendingEngineVersion *string `locationName:"pendingEngineVersion" type:"string"`
 
 	PubliclyAccessible *bool `locationName:"publiclyAccessible" type:"boolean"`
 
 	SecurityGroups []string `locationName:"securityGroups" type:"list"`
 
 	SubnetIds []string `locationName:"subnetIds" type:"list"`
+
+	Tags map[string]string `locationName:"tags" type:"map"`
 
 	Users []UserSummary `locationName:"users" type:"list"`
 }
@@ -1951,6 +2382,12 @@ func (s DescribeBrokerOutput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "configurations", v, metadata)
 	}
+	if s.Created != nil {
+		v := *s.Created
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "created", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
+	}
 	if len(s.DeploymentMode) > 0 {
 		v := s.DeploymentMode
 
@@ -1975,11 +2412,23 @@ func (s DescribeBrokerOutput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "hostInstanceType", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	if s.Logs != nil {
+		v := s.Logs
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "logs", v, metadata)
+	}
 	if s.MaintenanceWindowStartTime != nil {
 		v := s.MaintenanceWindowStartTime
 
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "maintenanceWindowStartTime", v, metadata)
+	}
+	if s.PendingEngineVersion != nil {
+		v := *s.PendingEngineVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "pendingEngineVersion", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	if s.PubliclyAccessible != nil {
 		v := *s.PubliclyAccessible
@@ -2009,6 +2458,18 @@ func (s DescribeBrokerOutput) MarshalFields(e protocol.FieldEncoder) error {
 			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
 		}
 		ls0.End()
+
+	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "tags", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
 
 	}
 	if len(s.Users) > 0 {
@@ -2079,6 +2540,8 @@ type DescribeConfigurationOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"unix"`
+
 	Description *string `locationName:"description" type:"string"`
 
 	// The type of broker engine. Note: Currently, Amazon MQ supports only ActiveMQ.
@@ -2092,6 +2555,8 @@ type DescribeConfigurationOutput struct {
 	LatestRevision *ConfigurationRevision `locationName:"latestRevision" type:"structure"`
 
 	Name *string `locationName:"name" type:"string"`
+
+	Tags map[string]string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -2116,6 +2581,12 @@ func (s DescribeConfigurationOutput) MarshalFields(e protocol.FieldEncoder) erro
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Created != nil {
+		v := *s.Created
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "created", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
 	}
 	if s.Description != nil {
 		v := *s.Description
@@ -2152,6 +2623,18 @@ func (s DescribeConfigurationOutput) MarshalFields(e protocol.FieldEncoder) erro
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "tags", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
+
 	}
 	return nil
 }
@@ -2222,6 +2705,8 @@ type DescribeConfigurationRevisionOutput struct {
 
 	ConfigurationId *string `locationName:"configurationId" type:"string"`
 
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"unix"`
+
 	Data *string `locationName:"data" type:"string"`
 
 	Description *string `locationName:"description" type:"string"`
@@ -2249,6 +2734,12 @@ func (s DescribeConfigurationRevisionOutput) MarshalFields(e protocol.FieldEncod
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "configurationId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Created != nil {
+		v := *s.Created
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "created", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
 	}
 	if s.Data != nil {
 		v := *s.Data
@@ -2735,6 +3226,92 @@ func (s ListConfigurationsOutput) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/ListTagsRequest
+type ListTagsInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resource-arn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListTagsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListTagsInput"}
+
+	if s.ResourceArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ResourceArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListTagsInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.ResourceArn != nil {
+		v := *s.ResourceArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "resource-arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/ListTagsResponse
+type ListTagsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	Tags map[string]string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s ListTagsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListTagsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListTagsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.Tags) > 0 {
+		v := s.Tags
+
+		metadata := protocol.Metadata{}
+		ms0 := e.Map(protocol.BodyTarget, "tags", metadata)
+		ms0.Start()
+		for k1, v1 := range v {
+			ms0.MapSetValue(k1, protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ms0.End()
+
+	}
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/ListUsersRequest
 type ListUsersInput struct {
 	_ struct{} `type:"structure"`
@@ -2807,7 +3384,7 @@ type ListUsersOutput struct {
 
 	BrokerId *string `locationName:"brokerId" type:"string"`
 
-	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+	MaxResults *int64 `locationName:"maxResults" min:"5" type:"integer"`
 
 	NextToken *string `locationName:"nextToken" type:"string"`
 
@@ -2860,6 +3437,155 @@ func (s ListUsersOutput) MarshalFields(e protocol.FieldEncoder) error {
 		}
 		ls0.End()
 
+	}
+	return nil
+}
+
+// The list of information about logs to be enabled for the specified broker.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/Logs
+type Logs struct {
+	_ struct{} `type:"structure"`
+
+	// Enables audit logging. Every user management action made using JMX or the
+	// ActiveMQ Web Console is logged.
+	Audit *bool `locationName:"audit" type:"boolean"`
+
+	// Enables general logging.
+	General *bool `locationName:"general" type:"boolean"`
+}
+
+// String returns the string representation
+func (s Logs) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Logs) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Logs) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Audit != nil {
+		v := *s.Audit
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "audit", protocol.BoolValue(v), metadata)
+	}
+	if s.General != nil {
+		v := *s.General
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "general", protocol.BoolValue(v), metadata)
+	}
+	return nil
+}
+
+// The list of information about logs currently enabled and pending to be deployed
+// for the specified broker.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/LogsSummary
+type LogsSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Enables audit logging. Every user management action made using JMX or the
+	// ActiveMQ Web Console is logged.
+	Audit *bool `locationName:"audit" type:"boolean"`
+
+	// The location of the CloudWatch Logs log group where audit logs are sent.
+	AuditLogGroup *string `locationName:"auditLogGroup" type:"string"`
+
+	// Enables general logging.
+	General *bool `locationName:"general" type:"boolean"`
+
+	// The location of the CloudWatch Logs log group where general logs are sent.
+	GeneralLogGroup *string `locationName:"generalLogGroup" type:"string"`
+
+	// The list of information about logs pending to be deployed for the specified
+	// broker.
+	Pending *PendingLogs `locationName:"pending" type:"structure"`
+}
+
+// String returns the string representation
+func (s LogsSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LogsSummary) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s LogsSummary) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Audit != nil {
+		v := *s.Audit
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "audit", protocol.BoolValue(v), metadata)
+	}
+	if s.AuditLogGroup != nil {
+		v := *s.AuditLogGroup
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "auditLogGroup", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.General != nil {
+		v := *s.General
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "general", protocol.BoolValue(v), metadata)
+	}
+	if s.GeneralLogGroup != nil {
+		v := *s.GeneralLogGroup
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "generalLogGroup", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Pending != nil {
+		v := s.Pending
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "pending", v, metadata)
+	}
+	return nil
+}
+
+// The list of information about logs to be enabled for the specified broker.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/mq-2017-11-27/PendingLogs
+type PendingLogs struct {
+	_ struct{} `type:"structure"`
+
+	// Enables audit logging. Every user management action made using JMX or the
+	// ActiveMQ Web Console is logged.
+	Audit *bool `locationName:"audit" type:"boolean"`
+
+	// Enables general logging.
+	General *bool `locationName:"general" type:"boolean"`
+}
+
+// String returns the string representation
+func (s PendingLogs) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PendingLogs) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s PendingLogs) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Audit != nil {
+		v := *s.Audit
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "audit", protocol.BoolValue(v), metadata)
+	}
+	if s.General != nil {
+		v := *s.General
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "general", protocol.BoolValue(v), metadata)
 	}
 	return nil
 }
@@ -2949,12 +3675,6 @@ type SanitizationWarning struct {
 	ElementName *string `locationName:"elementName" type:"string"`
 
 	// Required. The reason for which the XML elements or attributes were sanitized.
-	// Possible values: DISALLOWED_ELEMENT_REMOVED, DISALLOWED_ATTRIBUTE_REMOVED,
-	// INVALID_ATTRIBUTE_VALUE_REMOVED DISALLOWED_ELEMENT_REMOVED shows that the
-	// provided element isn't allowed and has been removed. DISALLOWED_ATTRIBUTE_REMOVED
-	// shows that the provided attribute isn't allowed and has been removed. INVALID_ATTRIBUTE_VALUE_REMOVED
-	// shows that the provided value for the attribute isn't allowed and has been
-	// removed.
 	Reason SanitizationWarningReason `locationName:"reason" type:"string" enum:"true"`
 }
 
@@ -2995,11 +3715,18 @@ func (s SanitizationWarning) MarshalFields(e protocol.FieldEncoder) error {
 type UpdateBrokerInput struct {
 	_ struct{} `type:"structure"`
 
+	AutoMinorVersionUpgrade *bool `locationName:"autoMinorVersionUpgrade" type:"boolean"`
+
 	// BrokerId is a required field
 	BrokerId *string `location:"uri" locationName:"broker-id" type:"string" required:"true"`
 
 	// A list of information about the configuration.
 	Configuration *ConfigurationId `locationName:"configuration" type:"structure"`
+
+	EngineVersion *string `locationName:"engineVersion" type:"string"`
+
+	// The list of information about logs to be enabled for the specified broker.
+	Logs *Logs `locationName:"logs" type:"structure"`
 }
 
 // String returns the string representation
@@ -3030,11 +3757,29 @@ func (s *UpdateBrokerInput) Validate() error {
 func (s UpdateBrokerInput) MarshalFields(e protocol.FieldEncoder) error {
 	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
 
+	if s.AutoMinorVersionUpgrade != nil {
+		v := *s.AutoMinorVersionUpgrade
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "autoMinorVersionUpgrade", protocol.BoolValue(v), metadata)
+	}
 	if s.Configuration != nil {
 		v := s.Configuration
 
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "configuration", v, metadata)
+	}
+	if s.EngineVersion != nil {
+		v := *s.EngineVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "engineVersion", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Logs != nil {
+		v := s.Logs
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "logs", v, metadata)
 	}
 	if s.BrokerId != nil {
 		v := *s.BrokerId
@@ -3051,10 +3796,17 @@ type UpdateBrokerOutput struct {
 
 	responseMetadata aws.Response
 
+	AutoMinorVersionUpgrade *bool `locationName:"autoMinorVersionUpgrade" type:"boolean"`
+
 	BrokerId *string `locationName:"brokerId" type:"string"`
 
 	// A list of information about the configuration.
 	Configuration *ConfigurationId `locationName:"configuration" type:"structure"`
+
+	EngineVersion *string `locationName:"engineVersion" type:"string"`
+
+	// The list of information about logs to be enabled for the specified broker.
+	Logs *Logs `locationName:"logs" type:"structure"`
 }
 
 // String returns the string representation
@@ -3074,6 +3826,12 @@ func (s UpdateBrokerOutput) SDKResponseMetadata() aws.Response {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s UpdateBrokerOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.AutoMinorVersionUpgrade != nil {
+		v := *s.AutoMinorVersionUpgrade
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "autoMinorVersionUpgrade", protocol.BoolValue(v), metadata)
+	}
 	if s.BrokerId != nil {
 		v := *s.BrokerId
 
@@ -3085,6 +3843,18 @@ func (s UpdateBrokerOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "configuration", v, metadata)
+	}
+	if s.EngineVersion != nil {
+		v := *s.EngineVersion
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "engineVersion", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Logs != nil {
+		v := s.Logs
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "logs", v, metadata)
 	}
 	return nil
 }
@@ -3158,6 +3928,8 @@ type UpdateConfigurationOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	Created *time.Time `locationName:"created" type:"timestamp" timestampFormat:"unix"`
+
 	Id *string `locationName:"id" type:"string"`
 
 	// Returns information about the specified configuration revision.
@@ -3190,6 +3962,12 @@ func (s UpdateConfigurationOutput) MarshalFields(e protocol.FieldEncoder) error 
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Created != nil {
+		v := *s.Created
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "created", protocol.TimeValue{V: v, Format: protocol.UnixTimeFormat}, metadata)
 	}
 	if s.Id != nil {
 		v := *s.Id
@@ -3422,8 +4200,7 @@ type UserPendingChanges struct {
 	// and tildes (- . _ ~). This value must be 2-100 characters long.
 	Groups []string `locationName:"groups" type:"list"`
 
-	// Required. The type of change pending for the ActiveMQ user. Possible values:
-	// CREATE, UPDATE, DELETE
+	// Required. The type of change pending for the ActiveMQ user.
 	PendingChange ChangeType `locationName:"pendingChange" type:"string" enum:"true"`
 }
 
@@ -3471,8 +4248,7 @@ func (s UserPendingChanges) MarshalFields(e protocol.FieldEncoder) error {
 type UserSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The type of change pending for the ActiveMQ user. Possible values: CREATE,
-	// UPDATE, DELETE
+	// The type of change pending for the ActiveMQ user.
 	PendingChange ChangeType `locationName:"pendingChange" type:"string" enum:"true"`
 
 	// Required. The username of the ActiveMQ user. This value can contain only
@@ -3514,8 +4290,7 @@ func (s UserSummary) MarshalFields(e protocol.FieldEncoder) error {
 type WeeklyStartTime struct {
 	_ struct{} `type:"structure"`
 
-	// Required. The day of the week. Possible values: MONDAY, TUESDAY, WEDNESDAY,
-	// THURSDAY, FRIDAY, SATURDAY, SUNDAY
+	// Required. The day of the week.
 	DayOfWeek DayOfWeek `locationName:"dayOfWeek" type:"string" enum:"true"`
 
 	// Required. The time, in 24-hour format.
@@ -3559,8 +4334,7 @@ func (s WeeklyStartTime) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
-// The status of the broker. Possible values: CREATION_IN_PROGRESS, CREATION_FAILED,
-// DELETION_IN_PROGRESS, RUNNING, REBOOT_IN_PROGRESS
+// The status of the broker.
 type BrokerState string
 
 // Enum values for BrokerState
@@ -3581,8 +4355,7 @@ func (enum BrokerState) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
-// The type of change pending for the ActiveMQ user. Possible values: CREATE,
-// UPDATE, DELETE
+// The type of change pending for the ActiveMQ user.
 type ChangeType string
 
 // Enum values for ChangeType
@@ -3623,9 +4396,7 @@ func (enum DayOfWeek) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
-// The deployment mode of the broker. Possible values: SINGLE_INSTANCE, ACTIVE_STANDBY_MULTI_AZ
-// SINGLE_INSTANCE creates a single-instance broker in a single Availability
-// Zone. ACTIVE_STANDBY_MULTI_AZ creates an active/standby broker for high availability.
+// The deployment mode of the broker.
 type DeploymentMode string
 
 // Enum values for DeploymentMode
@@ -3660,13 +4431,7 @@ func (enum EngineType) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
-// The reason for which the XML elements or attributes were sanitized. Possible
-// values: DISALLOWED_ELEMENT_REMOVED, DISALLOWED_ATTRIBUTE_REMOVED, INVALID_ATTRIBUTE_VALUE_REMOVED
-// DISALLOWED_ELEMENT_REMOVED shows that the provided element isn't allowed
-// and has been removed. DISALLOWED_ATTRIBUTE_REMOVED shows that the provided
-// attribute isn't allowed and has been removed. INVALID_ATTRIBUTE_VALUE_REMOVED
-// shows that the provided value for the attribute isn't allowed and has been
-// removed.
+// The reason for which the XML elements or attributes were sanitized.
 type SanitizationWarningReason string
 
 // Enum values for SanitizationWarningReason

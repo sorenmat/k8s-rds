@@ -1,4 +1,54 @@
-Release v2.0.0-preview.4 (2018-05-25)
+Release v0.7.0 (2019-01-03)
+===
+
+### Services
+* Synced the V2 SDK with latests AWS service API definitions.
+
+### SDK Enhancements
+* deps: Update SDK to latest go-jmespath ([#254](https://github.com/aws/aws-sdk-go-v2/pull/254))
+
+### SDK Bugs
+* `internal/ini`: Fix bug on trimming rhs spaces closes ([#260](https://github.com/aws/aws-sdk-go-v2/pull/260))
+  * Fixes a bug trimming RHS spaces not being read correctly from the ini file.
+  * Fix [#259](https://github.com/aws/aws-sdk-go-v2/pull/259)
+
+Release v0.6.0 (2018-12-03)
+===
+
+### Services
+* Synced the V2 SDK with latests AWS service API definitions.
+
+### SDK Bugs
+* Updates the SDK's release tagging scheme to use `v0` until the v2 SDK reaches
+	* General Availability (GA). This allows the SDK to be used with Go 1.11 modules. Post GA, v2 SDK's release tagging version will most likely follow a `v1.<x>.<y>` patter.
+	* Fixes [#221](https://github.com/aws/aws-sdk-go-v2/issues/221)
+
+Release v0.5.0 (2018-09-19)
+===
+
+### Services
+* Synced the V2 SDK with latests AWS service API definitions.
+
+### SDK Bugs
+* Fix SDK Go 1.11 connection reset handling (#207)
+	* Fixes how the SDK checks for connection reset errors when making API calls to be compatiable with Go 1.11.
+* `aws/signer/v4`: Fix X-Amz-Content-Sha256 being in to query for presign (#188)
+	* Fixes the bug which would allow the X-Amz-Content-Sha256 header to be promoted to the query string when presigning a S3 request.  This bug also was preventing users from setting their own sha256 value for a presigned URL. Presigned requests generated with the custom sha256 would of always failed with invalid signature.
+	* Related to aws/aws-sdk-go#1974
+
+### SDK Enhancements
+* Cleanup SDK README and example documenation.
+* `service/s3/s3manager`: Add doc for sequential download (#201)
+	Adds documentation for downloading object sequentially with the S3 download manager.
+* `aws/credentials`: Update Credentials cache to have less overhead (#184)
+	* Updates the Credentials type's cache of the CredentialsValue to be synchronized with an atomic value in addition to the Mutex. This reduces the overhead applications will encounter when many concurrent API requests are being made.
+	* Related to: aws/aws-sdk-go#1973
+* `service/dynamodb/dynamodbattribute`: Add support for custom struct tag keys (#203)
+	* Adds support for (un)marshaling Go types using custom struct tag keys. The new `MarshalOptions.TagKey` allows the user to specify the tag key to use when (un)marshaling struct fields.  Adds support for struct tags such as `yaml`, `toml`, etc. Support for these keys are in name only, and require the tag value format and values to be supported by the package's Marshalers.
+* `internal/ini`: Add custom INI parser for shared config/credentials file (#209)
+	* Related to: aws/aws-sdk-go#2024
+
+Release v0.4.0 (2018-05-25)
 ===
 
 ### Services
@@ -25,7 +75,7 @@ Release v2.0.0-preview.4 (2018-05-25)
 	* Fixes [#155](https://github.com/aws/aws-sdk-go-v2/issues/155)
 
 
-Release v2.0.0-preview.3 (2018-03-08)
+Release v0.3.0 (2018-03-08)
 ===
 
 ### Services
@@ -67,7 +117,7 @@ Release v2.0.0-preview.3 (2018-03-08)
 * Add code of conduct ([#138](https://github.com/aws/aws-sdk-go-v2/pull/138))
 * Update SDK README dep usage ([#140](https://github.com/aws/aws-sdk-go-v2/pull/140))
 
-Release v2.0.0-preview.2 (2018-01-15)
+Release v0.2.0 (2018-01-15)
 ===
 
 ### Services
@@ -80,7 +130,7 @@ Release v2.0.0-preview.2 (2018-01-15)
 	* Fixes [#84](https://github.com/aws/aws-sdk-go-v2/issues/84)
 
 
-Release v2.0.0-preview.1 (2017-12-21)
+Release v0.1.0 (2017-12-21)
 ===
 
 ## What has changed?

@@ -64,7 +64,25 @@ import (
 type XRayAPI interface {
 	BatchGetTracesRequest(*xray.BatchGetTracesInput) xray.BatchGetTracesRequest
 
+	CreateGroupRequest(*xray.CreateGroupInput) xray.CreateGroupRequest
+
+	CreateSamplingRuleRequest(*xray.CreateSamplingRuleInput) xray.CreateSamplingRuleRequest
+
+	DeleteGroupRequest(*xray.DeleteGroupInput) xray.DeleteGroupRequest
+
+	DeleteSamplingRuleRequest(*xray.DeleteSamplingRuleInput) xray.DeleteSamplingRuleRequest
+
 	GetEncryptionConfigRequest(*xray.GetEncryptionConfigInput) xray.GetEncryptionConfigRequest
+
+	GetGroupRequest(*xray.GetGroupInput) xray.GetGroupRequest
+
+	GetGroupsRequest(*xray.GetGroupsInput) xray.GetGroupsRequest
+
+	GetSamplingRulesRequest(*xray.GetSamplingRulesInput) xray.GetSamplingRulesRequest
+
+	GetSamplingStatisticSummariesRequest(*xray.GetSamplingStatisticSummariesInput) xray.GetSamplingStatisticSummariesRequest
+
+	GetSamplingTargetsRequest(*xray.GetSamplingTargetsInput) xray.GetSamplingTargetsRequest
 
 	GetServiceGraphRequest(*xray.GetServiceGraphInput) xray.GetServiceGraphRequest
 
@@ -77,6 +95,10 @@ type XRayAPI interface {
 	PutTelemetryRecordsRequest(*xray.PutTelemetryRecordsInput) xray.PutTelemetryRecordsRequest
 
 	PutTraceSegmentsRequest(*xray.PutTraceSegmentsInput) xray.PutTraceSegmentsRequest
+
+	UpdateGroupRequest(*xray.UpdateGroupInput) xray.UpdateGroupRequest
+
+	UpdateSamplingRuleRequest(*xray.UpdateSamplingRuleInput) xray.UpdateSamplingRuleRequest
 }
 
 var _ XRayAPI = (*xray.XRay)(nil)

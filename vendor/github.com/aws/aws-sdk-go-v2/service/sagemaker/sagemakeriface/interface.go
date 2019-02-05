@@ -65,11 +65,23 @@ import (
 type SageMakerAPI interface {
 	AddTagsRequest(*sagemaker.AddTagsInput) sagemaker.AddTagsRequest
 
+	CreateAlgorithmRequest(*sagemaker.CreateAlgorithmInput) sagemaker.CreateAlgorithmRequest
+
+	CreateCodeRepositoryRequest(*sagemaker.CreateCodeRepositoryInput) sagemaker.CreateCodeRepositoryRequest
+
+	CreateCompilationJobRequest(*sagemaker.CreateCompilationJobInput) sagemaker.CreateCompilationJobRequest
+
 	CreateEndpointRequest(*sagemaker.CreateEndpointInput) sagemaker.CreateEndpointRequest
 
 	CreateEndpointConfigRequest(*sagemaker.CreateEndpointConfigInput) sagemaker.CreateEndpointConfigRequest
 
+	CreateHyperParameterTuningJobRequest(*sagemaker.CreateHyperParameterTuningJobInput) sagemaker.CreateHyperParameterTuningJobRequest
+
+	CreateLabelingJobRequest(*sagemaker.CreateLabelingJobInput) sagemaker.CreateLabelingJobRequest
+
 	CreateModelRequest(*sagemaker.CreateModelInput) sagemaker.CreateModelRequest
+
+	CreateModelPackageRequest(*sagemaker.CreateModelPackageInput) sagemaker.CreateModelPackageRequest
 
 	CreateNotebookInstanceRequest(*sagemaker.CreateNotebookInstanceInput) sagemaker.CreateNotebookInstanceRequest
 
@@ -79,11 +91,21 @@ type SageMakerAPI interface {
 
 	CreateTrainingJobRequest(*sagemaker.CreateTrainingJobInput) sagemaker.CreateTrainingJobRequest
 
+	CreateTransformJobRequest(*sagemaker.CreateTransformJobInput) sagemaker.CreateTransformJobRequest
+
+	CreateWorkteamRequest(*sagemaker.CreateWorkteamInput) sagemaker.CreateWorkteamRequest
+
+	DeleteAlgorithmRequest(*sagemaker.DeleteAlgorithmInput) sagemaker.DeleteAlgorithmRequest
+
+	DeleteCodeRepositoryRequest(*sagemaker.DeleteCodeRepositoryInput) sagemaker.DeleteCodeRepositoryRequest
+
 	DeleteEndpointRequest(*sagemaker.DeleteEndpointInput) sagemaker.DeleteEndpointRequest
 
 	DeleteEndpointConfigRequest(*sagemaker.DeleteEndpointConfigInput) sagemaker.DeleteEndpointConfigRequest
 
 	DeleteModelRequest(*sagemaker.DeleteModelInput) sagemaker.DeleteModelRequest
+
+	DeleteModelPackageRequest(*sagemaker.DeleteModelPackageInput) sagemaker.DeleteModelPackageRequest
 
 	DeleteNotebookInstanceRequest(*sagemaker.DeleteNotebookInstanceInput) sagemaker.DeleteNotebookInstanceRequest
 
@@ -91,21 +113,57 @@ type SageMakerAPI interface {
 
 	DeleteTagsRequest(*sagemaker.DeleteTagsInput) sagemaker.DeleteTagsRequest
 
+	DeleteWorkteamRequest(*sagemaker.DeleteWorkteamInput) sagemaker.DeleteWorkteamRequest
+
+	DescribeAlgorithmRequest(*sagemaker.DescribeAlgorithmInput) sagemaker.DescribeAlgorithmRequest
+
+	DescribeCodeRepositoryRequest(*sagemaker.DescribeCodeRepositoryInput) sagemaker.DescribeCodeRepositoryRequest
+
+	DescribeCompilationJobRequest(*sagemaker.DescribeCompilationJobInput) sagemaker.DescribeCompilationJobRequest
+
 	DescribeEndpointRequest(*sagemaker.DescribeEndpointInput) sagemaker.DescribeEndpointRequest
 
 	DescribeEndpointConfigRequest(*sagemaker.DescribeEndpointConfigInput) sagemaker.DescribeEndpointConfigRequest
 
+	DescribeHyperParameterTuningJobRequest(*sagemaker.DescribeHyperParameterTuningJobInput) sagemaker.DescribeHyperParameterTuningJobRequest
+
+	DescribeLabelingJobRequest(*sagemaker.DescribeLabelingJobInput) sagemaker.DescribeLabelingJobRequest
+
 	DescribeModelRequest(*sagemaker.DescribeModelInput) sagemaker.DescribeModelRequest
+
+	DescribeModelPackageRequest(*sagemaker.DescribeModelPackageInput) sagemaker.DescribeModelPackageRequest
 
 	DescribeNotebookInstanceRequest(*sagemaker.DescribeNotebookInstanceInput) sagemaker.DescribeNotebookInstanceRequest
 
 	DescribeNotebookInstanceLifecycleConfigRequest(*sagemaker.DescribeNotebookInstanceLifecycleConfigInput) sagemaker.DescribeNotebookInstanceLifecycleConfigRequest
 
+	DescribeSubscribedWorkteamRequest(*sagemaker.DescribeSubscribedWorkteamInput) sagemaker.DescribeSubscribedWorkteamRequest
+
 	DescribeTrainingJobRequest(*sagemaker.DescribeTrainingJobInput) sagemaker.DescribeTrainingJobRequest
+
+	DescribeTransformJobRequest(*sagemaker.DescribeTransformJobInput) sagemaker.DescribeTransformJobRequest
+
+	DescribeWorkteamRequest(*sagemaker.DescribeWorkteamInput) sagemaker.DescribeWorkteamRequest
+
+	GetSearchSuggestionsRequest(*sagemaker.GetSearchSuggestionsInput) sagemaker.GetSearchSuggestionsRequest
+
+	ListAlgorithmsRequest(*sagemaker.ListAlgorithmsInput) sagemaker.ListAlgorithmsRequest
+
+	ListCodeRepositoriesRequest(*sagemaker.ListCodeRepositoriesInput) sagemaker.ListCodeRepositoriesRequest
+
+	ListCompilationJobsRequest(*sagemaker.ListCompilationJobsInput) sagemaker.ListCompilationJobsRequest
 
 	ListEndpointConfigsRequest(*sagemaker.ListEndpointConfigsInput) sagemaker.ListEndpointConfigsRequest
 
 	ListEndpointsRequest(*sagemaker.ListEndpointsInput) sagemaker.ListEndpointsRequest
+
+	ListHyperParameterTuningJobsRequest(*sagemaker.ListHyperParameterTuningJobsInput) sagemaker.ListHyperParameterTuningJobsRequest
+
+	ListLabelingJobsRequest(*sagemaker.ListLabelingJobsInput) sagemaker.ListLabelingJobsRequest
+
+	ListLabelingJobsForWorkteamRequest(*sagemaker.ListLabelingJobsForWorkteamInput) sagemaker.ListLabelingJobsForWorkteamRequest
+
+	ListModelPackagesRequest(*sagemaker.ListModelPackagesInput) sagemaker.ListModelPackagesRequest
 
 	ListModelsRequest(*sagemaker.ListModelsInput) sagemaker.ListModelsRequest
 
@@ -113,15 +171,37 @@ type SageMakerAPI interface {
 
 	ListNotebookInstancesRequest(*sagemaker.ListNotebookInstancesInput) sagemaker.ListNotebookInstancesRequest
 
+	ListSubscribedWorkteamsRequest(*sagemaker.ListSubscribedWorkteamsInput) sagemaker.ListSubscribedWorkteamsRequest
+
 	ListTagsRequest(*sagemaker.ListTagsInput) sagemaker.ListTagsRequest
 
 	ListTrainingJobsRequest(*sagemaker.ListTrainingJobsInput) sagemaker.ListTrainingJobsRequest
 
+	ListTrainingJobsForHyperParameterTuningJobRequest(*sagemaker.ListTrainingJobsForHyperParameterTuningJobInput) sagemaker.ListTrainingJobsForHyperParameterTuningJobRequest
+
+	ListTransformJobsRequest(*sagemaker.ListTransformJobsInput) sagemaker.ListTransformJobsRequest
+
+	ListWorkteamsRequest(*sagemaker.ListWorkteamsInput) sagemaker.ListWorkteamsRequest
+
+	RenderUiTemplateRequest(*sagemaker.RenderUiTemplateInput) sagemaker.RenderUiTemplateRequest
+
+	SearchRequest(*sagemaker.SearchInput) sagemaker.SearchRequest
+
 	StartNotebookInstanceRequest(*sagemaker.StartNotebookInstanceInput) sagemaker.StartNotebookInstanceRequest
+
+	StopCompilationJobRequest(*sagemaker.StopCompilationJobInput) sagemaker.StopCompilationJobRequest
+
+	StopHyperParameterTuningJobRequest(*sagemaker.StopHyperParameterTuningJobInput) sagemaker.StopHyperParameterTuningJobRequest
+
+	StopLabelingJobRequest(*sagemaker.StopLabelingJobInput) sagemaker.StopLabelingJobRequest
 
 	StopNotebookInstanceRequest(*sagemaker.StopNotebookInstanceInput) sagemaker.StopNotebookInstanceRequest
 
 	StopTrainingJobRequest(*sagemaker.StopTrainingJobInput) sagemaker.StopTrainingJobRequest
+
+	StopTransformJobRequest(*sagemaker.StopTransformJobInput) sagemaker.StopTransformJobRequest
+
+	UpdateCodeRepositoryRequest(*sagemaker.UpdateCodeRepositoryInput) sagemaker.UpdateCodeRepositoryRequest
 
 	UpdateEndpointRequest(*sagemaker.UpdateEndpointInput) sagemaker.UpdateEndpointRequest
 
@@ -130,6 +210,8 @@ type SageMakerAPI interface {
 	UpdateNotebookInstanceRequest(*sagemaker.UpdateNotebookInstanceInput) sagemaker.UpdateNotebookInstanceRequest
 
 	UpdateNotebookInstanceLifecycleConfigRequest(*sagemaker.UpdateNotebookInstanceLifecycleConfigInput) sagemaker.UpdateNotebookInstanceLifecycleConfigRequest
+
+	UpdateWorkteamRequest(*sagemaker.UpdateWorkteamInput) sagemaker.UpdateWorkteamRequest
 
 	WaitUntilEndpointDeleted(*sagemaker.DescribeEndpointInput) error
 	WaitUntilEndpointDeletedWithContext(aws.Context, *sagemaker.DescribeEndpointInput, ...aws.WaiterOption) error
@@ -148,6 +230,9 @@ type SageMakerAPI interface {
 
 	WaitUntilTrainingJobCompletedOrStopped(*sagemaker.DescribeTrainingJobInput) error
 	WaitUntilTrainingJobCompletedOrStoppedWithContext(aws.Context, *sagemaker.DescribeTrainingJobInput, ...aws.WaiterOption) error
+
+	WaitUntilTransformJobCompletedOrStopped(*sagemaker.DescribeTransformJobInput) error
+	WaitUntilTransformJobCompletedOrStoppedWithContext(aws.Context, *sagemaker.DescribeTransformJobInput, ...aws.WaiterOption) error
 }
 
 var _ SageMakerAPI = (*sagemaker.SageMaker)(nil)

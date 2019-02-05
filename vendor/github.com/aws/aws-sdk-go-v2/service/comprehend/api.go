@@ -3,6 +3,7 @@
 package comprehend
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -83,8 +84,8 @@ func (r BatchDetectEntitiesRequest) Send() (*BatchDetectEntitiesOutput, error) {
 // BatchDetectEntitiesRequest returns a request value for making API operation for
 // Amazon Comprehend.
 //
-// Inspects the text of a batch of documents and returns information about them.
-// For more information about entities, see how-entities
+// Inspects the text of a batch of documents for named entities and returns
+// information about them. For more information about named entities, see how-entities
 //
 //    // Example sending a request using the BatchDetectEntitiesRequest method.
 //    req := client.BatchDetectEntitiesRequest(params)
@@ -213,6 +214,635 @@ func (c *Comprehend) BatchDetectSentimentRequest(input *BatchDetectSentimentInpu
 	return BatchDetectSentimentRequest{Request: req, Input: input, Copy: c.BatchDetectSentimentRequest}
 }
 
+const opBatchDetectSyntax = "BatchDetectSyntax"
+
+// BatchDetectSyntaxRequest is a API request type for the BatchDetectSyntax API operation.
+type BatchDetectSyntaxRequest struct {
+	*aws.Request
+	Input *BatchDetectSyntaxInput
+	Copy  func(*BatchDetectSyntaxInput) BatchDetectSyntaxRequest
+}
+
+// Send marshals and sends the BatchDetectSyntax API request.
+func (r BatchDetectSyntaxRequest) Send() (*BatchDetectSyntaxOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*BatchDetectSyntaxOutput), nil
+}
+
+// BatchDetectSyntaxRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Inspects the text of a batch of documents for the syntax and part of speech
+// of the words in the document and returns information about them. For more
+// information, see how-syntax.
+//
+//    // Example sending a request using the BatchDetectSyntaxRequest method.
+//    req := client.BatchDetectSyntaxRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/BatchDetectSyntax
+func (c *Comprehend) BatchDetectSyntaxRequest(input *BatchDetectSyntaxInput) BatchDetectSyntaxRequest {
+	op := &aws.Operation{
+		Name:       opBatchDetectSyntax,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BatchDetectSyntaxInput{}
+	}
+
+	output := &BatchDetectSyntaxOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return BatchDetectSyntaxRequest{Request: req, Input: input, Copy: c.BatchDetectSyntaxRequest}
+}
+
+const opCreateDocumentClassifier = "CreateDocumentClassifier"
+
+// CreateDocumentClassifierRequest is a API request type for the CreateDocumentClassifier API operation.
+type CreateDocumentClassifierRequest struct {
+	*aws.Request
+	Input *CreateDocumentClassifierInput
+	Copy  func(*CreateDocumentClassifierInput) CreateDocumentClassifierRequest
+}
+
+// Send marshals and sends the CreateDocumentClassifier API request.
+func (r CreateDocumentClassifierRequest) Send() (*CreateDocumentClassifierOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CreateDocumentClassifierOutput), nil
+}
+
+// CreateDocumentClassifierRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Creates a new document classifier that you can use to categorize documents.
+// To create a classifier you provide a set of training documents that labeled
+// with the categories that you want to use. After the classifier is trained
+// you can use it to categorize a set of labeled documents into the categories.
+// For more information, see how-document-classification.
+//
+//    // Example sending a request using the CreateDocumentClassifierRequest method.
+//    req := client.CreateDocumentClassifierRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/CreateDocumentClassifier
+func (c *Comprehend) CreateDocumentClassifierRequest(input *CreateDocumentClassifierInput) CreateDocumentClassifierRequest {
+	op := &aws.Operation{
+		Name:       opCreateDocumentClassifier,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateDocumentClassifierInput{}
+	}
+
+	output := &CreateDocumentClassifierOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CreateDocumentClassifierRequest{Request: req, Input: input, Copy: c.CreateDocumentClassifierRequest}
+}
+
+const opCreateEntityRecognizer = "CreateEntityRecognizer"
+
+// CreateEntityRecognizerRequest is a API request type for the CreateEntityRecognizer API operation.
+type CreateEntityRecognizerRequest struct {
+	*aws.Request
+	Input *CreateEntityRecognizerInput
+	Copy  func(*CreateEntityRecognizerInput) CreateEntityRecognizerRequest
+}
+
+// Send marshals and sends the CreateEntityRecognizer API request.
+func (r CreateEntityRecognizerRequest) Send() (*CreateEntityRecognizerOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CreateEntityRecognizerOutput), nil
+}
+
+// CreateEntityRecognizerRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Creates an entity recognizer using submitted files. After your CreateEntityRecognizer
+// request is submitted, you can check job status using the API.
+//
+//    // Example sending a request using the CreateEntityRecognizerRequest method.
+//    req := client.CreateEntityRecognizerRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/CreateEntityRecognizer
+func (c *Comprehend) CreateEntityRecognizerRequest(input *CreateEntityRecognizerInput) CreateEntityRecognizerRequest {
+	op := &aws.Operation{
+		Name:       opCreateEntityRecognizer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateEntityRecognizerInput{}
+	}
+
+	output := &CreateEntityRecognizerOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CreateEntityRecognizerRequest{Request: req, Input: input, Copy: c.CreateEntityRecognizerRequest}
+}
+
+const opDeleteDocumentClassifier = "DeleteDocumentClassifier"
+
+// DeleteDocumentClassifierRequest is a API request type for the DeleteDocumentClassifier API operation.
+type DeleteDocumentClassifierRequest struct {
+	*aws.Request
+	Input *DeleteDocumentClassifierInput
+	Copy  func(*DeleteDocumentClassifierInput) DeleteDocumentClassifierRequest
+}
+
+// Send marshals and sends the DeleteDocumentClassifier API request.
+func (r DeleteDocumentClassifierRequest) Send() (*DeleteDocumentClassifierOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteDocumentClassifierOutput), nil
+}
+
+// DeleteDocumentClassifierRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Deletes a previously created document classifier
+//
+// Only those classifiers that are in terminated states (IN_ERROR, TRAINED)
+// will be deleted. If an active inference job is using the model, a ResourceInUseException
+// will be returned.
+//
+// This is an asynchronous action that puts the classifier into a DELETING state,
+// and it is then removed by a background job. Once removed, the classifier
+// disappears from your account and is no longer available for use.
+//
+//    // Example sending a request using the DeleteDocumentClassifierRequest method.
+//    req := client.DeleteDocumentClassifierRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DeleteDocumentClassifier
+func (c *Comprehend) DeleteDocumentClassifierRequest(input *DeleteDocumentClassifierInput) DeleteDocumentClassifierRequest {
+	op := &aws.Operation{
+		Name:       opDeleteDocumentClassifier,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteDocumentClassifierInput{}
+	}
+
+	output := &DeleteDocumentClassifierOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteDocumentClassifierRequest{Request: req, Input: input, Copy: c.DeleteDocumentClassifierRequest}
+}
+
+const opDeleteEntityRecognizer = "DeleteEntityRecognizer"
+
+// DeleteEntityRecognizerRequest is a API request type for the DeleteEntityRecognizer API operation.
+type DeleteEntityRecognizerRequest struct {
+	*aws.Request
+	Input *DeleteEntityRecognizerInput
+	Copy  func(*DeleteEntityRecognizerInput) DeleteEntityRecognizerRequest
+}
+
+// Send marshals and sends the DeleteEntityRecognizer API request.
+func (r DeleteEntityRecognizerRequest) Send() (*DeleteEntityRecognizerOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteEntityRecognizerOutput), nil
+}
+
+// DeleteEntityRecognizerRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Deletes an entity recognizer.
+//
+// Only those recognizers that are in terminated states (IN_ERROR, TRAINED)
+// will be deleted. If an active inference job is using the model, a ResourceInUseException
+// will be returned.
+//
+// This is an asynchronous action that puts the recognizer into a DELETING state,
+// and it is then removed by a background job. Once removed, the recognizer
+// disappears from your account and is no longer available for use.
+//
+//    // Example sending a request using the DeleteEntityRecognizerRequest method.
+//    req := client.DeleteEntityRecognizerRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DeleteEntityRecognizer
+func (c *Comprehend) DeleteEntityRecognizerRequest(input *DeleteEntityRecognizerInput) DeleteEntityRecognizerRequest {
+	op := &aws.Operation{
+		Name:       opDeleteEntityRecognizer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteEntityRecognizerInput{}
+	}
+
+	output := &DeleteEntityRecognizerOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteEntityRecognizerRequest{Request: req, Input: input, Copy: c.DeleteEntityRecognizerRequest}
+}
+
+const opDescribeDocumentClassificationJob = "DescribeDocumentClassificationJob"
+
+// DescribeDocumentClassificationJobRequest is a API request type for the DescribeDocumentClassificationJob API operation.
+type DescribeDocumentClassificationJobRequest struct {
+	*aws.Request
+	Input *DescribeDocumentClassificationJobInput
+	Copy  func(*DescribeDocumentClassificationJobInput) DescribeDocumentClassificationJobRequest
+}
+
+// Send marshals and sends the DescribeDocumentClassificationJob API request.
+func (r DescribeDocumentClassificationJobRequest) Send() (*DescribeDocumentClassificationJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeDocumentClassificationJobOutput), nil
+}
+
+// DescribeDocumentClassificationJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets the properties associated with a document classification job. Use this
+// operation to get the status of a classification job.
+//
+//    // Example sending a request using the DescribeDocumentClassificationJobRequest method.
+//    req := client.DescribeDocumentClassificationJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeDocumentClassificationJob
+func (c *Comprehend) DescribeDocumentClassificationJobRequest(input *DescribeDocumentClassificationJobInput) DescribeDocumentClassificationJobRequest {
+	op := &aws.Operation{
+		Name:       opDescribeDocumentClassificationJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeDocumentClassificationJobInput{}
+	}
+
+	output := &DescribeDocumentClassificationJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeDocumentClassificationJobRequest{Request: req, Input: input, Copy: c.DescribeDocumentClassificationJobRequest}
+}
+
+const opDescribeDocumentClassifier = "DescribeDocumentClassifier"
+
+// DescribeDocumentClassifierRequest is a API request type for the DescribeDocumentClassifier API operation.
+type DescribeDocumentClassifierRequest struct {
+	*aws.Request
+	Input *DescribeDocumentClassifierInput
+	Copy  func(*DescribeDocumentClassifierInput) DescribeDocumentClassifierRequest
+}
+
+// Send marshals and sends the DescribeDocumentClassifier API request.
+func (r DescribeDocumentClassifierRequest) Send() (*DescribeDocumentClassifierOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeDocumentClassifierOutput), nil
+}
+
+// DescribeDocumentClassifierRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets the properties associated with a document classifier.
+//
+//    // Example sending a request using the DescribeDocumentClassifierRequest method.
+//    req := client.DescribeDocumentClassifierRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeDocumentClassifier
+func (c *Comprehend) DescribeDocumentClassifierRequest(input *DescribeDocumentClassifierInput) DescribeDocumentClassifierRequest {
+	op := &aws.Operation{
+		Name:       opDescribeDocumentClassifier,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeDocumentClassifierInput{}
+	}
+
+	output := &DescribeDocumentClassifierOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeDocumentClassifierRequest{Request: req, Input: input, Copy: c.DescribeDocumentClassifierRequest}
+}
+
+const opDescribeDominantLanguageDetectionJob = "DescribeDominantLanguageDetectionJob"
+
+// DescribeDominantLanguageDetectionJobRequest is a API request type for the DescribeDominantLanguageDetectionJob API operation.
+type DescribeDominantLanguageDetectionJobRequest struct {
+	*aws.Request
+	Input *DescribeDominantLanguageDetectionJobInput
+	Copy  func(*DescribeDominantLanguageDetectionJobInput) DescribeDominantLanguageDetectionJobRequest
+}
+
+// Send marshals and sends the DescribeDominantLanguageDetectionJob API request.
+func (r DescribeDominantLanguageDetectionJobRequest) Send() (*DescribeDominantLanguageDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeDominantLanguageDetectionJobOutput), nil
+}
+
+// DescribeDominantLanguageDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets the properties associated with a dominant language detection job. Use
+// this operation to get the status of a detection job.
+//
+//    // Example sending a request using the DescribeDominantLanguageDetectionJobRequest method.
+//    req := client.DescribeDominantLanguageDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeDominantLanguageDetectionJob
+func (c *Comprehend) DescribeDominantLanguageDetectionJobRequest(input *DescribeDominantLanguageDetectionJobInput) DescribeDominantLanguageDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opDescribeDominantLanguageDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeDominantLanguageDetectionJobInput{}
+	}
+
+	output := &DescribeDominantLanguageDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeDominantLanguageDetectionJobRequest{Request: req, Input: input, Copy: c.DescribeDominantLanguageDetectionJobRequest}
+}
+
+const opDescribeEntitiesDetectionJob = "DescribeEntitiesDetectionJob"
+
+// DescribeEntitiesDetectionJobRequest is a API request type for the DescribeEntitiesDetectionJob API operation.
+type DescribeEntitiesDetectionJobRequest struct {
+	*aws.Request
+	Input *DescribeEntitiesDetectionJobInput
+	Copy  func(*DescribeEntitiesDetectionJobInput) DescribeEntitiesDetectionJobRequest
+}
+
+// Send marshals and sends the DescribeEntitiesDetectionJob API request.
+func (r DescribeEntitiesDetectionJobRequest) Send() (*DescribeEntitiesDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeEntitiesDetectionJobOutput), nil
+}
+
+// DescribeEntitiesDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets the properties associated with an entities detection job. Use this operation
+// to get the status of a detection job.
+//
+//    // Example sending a request using the DescribeEntitiesDetectionJobRequest method.
+//    req := client.DescribeEntitiesDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeEntitiesDetectionJob
+func (c *Comprehend) DescribeEntitiesDetectionJobRequest(input *DescribeEntitiesDetectionJobInput) DescribeEntitiesDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opDescribeEntitiesDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeEntitiesDetectionJobInput{}
+	}
+
+	output := &DescribeEntitiesDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeEntitiesDetectionJobRequest{Request: req, Input: input, Copy: c.DescribeEntitiesDetectionJobRequest}
+}
+
+const opDescribeEntityRecognizer = "DescribeEntityRecognizer"
+
+// DescribeEntityRecognizerRequest is a API request type for the DescribeEntityRecognizer API operation.
+type DescribeEntityRecognizerRequest struct {
+	*aws.Request
+	Input *DescribeEntityRecognizerInput
+	Copy  func(*DescribeEntityRecognizerInput) DescribeEntityRecognizerRequest
+}
+
+// Send marshals and sends the DescribeEntityRecognizer API request.
+func (r DescribeEntityRecognizerRequest) Send() (*DescribeEntityRecognizerOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeEntityRecognizerOutput), nil
+}
+
+// DescribeEntityRecognizerRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Provides details about an entity recognizer including status, S3 buckets
+// containing training data, recognizer metadata, metrics, and so on.
+//
+//    // Example sending a request using the DescribeEntityRecognizerRequest method.
+//    req := client.DescribeEntityRecognizerRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeEntityRecognizer
+func (c *Comprehend) DescribeEntityRecognizerRequest(input *DescribeEntityRecognizerInput) DescribeEntityRecognizerRequest {
+	op := &aws.Operation{
+		Name:       opDescribeEntityRecognizer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeEntityRecognizerInput{}
+	}
+
+	output := &DescribeEntityRecognizerOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeEntityRecognizerRequest{Request: req, Input: input, Copy: c.DescribeEntityRecognizerRequest}
+}
+
+const opDescribeKeyPhrasesDetectionJob = "DescribeKeyPhrasesDetectionJob"
+
+// DescribeKeyPhrasesDetectionJobRequest is a API request type for the DescribeKeyPhrasesDetectionJob API operation.
+type DescribeKeyPhrasesDetectionJobRequest struct {
+	*aws.Request
+	Input *DescribeKeyPhrasesDetectionJobInput
+	Copy  func(*DescribeKeyPhrasesDetectionJobInput) DescribeKeyPhrasesDetectionJobRequest
+}
+
+// Send marshals and sends the DescribeKeyPhrasesDetectionJob API request.
+func (r DescribeKeyPhrasesDetectionJobRequest) Send() (*DescribeKeyPhrasesDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeKeyPhrasesDetectionJobOutput), nil
+}
+
+// DescribeKeyPhrasesDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets the properties associated with a key phrases detection job. Use this
+// operation to get the status of a detection job.
+//
+//    // Example sending a request using the DescribeKeyPhrasesDetectionJobRequest method.
+//    req := client.DescribeKeyPhrasesDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeKeyPhrasesDetectionJob
+func (c *Comprehend) DescribeKeyPhrasesDetectionJobRequest(input *DescribeKeyPhrasesDetectionJobInput) DescribeKeyPhrasesDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opDescribeKeyPhrasesDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeKeyPhrasesDetectionJobInput{}
+	}
+
+	output := &DescribeKeyPhrasesDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeKeyPhrasesDetectionJobRequest{Request: req, Input: input, Copy: c.DescribeKeyPhrasesDetectionJobRequest}
+}
+
+const opDescribeSentimentDetectionJob = "DescribeSentimentDetectionJob"
+
+// DescribeSentimentDetectionJobRequest is a API request type for the DescribeSentimentDetectionJob API operation.
+type DescribeSentimentDetectionJobRequest struct {
+	*aws.Request
+	Input *DescribeSentimentDetectionJobInput
+	Copy  func(*DescribeSentimentDetectionJobInput) DescribeSentimentDetectionJobRequest
+}
+
+// Send marshals and sends the DescribeSentimentDetectionJob API request.
+func (r DescribeSentimentDetectionJobRequest) Send() (*DescribeSentimentDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeSentimentDetectionJobOutput), nil
+}
+
+// DescribeSentimentDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets the properties associated with a sentiment detection job. Use this operation
+// to get the status of a detection job.
+//
+//    // Example sending a request using the DescribeSentimentDetectionJobRequest method.
+//    req := client.DescribeSentimentDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeSentimentDetectionJob
+func (c *Comprehend) DescribeSentimentDetectionJobRequest(input *DescribeSentimentDetectionJobInput) DescribeSentimentDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opDescribeSentimentDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeSentimentDetectionJobInput{}
+	}
+
+	output := &DescribeSentimentDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeSentimentDetectionJobRequest{Request: req, Input: input, Copy: c.DescribeSentimentDetectionJobRequest}
+}
+
 const opDescribeTopicsDetectionJob = "DescribeTopicsDetectionJob"
 
 // DescribeTopicsDetectionJobRequest is a API request type for the DescribeTopicsDetectionJob API operation.
@@ -338,8 +968,8 @@ func (r DetectEntitiesRequest) Send() (*DetectEntitiesOutput, error) {
 // DetectEntitiesRequest returns a request value for making API operation for
 // Amazon Comprehend.
 //
-// Inspects text for entities, and returns information about them. For more
-// information, about entities, see how-entities.
+// Inspects text for named entities, and returns information about them. For
+// more information, about named entities, see how-entities.
 //
 //    // Example sending a request using the DetectEntitiesRequest method.
 //    req := client.DetectEntitiesRequest(params)
@@ -468,6 +1098,622 @@ func (c *Comprehend) DetectSentimentRequest(input *DetectSentimentInput) DetectS
 	return DetectSentimentRequest{Request: req, Input: input, Copy: c.DetectSentimentRequest}
 }
 
+const opDetectSyntax = "DetectSyntax"
+
+// DetectSyntaxRequest is a API request type for the DetectSyntax API operation.
+type DetectSyntaxRequest struct {
+	*aws.Request
+	Input *DetectSyntaxInput
+	Copy  func(*DetectSyntaxInput) DetectSyntaxRequest
+}
+
+// Send marshals and sends the DetectSyntax API request.
+func (r DetectSyntaxRequest) Send() (*DetectSyntaxOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DetectSyntaxOutput), nil
+}
+
+// DetectSyntaxRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Inspects text for syntax and the part of speech of words in the document.
+// For more information, how-syntax.
+//
+//    // Example sending a request using the DetectSyntaxRequest method.
+//    req := client.DetectSyntaxRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DetectSyntax
+func (c *Comprehend) DetectSyntaxRequest(input *DetectSyntaxInput) DetectSyntaxRequest {
+	op := &aws.Operation{
+		Name:       opDetectSyntax,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DetectSyntaxInput{}
+	}
+
+	output := &DetectSyntaxOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DetectSyntaxRequest{Request: req, Input: input, Copy: c.DetectSyntaxRequest}
+}
+
+const opListDocumentClassificationJobs = "ListDocumentClassificationJobs"
+
+// ListDocumentClassificationJobsRequest is a API request type for the ListDocumentClassificationJobs API operation.
+type ListDocumentClassificationJobsRequest struct {
+	*aws.Request
+	Input *ListDocumentClassificationJobsInput
+	Copy  func(*ListDocumentClassificationJobsInput) ListDocumentClassificationJobsRequest
+}
+
+// Send marshals and sends the ListDocumentClassificationJobs API request.
+func (r ListDocumentClassificationJobsRequest) Send() (*ListDocumentClassificationJobsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListDocumentClassificationJobsOutput), nil
+}
+
+// ListDocumentClassificationJobsRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets a list of the documentation classification jobs that you have submitted.
+//
+//    // Example sending a request using the ListDocumentClassificationJobsRequest method.
+//    req := client.ListDocumentClassificationJobsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDocumentClassificationJobs
+func (c *Comprehend) ListDocumentClassificationJobsRequest(input *ListDocumentClassificationJobsInput) ListDocumentClassificationJobsRequest {
+	op := &aws.Operation{
+		Name:       opListDocumentClassificationJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListDocumentClassificationJobsInput{}
+	}
+
+	output := &ListDocumentClassificationJobsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListDocumentClassificationJobsRequest{Request: req, Input: input, Copy: c.ListDocumentClassificationJobsRequest}
+}
+
+const opListDocumentClassifiers = "ListDocumentClassifiers"
+
+// ListDocumentClassifiersRequest is a API request type for the ListDocumentClassifiers API operation.
+type ListDocumentClassifiersRequest struct {
+	*aws.Request
+	Input *ListDocumentClassifiersInput
+	Copy  func(*ListDocumentClassifiersInput) ListDocumentClassifiersRequest
+}
+
+// Send marshals and sends the ListDocumentClassifiers API request.
+func (r ListDocumentClassifiersRequest) Send() (*ListDocumentClassifiersOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListDocumentClassifiersOutput), nil
+}
+
+// ListDocumentClassifiersRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets a list of the document classifiers that you have created.
+//
+//    // Example sending a request using the ListDocumentClassifiersRequest method.
+//    req := client.ListDocumentClassifiersRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDocumentClassifiers
+func (c *Comprehend) ListDocumentClassifiersRequest(input *ListDocumentClassifiersInput) ListDocumentClassifiersRequest {
+	op := &aws.Operation{
+		Name:       opListDocumentClassifiers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListDocumentClassifiersInput{}
+	}
+
+	output := &ListDocumentClassifiersOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListDocumentClassifiersRequest{Request: req, Input: input, Copy: c.ListDocumentClassifiersRequest}
+}
+
+const opListDominantLanguageDetectionJobs = "ListDominantLanguageDetectionJobs"
+
+// ListDominantLanguageDetectionJobsRequest is a API request type for the ListDominantLanguageDetectionJobs API operation.
+type ListDominantLanguageDetectionJobsRequest struct {
+	*aws.Request
+	Input *ListDominantLanguageDetectionJobsInput
+	Copy  func(*ListDominantLanguageDetectionJobsInput) ListDominantLanguageDetectionJobsRequest
+}
+
+// Send marshals and sends the ListDominantLanguageDetectionJobs API request.
+func (r ListDominantLanguageDetectionJobsRequest) Send() (*ListDominantLanguageDetectionJobsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListDominantLanguageDetectionJobsOutput), nil
+}
+
+// ListDominantLanguageDetectionJobsRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets a list of the dominant language detection jobs that you have submitted.
+//
+//    // Example sending a request using the ListDominantLanguageDetectionJobsRequest method.
+//    req := client.ListDominantLanguageDetectionJobsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDominantLanguageDetectionJobs
+func (c *Comprehend) ListDominantLanguageDetectionJobsRequest(input *ListDominantLanguageDetectionJobsInput) ListDominantLanguageDetectionJobsRequest {
+	op := &aws.Operation{
+		Name:       opListDominantLanguageDetectionJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListDominantLanguageDetectionJobsInput{}
+	}
+
+	output := &ListDominantLanguageDetectionJobsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListDominantLanguageDetectionJobsRequest{Request: req, Input: input, Copy: c.ListDominantLanguageDetectionJobsRequest}
+}
+
+// Paginate pages iterates over the pages of a ListDominantLanguageDetectionJobsRequest operation,
+// calling the Next method for each page. Using the paginators Next
+// method will depict whether or not there are more pages.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListDominantLanguageDetectionJobs operation.
+//		req := client.ListDominantLanguageDetectionJobsRequest(input)
+//		p := req.Paginate()
+//		for p.Next() {
+//			page := p.CurrentPage()
+//		}
+//
+//		if err := p.Err(); err != nil {
+//			return err
+//		}
+//
+func (p *ListDominantLanguageDetectionJobsRequest) Paginate(opts ...aws.Option) ListDominantLanguageDetectionJobsPager {
+	return ListDominantLanguageDetectionJobsPager{
+		Pager: aws.Pager{
+			NewRequest: func() (*aws.Request, error) {
+				var inCpy *ListDominantLanguageDetectionJobsInput
+				if p.Input != nil {
+					tmp := *p.Input
+					inCpy = &tmp
+				}
+
+				req := p.Copy(inCpy)
+				req.ApplyOptions(opts...)
+
+				return req.Request, nil
+			},
+		},
+	}
+}
+
+// ListDominantLanguageDetectionJobsPager is used to paginate the request. This can be done by
+// calling Next and CurrentPage.
+type ListDominantLanguageDetectionJobsPager struct {
+	aws.Pager
+}
+
+func (p *ListDominantLanguageDetectionJobsPager) CurrentPage() *ListDominantLanguageDetectionJobsOutput {
+	return p.Pager.CurrentPage().(*ListDominantLanguageDetectionJobsOutput)
+}
+
+const opListEntitiesDetectionJobs = "ListEntitiesDetectionJobs"
+
+// ListEntitiesDetectionJobsRequest is a API request type for the ListEntitiesDetectionJobs API operation.
+type ListEntitiesDetectionJobsRequest struct {
+	*aws.Request
+	Input *ListEntitiesDetectionJobsInput
+	Copy  func(*ListEntitiesDetectionJobsInput) ListEntitiesDetectionJobsRequest
+}
+
+// Send marshals and sends the ListEntitiesDetectionJobs API request.
+func (r ListEntitiesDetectionJobsRequest) Send() (*ListEntitiesDetectionJobsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListEntitiesDetectionJobsOutput), nil
+}
+
+// ListEntitiesDetectionJobsRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets a list of the entity detection jobs that you have submitted.
+//
+//    // Example sending a request using the ListEntitiesDetectionJobsRequest method.
+//    req := client.ListEntitiesDetectionJobsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEntitiesDetectionJobs
+func (c *Comprehend) ListEntitiesDetectionJobsRequest(input *ListEntitiesDetectionJobsInput) ListEntitiesDetectionJobsRequest {
+	op := &aws.Operation{
+		Name:       opListEntitiesDetectionJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListEntitiesDetectionJobsInput{}
+	}
+
+	output := &ListEntitiesDetectionJobsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListEntitiesDetectionJobsRequest{Request: req, Input: input, Copy: c.ListEntitiesDetectionJobsRequest}
+}
+
+// Paginate pages iterates over the pages of a ListEntitiesDetectionJobsRequest operation,
+// calling the Next method for each page. Using the paginators Next
+// method will depict whether or not there are more pages.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListEntitiesDetectionJobs operation.
+//		req := client.ListEntitiesDetectionJobsRequest(input)
+//		p := req.Paginate()
+//		for p.Next() {
+//			page := p.CurrentPage()
+//		}
+//
+//		if err := p.Err(); err != nil {
+//			return err
+//		}
+//
+func (p *ListEntitiesDetectionJobsRequest) Paginate(opts ...aws.Option) ListEntitiesDetectionJobsPager {
+	return ListEntitiesDetectionJobsPager{
+		Pager: aws.Pager{
+			NewRequest: func() (*aws.Request, error) {
+				var inCpy *ListEntitiesDetectionJobsInput
+				if p.Input != nil {
+					tmp := *p.Input
+					inCpy = &tmp
+				}
+
+				req := p.Copy(inCpy)
+				req.ApplyOptions(opts...)
+
+				return req.Request, nil
+			},
+		},
+	}
+}
+
+// ListEntitiesDetectionJobsPager is used to paginate the request. This can be done by
+// calling Next and CurrentPage.
+type ListEntitiesDetectionJobsPager struct {
+	aws.Pager
+}
+
+func (p *ListEntitiesDetectionJobsPager) CurrentPage() *ListEntitiesDetectionJobsOutput {
+	return p.Pager.CurrentPage().(*ListEntitiesDetectionJobsOutput)
+}
+
+const opListEntityRecognizers = "ListEntityRecognizers"
+
+// ListEntityRecognizersRequest is a API request type for the ListEntityRecognizers API operation.
+type ListEntityRecognizersRequest struct {
+	*aws.Request
+	Input *ListEntityRecognizersInput
+	Copy  func(*ListEntityRecognizersInput) ListEntityRecognizersRequest
+}
+
+// Send marshals and sends the ListEntityRecognizers API request.
+func (r ListEntityRecognizersRequest) Send() (*ListEntityRecognizersOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListEntityRecognizersOutput), nil
+}
+
+// ListEntityRecognizersRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets a list of the properties of all entity recognizers that you created,
+// including recognizers currently in training. Allows you to filter the list
+// of recognizers based on criteria such as status and submission time. This
+// call returns up to 500 entity recognizers in the list, with a default number
+// of 100 recognizers in the list.
+//
+// The results of this list are not in any particular order. Please get the
+// list and sort locally if needed.
+//
+//    // Example sending a request using the ListEntityRecognizersRequest method.
+//    req := client.ListEntityRecognizersRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEntityRecognizers
+func (c *Comprehend) ListEntityRecognizersRequest(input *ListEntityRecognizersInput) ListEntityRecognizersRequest {
+	op := &aws.Operation{
+		Name:       opListEntityRecognizers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListEntityRecognizersInput{}
+	}
+
+	output := &ListEntityRecognizersOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListEntityRecognizersRequest{Request: req, Input: input, Copy: c.ListEntityRecognizersRequest}
+}
+
+const opListKeyPhrasesDetectionJobs = "ListKeyPhrasesDetectionJobs"
+
+// ListKeyPhrasesDetectionJobsRequest is a API request type for the ListKeyPhrasesDetectionJobs API operation.
+type ListKeyPhrasesDetectionJobsRequest struct {
+	*aws.Request
+	Input *ListKeyPhrasesDetectionJobsInput
+	Copy  func(*ListKeyPhrasesDetectionJobsInput) ListKeyPhrasesDetectionJobsRequest
+}
+
+// Send marshals and sends the ListKeyPhrasesDetectionJobs API request.
+func (r ListKeyPhrasesDetectionJobsRequest) Send() (*ListKeyPhrasesDetectionJobsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListKeyPhrasesDetectionJobsOutput), nil
+}
+
+// ListKeyPhrasesDetectionJobsRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Get a list of key phrase detection jobs that you have submitted.
+//
+//    // Example sending a request using the ListKeyPhrasesDetectionJobsRequest method.
+//    req := client.ListKeyPhrasesDetectionJobsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListKeyPhrasesDetectionJobs
+func (c *Comprehend) ListKeyPhrasesDetectionJobsRequest(input *ListKeyPhrasesDetectionJobsInput) ListKeyPhrasesDetectionJobsRequest {
+	op := &aws.Operation{
+		Name:       opListKeyPhrasesDetectionJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListKeyPhrasesDetectionJobsInput{}
+	}
+
+	output := &ListKeyPhrasesDetectionJobsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListKeyPhrasesDetectionJobsRequest{Request: req, Input: input, Copy: c.ListKeyPhrasesDetectionJobsRequest}
+}
+
+// Paginate pages iterates over the pages of a ListKeyPhrasesDetectionJobsRequest operation,
+// calling the Next method for each page. Using the paginators Next
+// method will depict whether or not there are more pages.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListKeyPhrasesDetectionJobs operation.
+//		req := client.ListKeyPhrasesDetectionJobsRequest(input)
+//		p := req.Paginate()
+//		for p.Next() {
+//			page := p.CurrentPage()
+//		}
+//
+//		if err := p.Err(); err != nil {
+//			return err
+//		}
+//
+func (p *ListKeyPhrasesDetectionJobsRequest) Paginate(opts ...aws.Option) ListKeyPhrasesDetectionJobsPager {
+	return ListKeyPhrasesDetectionJobsPager{
+		Pager: aws.Pager{
+			NewRequest: func() (*aws.Request, error) {
+				var inCpy *ListKeyPhrasesDetectionJobsInput
+				if p.Input != nil {
+					tmp := *p.Input
+					inCpy = &tmp
+				}
+
+				req := p.Copy(inCpy)
+				req.ApplyOptions(opts...)
+
+				return req.Request, nil
+			},
+		},
+	}
+}
+
+// ListKeyPhrasesDetectionJobsPager is used to paginate the request. This can be done by
+// calling Next and CurrentPage.
+type ListKeyPhrasesDetectionJobsPager struct {
+	aws.Pager
+}
+
+func (p *ListKeyPhrasesDetectionJobsPager) CurrentPage() *ListKeyPhrasesDetectionJobsOutput {
+	return p.Pager.CurrentPage().(*ListKeyPhrasesDetectionJobsOutput)
+}
+
+const opListSentimentDetectionJobs = "ListSentimentDetectionJobs"
+
+// ListSentimentDetectionJobsRequest is a API request type for the ListSentimentDetectionJobs API operation.
+type ListSentimentDetectionJobsRequest struct {
+	*aws.Request
+	Input *ListSentimentDetectionJobsInput
+	Copy  func(*ListSentimentDetectionJobsInput) ListSentimentDetectionJobsRequest
+}
+
+// Send marshals and sends the ListSentimentDetectionJobs API request.
+func (r ListSentimentDetectionJobsRequest) Send() (*ListSentimentDetectionJobsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListSentimentDetectionJobsOutput), nil
+}
+
+// ListSentimentDetectionJobsRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Gets a list of sentiment detection jobs that you have submitted.
+//
+//    // Example sending a request using the ListSentimentDetectionJobsRequest method.
+//    req := client.ListSentimentDetectionJobsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListSentimentDetectionJobs
+func (c *Comprehend) ListSentimentDetectionJobsRequest(input *ListSentimentDetectionJobsInput) ListSentimentDetectionJobsRequest {
+	op := &aws.Operation{
+		Name:       opListSentimentDetectionJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSentimentDetectionJobsInput{}
+	}
+
+	output := &ListSentimentDetectionJobsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListSentimentDetectionJobsRequest{Request: req, Input: input, Copy: c.ListSentimentDetectionJobsRequest}
+}
+
+// Paginate pages iterates over the pages of a ListSentimentDetectionJobsRequest operation,
+// calling the Next method for each page. Using the paginators Next
+// method will depict whether or not there are more pages.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSentimentDetectionJobs operation.
+//		req := client.ListSentimentDetectionJobsRequest(input)
+//		p := req.Paginate()
+//		for p.Next() {
+//			page := p.CurrentPage()
+//		}
+//
+//		if err := p.Err(); err != nil {
+//			return err
+//		}
+//
+func (p *ListSentimentDetectionJobsRequest) Paginate(opts ...aws.Option) ListSentimentDetectionJobsPager {
+	return ListSentimentDetectionJobsPager{
+		Pager: aws.Pager{
+			NewRequest: func() (*aws.Request, error) {
+				var inCpy *ListSentimentDetectionJobsInput
+				if p.Input != nil {
+					tmp := *p.Input
+					inCpy = &tmp
+				}
+
+				req := p.Copy(inCpy)
+				req.ApplyOptions(opts...)
+
+				return req.Request, nil
+			},
+		},
+	}
+}
+
+// ListSentimentDetectionJobsPager is used to paginate the request. This can be done by
+// calling Next and CurrentPage.
+type ListSentimentDetectionJobsPager struct {
+	aws.Pager
+}
+
+func (p *ListSentimentDetectionJobsPager) CurrentPage() *ListSentimentDetectionJobsOutput {
+	return p.Pager.CurrentPage().(*ListSentimentDetectionJobsOutput)
+}
+
 const opListTopicsDetectionJobs = "ListTopicsDetectionJobs"
 
 // ListTopicsDetectionJobsRequest is a API request type for the ListTopicsDetectionJobs API operation.
@@ -570,6 +1816,266 @@ func (p *ListTopicsDetectionJobsPager) CurrentPage() *ListTopicsDetectionJobsOut
 	return p.Pager.CurrentPage().(*ListTopicsDetectionJobsOutput)
 }
 
+const opStartDocumentClassificationJob = "StartDocumentClassificationJob"
+
+// StartDocumentClassificationJobRequest is a API request type for the StartDocumentClassificationJob API operation.
+type StartDocumentClassificationJobRequest struct {
+	*aws.Request
+	Input *StartDocumentClassificationJobInput
+	Copy  func(*StartDocumentClassificationJobInput) StartDocumentClassificationJobRequest
+}
+
+// Send marshals and sends the StartDocumentClassificationJob API request.
+func (r StartDocumentClassificationJobRequest) Send() (*StartDocumentClassificationJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StartDocumentClassificationJobOutput), nil
+}
+
+// StartDocumentClassificationJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Starts an asynchronous document classification job. Use the operation to
+// track the progress of the job.
+//
+//    // Example sending a request using the StartDocumentClassificationJobRequest method.
+//    req := client.StartDocumentClassificationJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartDocumentClassificationJob
+func (c *Comprehend) StartDocumentClassificationJobRequest(input *StartDocumentClassificationJobInput) StartDocumentClassificationJobRequest {
+	op := &aws.Operation{
+		Name:       opStartDocumentClassificationJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartDocumentClassificationJobInput{}
+	}
+
+	output := &StartDocumentClassificationJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StartDocumentClassificationJobRequest{Request: req, Input: input, Copy: c.StartDocumentClassificationJobRequest}
+}
+
+const opStartDominantLanguageDetectionJob = "StartDominantLanguageDetectionJob"
+
+// StartDominantLanguageDetectionJobRequest is a API request type for the StartDominantLanguageDetectionJob API operation.
+type StartDominantLanguageDetectionJobRequest struct {
+	*aws.Request
+	Input *StartDominantLanguageDetectionJobInput
+	Copy  func(*StartDominantLanguageDetectionJobInput) StartDominantLanguageDetectionJobRequest
+}
+
+// Send marshals and sends the StartDominantLanguageDetectionJob API request.
+func (r StartDominantLanguageDetectionJobRequest) Send() (*StartDominantLanguageDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StartDominantLanguageDetectionJobOutput), nil
+}
+
+// StartDominantLanguageDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Starts an asynchronous dominant language detection job for a collection of
+// documents. Use the operation to track the status of a job.
+//
+//    // Example sending a request using the StartDominantLanguageDetectionJobRequest method.
+//    req := client.StartDominantLanguageDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartDominantLanguageDetectionJob
+func (c *Comprehend) StartDominantLanguageDetectionJobRequest(input *StartDominantLanguageDetectionJobInput) StartDominantLanguageDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opStartDominantLanguageDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartDominantLanguageDetectionJobInput{}
+	}
+
+	output := &StartDominantLanguageDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StartDominantLanguageDetectionJobRequest{Request: req, Input: input, Copy: c.StartDominantLanguageDetectionJobRequest}
+}
+
+const opStartEntitiesDetectionJob = "StartEntitiesDetectionJob"
+
+// StartEntitiesDetectionJobRequest is a API request type for the StartEntitiesDetectionJob API operation.
+type StartEntitiesDetectionJobRequest struct {
+	*aws.Request
+	Input *StartEntitiesDetectionJobInput
+	Copy  func(*StartEntitiesDetectionJobInput) StartEntitiesDetectionJobRequest
+}
+
+// Send marshals and sends the StartEntitiesDetectionJob API request.
+func (r StartEntitiesDetectionJobRequest) Send() (*StartEntitiesDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StartEntitiesDetectionJobOutput), nil
+}
+
+// StartEntitiesDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Starts an asynchronous entity detection job for a collection of documents.
+// Use the operation to track the status of a job.
+//
+// This API can be used for either standard entity detection or custom entity
+// recognition. In order to be used for custom entity recognition, the optional
+// EntityRecognizerArn must be used in order to provide access to the recognizer
+// being used to detect the custom entity.
+//
+//    // Example sending a request using the StartEntitiesDetectionJobRequest method.
+//    req := client.StartEntitiesDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartEntitiesDetectionJob
+func (c *Comprehend) StartEntitiesDetectionJobRequest(input *StartEntitiesDetectionJobInput) StartEntitiesDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opStartEntitiesDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartEntitiesDetectionJobInput{}
+	}
+
+	output := &StartEntitiesDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StartEntitiesDetectionJobRequest{Request: req, Input: input, Copy: c.StartEntitiesDetectionJobRequest}
+}
+
+const opStartKeyPhrasesDetectionJob = "StartKeyPhrasesDetectionJob"
+
+// StartKeyPhrasesDetectionJobRequest is a API request type for the StartKeyPhrasesDetectionJob API operation.
+type StartKeyPhrasesDetectionJobRequest struct {
+	*aws.Request
+	Input *StartKeyPhrasesDetectionJobInput
+	Copy  func(*StartKeyPhrasesDetectionJobInput) StartKeyPhrasesDetectionJobRequest
+}
+
+// Send marshals and sends the StartKeyPhrasesDetectionJob API request.
+func (r StartKeyPhrasesDetectionJobRequest) Send() (*StartKeyPhrasesDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StartKeyPhrasesDetectionJobOutput), nil
+}
+
+// StartKeyPhrasesDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Starts an asynchronous key phrase detection job for a collection of documents.
+// Use the operation to track the status of a job.
+//
+//    // Example sending a request using the StartKeyPhrasesDetectionJobRequest method.
+//    req := client.StartKeyPhrasesDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartKeyPhrasesDetectionJob
+func (c *Comprehend) StartKeyPhrasesDetectionJobRequest(input *StartKeyPhrasesDetectionJobInput) StartKeyPhrasesDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opStartKeyPhrasesDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartKeyPhrasesDetectionJobInput{}
+	}
+
+	output := &StartKeyPhrasesDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StartKeyPhrasesDetectionJobRequest{Request: req, Input: input, Copy: c.StartKeyPhrasesDetectionJobRequest}
+}
+
+const opStartSentimentDetectionJob = "StartSentimentDetectionJob"
+
+// StartSentimentDetectionJobRequest is a API request type for the StartSentimentDetectionJob API operation.
+type StartSentimentDetectionJobRequest struct {
+	*aws.Request
+	Input *StartSentimentDetectionJobInput
+	Copy  func(*StartSentimentDetectionJobInput) StartSentimentDetectionJobRequest
+}
+
+// Send marshals and sends the StartSentimentDetectionJob API request.
+func (r StartSentimentDetectionJobRequest) Send() (*StartSentimentDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StartSentimentDetectionJobOutput), nil
+}
+
+// StartSentimentDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Starts an asynchronous sentiment detection job for a collection of documents.
+// use the operation to track the status of a job.
+//
+//    // Example sending a request using the StartSentimentDetectionJobRequest method.
+//    req := client.StartSentimentDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartSentimentDetectionJob
+func (c *Comprehend) StartSentimentDetectionJobRequest(input *StartSentimentDetectionJobInput) StartSentimentDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opStartSentimentDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartSentimentDetectionJobInput{}
+	}
+
+	output := &StartSentimentDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StartSentimentDetectionJobRequest{Request: req, Input: input, Copy: c.StartSentimentDetectionJobRequest}
+}
+
 const opStartTopicsDetectionJob = "StartTopicsDetectionJob"
 
 // StartTopicsDetectionJobRequest is a API request type for the StartTopicsDetectionJob API operation.
@@ -619,6 +2125,362 @@ func (c *Comprehend) StartTopicsDetectionJobRequest(input *StartTopicsDetectionJ
 	output.responseMetadata = aws.Response{Request: req}
 
 	return StartTopicsDetectionJobRequest{Request: req, Input: input, Copy: c.StartTopicsDetectionJobRequest}
+}
+
+const opStopDominantLanguageDetectionJob = "StopDominantLanguageDetectionJob"
+
+// StopDominantLanguageDetectionJobRequest is a API request type for the StopDominantLanguageDetectionJob API operation.
+type StopDominantLanguageDetectionJobRequest struct {
+	*aws.Request
+	Input *StopDominantLanguageDetectionJobInput
+	Copy  func(*StopDominantLanguageDetectionJobInput) StopDominantLanguageDetectionJobRequest
+}
+
+// Send marshals and sends the StopDominantLanguageDetectionJob API request.
+func (r StopDominantLanguageDetectionJobRequest) Send() (*StopDominantLanguageDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StopDominantLanguageDetectionJobOutput), nil
+}
+
+// StopDominantLanguageDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Stops a dominant language detection job in progress.
+//
+// If the job state is IN_PROGRESS the job is marked for termination and put
+// into the STOP_REQUESTED state. If the job completes before it can be stopped,
+// it is put into the COMPLETED state; otherwise the job is stopped and put
+// into the STOPPED state.
+//
+// If the job is in the COMPLETED or FAILED state when you call the StopDominantLanguageDetectionJob
+// operation, the operation returns a 400 Internal Request Exception.
+//
+// When a job is stopped, any documents already processed are written to the
+// output location.
+//
+//    // Example sending a request using the StopDominantLanguageDetectionJobRequest method.
+//    req := client.StopDominantLanguageDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopDominantLanguageDetectionJob
+func (c *Comprehend) StopDominantLanguageDetectionJobRequest(input *StopDominantLanguageDetectionJobInput) StopDominantLanguageDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opStopDominantLanguageDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopDominantLanguageDetectionJobInput{}
+	}
+
+	output := &StopDominantLanguageDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StopDominantLanguageDetectionJobRequest{Request: req, Input: input, Copy: c.StopDominantLanguageDetectionJobRequest}
+}
+
+const opStopEntitiesDetectionJob = "StopEntitiesDetectionJob"
+
+// StopEntitiesDetectionJobRequest is a API request type for the StopEntitiesDetectionJob API operation.
+type StopEntitiesDetectionJobRequest struct {
+	*aws.Request
+	Input *StopEntitiesDetectionJobInput
+	Copy  func(*StopEntitiesDetectionJobInput) StopEntitiesDetectionJobRequest
+}
+
+// Send marshals and sends the StopEntitiesDetectionJob API request.
+func (r StopEntitiesDetectionJobRequest) Send() (*StopEntitiesDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StopEntitiesDetectionJobOutput), nil
+}
+
+// StopEntitiesDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Stops an entities detection job in progress.
+//
+// If the job state is IN_PROGRESS the job is marked for termination and put
+// into the STOP_REQUESTED state. If the job completes before it can be stopped,
+// it is put into the COMPLETED state; otherwise the job is stopped and put
+// into the STOPPED state.
+//
+// If the job is in the COMPLETED or FAILED state when you call the StopDominantLanguageDetectionJob
+// operation, the operation returns a 400 Internal Request Exception.
+//
+// When a job is stopped, any documents already processed are written to the
+// output location.
+//
+//    // Example sending a request using the StopEntitiesDetectionJobRequest method.
+//    req := client.StopEntitiesDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopEntitiesDetectionJob
+func (c *Comprehend) StopEntitiesDetectionJobRequest(input *StopEntitiesDetectionJobInput) StopEntitiesDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opStopEntitiesDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopEntitiesDetectionJobInput{}
+	}
+
+	output := &StopEntitiesDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StopEntitiesDetectionJobRequest{Request: req, Input: input, Copy: c.StopEntitiesDetectionJobRequest}
+}
+
+const opStopKeyPhrasesDetectionJob = "StopKeyPhrasesDetectionJob"
+
+// StopKeyPhrasesDetectionJobRequest is a API request type for the StopKeyPhrasesDetectionJob API operation.
+type StopKeyPhrasesDetectionJobRequest struct {
+	*aws.Request
+	Input *StopKeyPhrasesDetectionJobInput
+	Copy  func(*StopKeyPhrasesDetectionJobInput) StopKeyPhrasesDetectionJobRequest
+}
+
+// Send marshals and sends the StopKeyPhrasesDetectionJob API request.
+func (r StopKeyPhrasesDetectionJobRequest) Send() (*StopKeyPhrasesDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StopKeyPhrasesDetectionJobOutput), nil
+}
+
+// StopKeyPhrasesDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Stops a key phrases detection job in progress.
+//
+// If the job state is IN_PROGRESS the job is marked for termination and put
+// into the STOP_REQUESTED state. If the job completes before it can be stopped,
+// it is put into the COMPLETED state; otherwise the job is stopped and put
+// into the STOPPED state.
+//
+// If the job is in the COMPLETED or FAILED state when you call the StopDominantLanguageDetectionJob
+// operation, the operation returns a 400 Internal Request Exception.
+//
+// When a job is stopped, any documents already processed are written to the
+// output location.
+//
+//    // Example sending a request using the StopKeyPhrasesDetectionJobRequest method.
+//    req := client.StopKeyPhrasesDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopKeyPhrasesDetectionJob
+func (c *Comprehend) StopKeyPhrasesDetectionJobRequest(input *StopKeyPhrasesDetectionJobInput) StopKeyPhrasesDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opStopKeyPhrasesDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopKeyPhrasesDetectionJobInput{}
+	}
+
+	output := &StopKeyPhrasesDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StopKeyPhrasesDetectionJobRequest{Request: req, Input: input, Copy: c.StopKeyPhrasesDetectionJobRequest}
+}
+
+const opStopSentimentDetectionJob = "StopSentimentDetectionJob"
+
+// StopSentimentDetectionJobRequest is a API request type for the StopSentimentDetectionJob API operation.
+type StopSentimentDetectionJobRequest struct {
+	*aws.Request
+	Input *StopSentimentDetectionJobInput
+	Copy  func(*StopSentimentDetectionJobInput) StopSentimentDetectionJobRequest
+}
+
+// Send marshals and sends the StopSentimentDetectionJob API request.
+func (r StopSentimentDetectionJobRequest) Send() (*StopSentimentDetectionJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StopSentimentDetectionJobOutput), nil
+}
+
+// StopSentimentDetectionJobRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Stops a sentiment detection job in progress.
+//
+// If the job state is IN_PROGRESS the job is marked for termination and put
+// into the STOP_REQUESTED state. If the job completes before it can be stopped,
+// it is put into the COMPLETED state; otherwise the job is be stopped and put
+// into the STOPPED state.
+//
+// If the job is in the COMPLETED or FAILED state when you call the StopDominantLanguageDetectionJob
+// operation, the operation returns a 400 Internal Request Exception.
+//
+// When a job is stopped, any documents already processed are written to the
+// output location.
+//
+//    // Example sending a request using the StopSentimentDetectionJobRequest method.
+//    req := client.StopSentimentDetectionJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopSentimentDetectionJob
+func (c *Comprehend) StopSentimentDetectionJobRequest(input *StopSentimentDetectionJobInput) StopSentimentDetectionJobRequest {
+	op := &aws.Operation{
+		Name:       opStopSentimentDetectionJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopSentimentDetectionJobInput{}
+	}
+
+	output := &StopSentimentDetectionJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StopSentimentDetectionJobRequest{Request: req, Input: input, Copy: c.StopSentimentDetectionJobRequest}
+}
+
+const opStopTrainingDocumentClassifier = "StopTrainingDocumentClassifier"
+
+// StopTrainingDocumentClassifierRequest is a API request type for the StopTrainingDocumentClassifier API operation.
+type StopTrainingDocumentClassifierRequest struct {
+	*aws.Request
+	Input *StopTrainingDocumentClassifierInput
+	Copy  func(*StopTrainingDocumentClassifierInput) StopTrainingDocumentClassifierRequest
+}
+
+// Send marshals and sends the StopTrainingDocumentClassifier API request.
+func (r StopTrainingDocumentClassifierRequest) Send() (*StopTrainingDocumentClassifierOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StopTrainingDocumentClassifierOutput), nil
+}
+
+// StopTrainingDocumentClassifierRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Stops a document classifier training job while in progress.
+//
+// If the training job state is TRAINING, the job is marked for termination
+// and put into the STOP_REQUESTED state. If the training job completes before
+// it can be stopped, it is put into the TRAINED; otherwise the training job
+// is stopped and put into the STOPPED state and the service sends back an HTTP
+// 200 response with an empty HTTP body.
+//
+//    // Example sending a request using the StopTrainingDocumentClassifierRequest method.
+//    req := client.StopTrainingDocumentClassifierRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopTrainingDocumentClassifier
+func (c *Comprehend) StopTrainingDocumentClassifierRequest(input *StopTrainingDocumentClassifierInput) StopTrainingDocumentClassifierRequest {
+	op := &aws.Operation{
+		Name:       opStopTrainingDocumentClassifier,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopTrainingDocumentClassifierInput{}
+	}
+
+	output := &StopTrainingDocumentClassifierOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StopTrainingDocumentClassifierRequest{Request: req, Input: input, Copy: c.StopTrainingDocumentClassifierRequest}
+}
+
+const opStopTrainingEntityRecognizer = "StopTrainingEntityRecognizer"
+
+// StopTrainingEntityRecognizerRequest is a API request type for the StopTrainingEntityRecognizer API operation.
+type StopTrainingEntityRecognizerRequest struct {
+	*aws.Request
+	Input *StopTrainingEntityRecognizerInput
+	Copy  func(*StopTrainingEntityRecognizerInput) StopTrainingEntityRecognizerRequest
+}
+
+// Send marshals and sends the StopTrainingEntityRecognizer API request.
+func (r StopTrainingEntityRecognizerRequest) Send() (*StopTrainingEntityRecognizerOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StopTrainingEntityRecognizerOutput), nil
+}
+
+// StopTrainingEntityRecognizerRequest returns a request value for making API operation for
+// Amazon Comprehend.
+//
+// Stops an entity recognizer training job while in progress.
+//
+// If the training job state is TRAINING, the job is marked for termination
+// and put into the STOP_REQUESTED state. If the training job completes before
+// it can be stopped, it is put into the TRAINED; otherwise the training job
+// is stopped and putted into the STOPPED state and the service sends back an
+// HTTP 200 response with an empty HTTP body.
+//
+//    // Example sending a request using the StopTrainingEntityRecognizerRequest method.
+//    req := client.StopTrainingEntityRecognizerRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopTrainingEntityRecognizer
+func (c *Comprehend) StopTrainingEntityRecognizerRequest(input *StopTrainingEntityRecognizerInput) StopTrainingEntityRecognizerRequest {
+	op := &aws.Operation{
+		Name:       opStopTrainingEntityRecognizer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopTrainingEntityRecognizerInput{}
+	}
+
+	output := &StopTrainingEntityRecognizerOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StopTrainingEntityRecognizerRequest{Request: req, Input: input, Copy: c.StopTrainingEntityRecognizerRequest}
 }
 
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/BatchDetectDominantLanguageRequest
@@ -723,10 +2585,11 @@ func (s BatchDetectDominantLanguageOutput) SDKResponseMetadata() aws.Response {
 type BatchDetectEntitiesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language of the input documents. All documents must be in the same language.
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
 	//
 	// LanguageCode is a required field
-	LanguageCode *string `min:"1" type:"string" required:"true"`
+	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
 
 	// A list containing the text of the input documents. The list can contain a
 	// maximum of 25 documents. Each document must contain fewer than 5,000 bytes
@@ -749,12 +2612,8 @@ func (s BatchDetectEntitiesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *BatchDetectEntitiesInput) Validate() error {
 	invalidParams := aws.ErrInvalidParams{Context: "BatchDetectEntitiesInput"}
-
-	if s.LanguageCode == nil {
+	if len(s.LanguageCode) == 0 {
 		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
-	}
-	if s.LanguageCode != nil && len(*s.LanguageCode) < 1 {
-		invalidParams.Add(aws.NewErrParamMinLen("LanguageCode", 1))
 	}
 
 	if s.TextList == nil {
@@ -832,10 +2691,11 @@ func (s BatchDetectEntitiesOutput) SDKResponseMetadata() aws.Response {
 type BatchDetectKeyPhrasesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language of the input documents. All documents must be in the same language.
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
 	//
 	// LanguageCode is a required field
-	LanguageCode *string `min:"1" type:"string" required:"true"`
+	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
 
 	// A list containing the text of the input documents. The list can contain a
 	// maximum of 25 documents. Each document must contain fewer that 5,000 bytes
@@ -858,12 +2718,8 @@ func (s BatchDetectKeyPhrasesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *BatchDetectKeyPhrasesInput) Validate() error {
 	invalidParams := aws.ErrInvalidParams{Context: "BatchDetectKeyPhrasesInput"}
-
-	if s.LanguageCode == nil {
+	if len(s.LanguageCode) == 0 {
 		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
-	}
-	if s.LanguageCode != nil && len(*s.LanguageCode) < 1 {
-		invalidParams.Add(aws.NewErrParamMinLen("LanguageCode", 1))
 	}
 
 	if s.TextList == nil {
@@ -941,10 +2797,11 @@ func (s BatchDetectKeyPhrasesOutput) SDKResponseMetadata() aws.Response {
 type BatchDetectSentimentInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language of the input documents. All documents must be in the same language.
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
 	//
 	// LanguageCode is a required field
-	LanguageCode *string `min:"1" type:"string" required:"true"`
+	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
 
 	// A list containing the text of the input documents. The list can contain a
 	// maximum of 25 documents. Each document must contain fewer that 5,000 bytes
@@ -967,12 +2824,8 @@ func (s BatchDetectSentimentInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *BatchDetectSentimentInput) Validate() error {
 	invalidParams := aws.ErrInvalidParams{Context: "BatchDetectSentimentInput"}
-
-	if s.LanguageCode == nil {
+	if len(s.LanguageCode) == 0 {
 		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
-	}
-	if s.LanguageCode != nil && len(*s.LanguageCode) < 1 {
-		invalidParams.Add(aws.NewErrParamMinLen("LanguageCode", 1))
 	}
 
 	if s.TextList == nil {
@@ -1050,6 +2903,112 @@ func (s BatchDetectSentimentOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/BatchDetectSyntaxRequest
+type BatchDetectSyntaxInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
+	//
+	// LanguageCode is a required field
+	LanguageCode SyntaxLanguageCode `type:"string" required:"true" enum:"true"`
+
+	// A list containing the text of the input documents. The list can contain a
+	// maximum of 25 documents. Each document must contain fewer that 5,000 bytes
+	// of UTF-8 encoded characters.
+	//
+	// TextList is a required field
+	TextList []string `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s BatchDetectSyntaxInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchDetectSyntaxInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchDetectSyntaxInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "BatchDetectSyntaxInput"}
+	if len(s.LanguageCode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
+	}
+
+	if s.TextList == nil {
+		invalidParams.Add(aws.NewErrParamRequired("TextList"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// The result of calling the operation. The operation returns one object that
+// is successfully processed by the operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/BatchDetectSyntaxItemResult
+type BatchDetectSyntaxItemResult struct {
+	_ struct{} `type:"structure"`
+
+	// The zero-based index of the document in the input list.
+	Index *int64 `type:"integer"`
+
+	// The syntax tokens for the words in the document, one token for each word.
+	SyntaxTokens []SyntaxToken `type:"list"`
+}
+
+// String returns the string representation
+func (s BatchDetectSyntaxItemResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchDetectSyntaxItemResult) GoString() string {
+	return s.String()
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/BatchDetectSyntaxResponse
+type BatchDetectSyntaxOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A list containing one object for each document that contained an error. The
+	// results are sorted in ascending order by the Index field and match the order
+	// of the documents in the input list. If there are no errors in the batch,
+	// the ErrorList is empty.
+	//
+	// ErrorList is a required field
+	ErrorList []BatchItemError `type:"list" required:"true"`
+
+	// A list of objects containing the results of the operation. The results are
+	// sorted in ascending order by the Index field and match the order of the documents
+	// in the input list. If all of the documents contain an error, the ResultList
+	// is empty.
+	//
+	// ResultList is a required field
+	ResultList []BatchDetectSyntaxItemResult `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s BatchDetectSyntaxOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchDetectSyntaxOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s BatchDetectSyntaxOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
 // Describes an error that occurred while processing a document in a batch.
 // The operation returns on BatchItemError object for each document that contained
 // an error.
@@ -1075,6 +3034,833 @@ func (s BatchItemError) String() string {
 // GoString returns the string representation
 func (s BatchItemError) GoString() string {
 	return s.String()
+}
+
+// Describes the result metrics for the test data associated with an documentation
+// classifier.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ClassifierEvaluationMetrics
+type ClassifierEvaluationMetrics struct {
+	_ struct{} `type:"structure"`
+
+	// The fraction of the labels that were correct recognized. It is computed by
+	// dividing the number of labels in the test documents that were correctly recognized
+	// by the total number of labels in the test documents.
+	Accuracy *float64 `type:"double"`
+
+	// A measure of how accurate the classifier results are for the test data. It
+	// is derived from the Precision and Recall values. The F1Score is the harmonic
+	// average of the two scores. The highest score is 1, and the worst score is
+	// 0.
+	F1Score *float64 `type:"double"`
+
+	// A measure of the usefulness of the classifier results in the test data. High
+	// precision means that the classifier returned substantially more relevant
+	// results than irrelevant ones.
+	Precision *float64 `type:"double"`
+
+	// A measure of how complete the classifier results are for the test data. High
+	// recall means that the classifier returned most of the relevant results.
+	Recall *float64 `type:"double"`
+}
+
+// String returns the string representation
+func (s ClassifierEvaluationMetrics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ClassifierEvaluationMetrics) GoString() string {
+	return s.String()
+}
+
+// Provides information about a document classifier.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ClassifierMetadata
+type ClassifierMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the result metrics for the test data associated with an documentation
+	// classifier.
+	EvaluationMetrics *ClassifierEvaluationMetrics `type:"structure"`
+
+	// The number of labels in the input data.
+	NumberOfLabels *int64 `type:"integer"`
+
+	// The number of documents in the input data that were used to test the classifier.
+	// Typically this is 10 to 20 percent of the input documents.
+	NumberOfTestDocuments *int64 `type:"integer"`
+
+	// The number of documents in the input data that were used to train the classifier.
+	// Typically this is 80 to 90 percent of the input documents.
+	NumberOfTrainedDocuments *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s ClassifierMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ClassifierMetadata) GoString() string {
+	return s.String()
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/CreateDocumentClassifierRequest
+type CreateDocumentClassifierInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for the request. If you don't set the client request
+	// token, Amazon Comprehend generates one.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role
+	// that grants Amazon Comprehend read access to your input data.
+	//
+	// DataAccessRoleArn is a required field
+	DataAccessRoleArn *string `min:"20" type:"string" required:"true"`
+
+	// The name of the document classifier.
+	//
+	// DocumentClassifierName is a required field
+	DocumentClassifierName *string `type:"string" required:"true"`
+
+	// Specifies the format and location of the input data for the job.
+	//
+	// InputDataConfig is a required field
+	InputDataConfig *DocumentClassifierInputDataConfig `type:"structure" required:"true"`
+
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
+	//
+	// LanguageCode is a required field
+	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
+}
+
+// String returns the string representation
+func (s CreateDocumentClassifierInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateDocumentClassifierInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateDocumentClassifierInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CreateDocumentClassifierInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+
+	if s.DataAccessRoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DataAccessRoleArn"))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("DataAccessRoleArn", 20))
+	}
+
+	if s.DocumentClassifierName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DocumentClassifierName"))
+	}
+
+	if s.InputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("InputDataConfig"))
+	}
+	if len(s.LanguageCode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
+	}
+	if s.InputDataConfig != nil {
+		if err := s.InputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("InputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/CreateDocumentClassifierResponse
+type CreateDocumentClassifierOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The Amazon Resource Name (ARN) that identifies the document classifier.
+	DocumentClassifierArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateDocumentClassifierOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateDocumentClassifierOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CreateDocumentClassifierOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/CreateEntityRecognizerRequest
+type CreateEntityRecognizerInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for the request. If you don't set the client request
+	// token, Amazon Comprehend generates one.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role
+	// that grants Amazon Comprehend read access to your input data.
+	//
+	// DataAccessRoleArn is a required field
+	DataAccessRoleArn *string `min:"20" type:"string" required:"true"`
+
+	// Specifies the format and location of the input data. The S3 bucket containing
+	// the input data must be located in the same region as the entity recognizer
+	// being created.
+	//
+	// InputDataConfig is a required field
+	InputDataConfig *EntityRecognizerInputDataConfig `type:"structure" required:"true"`
+
+	// The language of the input documents. All documents must be in the same language.
+	// Only English ("en") is currently supported.
+	//
+	// LanguageCode is a required field
+	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
+
+	// The name given to the newly created recognizer. Recognizer names can be a
+	// maximum of 256 characters. Alphanumeric characters, hyphens (-) and underscores
+	// (_) are allowed. The name must be unique in the account/region.
+	//
+	// RecognizerName is a required field
+	RecognizerName *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateEntityRecognizerInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateEntityRecognizerInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateEntityRecognizerInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CreateEntityRecognizerInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+
+	if s.DataAccessRoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DataAccessRoleArn"))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("DataAccessRoleArn", 20))
+	}
+
+	if s.InputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("InputDataConfig"))
+	}
+	if len(s.LanguageCode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
+	}
+
+	if s.RecognizerName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("RecognizerName"))
+	}
+	if s.InputDataConfig != nil {
+		if err := s.InputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("InputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/CreateEntityRecognizerResponse
+type CreateEntityRecognizerOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The Amazon Resource Name (ARN) that identifies the entity recognizer.
+	EntityRecognizerArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateEntityRecognizerOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateEntityRecognizerOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CreateEntityRecognizerOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DeleteDocumentClassifierRequest
+type DeleteDocumentClassifierInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that identifies the document classifier.
+	//
+	// DocumentClassifierArn is a required field
+	DocumentClassifierArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteDocumentClassifierInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDocumentClassifierInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteDocumentClassifierInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteDocumentClassifierInput"}
+
+	if s.DocumentClassifierArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DocumentClassifierArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DeleteDocumentClassifierResponse
+type DeleteDocumentClassifierOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteDocumentClassifierOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDocumentClassifierOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteDocumentClassifierOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DeleteEntityRecognizerRequest
+type DeleteEntityRecognizerInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that identifies the entity recognizer.
+	//
+	// EntityRecognizerArn is a required field
+	EntityRecognizerArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteEntityRecognizerInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteEntityRecognizerInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteEntityRecognizerInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteEntityRecognizerInput"}
+
+	if s.EntityRecognizerArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("EntityRecognizerArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DeleteEntityRecognizerResponse
+type DeleteEntityRecognizerOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteEntityRecognizerOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteEntityRecognizerOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteEntityRecognizerOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeDocumentClassificationJobRequest
+type DescribeDocumentClassificationJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier that Amazon Comprehend generated for the job. The operation
+	// returns this identifier in its response.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentClassificationJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentClassificationJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDocumentClassificationJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeDocumentClassificationJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeDocumentClassificationJobResponse
+type DescribeDocumentClassificationJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// An object that describes the properties associated with the document classification
+	// job.
+	DocumentClassificationJobProperties *DocumentClassificationJobProperties `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentClassificationJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentClassificationJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeDocumentClassificationJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeDocumentClassifierRequest
+type DescribeDocumentClassifierInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that identifies the document classifier. The
+	// operation returns this identifier in its response.
+	//
+	// DocumentClassifierArn is a required field
+	DocumentClassifierArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentClassifierInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentClassifierInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDocumentClassifierInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeDocumentClassifierInput"}
+
+	if s.DocumentClassifierArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DocumentClassifierArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeDocumentClassifierResponse
+type DescribeDocumentClassifierOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// An object that contains the properties associated with a document classifier.
+	DocumentClassifierProperties *DocumentClassifierProperties `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeDocumentClassifierOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDocumentClassifierOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeDocumentClassifierOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeDominantLanguageDetectionJobRequest
+type DescribeDominantLanguageDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier that Amazon Comprehend generated for the job. The operation
+	// returns this identifier in its response.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeDominantLanguageDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDominantLanguageDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDominantLanguageDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeDominantLanguageDetectionJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeDominantLanguageDetectionJobResponse
+type DescribeDominantLanguageDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// An object that contains the properties associated with a dominant language
+	// detection job.
+	DominantLanguageDetectionJobProperties *DominantLanguageDetectionJobProperties `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeDominantLanguageDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDominantLanguageDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeDominantLanguageDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeEntitiesDetectionJobRequest
+type DescribeEntitiesDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier that Amazon Comprehend generated for the job. The operation
+	// returns this identifier in its response.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeEntitiesDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeEntitiesDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeEntitiesDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeEntitiesDetectionJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeEntitiesDetectionJobResponse
+type DescribeEntitiesDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// An object that contains the properties associated with an entities detection
+	// job.
+	EntitiesDetectionJobProperties *EntitiesDetectionJobProperties `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeEntitiesDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeEntitiesDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeEntitiesDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeEntityRecognizerRequest
+type DescribeEntityRecognizerInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that identifies the entity recognizer.
+	//
+	// EntityRecognizerArn is a required field
+	EntityRecognizerArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeEntityRecognizerInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeEntityRecognizerInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeEntityRecognizerInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeEntityRecognizerInput"}
+
+	if s.EntityRecognizerArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("EntityRecognizerArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeEntityRecognizerResponse
+type DescribeEntityRecognizerOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// Describes information associated with an entity recognizer.
+	EntityRecognizerProperties *EntityRecognizerProperties `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeEntityRecognizerOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeEntityRecognizerOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeEntityRecognizerOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeKeyPhrasesDetectionJobRequest
+type DescribeKeyPhrasesDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier that Amazon Comprehend generated for the job. The operation
+	// returns this identifier in its response.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeKeyPhrasesDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeKeyPhrasesDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeKeyPhrasesDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeKeyPhrasesDetectionJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeKeyPhrasesDetectionJobResponse
+type DescribeKeyPhrasesDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// An object that contains the properties associated with a key phrases detection
+	// job.
+	KeyPhrasesDetectionJobProperties *KeyPhrasesDetectionJobProperties `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeKeyPhrasesDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeKeyPhrasesDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeKeyPhrasesDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeSentimentDetectionJobRequest
+type DescribeSentimentDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier that Amazon Comprehend generated for the job. The operation
+	// returns this identifier in its response.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeSentimentDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeSentimentDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeSentimentDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeSentimentDetectionJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeSentimentDetectionJobResponse
+type DescribeSentimentDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// An object that contains the properties associated with a sentiment detection
+	// job.
+	SentimentDetectionJobProperties *SentimentDetectionJobProperties `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeSentimentDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeSentimentDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeSentimentDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
 }
 
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DescribeTopicsDetectionJobRequest
@@ -1210,11 +3996,8 @@ func (s DetectDominantLanguageOutput) SDKResponseMetadata() aws.Response {
 type DetectEntitiesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The RFC 5646 language code of the input text. If the request does not specify
-	// the language code, the service detects the dominant language. If you specify
-	// a language code that the service does not support, it returns UnsupportedLanguageException
-	// exception. For more information about RFC 5646, see Tags for Identifying
-	// Languages (https://tools.ietf.org/html/rfc5646) on the IETF Tools web site.
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
 	//
 	// LanguageCode is a required field
 	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
@@ -1288,12 +4071,8 @@ func (s DetectEntitiesOutput) SDKResponseMetadata() aws.Response {
 type DetectKeyPhrasesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The RFC 5646 language code for the input text. If you don't specify a language
-	// code, Amazon Comprehend detects the dominant language. If you specify the
-	// code for a language that Amazon Comprehend does not support, it returns and
-	// UnsupportedLanguageException. For more information about RFC 5646, see Tags
-	// for Identifying Languages (https://tools.ietf.org/html/rfc5646) on the IETF
-	// Tools web site.
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
 	//
 	// LanguageCode is a required field
 	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
@@ -1367,12 +4146,8 @@ func (s DetectKeyPhrasesOutput) SDKResponseMetadata() aws.Response {
 type DetectSentimentInput struct {
 	_ struct{} `type:"structure"`
 
-	// The RFC 5646 language code for the input text. If you don't specify a language
-	// code, Amazon Comprehend detects the dominant language. If you specify the
-	// code for a language that Amazon Comprehend does not support, it returns and
-	// UnsupportedLanguageException. For more information about RFC 5646, see Tags
-	// for Identifying Languages (https://tools.ietf.org/html/rfc5646) on the IETF
-	// Tools web site.
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
 	//
 	// LanguageCode is a required field
 	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
@@ -1443,13 +4218,321 @@ func (s DetectSentimentOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DetectSyntaxRequest
+type DetectSyntaxInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code of the input documents. You can specify English ("en")
+	// or Spanish ("es").
+	//
+	// LanguageCode is a required field
+	LanguageCode SyntaxLanguageCode `type:"string" required:"true" enum:"true"`
+
+	// A UTF-8 string. Each string must contain fewer that 5,000 bytes of UTF encoded
+	// characters.
+	//
+	// Text is a required field
+	Text *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DetectSyntaxInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DetectSyntaxInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DetectSyntaxInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DetectSyntaxInput"}
+	if len(s.LanguageCode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
+	}
+
+	if s.Text == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Text"))
+	}
+	if s.Text != nil && len(*s.Text) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("Text", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DetectSyntaxResponse
+type DetectSyntaxOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A collection of syntax tokens describing the text. For each token, the response
+	// provides the text, the token type, where the text begins and ends, and the
+	// level of confidence that Amazon Comprehend has that the token is correct.
+	// For a list of token types, see how-syntax.
+	SyntaxTokens []SyntaxToken `type:"list"`
+}
+
+// String returns the string representation
+func (s DetectSyntaxOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DetectSyntaxOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DetectSyntaxOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Provides information for filtering a list of document classification jobs.
+// For more information, see the operation. You can provide only one filter
+// parameter in each request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DocumentClassificationJobFilter
+type DocumentClassificationJobFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filters on the name of the job.
+	JobName *string `min:"1" type:"string"`
+
+	// Filters the list based on job status. Returns only jobs with the specified
+	// status.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted before the specified time. Jobs are
+	// returned in descending order, newest to oldest.
+	SubmitTimeAfter *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted after the specified time. Jobs are
+	// returned in ascending order, oldest to newest.
+	SubmitTimeBefore *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s DocumentClassificationJobFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DocumentClassificationJobFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DocumentClassificationJobFilter) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DocumentClassificationJobFilter"}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Provides information about a document classification job.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DocumentClassificationJobProperties
+type DocumentClassificationJobProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the AWS identity and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to your input data.
+	DataAccessRoleArn *string `min:"20" type:"string"`
+
+	// The Amazon Resource Name (ARN) that identifies the document classifier.
+	DocumentClassifierArn *string `type:"string"`
+
+	// The time that the document classification job completed.
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The input data configuration that you supplied when you created the document
+	// classification job.
+	InputDataConfig *InputDataConfig `type:"structure"`
+
+	// The identifier assigned to the document classification job.
+	JobId *string `min:"1" type:"string"`
+
+	// The name that you assigned to the document classification job.
+	JobName *string `min:"1" type:"string"`
+
+	// The current status of the document classification job. If the status is FAILED,
+	// the Message field shows the reason for the failure.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// A description of the status of the job.
+	Message *string `type:"string"`
+
+	// The output data configuration that you supplied when you created the document
+	// classification job.
+	OutputDataConfig *OutputDataConfig `type:"structure"`
+
+	// The time that the document classification job was submitted for processing.
+	SubmitTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s DocumentClassificationJobProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DocumentClassificationJobProperties) GoString() string {
+	return s.String()
+}
+
+// Provides information for filtering a list of document classifiers. You can
+// only specify one filtering parameter in a request. For more information,
+// see the operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DocumentClassifierFilter
+type DocumentClassifierFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the list of classifiers based on status.
+	Status ModelStatus `type:"string" enum:"true"`
+
+	// Filters the list of classifiers based on the time that the classifier was
+	// submitted for processing. Returns only classifiers submitted after the specified
+	// time. Classifiers are returned in descending order, newest to oldest.
+	SubmitTimeAfter *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Filters the list of classifiers based on the time that the classifier was
+	// submitted for processing. Returns only classifiers submitted before the specified
+	// time. Classifiers are returned in ascending order, oldest to newest.
+	SubmitTimeBefore *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s DocumentClassifierFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DocumentClassifierFilter) GoString() string {
+	return s.String()
+}
+
+// The input properties for training a document classifier.
+//
+// For more information on how the input file is formatted, see how-document-classification-training-data.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DocumentClassifierInputDataConfig
+type DocumentClassifierInputDataConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon S3 URI for the input data. The S3 bucket must be in the same region
+	// as the API endpoint that you are calling. The URI can point to a single input
+	// file or it can provide the prefix for a collection of input files.
+	//
+	// For example, if you use the URI S3://bucketName/prefix, if the prefix is
+	// a single file, Amazon Comprehend uses that file as input. If more than one
+	// file begins with the prefix, Amazon Comprehend uses all of them as input.
+	//
+	// S3Uri is a required field
+	S3Uri *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DocumentClassifierInputDataConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DocumentClassifierInputDataConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DocumentClassifierInputDataConfig) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DocumentClassifierInputDataConfig"}
+
+	if s.S3Uri == nil {
+		invalidParams.Add(aws.NewErrParamRequired("S3Uri"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Provides information about a document classifier.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DocumentClassifierProperties
+type DocumentClassifierProperties struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the document classifier, including the number of documents
+	// used for training the classifier, the number of documents used for test the
+	// classifier, and an accuracy rating.
+	ClassifierMetadata *ClassifierMetadata `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role
+	// that grants Amazon Comprehend read access to your input data.
+	DataAccessRoleArn *string `min:"20" type:"string"`
+
+	// The Amazon Resource Name (ARN) that identifies the document classifier.
+	DocumentClassifierArn *string `type:"string"`
+
+	// The time that training the document classifier completed.
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The input data configuration that you supplied when you created the document
+	// classifier for training.
+	InputDataConfig *DocumentClassifierInputDataConfig `type:"structure"`
+
+	// The language code for the language of the documents that the classifier was
+	// trained on.
+	LanguageCode LanguageCode `type:"string" enum:"true"`
+
+	// Additional information about the status of the classifier.
+	Message *string `type:"string"`
+
+	// The status of the document classifier. If the status is TRAINED the classifier
+	// is ready to use. If the status is FAILED you can see additional information
+	// about why the classifier wasn't trained in the Message field.
+	Status ModelStatus `type:"string" enum:"true"`
+
+	// The time that the document classifier was submitted for training.
+	SubmitTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The time that training of the document classifier was completed. Indicates
+	// the time when the training completes on documentation classifiers. You are
+	// billed for the time interval between this time and the value of TrainingStartTime.
+	TrainingEndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Indicates the time when the training starts on documentation classifiers.
+	// You are billed for the time interval between this time and the value of TrainingEndTime.
+	TrainingStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s DocumentClassifierProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DocumentClassifierProperties) GoString() string {
+	return s.String()
+}
+
 // Returns the code for the dominant language in the input text and the level
 // of confidence that Amazon Comprehend has in the accuracy of the detection.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DominantLanguage
 type DominantLanguage struct {
 	_ struct{} `type:"structure"`
 
-	// The RFC 5646 language code for the dominant language.
+	// The RFC 5646 language code for the dominant language. For more information
+	// about RFC 5646, see Tags for Identifying Languages (https://tools.ietf.org/html/rfc5646)
+	// on the IETF Tools web site.
 	LanguageCode *string `min:"1" type:"string"`
 
 	// The level of confidence that Amazon Comprehend has in the accuracy of the
@@ -1464,6 +4547,200 @@ func (s DominantLanguage) String() string {
 
 // GoString returns the string representation
 func (s DominantLanguage) GoString() string {
+	return s.String()
+}
+
+// Provides information for filtering a list of dominant language detection
+// jobs. For more information, see the operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DominantLanguageDetectionJobFilter
+type DominantLanguageDetectionJobFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filters on the name of the job.
+	JobName *string `min:"1" type:"string"`
+
+	// Filters the list of jobs based on job status. Returns only jobs with the
+	// specified status.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted after the specified time. Jobs are
+	// returned in descending order, newest to oldest.
+	SubmitTimeAfter *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted before the specified time. Jobs are
+	// returned in ascending order, oldest to newest.
+	SubmitTimeBefore *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s DominantLanguageDetectionJobFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DominantLanguageDetectionJobFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DominantLanguageDetectionJobFilter) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DominantLanguageDetectionJobFilter"}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Provides information about a dominant language detection job.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/DominantLanguageDetectionJobProperties
+type DominantLanguageDetectionJobProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to
+	// your input data.
+	DataAccessRoleArn *string `min:"20" type:"string"`
+
+	// The time that the dominant language detection job completed.
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The input data configuration that you supplied when you created the dominant
+	// language detection job.
+	InputDataConfig *InputDataConfig `type:"structure"`
+
+	// The identifier assigned to the dominant language detection job.
+	JobId *string `min:"1" type:"string"`
+
+	// The name that you assigned to the dominant language detection job.
+	JobName *string `min:"1" type:"string"`
+
+	// The current status of the dominant language detection job. If the status
+	// is FAILED, the Message field shows the reason for the failure.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// A description for the status of a job.
+	Message *string `type:"string"`
+
+	// The output data configuration that you supplied when you created the dominant
+	// language detection job.
+	OutputDataConfig *OutputDataConfig `type:"structure"`
+
+	// The time that the dominant language detection job was submitted for processing.
+	SubmitTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s DominantLanguageDetectionJobProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DominantLanguageDetectionJobProperties) GoString() string {
+	return s.String()
+}
+
+// Provides information for filtering a list of dominant language detection
+// jobs. For more information, see the operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntitiesDetectionJobFilter
+type EntitiesDetectionJobFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filters on the name of the job.
+	JobName *string `min:"1" type:"string"`
+
+	// Filters the list of jobs based on job status. Returns only jobs with the
+	// specified status.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted after the specified time. Jobs are
+	// returned in descending order, newest to oldest.
+	SubmitTimeAfter *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted before the specified time. Jobs are
+	// returned in ascending order, oldest to newest.
+	SubmitTimeBefore *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s EntitiesDetectionJobFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntitiesDetectionJobFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EntitiesDetectionJobFilter) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "EntitiesDetectionJobFilter"}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Provides information about an entities detection job.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntitiesDetectionJobProperties
+type EntitiesDetectionJobProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to
+	// your input data.
+	DataAccessRoleArn *string `min:"20" type:"string"`
+
+	// The time that the entities detection job completed
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The Amazon Resource Name (ARN) that identifies the entity recognizer.
+	EntityRecognizerArn *string `type:"string"`
+
+	// The input data configuration that you supplied when you created the entities
+	// detection job.
+	InputDataConfig *InputDataConfig `type:"structure"`
+
+	// The identifier assigned to the entities detection job.
+	JobId *string `min:"1" type:"string"`
+
+	// The name that you assigned the entities detection job.
+	JobName *string `min:"1" type:"string"`
+
+	// The current status of the entities detection job. If the status is FAILED,
+	// the Message field shows the reason for the failure.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// The language code of the input documents.
+	LanguageCode LanguageCode `type:"string" enum:"true"`
+
+	// A description of the status of a job.
+	Message *string `type:"string"`
+
+	// The output data configuration that you supplied when you created the entities
+	// detection job.
+	OutputDataConfig *OutputDataConfig `type:"structure"`
+
+	// The time that the entities detection job was submitted for processing.
+	SubmitTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s EntitiesDetectionJobProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntitiesDetectionJobProperties) GoString() string {
 	return s.String()
 }
 
@@ -1504,6 +4781,387 @@ func (s Entity) String() string {
 // GoString returns the string representation
 func (s Entity) GoString() string {
 	return s.String()
+}
+
+// Describes the annotations associated with a entity recognizer.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityRecognizerAnnotations
+type EntityRecognizerAnnotations struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the Amazon S3 location where the annotations for an entity recognizer
+	// are located. The URI must be in the same region as the API endpoint that
+	// you are calling.
+	//
+	// S3Uri is a required field
+	S3Uri *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s EntityRecognizerAnnotations) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityRecognizerAnnotations) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EntityRecognizerAnnotations) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "EntityRecognizerAnnotations"}
+
+	if s.S3Uri == nil {
+		invalidParams.Add(aws.NewErrParamRequired("S3Uri"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Describes the training documents submitted with an entity recognizer.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityRecognizerDocuments
+type EntityRecognizerDocuments struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the Amazon S3 location where the training documents for an entity
+	// recognizer are located. The URI must be in the same region as the API endpoint
+	// that you are calling.
+	//
+	// S3Uri is a required field
+	S3Uri *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s EntityRecognizerDocuments) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityRecognizerDocuments) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EntityRecognizerDocuments) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "EntityRecognizerDocuments"}
+
+	if s.S3Uri == nil {
+		invalidParams.Add(aws.NewErrParamRequired("S3Uri"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Describes the entity recognizer submitted with an entity recognizer.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityRecognizerEntityList
+type EntityRecognizerEntityList struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the Amazon S3 location where the entity list is located. The URI
+	// must be in the same region as the API endpoint that you are calling.
+	//
+	// S3Uri is a required field
+	S3Uri *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s EntityRecognizerEntityList) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityRecognizerEntityList) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EntityRecognizerEntityList) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "EntityRecognizerEntityList"}
+
+	if s.S3Uri == nil {
+		invalidParams.Add(aws.NewErrParamRequired("S3Uri"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Detailed information about the accuracy of an entity recognizer.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityRecognizerEvaluationMetrics
+type EntityRecognizerEvaluationMetrics struct {
+	_ struct{} `type:"structure"`
+
+	// A measure of how accurate the recognizer results are for the test data. It
+	// is derived from the Precision and Recall values. The F1Score is the harmonic
+	// average of the two scores. The highest score is 1, and the worst score is
+	// 0.
+	F1Score *float64 `type:"double"`
+
+	// A measure of the usefulness of the recognizer results in the test data. High
+	// precision means that the recognizer returned substantially more relevant
+	// results than irrelevant ones.
+	Precision *float64 `type:"double"`
+
+	// A measure of how complete the recognizer results are for the test data. High
+	// recall means that the recognizer returned most of the relevant results.
+	Recall *float64 `type:"double"`
+}
+
+// String returns the string representation
+func (s EntityRecognizerEvaluationMetrics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityRecognizerEvaluationMetrics) GoString() string {
+	return s.String()
+}
+
+// Provides information for filtering a list of entity recognizers. You can
+// only specify one filtering parameter in a request. For more information,
+// see the operation./>
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityRecognizerFilter
+type EntityRecognizerFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The status of an entity recognizer.
+	Status ModelStatus `type:"string" enum:"true"`
+
+	// Filters the list of entities based on the time that the list was submitted
+	// for processing. Returns only jobs submitted after the specified time. Jobs
+	// are returned in ascending order, oldest to newest.
+	SubmitTimeAfter *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Filters the list of entities based on the time that the list was submitted
+	// for processing. Returns only jobs submitted before the specified time. Jobs
+	// are returned in descending order, newest to oldest.
+	SubmitTimeBefore *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s EntityRecognizerFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityRecognizerFilter) GoString() string {
+	return s.String()
+}
+
+// Specifies the format and location of the input data.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityRecognizerInputDataConfig
+type EntityRecognizerInputDataConfig struct {
+	_ struct{} `type:"structure"`
+
+	// S3 location of the annotations file for an entity recognizer.
+	Annotations *EntityRecognizerAnnotations `type:"structure"`
+
+	// S3 location of the documents folder for an entity recognizer
+	//
+	// Documents is a required field
+	Documents *EntityRecognizerDocuments `type:"structure" required:"true"`
+
+	// S3 location of the entity list for an entity recognizer.
+	EntityList *EntityRecognizerEntityList `type:"structure"`
+
+	// The entity types in the input data for an entity recognizer.
+	//
+	// EntityTypes is a required field
+	EntityTypes []EntityTypesListItem `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s EntityRecognizerInputDataConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityRecognizerInputDataConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EntityRecognizerInputDataConfig) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "EntityRecognizerInputDataConfig"}
+
+	if s.Documents == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Documents"))
+	}
+
+	if s.EntityTypes == nil {
+		invalidParams.Add(aws.NewErrParamRequired("EntityTypes"))
+	}
+	if s.Annotations != nil {
+		if err := s.Annotations.Validate(); err != nil {
+			invalidParams.AddNested("Annotations", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.Documents != nil {
+		if err := s.Documents.Validate(); err != nil {
+			invalidParams.AddNested("Documents", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.EntityList != nil {
+		if err := s.EntityList.Validate(); err != nil {
+			invalidParams.AddNested("EntityList", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.EntityTypes != nil {
+		for i, v := range s.EntityTypes {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "EntityTypes", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Detailed information about an entity recognizer.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityRecognizerMetadata
+type EntityRecognizerMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// Entity types from the metadata of an entity recognizer.
+	EntityTypes []EntityRecognizerMetadataEntityTypesListItem `type:"list"`
+
+	// Detailed information about the accuracy of an entity recognizer.
+	EvaluationMetrics *EntityRecognizerEvaluationMetrics `type:"structure"`
+
+	// The number of documents in the input data that were used to test the entity
+	// recognizer. Typically this is 10 to 20 percent of the input documents.
+	NumberOfTestDocuments *int64 `type:"integer"`
+
+	// The number of documents in the input data that were used to train the entity
+	// recognizer. Typically this is 80 to 90 percent of the input documents.
+	NumberOfTrainedDocuments *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s EntityRecognizerMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityRecognizerMetadata) GoString() string {
+	return s.String()
+}
+
+// Individual item from the list of entity types in the metadata of an entity
+// recognizer.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityRecognizerMetadataEntityTypesListItem
+type EntityRecognizerMetadataEntityTypesListItem struct {
+	_ struct{} `type:"structure"`
+
+	// Type of entity from the list of entity types in the metadata of an entity
+	// recognizer.
+	Type *string `type:"string"`
+}
+
+// String returns the string representation
+func (s EntityRecognizerMetadataEntityTypesListItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityRecognizerMetadataEntityTypesListItem) GoString() string {
+	return s.String()
+}
+
+// Describes information about an entity recognizer.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityRecognizerProperties
+type EntityRecognizerProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role
+	// that grants Amazon Comprehend read access to your input data.
+	DataAccessRoleArn *string `min:"20" type:"string"`
+
+	// The time that the recognizer creation completed.
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The Amazon Resource Name (ARN) that identifies the entity recognizer.
+	EntityRecognizerArn *string `type:"string"`
+
+	// The input data properties of an entity recognizer.
+	InputDataConfig *EntityRecognizerInputDataConfig `type:"structure"`
+
+	// The language of the input documents. All documents must be in the same language.
+	// Only English ("en") is currently supported.
+	LanguageCode LanguageCode `type:"string" enum:"true"`
+
+	// A description of the status of the recognizer.
+	Message *string `type:"string"`
+
+	// Provides information about an entity recognizer.
+	RecognizerMetadata *EntityRecognizerMetadata `type:"structure"`
+
+	// Provides the status of the entity recognizer.
+	Status ModelStatus `type:"string" enum:"true"`
+
+	// The time that the recognizer was submitted for processing.
+	SubmitTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The time that training of the entity recognizer was completed.
+	TrainingEndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The time that training of the entity recognizer started.
+	TrainingStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s EntityRecognizerProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityRecognizerProperties) GoString() string {
+	return s.String()
+}
+
+// Information about an individual item on a list of entity types.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/EntityTypesListItem
+type EntityTypesListItem struct {
+	_ struct{} `type:"structure"`
+
+	// Entity type of an item on an entity type list.
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s EntityTypesListItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EntityTypesListItem) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EntityTypesListItem) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "EntityTypesListItem"}
+
+	if s.Type == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // The input properties for a topic detection job.
@@ -1594,6 +5252,617 @@ func (s KeyPhrase) GoString() string {
 	return s.String()
 }
 
+// Provides information for filtering a list of dominant language detection
+// jobs. For more information, see the operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/KeyPhrasesDetectionJobFilter
+type KeyPhrasesDetectionJobFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filters on the name of the job.
+	JobName *string `min:"1" type:"string"`
+
+	// Filters the list of jobs based on job status. Returns only jobs with the
+	// specified status.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted after the specified time. Jobs are
+	// returned in descending order, newest to oldest.
+	SubmitTimeAfter *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted before the specified time. Jobs are
+	// returned in ascending order, oldest to newest.
+	SubmitTimeBefore *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s KeyPhrasesDetectionJobFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s KeyPhrasesDetectionJobFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *KeyPhrasesDetectionJobFilter) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "KeyPhrasesDetectionJobFilter"}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Provides information about a key phrases detection job.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/KeyPhrasesDetectionJobProperties
+type KeyPhrasesDetectionJobProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to
+	// your input data.
+	DataAccessRoleArn *string `min:"20" type:"string"`
+
+	// The time that the key phrases detection job completed.
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The input data configuration that you supplied when you created the key phrases
+	// detection job.
+	InputDataConfig *InputDataConfig `type:"structure"`
+
+	// The identifier assigned to the key phrases detection job.
+	JobId *string `min:"1" type:"string"`
+
+	// The name that you assigned the key phrases detection job.
+	JobName *string `min:"1" type:"string"`
+
+	// The current status of the key phrases detection job. If the status is FAILED,
+	// the Message field shows the reason for the failure.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// The language code of the input documents.
+	LanguageCode LanguageCode `type:"string" enum:"true"`
+
+	// A description of the status of a job.
+	Message *string `type:"string"`
+
+	// The output data configuration that you supplied when you created the key
+	// phrases detection job.
+	OutputDataConfig *OutputDataConfig `type:"structure"`
+
+	// The time that the key phrases detection job was submitted for processing.
+	SubmitTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s KeyPhrasesDetectionJobProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s KeyPhrasesDetectionJobProperties) GoString() string {
+	return s.String()
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDocumentClassificationJobsRequest
+type ListDocumentClassificationJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the jobs that are returned. You can filter jobs on their names, status,
+	// or the date and time that they were submitted. You can only set one filter
+	// at a time.
+	Filter *DocumentClassificationJobFilter `type:"structure"`
+
+	// The maximum number of results to return in each page. The default is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListDocumentClassificationJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDocumentClassificationJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListDocumentClassificationJobsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListDocumentClassificationJobsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filter != nil {
+		if err := s.Filter.Validate(); err != nil {
+			invalidParams.AddNested("Filter", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDocumentClassificationJobsResponse
+type ListDocumentClassificationJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A list containing the properties of each job returned.
+	DocumentClassificationJobPropertiesList []DocumentClassificationJobProperties `type:"list"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListDocumentClassificationJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDocumentClassificationJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListDocumentClassificationJobsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDocumentClassifiersRequest
+type ListDocumentClassifiersInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the jobs that are returned. You can filter jobs on their name, status,
+	// or the date and time that they were submitted. You can only set one filter
+	// at a time.
+	Filter *DocumentClassifierFilter `type:"structure"`
+
+	// The maximum number of results to return in each page. The default is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListDocumentClassifiersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDocumentClassifiersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListDocumentClassifiersInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListDocumentClassifiersInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDocumentClassifiersResponse
+type ListDocumentClassifiersOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A list containing the properties of each job returned.
+	DocumentClassifierPropertiesList []DocumentClassifierProperties `type:"list"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListDocumentClassifiersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDocumentClassifiersOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListDocumentClassifiersOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDominantLanguageDetectionJobsRequest
+type ListDominantLanguageDetectionJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters that jobs that are returned. You can filter jobs on their name, status,
+	// or the date and time that they were submitted. You can only set one filter
+	// at a time.
+	Filter *DominantLanguageDetectionJobFilter `type:"structure"`
+
+	// The maximum number of results to return in each page. The default is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListDominantLanguageDetectionJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDominantLanguageDetectionJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListDominantLanguageDetectionJobsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListDominantLanguageDetectionJobsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filter != nil {
+		if err := s.Filter.Validate(); err != nil {
+			invalidParams.AddNested("Filter", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListDominantLanguageDetectionJobsResponse
+type ListDominantLanguageDetectionJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A list containing the properties of each job that is returned.
+	DominantLanguageDetectionJobPropertiesList []DominantLanguageDetectionJobProperties `type:"list"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListDominantLanguageDetectionJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListDominantLanguageDetectionJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListDominantLanguageDetectionJobsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEntitiesDetectionJobsRequest
+type ListEntitiesDetectionJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the jobs that are returned. You can filter jobs on their name, status,
+	// or the date and time that they were submitted. You can only set one filter
+	// at a time.
+	Filter *EntitiesDetectionJobFilter `type:"structure"`
+
+	// The maximum number of results to return in each page. The default is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListEntitiesDetectionJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListEntitiesDetectionJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListEntitiesDetectionJobsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListEntitiesDetectionJobsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filter != nil {
+		if err := s.Filter.Validate(); err != nil {
+			invalidParams.AddNested("Filter", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEntitiesDetectionJobsResponse
+type ListEntitiesDetectionJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A list containing the properties of each job that is returned.
+	EntitiesDetectionJobPropertiesList []EntitiesDetectionJobProperties `type:"list"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListEntitiesDetectionJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListEntitiesDetectionJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListEntitiesDetectionJobsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEntityRecognizersRequest
+type ListEntityRecognizersInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the list of entities returned. You can filter on Status, SubmitTimeBefore,
+	// or SubmitTimeAfter. You can only set one filter at a time.
+	Filter *EntityRecognizerFilter `type:"structure"`
+
+	// The maximum number of results to return on each page. The default is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListEntityRecognizersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListEntityRecognizersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListEntityRecognizersInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListEntityRecognizersInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListEntityRecognizersResponse
+type ListEntityRecognizersOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The list of properties of an entity recognizer.
+	EntityRecognizerPropertiesList []EntityRecognizerProperties `type:"list"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListEntityRecognizersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListEntityRecognizersOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListEntityRecognizersOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListKeyPhrasesDetectionJobsRequest
+type ListKeyPhrasesDetectionJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the jobs that are returned. You can filter jobs on their name, status,
+	// or the date and time that they were submitted. You can only set one filter
+	// at a time.
+	Filter *KeyPhrasesDetectionJobFilter `type:"structure"`
+
+	// The maximum number of results to return in each page. The default is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListKeyPhrasesDetectionJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListKeyPhrasesDetectionJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListKeyPhrasesDetectionJobsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListKeyPhrasesDetectionJobsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filter != nil {
+		if err := s.Filter.Validate(); err != nil {
+			invalidParams.AddNested("Filter", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListKeyPhrasesDetectionJobsResponse
+type ListKeyPhrasesDetectionJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A list containing the properties of each job that is returned.
+	KeyPhrasesDetectionJobPropertiesList []KeyPhrasesDetectionJobProperties `type:"list"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListKeyPhrasesDetectionJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListKeyPhrasesDetectionJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListKeyPhrasesDetectionJobsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListSentimentDetectionJobsRequest
+type ListSentimentDetectionJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the jobs that are returned. You can filter jobs on their name, status,
+	// or the date and time that they were submitted. You can only set one filter
+	// at a time.
+	Filter *SentimentDetectionJobFilter `type:"structure"`
+
+	// The maximum number of results to return in each page. The default is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListSentimentDetectionJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSentimentDetectionJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSentimentDetectionJobsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListSentimentDetectionJobsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filter != nil {
+		if err := s.Filter.Validate(); err != nil {
+			invalidParams.AddNested("Filter", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListSentimentDetectionJobsResponse
+type ListSentimentDetectionJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// Identifies the next page of results to return.
+	NextToken *string `min:"1" type:"string"`
+
+	// A list containing the properties of each job that is returned.
+	SentimentDetectionJobPropertiesList []SentimentDetectionJobProperties `type:"list"`
+}
+
+// String returns the string representation
+func (s ListSentimentDetectionJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSentimentDetectionJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListSentimentDetectionJobsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/ListTopicsDetectionJobsRequest
 type ListTopicsDetectionJobsInput struct {
 	_ struct{} `type:"structure"`
@@ -1603,7 +5872,7 @@ type ListTopicsDetectionJobsInput struct {
 	// at a time.
 	Filter *TopicsDetectionJobFilter `type:"structure"`
 
-	// The maximum number of results to return in each page.
+	// The maximum number of results to return in each page. The default is 100.
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// Identifies the next page of results to return.
@@ -1674,13 +5943,16 @@ func (s ListTopicsDetectionJobsOutput) SDKResponseMetadata() aws.Response {
 type OutputDataConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon S3 URI where you want to write the output data. The URI must be
-	// in the same region as the API endpoint that you are calling.
+	// When you use the OutputDataConfig object with asynchronous operations, you
+	// specify the Amazon S3 location where you want to write the output data. The
+	// URI must be in the same region as the API endpoint that you are calling.
+	// The location is used as the prefix for the actual location of the output
+	// file.
 	//
-	// The service creates an output file called output.tar.gz. It is a compressed
-	// archive that contains two files, topic-terms.csv that lists the terms associated
-	// with each topic, and doc-topics.csv that lists the documents associated with
-	// each topic. For more information, see topic-modeling.
+	// When the topic detection job is finished, the service creates an output file
+	// in a directory specific to the job. The S3Uri field contains the location
+	// of the output file, called output.tar.gz. It is a compressed archive that
+	// contains the ouput of the operation.
 	//
 	// S3Uri is a required field
 	S3Uri *string `type:"string" required:"true"`
@@ -1708,6 +5980,129 @@ func (s *OutputDataConfig) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// Identifies the part of speech represented by the token and gives the confidence
+// that Amazon Comprehend has that the part of speech was correctly identified.
+// For more information about the parts of speech that Amazon Comprehend can
+// identify, see how-syntax.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/PartOfSpeechTag
+type PartOfSpeechTag struct {
+	_ struct{} `type:"structure"`
+
+	// The confidence that Amazon Comprehend has that the part of speech was correctly
+	// identified.
+	Score *float64 `type:"float"`
+
+	// Identifies the part of speech that the token represents.
+	Tag PartOfSpeechTagType `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s PartOfSpeechTag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PartOfSpeechTag) GoString() string {
+	return s.String()
+}
+
+// Provides information for filtering a list of dominant language detection
+// jobs. For more information, see the operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/SentimentDetectionJobFilter
+type SentimentDetectionJobFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filters on the name of the job.
+	JobName *string `min:"1" type:"string"`
+
+	// Filters the list of jobs based on job status. Returns only jobs with the
+	// specified status.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted after the specified time. Jobs are
+	// returned in descending order, newest to oldest.
+	SubmitTimeAfter *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Filters the list of jobs based on the time that the job was submitted for
+	// processing. Returns only jobs submitted before the specified time. Jobs are
+	// returned in ascending order, oldest to newest.
+	SubmitTimeBefore *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s SentimentDetectionJobFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SentimentDetectionJobFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SentimentDetectionJobFilter) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "SentimentDetectionJobFilter"}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Provides information about a sentiment detection job.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/SentimentDetectionJobProperties
+type SentimentDetectionJobProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to
+	// your input data.
+	DataAccessRoleArn *string `min:"20" type:"string"`
+
+	// The time that the sentiment detection job ended.
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The input data configuration that you supplied when you created the sentiment
+	// detection job.
+	InputDataConfig *InputDataConfig `type:"structure"`
+
+	// The identifier assigned to the sentiment detection job.
+	JobId *string `min:"1" type:"string"`
+
+	// The name that you assigned to the sentiment detection job
+	JobName *string `min:"1" type:"string"`
+
+	// The current status of the sentiment detection job. If the status is FAILED,
+	// the Messages field shows the reason for the failure.
+	JobStatus JobStatus `type:"string" enum:"true"`
+
+	// The language code of the input documents.
+	LanguageCode LanguageCode `type:"string" enum:"true"`
+
+	// A description of the status of a job.
+	Message *string `type:"string"`
+
+	// The output data configuration that you supplied when you created the sentiment
+	// detection job.
+	OutputDataConfig *OutputDataConfig `type:"structure"`
+
+	// The time that the sentiment detection job was submitted for processing.
+	SubmitTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s SentimentDetectionJobProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SentimentDetectionJobProperties) GoString() string {
+	return s.String()
 }
 
 // Describes the level of confidence that Amazon Comprehend has in the accuracy
@@ -1743,8 +6138,8 @@ func (s SentimentScore) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartTopicsDetectionJobRequest
-type StartTopicsDetectionJobInput struct {
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartDocumentClassificationJobRequest
+type StartDocumentClassificationJobInput struct {
 	_ struct{} `type:"structure"`
 
 	// A unique identifier for the request. If you do not set the client request
@@ -1755,7 +6150,652 @@ type StartTopicsDetectionJobInput struct {
 	// (IAM) role that grants Amazon Comprehend read access to your input data.
 	//
 	// DataAccessRoleArn is a required field
-	DataAccessRoleArn *string `type:"string" required:"true"`
+	DataAccessRoleArn *string `min:"20" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the document classifier to use to process
+	// the job.
+	//
+	// DocumentClassifierArn is a required field
+	DocumentClassifierArn *string `type:"string" required:"true"`
+
+	// Specifies the format and location of the input data for the job.
+	//
+	// InputDataConfig is a required field
+	InputDataConfig *InputDataConfig `type:"structure" required:"true"`
+
+	// The identifier of the job.
+	JobName *string `min:"1" type:"string"`
+
+	// Specifies where to send the output files.
+	//
+	// OutputDataConfig is a required field
+	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s StartDocumentClassificationJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDocumentClassificationJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartDocumentClassificationJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StartDocumentClassificationJobInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+
+	if s.DataAccessRoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DataAccessRoleArn"))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("DataAccessRoleArn", 20))
+	}
+
+	if s.DocumentClassifierArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DocumentClassifierArn"))
+	}
+
+	if s.InputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("InputDataConfig"))
+	}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+
+	if s.OutputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("OutputDataConfig"))
+	}
+	if s.InputDataConfig != nil {
+		if err := s.InputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("InputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.OutputDataConfig != nil {
+		if err := s.OutputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartDocumentClassificationJobResponse
+type StartDocumentClassificationJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The identifier generated for the job. To get the status of the job, use this
+	// identifier with the operation.
+	JobId *string `min:"1" type:"string"`
+
+	// The status of the job:
+	//
+	//    * SUBMITTED - The job has been received and queued for processing.
+	//
+	//    * IN_PROGRESS - Amazon Comprehend is processing the job.
+	//
+	//    * COMPLETED - The job was successfully completed and the output is available.
+	//
+	//    * FAILED - The job did not complete. For details, use the operation.
+	//
+	//    * STOP_REQUESTED - Amazon Comprehend has received a stop request for the
+	//    job and is processing the request.
+	//
+	//    * STOPPED - The job was successfully stopped without completing.
+	JobStatus JobStatus `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s StartDocumentClassificationJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDocumentClassificationJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StartDocumentClassificationJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartDominantLanguageDetectionJobRequest
+type StartDominantLanguageDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for the request. If you do not set the client request
+	// token, Amazon Comprehend generates one.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to your input data.
+	// For more information, see https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions
+	// (https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions).
+	//
+	// DataAccessRoleArn is a required field
+	DataAccessRoleArn *string `min:"20" type:"string" required:"true"`
+
+	// Specifies the format and location of the input data for the job.
+	//
+	// InputDataConfig is a required field
+	InputDataConfig *InputDataConfig `type:"structure" required:"true"`
+
+	// An identifier for the job.
+	JobName *string `min:"1" type:"string"`
+
+	// Specifies where to send the output files.
+	//
+	// OutputDataConfig is a required field
+	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s StartDominantLanguageDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDominantLanguageDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartDominantLanguageDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StartDominantLanguageDetectionJobInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+
+	if s.DataAccessRoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DataAccessRoleArn"))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("DataAccessRoleArn", 20))
+	}
+
+	if s.InputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("InputDataConfig"))
+	}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+
+	if s.OutputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("OutputDataConfig"))
+	}
+	if s.InputDataConfig != nil {
+		if err := s.InputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("InputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.OutputDataConfig != nil {
+		if err := s.OutputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartDominantLanguageDetectionJobResponse
+type StartDominantLanguageDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The identifier generated for the job. To get the status of a job, use this
+	// identifier with the operation.
+	JobId *string `min:"1" type:"string"`
+
+	// The status of the job.
+	//
+	//    * SUBMITTED - The job has been received and is queued for processing.
+	//
+	//    * IN_PROGRESS - Amazon Comprehend is processing the job.
+	//
+	//    * COMPLETED - The job was successfully completed and the output is available.
+	//
+	//    * FAILED - The job did not complete. To get details, use the operation.
+	JobStatus JobStatus `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s StartDominantLanguageDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDominantLanguageDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StartDominantLanguageDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartEntitiesDetectionJobRequest
+type StartEntitiesDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for the request. If you don't set the client request
+	// token, Amazon Comprehend generates one.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to your input data.
+	// For more information, see https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions
+	// (https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions).
+	//
+	// DataAccessRoleArn is a required field
+	DataAccessRoleArn *string `min:"20" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) that identifies the specific entity recognizer
+	// to be used by the StartEntitiesDetectionJob. This ARN is optional and is
+	// only used for a custom entity recognition job.
+	EntityRecognizerArn *string `type:"string"`
+
+	// Specifies the format and location of the input data for the job.
+	//
+	// InputDataConfig is a required field
+	InputDataConfig *InputDataConfig `type:"structure" required:"true"`
+
+	// The identifier of the job.
+	JobName *string `min:"1" type:"string"`
+
+	// The language of the input documents. All documents must be in the same language.
+	// You can specify any of the languages supported by Amazon Comprehend: English
+	// ("en"), Spanish ("es"), French ("fr"), German ("de"), Italian ("it"), or
+	// Portuguese ("pt"). If custom entities recognition is used, this parameter
+	// is ignored and the language used for training the model is used instead.
+	//
+	// LanguageCode is a required field
+	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
+
+	// Specifies where to send the output files.
+	//
+	// OutputDataConfig is a required field
+	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s StartEntitiesDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartEntitiesDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartEntitiesDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StartEntitiesDetectionJobInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+
+	if s.DataAccessRoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DataAccessRoleArn"))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("DataAccessRoleArn", 20))
+	}
+
+	if s.InputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("InputDataConfig"))
+	}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+	if len(s.LanguageCode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
+	}
+
+	if s.OutputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("OutputDataConfig"))
+	}
+	if s.InputDataConfig != nil {
+		if err := s.InputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("InputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.OutputDataConfig != nil {
+		if err := s.OutputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartEntitiesDetectionJobResponse
+type StartEntitiesDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The identifier generated for the job. To get the status of job, use this
+	// identifier with the operation.
+	JobId *string `min:"1" type:"string"`
+
+	// The status of the job.
+	//
+	//    * SUBMITTED - The job has been received and is queued for processing.
+	//
+	//    * IN_PROGRESS - Amazon Comprehend is processing the job.
+	//
+	//    * COMPLETED - The job was successfully completed and the output is available.
+	//
+	//    * FAILED - The job did not complete. To get details, use the operation.
+	//
+	//    * STOP_REQUESTED - Amazon Comprehend has received a stop request for the
+	//    job and is processing the request.
+	//
+	//    * STOPPED - The job was successfully stopped without completing.
+	JobStatus JobStatus `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s StartEntitiesDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartEntitiesDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StartEntitiesDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartKeyPhrasesDetectionJobRequest
+type StartKeyPhrasesDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for the request. If you don't set the client request
+	// token, Amazon Comprehend generates one.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to your input data.
+	// For more information, see https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions
+	// (https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions).
+	//
+	// DataAccessRoleArn is a required field
+	DataAccessRoleArn *string `min:"20" type:"string" required:"true"`
+
+	// Specifies the format and location of the input data for the job.
+	//
+	// InputDataConfig is a required field
+	InputDataConfig *InputDataConfig `type:"structure" required:"true"`
+
+	// The identifier of the job.
+	JobName *string `min:"1" type:"string"`
+
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
+	//
+	// LanguageCode is a required field
+	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
+
+	// Specifies where to send the output files.
+	//
+	// OutputDataConfig is a required field
+	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s StartKeyPhrasesDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartKeyPhrasesDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartKeyPhrasesDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StartKeyPhrasesDetectionJobInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+
+	if s.DataAccessRoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DataAccessRoleArn"))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("DataAccessRoleArn", 20))
+	}
+
+	if s.InputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("InputDataConfig"))
+	}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+	if len(s.LanguageCode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
+	}
+
+	if s.OutputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("OutputDataConfig"))
+	}
+	if s.InputDataConfig != nil {
+		if err := s.InputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("InputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.OutputDataConfig != nil {
+		if err := s.OutputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartKeyPhrasesDetectionJobResponse
+type StartKeyPhrasesDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The identifier generated for the job. To get the status of a job, use this
+	// identifier with the operation.
+	JobId *string `min:"1" type:"string"`
+
+	// The status of the job.
+	//
+	//    * SUBMITTED - The job has been received and is queued for processing.
+	//
+	//    * IN_PROGRESS - Amazon Comprehend is processing the job.
+	//
+	//    * COMPLETED - The job was successfully completed and the output is available.
+	//
+	//    * FAILED - The job did not complete. To get details, use the operation.
+	JobStatus JobStatus `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s StartKeyPhrasesDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartKeyPhrasesDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StartKeyPhrasesDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartSentimentDetectionJobRequest
+type StartSentimentDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for the request. If you don't set the client request
+	// token, Amazon Comprehend generates one.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to your input data.
+	// For more information, see https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions
+	// (https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions).
+	//
+	// DataAccessRoleArn is a required field
+	DataAccessRoleArn *string `min:"20" type:"string" required:"true"`
+
+	// Specifies the format and location of the input data for the job.
+	//
+	// InputDataConfig is a required field
+	InputDataConfig *InputDataConfig `type:"structure" required:"true"`
+
+	// The identifier of the job.
+	JobName *string `min:"1" type:"string"`
+
+	// The language of the input documents. You can specify English ("en") or Spanish
+	// ("es"). All documents must be in the same language.
+	//
+	// LanguageCode is a required field
+	LanguageCode LanguageCode `type:"string" required:"true" enum:"true"`
+
+	// Specifies where to send the output files.
+	//
+	// OutputDataConfig is a required field
+	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s StartSentimentDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSentimentDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartSentimentDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StartSentimentDetectionJobInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+
+	if s.DataAccessRoleArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DataAccessRoleArn"))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("DataAccessRoleArn", 20))
+	}
+
+	if s.InputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("InputDataConfig"))
+	}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+	if len(s.LanguageCode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("LanguageCode"))
+	}
+
+	if s.OutputDataConfig == nil {
+		invalidParams.Add(aws.NewErrParamRequired("OutputDataConfig"))
+	}
+	if s.InputDataConfig != nil {
+		if err := s.InputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("InputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.OutputDataConfig != nil {
+		if err := s.OutputDataConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputDataConfig", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartSentimentDetectionJobResponse
+type StartSentimentDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The identifier generated for the job. To get the status of a job, use this
+	// identifier with the operation.
+	JobId *string `min:"1" type:"string"`
+
+	// The status of the job.
+	//
+	//    * SUBMITTED - The job has been received and is queued for processing.
+	//
+	//    * IN_PROGRESS - Amazon Comprehend is processing the job.
+	//
+	//    * COMPLETED - The job was successfully completed and the output is available.
+	//
+	//    * FAILED - The job did not complete. To get details, use the operation.
+	JobStatus JobStatus `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s StartSentimentDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSentimentDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StartSentimentDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StartTopicsDetectionJobRequest
+type StartTopicsDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for the request. If you do not set the client request
+	// token, Amazon Comprehend generates one.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the AWS Identity and Access Management
+	// (IAM) role that grants Amazon Comprehend read access to your input data.
+	// For more information, see https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions
+	// (https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions).
+	//
+	// DataAccessRoleArn is a required field
+	DataAccessRoleArn *string `min:"20" type:"string" required:"true"`
 
 	// Specifies the format and location of the input data for the job.
 	//
@@ -1768,7 +6808,9 @@ type StartTopicsDetectionJobInput struct {
 	// The number of topics to detect.
 	NumberOfTopics *int64 `min:"1" type:"integer"`
 
-	// Specifies where to send the output files.
+	// Specifies where to send the output files. The output is a compressed archive
+	// with two files, topic-terms.csv that lists the terms associated with each
+	// topic, and doc-topics.csv that lists the documents associated with each topic
 	//
 	// OutputDataConfig is a required field
 	OutputDataConfig *OutputDataConfig `type:"structure" required:"true"`
@@ -1793,6 +6835,9 @@ func (s *StartTopicsDetectionJobInput) Validate() error {
 
 	if s.DataAccessRoleArn == nil {
 		invalidParams.Add(aws.NewErrParamRequired("DataAccessRoleArn"))
+	}
+	if s.DataAccessRoleArn != nil && len(*s.DataAccessRoleArn) < 20 {
+		invalidParams.Add(aws.NewErrParamMinLen("DataAccessRoleArn", 20))
 	}
 
 	if s.InputDataConfig == nil {
@@ -1861,6 +6906,420 @@ func (s StartTopicsDetectionJobOutput) GoString() string {
 // SDKResponseMetdata return sthe response metadata for the API.
 func (s StartTopicsDetectionJobOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopDominantLanguageDetectionJobRequest
+type StopDominantLanguageDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the dominant language detection job to stop.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopDominantLanguageDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDominantLanguageDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopDominantLanguageDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StopDominantLanguageDetectionJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopDominantLanguageDetectionJobResponse
+type StopDominantLanguageDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The identifier of the dominant language detection job to stop.
+	JobId *string `min:"1" type:"string"`
+
+	// Either STOP_REQUESTED if the job is currently running, or STOPPED if the
+	// job was previously stopped with the StopDominantLanguageDetectionJob operation.
+	JobStatus JobStatus `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s StopDominantLanguageDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDominantLanguageDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StopDominantLanguageDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopEntitiesDetectionJobRequest
+type StopEntitiesDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the entities detection job to stop.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopEntitiesDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopEntitiesDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopEntitiesDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StopEntitiesDetectionJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopEntitiesDetectionJobResponse
+type StopEntitiesDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The identifier of the entities detection job to stop.
+	JobId *string `min:"1" type:"string"`
+
+	// Either STOP_REQUESTED if the job is currently running, or STOPPED if the
+	// job was previously stopped with the StopEntitiesDetectionJob operation.
+	JobStatus JobStatus `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s StopEntitiesDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopEntitiesDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StopEntitiesDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopKeyPhrasesDetectionJobRequest
+type StopKeyPhrasesDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the key phrases detection job to stop.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopKeyPhrasesDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopKeyPhrasesDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopKeyPhrasesDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StopKeyPhrasesDetectionJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopKeyPhrasesDetectionJobResponse
+type StopKeyPhrasesDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The identifier of the key phrases detection job to stop.
+	JobId *string `min:"1" type:"string"`
+
+	// Either STOP_REQUESTED if the job is currently running, or STOPPED if the
+	// job was previously stopped with the StopKeyPhrasesDetectionJob operation.
+	JobStatus JobStatus `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s StopKeyPhrasesDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopKeyPhrasesDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StopKeyPhrasesDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopSentimentDetectionJobRequest
+type StopSentimentDetectionJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the sentiment detection job to stop.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopSentimentDetectionJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopSentimentDetectionJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopSentimentDetectionJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StopSentimentDetectionJobInput"}
+
+	if s.JobId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopSentimentDetectionJobResponse
+type StopSentimentDetectionJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The identifier of the sentiment detection job to stop.
+	JobId *string `min:"1" type:"string"`
+
+	// Either STOP_REQUESTED if the job is currently running, or STOPPED if the
+	// job was previously stopped with the StopSentimentDetectionJob operation.
+	JobStatus JobStatus `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s StopSentimentDetectionJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopSentimentDetectionJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StopSentimentDetectionJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopTrainingDocumentClassifierRequest
+type StopTrainingDocumentClassifierInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that identifies the document classifier currently
+	// being trained.
+	//
+	// DocumentClassifierArn is a required field
+	DocumentClassifierArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopTrainingDocumentClassifierInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopTrainingDocumentClassifierInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopTrainingDocumentClassifierInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StopTrainingDocumentClassifierInput"}
+
+	if s.DocumentClassifierArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DocumentClassifierArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopTrainingDocumentClassifierResponse
+type StopTrainingDocumentClassifierOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s StopTrainingDocumentClassifierOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopTrainingDocumentClassifierOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StopTrainingDocumentClassifierOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopTrainingEntityRecognizerRequest
+type StopTrainingEntityRecognizerInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) that identifies the entity recognizer currently
+	// being trained.
+	//
+	// EntityRecognizerArn is a required field
+	EntityRecognizerArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopTrainingEntityRecognizerInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopTrainingEntityRecognizerInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopTrainingEntityRecognizerInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StopTrainingEntityRecognizerInput"}
+
+	if s.EntityRecognizerArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("EntityRecognizerArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/StopTrainingEntityRecognizerResponse
+type StopTrainingEntityRecognizerOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s StopTrainingEntityRecognizerOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopTrainingEntityRecognizerOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StopTrainingEntityRecognizerOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Represents a work in the input text that was recognized and assigned a part
+// of speech. There is one syntax token record for each word in the source text.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/comprehend-2017-11-27/SyntaxToken
+type SyntaxToken struct {
+	_ struct{} `type:"structure"`
+
+	// The zero-based offset from the beginning of the source text to the first
+	// character in the word.
+	BeginOffset *int64 `type:"integer"`
+
+	// The zero-based offset from the beginning of the source text to the last character
+	// in the word.
+	EndOffset *int64 `type:"integer"`
+
+	// Provides the part of speech label and the confidence level that Amazon Comprehend
+	// has that the part of speech was correctly identified. For more information,
+	// see how-syntax.
+	PartOfSpeech *PartOfSpeechTag `type:"structure"`
+
+	// The word that was recognized in the source text.
+	Text *string `min:"1" type:"string"`
+
+	// A unique identifier for a token.
+	TokenId *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s SyntaxToken) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SyntaxToken) GoString() string {
+	return s.String()
 }
 
 // Provides information for filtering topic detection jobs. For more information,
@@ -2001,10 +7460,12 @@ type JobStatus string
 
 // Enum values for JobStatus
 const (
-	JobStatusSubmitted  JobStatus = "SUBMITTED"
-	JobStatusInProgress JobStatus = "IN_PROGRESS"
-	JobStatusCompleted  JobStatus = "COMPLETED"
-	JobStatusFailed     JobStatus = "FAILED"
+	JobStatusSubmitted     JobStatus = "SUBMITTED"
+	JobStatusInProgress    JobStatus = "IN_PROGRESS"
+	JobStatusCompleted     JobStatus = "COMPLETED"
+	JobStatusFailed        JobStatus = "FAILED"
+	JobStatusStopRequested JobStatus = "STOP_REQUESTED"
+	JobStatusStopped       JobStatus = "STOPPED"
 )
 
 func (enum JobStatus) MarshalValue() (string, error) {
@@ -2022,6 +7483,10 @@ type LanguageCode string
 const (
 	LanguageCodeEn LanguageCode = "en"
 	LanguageCodeEs LanguageCode = "es"
+	LanguageCodeFr LanguageCode = "fr"
+	LanguageCodeDe LanguageCode = "de"
+	LanguageCodeIt LanguageCode = "it"
+	LanguageCodePt LanguageCode = "pt"
 )
 
 func (enum LanguageCode) MarshalValue() (string, error) {
@@ -2029,6 +7494,61 @@ func (enum LanguageCode) MarshalValue() (string, error) {
 }
 
 func (enum LanguageCode) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type ModelStatus string
+
+// Enum values for ModelStatus
+const (
+	ModelStatusSubmitted     ModelStatus = "SUBMITTED"
+	ModelStatusTraining      ModelStatus = "TRAINING"
+	ModelStatusDeleting      ModelStatus = "DELETING"
+	ModelStatusStopRequested ModelStatus = "STOP_REQUESTED"
+	ModelStatusStopped       ModelStatus = "STOPPED"
+	ModelStatusInError       ModelStatus = "IN_ERROR"
+	ModelStatusTrained       ModelStatus = "TRAINED"
+)
+
+func (enum ModelStatus) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ModelStatus) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type PartOfSpeechTagType string
+
+// Enum values for PartOfSpeechTagType
+const (
+	PartOfSpeechTagTypeAdj   PartOfSpeechTagType = "ADJ"
+	PartOfSpeechTagTypeAdp   PartOfSpeechTagType = "ADP"
+	PartOfSpeechTagTypeAdv   PartOfSpeechTagType = "ADV"
+	PartOfSpeechTagTypeAux   PartOfSpeechTagType = "AUX"
+	PartOfSpeechTagTypeConj  PartOfSpeechTagType = "CONJ"
+	PartOfSpeechTagTypeCconj PartOfSpeechTagType = "CCONJ"
+	PartOfSpeechTagTypeDet   PartOfSpeechTagType = "DET"
+	PartOfSpeechTagTypeIntj  PartOfSpeechTagType = "INTJ"
+	PartOfSpeechTagTypeNoun  PartOfSpeechTagType = "NOUN"
+	PartOfSpeechTagTypeNum   PartOfSpeechTagType = "NUM"
+	PartOfSpeechTagTypeO     PartOfSpeechTagType = "O"
+	PartOfSpeechTagTypePart  PartOfSpeechTagType = "PART"
+	PartOfSpeechTagTypePron  PartOfSpeechTagType = "PRON"
+	PartOfSpeechTagTypePropn PartOfSpeechTagType = "PROPN"
+	PartOfSpeechTagTypePunct PartOfSpeechTagType = "PUNCT"
+	PartOfSpeechTagTypeSconj PartOfSpeechTagType = "SCONJ"
+	PartOfSpeechTagTypeSym   PartOfSpeechTagType = "SYM"
+	PartOfSpeechTagTypeVerb  PartOfSpeechTagType = "VERB"
+)
+
+func (enum PartOfSpeechTagType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum PartOfSpeechTagType) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }
@@ -2048,6 +7568,27 @@ func (enum SentimentType) MarshalValue() (string, error) {
 }
 
 func (enum SentimentType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type SyntaxLanguageCode string
+
+// Enum values for SyntaxLanguageCode
+const (
+	SyntaxLanguageCodeEn SyntaxLanguageCode = "en"
+	SyntaxLanguageCodeEs SyntaxLanguageCode = "es"
+	SyntaxLanguageCodeFr SyntaxLanguageCode = "fr"
+	SyntaxLanguageCodeDe SyntaxLanguageCode = "de"
+	SyntaxLanguageCodeIt SyntaxLanguageCode = "it"
+	SyntaxLanguageCodePt SyntaxLanguageCode = "pt"
+)
+
+func (enum SyntaxLanguageCode) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum SyntaxLanguageCode) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }

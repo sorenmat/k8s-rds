@@ -184,6 +184,15 @@ func (r BatchDeleteTableRequest) Send() (*BatchDeleteTableOutput, error) {
 //
 // Deletes multiple tables at once.
 //
+// After completing this operation, you will no longer have access to the table
+// versions and partitions that belong to the deleted table. AWS Glue deletes
+// these "orphaned" resources asynchronously in a timely manner, at the discretion
+// of the service.
+//
+// To ensure immediate deletion of all related resources, before calling BatchDeleteTable,
+// use DeleteTableVersion or BatchDeleteTableVersion, and DeletePartition or
+// BatchDeletePartition, to delete any resources that belong to the table.
+//
 //    // Example sending a request using the BatchDeleteTableRequest method.
 //    req := client.BatchDeleteTableRequest(params)
 //    resp, err := req.Send()
@@ -485,8 +494,8 @@ func (r CreateCrawlerRequest) Send() (*CreateCrawlerOutput, error) {
 // AWS Glue.
 //
 // Creates a new crawler with specified targets, role, configuration, and optional
-// schedule. At least one crawl target must be specified, in either the s3Targets
-// or the jdbcTargets field.
+// schedule. At least one crawl target must be specified, in the s3Targets field,
+// the jdbcTargets field, or the DynamoDBTargets field.
 //
 //    // Example sending a request using the CreateCrawlerRequest method.
 //    req := client.CreateCrawlerRequest(params)
@@ -762,6 +771,56 @@ func (c *Glue) CreateScriptRequest(input *CreateScriptInput) CreateScriptRequest
 	output.responseMetadata = aws.Response{Request: req}
 
 	return CreateScriptRequest{Request: req, Input: input, Copy: c.CreateScriptRequest}
+}
+
+const opCreateSecurityConfiguration = "CreateSecurityConfiguration"
+
+// CreateSecurityConfigurationRequest is a API request type for the CreateSecurityConfiguration API operation.
+type CreateSecurityConfigurationRequest struct {
+	*aws.Request
+	Input *CreateSecurityConfigurationInput
+	Copy  func(*CreateSecurityConfigurationInput) CreateSecurityConfigurationRequest
+}
+
+// Send marshals and sends the CreateSecurityConfiguration API request.
+func (r CreateSecurityConfigurationRequest) Send() (*CreateSecurityConfigurationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*CreateSecurityConfigurationOutput), nil
+}
+
+// CreateSecurityConfigurationRequest returns a request value for making API operation for
+// AWS Glue.
+//
+// Creates a new security configuration.
+//
+//    // Example sending a request using the CreateSecurityConfigurationRequest method.
+//    req := client.CreateSecurityConfigurationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateSecurityConfiguration
+func (c *Glue) CreateSecurityConfigurationRequest(input *CreateSecurityConfigurationInput) CreateSecurityConfigurationRequest {
+	op := &aws.Operation{
+		Name:       opCreateSecurityConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateSecurityConfigurationInput{}
+	}
+
+	output := &CreateSecurityConfigurationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return CreateSecurityConfigurationRequest{Request: req, Input: input, Copy: c.CreateSecurityConfigurationRequest}
 }
 
 const opCreateTable = "CreateTable"
@@ -1089,6 +1148,17 @@ func (r DeleteDatabaseRequest) Send() (*DeleteDatabaseOutput, error) {
 //
 // Removes a specified Database from a Data Catalog.
 //
+// After completing this operation, you will no longer have access to the tables
+// (and all table versions and partitions that might belong to the tables) and
+// the user-defined functions in the deleted database. AWS Glue deletes these
+// "orphaned" resources asynchronously in a timely manner, at the discretion
+// of the service.
+//
+// To ensure immediate deletion of all related resources, before calling DeleteDatabase,
+// use DeleteTableVersion or BatchDeleteTableVersion, DeletePartition or BatchDeletePartition,
+// DeleteUserDefinedFunction, and DeleteTable or BatchDeleteTable, to delete
+// any resources that belong to the database.
+//
 //    // Example sending a request using the DeleteDatabaseRequest method.
 //    req := client.DeleteDatabaseRequest(params)
 //    resp, err := req.Send()
@@ -1266,6 +1336,106 @@ func (c *Glue) DeletePartitionRequest(input *DeletePartitionInput) DeletePartiti
 	return DeletePartitionRequest{Request: req, Input: input, Copy: c.DeletePartitionRequest}
 }
 
+const opDeleteResourcePolicy = "DeleteResourcePolicy"
+
+// DeleteResourcePolicyRequest is a API request type for the DeleteResourcePolicy API operation.
+type DeleteResourcePolicyRequest struct {
+	*aws.Request
+	Input *DeleteResourcePolicyInput
+	Copy  func(*DeleteResourcePolicyInput) DeleteResourcePolicyRequest
+}
+
+// Send marshals and sends the DeleteResourcePolicy API request.
+func (r DeleteResourcePolicyRequest) Send() (*DeleteResourcePolicyOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteResourcePolicyOutput), nil
+}
+
+// DeleteResourcePolicyRequest returns a request value for making API operation for
+// AWS Glue.
+//
+// Deletes a specified policy.
+//
+//    // Example sending a request using the DeleteResourcePolicyRequest method.
+//    req := client.DeleteResourcePolicyRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteResourcePolicy
+func (c *Glue) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInput) DeleteResourcePolicyRequest {
+	op := &aws.Operation{
+		Name:       opDeleteResourcePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteResourcePolicyInput{}
+	}
+
+	output := &DeleteResourcePolicyOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteResourcePolicyRequest{Request: req, Input: input, Copy: c.DeleteResourcePolicyRequest}
+}
+
+const opDeleteSecurityConfiguration = "DeleteSecurityConfiguration"
+
+// DeleteSecurityConfigurationRequest is a API request type for the DeleteSecurityConfiguration API operation.
+type DeleteSecurityConfigurationRequest struct {
+	*aws.Request
+	Input *DeleteSecurityConfigurationInput
+	Copy  func(*DeleteSecurityConfigurationInput) DeleteSecurityConfigurationRequest
+}
+
+// Send marshals and sends the DeleteSecurityConfiguration API request.
+func (r DeleteSecurityConfigurationRequest) Send() (*DeleteSecurityConfigurationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteSecurityConfigurationOutput), nil
+}
+
+// DeleteSecurityConfigurationRequest returns a request value for making API operation for
+// AWS Glue.
+//
+// Deletes a specified security configuration.
+//
+//    // Example sending a request using the DeleteSecurityConfigurationRequest method.
+//    req := client.DeleteSecurityConfigurationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteSecurityConfiguration
+func (c *Glue) DeleteSecurityConfigurationRequest(input *DeleteSecurityConfigurationInput) DeleteSecurityConfigurationRequest {
+	op := &aws.Operation{
+		Name:       opDeleteSecurityConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteSecurityConfigurationInput{}
+	}
+
+	output := &DeleteSecurityConfigurationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteSecurityConfigurationRequest{Request: req, Input: input, Copy: c.DeleteSecurityConfigurationRequest}
+}
+
 const opDeleteTable = "DeleteTable"
 
 // DeleteTableRequest is a API request type for the DeleteTable API operation.
@@ -1289,6 +1459,15 @@ func (r DeleteTableRequest) Send() (*DeleteTableOutput, error) {
 // AWS Glue.
 //
 // Removes a table definition from the Data Catalog.
+//
+// After completing this operation, you will no longer have access to the table
+// versions and partitions that belong to the deleted table. AWS Glue deletes
+// these "orphaned" resources asynchronously in a timely manner, at the discretion
+// of the service.
+//
+// To ensure immediate deletion of all related resources, before calling DeleteTable,
+// use DeleteTableVersion or BatchDeleteTableVersion, and DeletePartition or
+// BatchDeletePartition, to delete any resources that belong to the table.
 //
 //    // Example sending a request using the DeleteTableRequest method.
 //    req := client.DeleteTableRequest(params)
@@ -2075,6 +2254,56 @@ func (p *GetCrawlersPager) CurrentPage() *GetCrawlersOutput {
 	return p.Pager.CurrentPage().(*GetCrawlersOutput)
 }
 
+const opGetDataCatalogEncryptionSettings = "GetDataCatalogEncryptionSettings"
+
+// GetDataCatalogEncryptionSettingsRequest is a API request type for the GetDataCatalogEncryptionSettings API operation.
+type GetDataCatalogEncryptionSettingsRequest struct {
+	*aws.Request
+	Input *GetDataCatalogEncryptionSettingsInput
+	Copy  func(*GetDataCatalogEncryptionSettingsInput) GetDataCatalogEncryptionSettingsRequest
+}
+
+// Send marshals and sends the GetDataCatalogEncryptionSettings API request.
+func (r GetDataCatalogEncryptionSettingsRequest) Send() (*GetDataCatalogEncryptionSettingsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*GetDataCatalogEncryptionSettingsOutput), nil
+}
+
+// GetDataCatalogEncryptionSettingsRequest returns a request value for making API operation for
+// AWS Glue.
+//
+// Retrieves the security configuration for a specified catalog.
+//
+//    // Example sending a request using the GetDataCatalogEncryptionSettingsRequest method.
+//    req := client.GetDataCatalogEncryptionSettingsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetDataCatalogEncryptionSettings
+func (c *Glue) GetDataCatalogEncryptionSettingsRequest(input *GetDataCatalogEncryptionSettingsInput) GetDataCatalogEncryptionSettingsRequest {
+	op := &aws.Operation{
+		Name:       opGetDataCatalogEncryptionSettings,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetDataCatalogEncryptionSettingsInput{}
+	}
+
+	output := &GetDataCatalogEncryptionSettingsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return GetDataCatalogEncryptionSettingsRequest{Request: req, Input: input, Copy: c.GetDataCatalogEncryptionSettingsRequest}
+}
+
 const opGetDatabase = "GetDatabase"
 
 // GetDatabaseRequest is a API request type for the GetDatabase API operation.
@@ -2301,6 +2530,11 @@ func (r GetDevEndpointRequest) Send() (*GetDevEndpointOutput, error) {
 //
 // Retrieves information about a specified DevEndpoint.
 //
+// When you create a development endpoint in a virtual private cloud (VPC),
+// AWS Glue returns only a private IP address, and the public IP address field
+// is not populated. When you create a non-VPC development endpoint, AWS Glue
+// returns only a public IP address.
+//
 //    // Example sending a request using the GetDevEndpointRequest method.
 //    req := client.GetDevEndpointRequest(params)
 //    resp, err := req.Send()
@@ -2350,6 +2584,11 @@ func (r GetDevEndpointsRequest) Send() (*GetDevEndpointsOutput, error) {
 // AWS Glue.
 //
 // Retrieves all the DevEndpoints in this AWS account.
+//
+// When you create a development endpoint in a virtual private cloud (VPC),
+// AWS Glue returns only a private IP address and the public IP address field
+// is not populated. When you create a non-VPC development endpoint, AWS Glue
+// returns only a public IP address.
 //
 //    // Example sending a request using the GetDevEndpointsRequest method.
 //    req := client.GetDevEndpointsRequest(params)
@@ -2983,6 +3222,156 @@ func (c *Glue) GetPlanRequest(input *GetPlanInput) GetPlanRequest {
 	output.responseMetadata = aws.Response{Request: req}
 
 	return GetPlanRequest{Request: req, Input: input, Copy: c.GetPlanRequest}
+}
+
+const opGetResourcePolicy = "GetResourcePolicy"
+
+// GetResourcePolicyRequest is a API request type for the GetResourcePolicy API operation.
+type GetResourcePolicyRequest struct {
+	*aws.Request
+	Input *GetResourcePolicyInput
+	Copy  func(*GetResourcePolicyInput) GetResourcePolicyRequest
+}
+
+// Send marshals and sends the GetResourcePolicy API request.
+func (r GetResourcePolicyRequest) Send() (*GetResourcePolicyOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*GetResourcePolicyOutput), nil
+}
+
+// GetResourcePolicyRequest returns a request value for making API operation for
+// AWS Glue.
+//
+// Retrieves a specified resource policy.
+//
+//    // Example sending a request using the GetResourcePolicyRequest method.
+//    req := client.GetResourcePolicyRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetResourcePolicy
+func (c *Glue) GetResourcePolicyRequest(input *GetResourcePolicyInput) GetResourcePolicyRequest {
+	op := &aws.Operation{
+		Name:       opGetResourcePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetResourcePolicyInput{}
+	}
+
+	output := &GetResourcePolicyOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return GetResourcePolicyRequest{Request: req, Input: input, Copy: c.GetResourcePolicyRequest}
+}
+
+const opGetSecurityConfiguration = "GetSecurityConfiguration"
+
+// GetSecurityConfigurationRequest is a API request type for the GetSecurityConfiguration API operation.
+type GetSecurityConfigurationRequest struct {
+	*aws.Request
+	Input *GetSecurityConfigurationInput
+	Copy  func(*GetSecurityConfigurationInput) GetSecurityConfigurationRequest
+}
+
+// Send marshals and sends the GetSecurityConfiguration API request.
+func (r GetSecurityConfigurationRequest) Send() (*GetSecurityConfigurationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*GetSecurityConfigurationOutput), nil
+}
+
+// GetSecurityConfigurationRequest returns a request value for making API operation for
+// AWS Glue.
+//
+// Retrieves a specified security configuration.
+//
+//    // Example sending a request using the GetSecurityConfigurationRequest method.
+//    req := client.GetSecurityConfigurationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetSecurityConfiguration
+func (c *Glue) GetSecurityConfigurationRequest(input *GetSecurityConfigurationInput) GetSecurityConfigurationRequest {
+	op := &aws.Operation{
+		Name:       opGetSecurityConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetSecurityConfigurationInput{}
+	}
+
+	output := &GetSecurityConfigurationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return GetSecurityConfigurationRequest{Request: req, Input: input, Copy: c.GetSecurityConfigurationRequest}
+}
+
+const opGetSecurityConfigurations = "GetSecurityConfigurations"
+
+// GetSecurityConfigurationsRequest is a API request type for the GetSecurityConfigurations API operation.
+type GetSecurityConfigurationsRequest struct {
+	*aws.Request
+	Input *GetSecurityConfigurationsInput
+	Copy  func(*GetSecurityConfigurationsInput) GetSecurityConfigurationsRequest
+}
+
+// Send marshals and sends the GetSecurityConfigurations API request.
+func (r GetSecurityConfigurationsRequest) Send() (*GetSecurityConfigurationsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*GetSecurityConfigurationsOutput), nil
+}
+
+// GetSecurityConfigurationsRequest returns a request value for making API operation for
+// AWS Glue.
+//
+// Retrieves a list of all security configurations.
+//
+//    // Example sending a request using the GetSecurityConfigurationsRequest method.
+//    req := client.GetSecurityConfigurationsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetSecurityConfigurations
+func (c *Glue) GetSecurityConfigurationsRequest(input *GetSecurityConfigurationsInput) GetSecurityConfigurationsRequest {
+	op := &aws.Operation{
+		Name:       opGetSecurityConfigurations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetSecurityConfigurationsInput{}
+	}
+
+	output := &GetSecurityConfigurationsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return GetSecurityConfigurationsRequest{Request: req, Input: input, Copy: c.GetSecurityConfigurationsRequest}
 }
 
 const opGetTable = "GetTable"
@@ -3644,6 +4033,108 @@ func (c *Glue) ImportCatalogToGlueRequest(input *ImportCatalogToGlueInput) Impor
 	return ImportCatalogToGlueRequest{Request: req, Input: input, Copy: c.ImportCatalogToGlueRequest}
 }
 
+const opPutDataCatalogEncryptionSettings = "PutDataCatalogEncryptionSettings"
+
+// PutDataCatalogEncryptionSettingsRequest is a API request type for the PutDataCatalogEncryptionSettings API operation.
+type PutDataCatalogEncryptionSettingsRequest struct {
+	*aws.Request
+	Input *PutDataCatalogEncryptionSettingsInput
+	Copy  func(*PutDataCatalogEncryptionSettingsInput) PutDataCatalogEncryptionSettingsRequest
+}
+
+// Send marshals and sends the PutDataCatalogEncryptionSettings API request.
+func (r PutDataCatalogEncryptionSettingsRequest) Send() (*PutDataCatalogEncryptionSettingsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*PutDataCatalogEncryptionSettingsOutput), nil
+}
+
+// PutDataCatalogEncryptionSettingsRequest returns a request value for making API operation for
+// AWS Glue.
+//
+// Sets the security configuration for a specified catalog. Once the configuration
+// has been set, the specified encryption is applied to every catalog write
+// thereafter.
+//
+//    // Example sending a request using the PutDataCatalogEncryptionSettingsRequest method.
+//    req := client.PutDataCatalogEncryptionSettingsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/PutDataCatalogEncryptionSettings
+func (c *Glue) PutDataCatalogEncryptionSettingsRequest(input *PutDataCatalogEncryptionSettingsInput) PutDataCatalogEncryptionSettingsRequest {
+	op := &aws.Operation{
+		Name:       opPutDataCatalogEncryptionSettings,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutDataCatalogEncryptionSettingsInput{}
+	}
+
+	output := &PutDataCatalogEncryptionSettingsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return PutDataCatalogEncryptionSettingsRequest{Request: req, Input: input, Copy: c.PutDataCatalogEncryptionSettingsRequest}
+}
+
+const opPutResourcePolicy = "PutResourcePolicy"
+
+// PutResourcePolicyRequest is a API request type for the PutResourcePolicy API operation.
+type PutResourcePolicyRequest struct {
+	*aws.Request
+	Input *PutResourcePolicyInput
+	Copy  func(*PutResourcePolicyInput) PutResourcePolicyRequest
+}
+
+// Send marshals and sends the PutResourcePolicy API request.
+func (r PutResourcePolicyRequest) Send() (*PutResourcePolicyOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*PutResourcePolicyOutput), nil
+}
+
+// PutResourcePolicyRequest returns a request value for making API operation for
+// AWS Glue.
+//
+// Sets the Data Catalog resource policy for access control.
+//
+//    // Example sending a request using the PutResourcePolicyRequest method.
+//    req := client.PutResourcePolicyRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/PutResourcePolicy
+func (c *Glue) PutResourcePolicyRequest(input *PutResourcePolicyInput) PutResourcePolicyRequest {
+	op := &aws.Operation{
+		Name:       opPutResourcePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutResourcePolicyInput{}
+	}
+
+	output := &PutResourcePolicyOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return PutResourcePolicyRequest{Request: req, Input: input, Copy: c.PutResourcePolicyRequest}
+}
+
 const opResetJobBookmark = "ResetJobBookmark"
 
 // ResetJobBookmarkRequest is a API request type for the ResetJobBookmark API operation.
@@ -3717,7 +4208,7 @@ func (r StartCrawlerRequest) Send() (*StartCrawlerOutput, error) {
 // AWS Glue.
 //
 // Starts a crawl using the specified crawler, regardless of what is scheduled.
-// If the crawler is already running, does nothing.
+// If the crawler is already running, returns a CrawlerRunningException (https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException).
 //
 //    // Example sending a request using the StartCrawlerRequest method.
 //    req := client.StartCrawlerRequest(params)
@@ -4605,7 +5096,7 @@ func (c *Glue) UpdateUserDefinedFunctionRequest(input *UpdateUserDefinedFunction
 type Action struct {
 	_ struct{} `type:"structure"`
 
-	// Arguments to be passed to the job.
+	// Arguments to be passed to the job run.
 	//
 	// You can specify arguments here that your own job-execution script consumes,
 	// as well as arguments that AWS Glue itself consumes.
@@ -4625,7 +5116,13 @@ type Action struct {
 	// Specifies configuration properties of a job run notification.
 	NotificationProperty *NotificationProperty `type:"structure"`
 
-	// The job run timeout in minutes. It overrides the timeout value of the job.
+	// The name of the SecurityConfiguration structure to be used with this action.
+	SecurityConfiguration *string `min:"1" type:"string"`
+
+	// The JobRun timeout in minutes. This is the maximum time that a job run can
+	// consume resources before it is terminated and enters TIMEOUT status. The
+	// default is 2,880 minutes (48 hours). This overrides the timeout value set
+	// in the parent job.
 	Timeout *int64 `min:"1" type:"integer"`
 }
 
@@ -4644,6 +5141,9 @@ func (s *Action) Validate() error {
 	invalidParams := aws.ErrInvalidParams{Context: "Action"}
 	if s.JobName != nil && len(*s.JobName) < 1 {
 		invalidParams.Add(aws.NewErrParamMinLen("JobName", 1))
+	}
+	if s.SecurityConfiguration != nil && len(*s.SecurityConfiguration) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityConfiguration", 1))
 	}
 	if s.Timeout != nil && *s.Timeout < 1 {
 		invalidParams.Add(aws.NewErrParamMinValue("Timeout", 1))
@@ -5022,7 +5522,8 @@ type BatchDeleteTableVersionInput struct {
 	// TableName is a required field
 	TableName *string `min:"1" type:"string" required:"true"`
 
-	// A list of the IDs of versions to be deleted.
+	// A list of the IDs of versions to be deleted. A VersionId is a string representation
+	// of an integer. Each version is incremented by 1.
 	//
 	// VersionIds is a required field
 	VersionIds []string `type:"list" required:"true"`
@@ -5395,14 +5896,15 @@ func (s CatalogImportStatus) GoString() string {
 	return s.String()
 }
 
-// Classifiers are written in Python and triggered during a crawl task. You
-// can write your own classifiers to best categorize your data sources and specify
-// the appropriate schemas to use for them. A classifier checks whether a given
-// file is in a format it can handle, and if it is, the classifier creates a
-// schema in the form of a StructType object that matches that data format.
+// Classifiers are triggered during a crawl task. A classifier checks whether
+// a given file is in a format it can handle, and if it is, the classifier creates
+// a schema in the form of a StructType object that matches that data format.
 //
-// A classifier can be a grok classifier, an XML classifier, or a JSON classifier,
-// asspecified in one of the fields in the Classifier object.
+// You can use the standard classifiers that AWS Glue supplies, or you can write
+// your own classifiers to best categorize your data sources and specify the
+// appropriate schemas to use for them. A classifier can be a grok classifier,
+// an XML classifier, or a JSON classifier, as specified in one of the fields
+// in the Classifier object.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/Classifier
 type Classifier struct {
 	_ struct{} `type:"structure"`
@@ -5424,6 +5926,28 @@ func (s Classifier) String() string {
 
 // GoString returns the string representation
 func (s Classifier) GoString() string {
+	return s.String()
+}
+
+// Specifies how CloudWatch data should be encrypted.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CloudWatchEncryption
+type CloudWatchEncryption struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption mode to use for CloudWatch data.
+	CloudWatchEncryptionMode CloudWatchEncryptionMode `type:"string" enum:"true"`
+
+	// The AWS ARN of the KMS key to be used to encrypt the data.
+	KmsKeyArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CloudWatchEncryption) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CloudWatchEncryption) GoString() string {
 	return s.String()
 }
 
@@ -5682,7 +6206,41 @@ func (s *Condition) Validate() error {
 type Connection struct {
 	_ struct{} `type:"structure"`
 
-	// A list of key-value pairs used as parameters for this connection.
+	// These key-value pairs define parameters for the connection:
+	//
+	//    * HOST - The host URI: either the fully qualified domain name (FQDN) or
+	//    the IPv4 address of the database host.
+	//
+	//    * PORT - The port number, between 1024 and 65535, of the port on which
+	//    the database host is listening for database connections.
+	//
+	//    * USER_NAME - The name under which to log in to the database. The value
+	//    string for USER_NAME is "USERNAME".
+	//
+	//    * PASSWORD - A password, if one is used, for the user name.
+	//
+	//    * ENCRYPTED_PASSWORD - When you enable connection password protection
+	//    by setting ConnectionPasswordEncryption in the Data Catalog encryption
+	//    settings, this field stores the key you designate to encrypt the password.
+	//
+	//    * JDBC_DRIVER_JAR_URI - The S3 path of the a jar file that contains the
+	//    JDBC driver to use.
+	//
+	//    * JDBC_DRIVER_CLASS_NAME - The class name of the JDBC driver to use.
+	//
+	//    * JDBC_ENGINE - The name of the JDBC engine to use.
+	//
+	//    * JDBC_ENGINE_VERSION - The version of the JDBC engine to use.
+	//
+	//    * CONFIG_FILES - (Reserved for future use).
+	//
+	//    * INSTANCE_ID - The instance ID to use.
+	//
+	//    * JDBC_CONNECTION_URL - The URL for the JDBC connection.
+	//
+	//    * JDBC_ENFORCE_SSL - A Boolean string (true, false) specifying whether
+	//    SSL with hostname matching will be enforced for the JDBC connection on
+	//    the client. The default is false.
 	ConnectionProperties map[string]string `type:"map"`
 
 	// The type of the connection. Currently, only JDBC is supported; SFTP is not
@@ -5727,7 +6285,7 @@ func (s Connection) GoString() string {
 type ConnectionInput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of key-value pairs used as parameters for this connection.
+	// These key-value pairs define parameters for the connection.
 	//
 	// ConnectionProperties is a required field
 	ConnectionProperties map[string]string `type:"map" required:"true"`
@@ -5793,6 +6351,68 @@ func (s *ConnectionInput) Validate() error {
 	return nil
 }
 
+// The data structure used by the Data Catalog to encrypt the password as part
+// of CreateConnection or UpdateConnection and store it in the ENCRYPTED_PASSWORD
+// field in the connection properties. You can enable catalog encryption or
+// only password encryption.
+//
+// When a CreationConnection request arrives containing a password, the Data
+// Catalog first encrypts the password using your KMS key, and then encrypts
+// the whole connection object again if catalog encryption is also enabled.
+//
+// This encryption requires that you set KMS key permissions to enable or restrict
+// access on the password key according to your security requirements. For example,
+// you may want only admin users to have decrypt permission on the password
+// key.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ConnectionPasswordEncryption
+type ConnectionPasswordEncryption struct {
+	_ struct{} `type:"structure"`
+
+	// A KMS key used to protect access to the JDBC source.
+	//
+	// All users in your account should be granted the kms:encrypt permission to
+	// encrypt passwords before storing them in the Data Catalog (through the AWS
+	// Glue CreateConnection operation).
+	//
+	// The decrypt permission should be granted only to KMS key admins and IAM roles
+	// designated for AWS Glue crawlers.
+	AwsKmsKeyId *string `min:"1" type:"string"`
+
+	// When the ReturnConnectionPasswordEncrypted flag is set to "true", passwords
+	// remain encrypted in the responses of GetConnection and GetConnections. This
+	// encryption takes effect independently from catalog encryption.
+	//
+	// ReturnConnectionPasswordEncrypted is a required field
+	ReturnConnectionPasswordEncrypted *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation
+func (s ConnectionPasswordEncryption) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConnectionPasswordEncryption) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConnectionPasswordEncryption) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ConnectionPasswordEncryption"}
+	if s.AwsKmsKeyId != nil && len(*s.AwsKmsKeyId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("AwsKmsKeyId", 1))
+	}
+
+	if s.ReturnConnectionPasswordEncrypted == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ReturnConnectionPasswordEncrypted"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // Specifies the connections used by a job.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ConnectionsList
 type ConnectionsList struct {
@@ -5823,20 +6443,16 @@ type Crawler struct {
 	Classifiers []string `type:"list"`
 
 	// Crawler configuration information. This versioned JSON string allows users
-	// to specify aspects of a Crawler's behavior.
-	//
-	// You can use this field to force partitions to inherit metadata such as classification,
-	// input format, output format, serde information, and schema from their parent
-	// table, rather than detect this information separately for each partition.
-	// Use the following JSON string to specify that behavior:
-	//
-	// Example: '{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior":
-	// "InheritFromTable" } } }'
+	// to specify aspects of a crawler's behavior. For more information, see Configuring
+	// a Crawler (http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html).
 	Configuration *string `type:"string"`
 
 	// If the crawler is running, contains the total time elapsed since the last
 	// crawl began.
 	CrawlElapsedTime *int64 `type:"long"`
+
+	// The name of the SecurityConfiguration structure to be used by this Crawler.
+	CrawlerSecurityConfiguration *string `type:"string"`
 
 	// The time when the crawler was created.
 	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
@@ -5935,6 +6551,9 @@ func (s CrawlerMetrics) GoString() string {
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CrawlerTargets
 type CrawlerTargets struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies DynamoDB targets.
+	DynamoDBTargets []DynamoDBTarget `type:"list"`
 
 	// Specifies JDBC targets.
 	JdbcTargets []JdbcTarget `type:"list"`
@@ -6097,21 +6716,17 @@ type CreateCrawlerInput struct {
 	_ struct{} `type:"structure"`
 
 	// A list of custom classifiers that the user has registered. By default, all
-	// AWS classifiers are included in a crawl, but these custom classifiers always
-	// override the default classifiers for a given classification.
+	// built-in classifiers are included in a crawl, but these custom classifiers
+	// always override the default classifiers for a given classification.
 	Classifiers []string `type:"list"`
 
 	// Crawler configuration information. This versioned JSON string allows users
-	// to specify aspects of a Crawler's behavior.
-	//
-	// You can use this field to force partitions to inherit metadata such as classification,
-	// input format, output format, serde information, and schema from their parent
-	// table, rather than detect this information separately for each partition.
-	// Use the following JSON string to specify that behavior:
-	//
-	// Example: '{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior":
-	// "InheritFromTable" } } }'
+	// to specify aspects of a crawler's behavior. For more information, see Configuring
+	// a Crawler (http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html).
 	Configuration *string `type:"string"`
+
+	// The name of the SecurityConfiguration structure to be used by this Crawler.
+	CrawlerSecurityConfiguration *string `type:"string"`
 
 	// The AWS Glue database where results are written, such as: arn:aws:daylight:us-east-1::database/sometable/*.
 	//
@@ -6304,13 +6919,28 @@ type CreateDevEndpointInput struct {
 	// The number of AWS Glue Data Processing Units (DPUs) to allocate to this DevEndpoint.
 	NumberOfNodes *int64 `type:"integer"`
 
-	// The public key to use for authentication.
+	// The public key to be used by this DevEndpoint for authentication. This attribute
+	// is provided for backward compatibility, as the recommended attribute to use
+	// is public keys.
 	PublicKey *string `type:"string"`
+
+	// A list of public keys to be used by the DevEndpoints for authentication.
+	// The use of this attribute is preferred over a single public key because the
+	// public keys allow you to have a different private key per client.
+	//
+	// If you previously created an endpoint with a public key, you must remove
+	// that key to be able to set a list of public keys: call the UpdateDevEndpoint
+	// API with the public key content in the deletePublicKeys attribute, and the
+	// list of new keys in the addPublicKeys attribute.
+	PublicKeys []string `type:"list"`
 
 	// The IAM role for the DevEndpoint.
 	//
 	// RoleArn is a required field
 	RoleArn *string `type:"string" required:"true"`
+
+	// The name of the SecurityConfiguration structure to be used with this DevEndpoint.
+	SecurityConfiguration *string `min:"1" type:"string"`
 
 	// Security group IDs for the security groups to be used by the new DevEndpoint.
 	SecurityGroupIds []string `type:"list"`
@@ -6339,6 +6969,9 @@ func (s *CreateDevEndpointInput) Validate() error {
 
 	if s.RoleArn == nil {
 		invalidParams.Add(aws.NewErrParamRequired("RoleArn"))
+	}
+	if s.SecurityConfiguration != nil && len(*s.SecurityConfiguration) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityConfiguration", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -6378,6 +7011,9 @@ type CreateDevEndpointOutput struct {
 
 	// The AWS ARN of the role assigned to the new DevEndpoint.
 	RoleArn *string `type:"string"`
+
+	// The name of the SecurityConfiguration structure being used with this DevEndpoint.
+	SecurityConfiguration *string `min:"1" type:"string"`
 
 	// The security groups assigned to the new DevEndpoint.
 	SecurityGroupIds []string `type:"list"`
@@ -6535,7 +7171,12 @@ type CreateJobInput struct {
 	// Role is a required field
 	Role *string `type:"string" required:"true"`
 
-	// The job timeout in minutes. The default is 2880 minutes (48 hours).
+	// The name of the SecurityConfiguration structure to be used with this job.
+	SecurityConfiguration *string `min:"1" type:"string"`
+
+	// The job timeout in minutes. This is the maximum time that a job run can consume
+	// resources before it is terminated and enters TIMEOUT status. The default
+	// is 2,880 minutes (48 hours).
 	Timeout *int64 `min:"1" type:"integer"`
 }
 
@@ -6566,6 +7207,9 @@ func (s *CreateJobInput) Validate() error {
 
 	if s.Role == nil {
 		invalidParams.Add(aws.NewErrParamRequired("Role"))
+	}
+	if s.SecurityConfiguration != nil && len(*s.SecurityConfiguration) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityConfiguration", 1))
 	}
 	if s.Timeout != nil && *s.Timeout < 1 {
 		invalidParams.Add(aws.NewErrParamMinValue("Timeout", 1))
@@ -6821,6 +7465,80 @@ func (s CreateScriptOutput) GoString() string {
 
 // SDKResponseMetdata return sthe response metadata for the API.
 func (s CreateScriptOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateSecurityConfigurationRequest
+type CreateSecurityConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption configuration for the new security configuration.
+	//
+	// EncryptionConfiguration is a required field
+	EncryptionConfiguration *EncryptionConfiguration `type:"structure" required:"true"`
+
+	// The name for the new security configuration.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateSecurityConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateSecurityConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateSecurityConfigurationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "CreateSecurityConfigurationInput"}
+
+	if s.EncryptionConfiguration == nil {
+		invalidParams.Add(aws.NewErrParamRequired("EncryptionConfiguration"))
+	}
+
+	if s.Name == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateSecurityConfigurationResponse
+type CreateSecurityConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The time at which the new security configuration was created.
+	CreatedTimestamp *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The name assigned to the new security configuration.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateSecurityConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateSecurityConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s CreateSecurityConfigurationOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
@@ -7150,6 +7868,51 @@ func (s *CreateXMLClassifierRequest) Validate() error {
 	return nil
 }
 
+// Contains configuration information for maintaining Data Catalog security.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DataCatalogEncryptionSettings
+type DataCatalogEncryptionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// When password protection is enabled, the Data Catalog uses a customer-provided
+	// key to encrypt the password as part of CreateConnection or UpdateConnection
+	// and store it in the ENCRYPTED_PASSWORD field in the connection properties.
+	// You can enable catalog encryption or only password encryption.
+	ConnectionPasswordEncryption *ConnectionPasswordEncryption `type:"structure"`
+
+	// Specifies encryption-at-rest configuration for the Data Catalog.
+	EncryptionAtRest *EncryptionAtRest `type:"structure"`
+}
+
+// String returns the string representation
+func (s DataCatalogEncryptionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DataCatalogEncryptionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DataCatalogEncryptionSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DataCatalogEncryptionSettings"}
+	if s.ConnectionPasswordEncryption != nil {
+		if err := s.ConnectionPasswordEncryption.Validate(); err != nil {
+			invalidParams.AddNested("ConnectionPasswordEncryption", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.EncryptionAtRest != nil {
+		if err := s.EncryptionAtRest.Validate(); err != nil {
+			invalidParams.AddNested("EncryptionAtRest", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // The Database object represents a logical grouping of tables that may reside
 // in a Hive metastore or an RDBMS.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/Database
@@ -7171,7 +7934,7 @@ type Database struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// A list of key-value pairs that define parameters and properties of the database.
+	// These key-value pairs define parameters and properties of the database.
 	Parameters map[string]string `type:"map"`
 }
 
@@ -7202,7 +7965,7 @@ type DatabaseInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// A list of key-value pairs that define parameters and properties of the database.
+	// Thes key-value pairs define parameters and properties of the database.
 	Parameters map[string]string `type:"map"`
 }
 
@@ -7692,6 +8455,118 @@ func (s DeletePartitionOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteResourcePolicyRequest
+type DeleteResourcePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The hash value returned when this policy was set.
+	PolicyHashCondition *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DeleteResourcePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteResourcePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteResourcePolicyInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteResourcePolicyInput"}
+	if s.PolicyHashCondition != nil && len(*s.PolicyHashCondition) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("PolicyHashCondition", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteResourcePolicyResponse
+type DeleteResourcePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteResourcePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteResourcePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteResourcePolicyOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteSecurityConfigurationRequest
+type DeleteSecurityConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the security configuration to delete.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteSecurityConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteSecurityConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteSecurityConfigurationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteSecurityConfigurationInput"}
+
+	if s.Name == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteSecurityConfigurationResponse
+type DeleteSecurityConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteSecurityConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteSecurityConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteSecurityConfigurationOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteTableRequest
 type DeleteTableInput struct {
 	_ struct{} `type:"structure"`
@@ -7791,7 +8666,8 @@ type DeleteTableVersionInput struct {
 	// TableName is a required field
 	TableName *string `min:"1" type:"string" required:"true"`
 
-	// The ID of the table version to be deleted.
+	// The ID of the table version to be deleted. A VersionID is a string representation
+	// of an integer. Each version is incremented by 1.
 	//
 	// VersionId is a required field
 	VersionId *string `min:"1" type:"string" required:"true"`
@@ -8045,17 +8921,35 @@ type DevEndpoint struct {
 	// The number of AWS Glue Data Processing Units (DPUs) allocated to this DevEndpoint.
 	NumberOfNodes *int64 `type:"integer"`
 
-	// The private address used by this DevEndpoint.
+	// A private IP address to access the DevEndpoint within a VPC, if the DevEndpoint
+	// is created within one. The PrivateAddress field is present only when you
+	// create the DevEndpoint within your virtual private cloud (VPC).
 	PrivateAddress *string `type:"string"`
 
-	// The public VPC address used by this DevEndpoint.
+	// The public IP address used by this DevEndpoint. The PublicAddress field is
+	// present only when you create a non-VPC (virtual private cloud) DevEndpoint.
 	PublicAddress *string `type:"string"`
 
-	// The public key to be used by this DevEndpoint for authentication.
+	// The public key to be used by this DevEndpoint for authentication. This attribute
+	// is provided for backward compatibility, as the recommended attribute to use
+	// is public keys.
 	PublicKey *string `type:"string"`
+
+	// A list of public keys to be used by the DevEndpoints for authentication.
+	// The use of this attribute is preferred over a single public key because the
+	// public keys allow you to have a different private key per client.
+	//
+	// If you previously created an endpoint with a public key, you must remove
+	// that key to be able to set a list of public keys: call the UpdateDevEndpoint
+	// API with the public key content in the deletePublicKeys attribute, and the
+	// list of new keys in the addPublicKeys attribute.
+	PublicKeys []string `type:"list"`
 
 	// The AWS ARN of the IAM role used in this DevEndpoint.
 	RoleArn *string `type:"string"`
+
+	// The name of the SecurityConfiguration structure to be used with this DevEndpoint.
+	SecurityConfiguration *string `min:"1" type:"string"`
 
 	// A list of security group identifiers used in this DevEndpoint.
 	SecurityGroupIds []string `type:"list"`
@@ -8115,6 +9009,90 @@ func (s DevEndpointCustomLibraries) String() string {
 
 // GoString returns the string representation
 func (s DevEndpointCustomLibraries) GoString() string {
+	return s.String()
+}
+
+// Specifies a DynamoDB table to crawl.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DynamoDBTarget
+type DynamoDBTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the DynamoDB table to crawl.
+	Path *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DynamoDBTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DynamoDBTarget) GoString() string {
+	return s.String()
+}
+
+// Specifies encryption-at-rest configuration for the Data Catalog.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/EncryptionAtRest
+type EncryptionAtRest struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption-at-rest mode for encrypting Data Catalog data.
+	//
+	// CatalogEncryptionMode is a required field
+	CatalogEncryptionMode CatalogEncryptionMode `type:"string" required:"true" enum:"true"`
+
+	// The ID of the AWS KMS key to use for encryption at rest.
+	SseAwsKmsKeyId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s EncryptionAtRest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EncryptionAtRest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EncryptionAtRest) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "EncryptionAtRest"}
+	if len(s.CatalogEncryptionMode) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("CatalogEncryptionMode"))
+	}
+	if s.SseAwsKmsKeyId != nil && len(*s.SseAwsKmsKeyId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SseAwsKmsKeyId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Specifies an encryption configuration.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/EncryptionConfiguration
+type EncryptionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption configuration for CloudWatch.
+	CloudWatchEncryption *CloudWatchEncryption `type:"structure"`
+
+	// The encryption configuration for Job Bookmarks.
+	JobBookmarksEncryption *JobBookmarksEncryption `type:"structure"`
+
+	// The encryption configuration for S3 data.
+	S3Encryption []S3Encryption `type:"list"`
+}
+
+// String returns the string representation
+func (s EncryptionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EncryptionConfiguration) GoString() string {
 	return s.String()
 }
 
@@ -8350,6 +9328,14 @@ type GetConnectionInput struct {
 	// the AWS account ID is used by default.
 	CatalogId *string `min:"1" type:"string"`
 
+	// Allow you to retrieve the connection metadata without displaying the password.
+	// For instance, the AWS Glue console uses this flag to retrieve connections,
+	// since the console does not display passwords. Set this parameter where the
+	// caller may not have permission to use the KMS key to decrypt the password,
+	// but does have permission to access the rest of the connection metadata (that
+	// is, the other connection properties).
+	HidePassword *bool `type:"boolean"`
+
 	// The name of the connection definition to retrieve.
 	//
 	// Name is a required field
@@ -8445,6 +9431,14 @@ type GetConnectionsInput struct {
 
 	// A filter that controls which connections will be returned.
 	Filter *GetConnectionsFilter `type:"structure"`
+
+	// Allow you to retrieve the connection metadata without displaying the password.
+	// For instance, the AWS Glue console uses this flag to retrieve connections,
+	// since the console does not display passwords. Set this parameter where the
+	// caller may not have permission to use the KMS key to decrypt the password,
+	// but does have permission to access the rest of the connection metadata (that
+	// is, the other connection properties).
+	HidePassword *bool `type:"boolean"`
 
 	// The maximum number of connections to return in one response.
 	MaxResults *int64 `min:"1" type:"integer"`
@@ -8696,6 +9690,63 @@ func (s GetCrawlersOutput) GoString() string {
 
 // SDKResponseMetdata return sthe response metadata for the API.
 func (s GetCrawlersOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetDataCatalogEncryptionSettingsRequest
+type GetDataCatalogEncryptionSettingsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Data Catalog for which to retrieve the security configuration.
+	// If none is supplied, the AWS account ID is used by default.
+	CatalogId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s GetDataCatalogEncryptionSettingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetDataCatalogEncryptionSettingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetDataCatalogEncryptionSettingsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "GetDataCatalogEncryptionSettingsInput"}
+	if s.CatalogId != nil && len(*s.CatalogId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("CatalogId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetDataCatalogEncryptionSettingsResponse
+type GetDataCatalogEncryptionSettingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The requested security configuration.
+	DataCatalogEncryptionSettings *DataCatalogEncryptionSettings `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetDataCatalogEncryptionSettingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetDataCatalogEncryptionSettingsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s GetDataCatalogEncryptionSettingsOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
@@ -9471,6 +10522,76 @@ type GetPartitionsInput struct {
 	DatabaseName *string `min:"1" type:"string" required:"true"`
 
 	// An expression filtering the partitions to be returned.
+	//
+	// The expression uses SQL syntax similar to the SQL WHERE filter clause. The
+	// SQL statement parser JSQLParser (http://jsqlparser.sourceforge.net/home.php)
+	// parses the expression.
+	//
+	// Operators: The following are the operators that you can use in the Expression
+	// API call:
+	//
+	// =Checks if the values of the two operands are equal or not; if yes, then
+	// the condition becomes true.
+	//
+	// Example: Assume 'variable a' holds 10 and 'variable b' holds 20.
+	//
+	// (a = b) is not true.
+	//
+	// < >Checks if the values of two operands are equal or not; if the values are
+	// not equal, then the condition becomes true.
+	//
+	// Example: (a < > b) is true.
+	//
+	// >Checks if the value of the left operand is greater than the value of the
+	// right operand; if yes, then the condition becomes true.
+	//
+	// Example: (a > b) is not true.
+	//
+	// <Checks if the value of the left operand is less than the value of the right
+	// operand; if yes, then the condition becomes true.
+	//
+	// Example: (a < b) is true.
+	//
+	// >=Checks if the value of the left operand is greater than or equal to the
+	// value of the right operand; if yes, then the condition becomes true.
+	//
+	// Example: (a >= b) is not true.
+	//
+	// <=Checks if the value of the left operand is less than or equal to the value
+	// of the right operand; if yes, then the condition becomes true.
+	//
+	// Example: (a <= b) is true.
+	//
+	// AND, OR, IN, BETWEEN, LIKE, NOT, IS NULLLogical operators.
+	//
+	// Supported Partition Key Types: The following are the the supported partition
+	// keys.
+	//
+	//    * string
+	//
+	//    * date
+	//
+	//    * timestamp
+	//
+	//    * int
+	//
+	//    * bigint
+	//
+	//    * long
+	//
+	//    * tinyint
+	//
+	//    * smallint
+	//
+	//    * decimal
+	//
+	// If an invalid type is encountered, an exception is thrown.
+	//
+	// The following list shows the valid operators on each type. When you define
+	// a crawler, the partitionKey type is created as a STRING, to be compatible
+	// with the catalog partitions.
+	//
+	// Sample API Call:
 	Expression *string `type:"string"`
 
 	// The maximum number of partitions to return in a single response.
@@ -9659,6 +10780,179 @@ func (s GetPlanOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetResourcePolicyRequest
+type GetResourcePolicyInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetResourcePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetResourcePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetResourcePolicyResponse
+type GetResourcePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The date and time at which the policy was created.
+	CreateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Contains the hash value associated with this policy.
+	PolicyHash *string `min:"1" type:"string"`
+
+	// Contains the requested policy document, in JSON format.
+	PolicyInJson *string `min:"2" type:"string"`
+
+	// The date and time at which the policy was last updated.
+	UpdateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s GetResourcePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetResourcePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s GetResourcePolicyOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetSecurityConfigurationRequest
+type GetSecurityConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the security configuration to retrieve.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetSecurityConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetSecurityConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSecurityConfigurationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "GetSecurityConfigurationInput"}
+
+	if s.Name == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetSecurityConfigurationResponse
+type GetSecurityConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The requested security configuration
+	SecurityConfiguration *SecurityConfiguration `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetSecurityConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetSecurityConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s GetSecurityConfigurationOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetSecurityConfigurationsRequest
+type GetSecurityConfigurationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A continuation token, if this is a continuation call.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetSecurityConfigurationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetSecurityConfigurationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSecurityConfigurationsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "GetSecurityConfigurationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetSecurityConfigurationsResponse
+type GetSecurityConfigurationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A continuation token, if there are more security configurations to return.
+	NextToken *string `type:"string"`
+
+	// A list of security configurations.
+	SecurityConfigurations []SecurityConfiguration `type:"list"`
+}
+
+// String returns the string representation
+func (s GetSecurityConfigurationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetSecurityConfigurationsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s GetSecurityConfigurationsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetTableRequest
 type GetTableInput struct {
 	_ struct{} `type:"structure"`
@@ -9761,7 +11055,8 @@ type GetTableVersionInput struct {
 	// TableName is a required field
 	TableName *string `min:"1" type:"string" required:"true"`
 
-	// The ID value of the table version to be retrieved.
+	// The ID value of the table version to be retrieved. A VersionID is a string
+	// representation of an integer. Each version is incremented by 1.
 	VersionId *string `min:"1" type:"string"`
 }
 
@@ -10505,7 +11800,12 @@ type Job struct {
 	// The name or ARN of the IAM role associated with this job.
 	Role *string `type:"string"`
 
-	// The job timeout in minutes.
+	// The name of the SecurityConfiguration structure to be used with this job.
+	SecurityConfiguration *string `min:"1" type:"string"`
+
+	// The job timeout in minutes. This is the maximum time that a job run can consume
+	// resources before it is terminated and enters TIMEOUT status. The default
+	// is 2,880 minutes (48 hours).
 	Timeout *int64 `min:"1" type:"integer"`
 }
 
@@ -10547,6 +11847,28 @@ func (s JobBookmarkEntry) String() string {
 
 // GoString returns the string representation
 func (s JobBookmarkEntry) GoString() string {
+	return s.String()
+}
+
+// Specifies how Job bookmark data should be encrypted.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/JobBookmarksEncryption
+type JobBookmarksEncryption struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption mode to use for Job bookmarks data.
+	JobBookmarksEncryptionMode JobBookmarksEncryptionMode `type:"string" enum:"true"`
+
+	// The AWS ARN of the KMS key to be used to encrypt the data.
+	KmsKeyArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s JobBookmarksEncryption) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s JobBookmarksEncryption) GoString() string {
 	return s.String()
 }
 
@@ -10623,6 +11945,13 @@ type JobRun struct {
 	// The last time this job run was modified.
 	LastModifiedOn *time.Time `type:"timestamp" timestampFormat:"unix"`
 
+	// The name of the log group for secure logging, that can be server-side encrypted
+	// in CloudWatch using KMS. This name can be /aws-glue/jobs/, in which case
+	// the default encryption is NONE. If you add a role name and SecurityConfiguration
+	// name (in other words, /aws-glue/jobs-yourRoleName-yourSecurityConfigurationName/),
+	// then that security configuration will be used to encrypt the log group.
+	LogGroupName *string `type:"string"`
+
 	// Specifies configuration properties of a job run notification.
 	NotificationProperty *NotificationProperty `type:"structure"`
 
@@ -10633,10 +11962,17 @@ type JobRun struct {
 	// in the StartJobRun action.
 	PreviousRunId *string `min:"1" type:"string"`
 
+	// The name of the SecurityConfiguration structure to be used with this job
+	// run.
+	SecurityConfiguration *string `min:"1" type:"string"`
+
 	// The date and time at which this job run was started.
 	StartedOn *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// The job run timeout in minutes.
+	// The JobRun timeout in minutes. This is the maximum time that a job run can
+	// consume resources before it is terminated and enters TIMEOUT status. The
+	// default is 2,880 minutes (48 hours). This overrides the timeout value set
+	// in the parent job.
 	Timeout *int64 `min:"1" type:"integer"`
 
 	// The name of the trigger that started this job run.
@@ -10705,7 +12041,12 @@ type JobUpdate struct {
 	// The name or ARN of the IAM role associated with this job (required).
 	Role *string `type:"string"`
 
-	// The job timeout in minutes. The default is 2880 minutes (48 hours).
+	// The name of the SecurityConfiguration structure to be used with this job.
+	SecurityConfiguration *string `min:"1" type:"string"`
+
+	// The job timeout in minutes. This is the maximum time that a job run can consume
+	// resources before it is terminated and enters TIMEOUT status. The default
+	// is 2,880 minutes (48 hours).
 	Timeout *int64 `min:"1" type:"integer"`
 }
 
@@ -10722,6 +12063,9 @@ func (s JobUpdate) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *JobUpdate) Validate() error {
 	invalidParams := aws.ErrInvalidParams{Context: "JobUpdate"}
+	if s.SecurityConfiguration != nil && len(*s.SecurityConfiguration) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityConfiguration", 1))
+	}
 	if s.Timeout != nil && *s.Timeout < 1 {
 		invalidParams.Add(aws.NewErrParamMinValue("Timeout", 1))
 	}
@@ -10813,6 +12157,9 @@ func (s LastCrawlInfo) GoString() string {
 type Location struct {
 	_ struct{} `type:"structure"`
 
+	// A DynamoDB Table location.
+	DynamoDB []CodeGenNodeArg `type:"list"`
+
 	// A JDBC location.
 	Jdbc []CodeGenNodeArg `type:"list"`
 
@@ -10833,6 +12180,13 @@ func (s Location) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Location) Validate() error {
 	invalidParams := aws.ErrInvalidParams{Context: "Location"}
+	if s.DynamoDB != nil {
+		for i, v := range s.DynamoDB {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DynamoDB", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
 	if s.Jdbc != nil {
 		for i, v := range s.Jdbc {
 			if err := v.Validate(); err != nil {
@@ -10986,7 +12340,7 @@ type Partition struct {
 	// The last time at which column statistics were computed for this partition.
 	LastAnalyzedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// Partition parameters, in the form of a list of key-value pairs.
+	// These key-value pairs define partition parameters.
 	Parameters map[string]string `type:"map"`
 
 	// Provides information about the physical location where the partition is stored.
@@ -11042,7 +12396,7 @@ type PartitionInput struct {
 	// The last time at which column statistics were computed for this partition.
 	LastAnalyzedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// Partition parameters, in the form of a list of key-value pairs.
+	// These key-value pairs define partition parameters.
 	Parameters map[string]string `type:"map"`
 
 	// Provides information about the physical location where the partition is stored.
@@ -11117,7 +12471,9 @@ func (s *PartitionValueList) Validate() error {
 type PhysicalConnectionRequirements struct {
 	_ struct{} `type:"structure"`
 
-	// The connection's availability zone. This field is deprecated and has no effect.
+	// The connection's availability zone. This field is redundant, since the specified
+	// subnet implies the availability zone to be used. The field must be populated
+	// now, but will be deprecated in the future.
 	AvailabilityZone *string `min:"1" type:"string"`
 
 	// The security group ID list used by the connection.
@@ -11216,6 +12572,150 @@ func (s *Predicate) Validate() error {
 	return nil
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/PutDataCatalogEncryptionSettingsRequest
+type PutDataCatalogEncryptionSettingsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Data Catalog for which to set the security configuration. If
+	// none is supplied, the AWS account ID is used by default.
+	CatalogId *string `min:"1" type:"string"`
+
+	// The security configuration to set.
+	//
+	// DataCatalogEncryptionSettings is a required field
+	DataCatalogEncryptionSettings *DataCatalogEncryptionSettings `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s PutDataCatalogEncryptionSettingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutDataCatalogEncryptionSettingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutDataCatalogEncryptionSettingsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "PutDataCatalogEncryptionSettingsInput"}
+	if s.CatalogId != nil && len(*s.CatalogId) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("CatalogId", 1))
+	}
+
+	if s.DataCatalogEncryptionSettings == nil {
+		invalidParams.Add(aws.NewErrParamRequired("DataCatalogEncryptionSettings"))
+	}
+	if s.DataCatalogEncryptionSettings != nil {
+		if err := s.DataCatalogEncryptionSettings.Validate(); err != nil {
+			invalidParams.AddNested("DataCatalogEncryptionSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/PutDataCatalogEncryptionSettingsResponse
+type PutDataCatalogEncryptionSettingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s PutDataCatalogEncryptionSettingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutDataCatalogEncryptionSettingsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s PutDataCatalogEncryptionSettingsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/PutResourcePolicyRequest
+type PutResourcePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// A value of MUST_EXIST is used to update a policy. A value of NOT_EXIST is
+	// used to create a new policy. If a value of NONE or a null value is used,
+	// the call will not depend on the existence of a policy.
+	PolicyExistsCondition ExistCondition `type:"string" enum:"true"`
+
+	// This is the hash value returned when the previous policy was set using PutResourcePolicy.
+	// Its purpose is to prevent concurrent modifications of a policy. Do not use
+	// this parameter if no previous policy has been set.
+	PolicyHashCondition *string `min:"1" type:"string"`
+
+	// Contains the policy document to set, in JSON format.
+	//
+	// PolicyInJson is a required field
+	PolicyInJson *string `min:"2" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s PutResourcePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutResourcePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutResourcePolicyInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "PutResourcePolicyInput"}
+	if s.PolicyHashCondition != nil && len(*s.PolicyHashCondition) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("PolicyHashCondition", 1))
+	}
+
+	if s.PolicyInJson == nil {
+		invalidParams.Add(aws.NewErrParamRequired("PolicyInJson"))
+	}
+	if s.PolicyInJson != nil && len(*s.PolicyInJson) < 2 {
+		invalidParams.Add(aws.NewErrParamMinLen("PolicyInJson", 2))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/PutResourcePolicyResponse
+type PutResourcePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A hash of the policy that has just been set. This must be included in a subsequent
+	// call that overwrites or updates this policy.
+	PolicyHash *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s PutResourcePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutResourcePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s PutResourcePolicyOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ResetJobBookmarkRequest
 type ResetJobBookmarkInput struct {
 	_ struct{} `type:"structure"`
@@ -11310,6 +12810,28 @@ func (s *ResourceUri) Validate() error {
 	return nil
 }
 
+// Specifies how S3 data should be encrypted.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/S3Encryption
+type S3Encryption struct {
+	_ struct{} `type:"structure"`
+
+	// The AWS ARN of the KMS key to be used to encrypt the data.
+	KmsKeyArn *string `type:"string"`
+
+	// The encryption mode to use for S3 data.
+	S3EncryptionMode S3EncryptionMode `type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s S3Encryption) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s S3Encryption) GoString() string {
+	return s.String()
+}
+
 // Specifies a data store in Amazon S3.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/S3Target
 type S3Target struct {
@@ -11380,6 +12902,31 @@ func (s SchemaChangePolicy) GoString() string {
 	return s.String()
 }
 
+// Specifies a security configuration.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/SecurityConfiguration
+type SecurityConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The time at which this security configuration was created.
+	CreatedTimeStamp *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The encryption configuration associated with this security configuration.
+	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
+
+	// The name of the security configuration.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s SecurityConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SecurityConfiguration) GoString() string {
+	return s.String()
+}
+
 // Defines a non-overlapping region of a table's partitions, allowing multiple
 // requests to be executed in parallel.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/Segment
@@ -11439,7 +12986,7 @@ type SerDeInfo struct {
 	// Name of the SerDe.
 	Name *string `min:"1" type:"string"`
 
-	// A list of initialization parameters for the SerDe, in key-value form.
+	// These key-value pairs define initialization parameters for the SerDe.
 	Parameters map[string]string `type:"map"`
 
 	// Usually the class that implements the SerDe. An example is: org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe.
@@ -11653,7 +13200,14 @@ type StartJobRunInput struct {
 	// Specifies configuration properties of a job run notification.
 	NotificationProperty *NotificationProperty `type:"structure"`
 
-	// The job run timeout in minutes. It overrides the timeout value of the job.
+	// The name of the SecurityConfiguration structure to be used with this job
+	// run.
+	SecurityConfiguration *string `min:"1" type:"string"`
+
+	// The JobRun timeout in minutes. This is the maximum time that a job run can
+	// consume resources before it is terminated and enters TIMEOUT status. The
+	// default is 2,880 minutes (48 hours). This overrides the timeout value set
+	// in the parent job.
 	Timeout *int64 `min:"1" type:"integer"`
 }
 
@@ -11679,6 +13233,9 @@ func (s *StartJobRunInput) Validate() error {
 	}
 	if s.JobRunId != nil && len(*s.JobRunId) < 1 {
 		invalidParams.Add(aws.NewErrParamMinLen("JobRunId", 1))
+	}
+	if s.SecurityConfiguration != nil && len(*s.SecurityConfiguration) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("SecurityConfiguration", 1))
 	}
 	if s.Timeout != nil && *s.Timeout < 1 {
 		invalidParams.Add(aws.NewErrParamMinValue("Timeout", 1))
@@ -12082,11 +13639,16 @@ type Table struct {
 	// Owner of the table.
 	Owner *string `min:"1" type:"string"`
 
-	// Properties associated with this table, as a list of key-value pairs.
+	// These key-value pairs define properties associated with the table.
 	Parameters map[string]string `type:"map"`
 
 	// A list of columns by which the table is partitioned. Only primitive types
 	// are supported as partition keys.
+	//
+	// When creating a table used by Athena, and you do not specify any partitionKeys,
+	// you must at least set the value of partitionKeys to an empty list. For example:
+	//
+	// "PartitionKeys": []
 	PartitionKeys []Column `type:"list"`
 
 	// Retention time for this table.
@@ -12164,11 +13726,16 @@ type TableInput struct {
 	// Owner of the table.
 	Owner *string `min:"1" type:"string"`
 
-	// Properties associated with this table, as a list of key-value pairs.
+	// These key-value pairs define properties associated with the table.
 	Parameters map[string]string `type:"map"`
 
 	// A list of columns by which the table is partitioned. Only primitive types
 	// are supported as partition keys.
+	//
+	// When creating a table used by Athena, and you do not specify any partitionKeys,
+	// you must at least set the value of partitionKeys to an empty list. For example:
+	//
+	// "PartitionKeys": []
 	PartitionKeys []Column `type:"list"`
 
 	// Retention time for this table.
@@ -12238,7 +13805,8 @@ type TableVersion struct {
 	// The table in question
 	Table *Table `type:"structure"`
 
-	// The ID value that identifies this table version.
+	// The ID value that identifies this table version. A VersionId is a string
+	// representation of an integer. Each version is incremented by 1.
 	VersionId *string `min:"1" type:"string"`
 }
 
@@ -12263,7 +13831,8 @@ type TableVersionError struct {
 	// The name of the table in question.
 	TableName *string `min:"1" type:"string"`
 
-	// The ID value of the version in question.
+	// The ID value of the version in question. A VersionID is a string representation
+	// of an integer. Each version is incremented by 1.
 	VersionId *string `min:"1" type:"string"`
 }
 
@@ -12536,21 +14105,17 @@ type UpdateCrawlerInput struct {
 	_ struct{} `type:"structure"`
 
 	// A list of custom classifiers that the user has registered. By default, all
-	// classifiers are included in a crawl, but these custom classifiers always
-	// override the default classifiers for a given classification.
+	// built-in classifiers are included in a crawl, but these custom classifiers
+	// always override the default classifiers for a given classification.
 	Classifiers []string `type:"list"`
 
 	// Crawler configuration information. This versioned JSON string allows users
-	// to specify aspects of a Crawler's behavior.
-	//
-	// You can use this field to force partitions to inherit metadata such as classification,
-	// input format, output format, serde information, and schema from their parent
-	// table, rather than detect this information separately for each partition.
-	// Use the following JSON string to specify that behavior:
-	//
-	// Example: '{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior":
-	// "InheritFromTable" } } }'
+	// to specify aspects of a crawler's behavior. For more information, see Configuring
+	// a Crawler (http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html).
 	Configuration *string `type:"string"`
+
+	// The name of the SecurityConfiguration structure to be used by this Crawler.
+	CrawlerSecurityConfiguration *string `type:"string"`
 
 	// The AWS Glue database where results are stored, such as: arn:aws:daylight:us-east-1::database/sometable/*.
 	DatabaseName *string `type:"string"`
@@ -12783,8 +14348,14 @@ func (s UpdateDatabaseOutput) SDKResponseMetadata() aws.Response {
 type UpdateDevEndpointInput struct {
 	_ struct{} `type:"structure"`
 
+	// The list of public keys for the DevEndpoint to use.
+	AddPublicKeys []string `type:"list"`
+
 	// Custom Python or Java libraries to be loaded in the DevEndpoint.
 	CustomLibraries *DevEndpointCustomLibraries `type:"structure"`
+
+	// The list of public keys to be deleted from the DevEndpoint.
+	DeletePublicKeys []string `type:"list"`
 
 	// The name of the DevEndpoint to be updated.
 	//
@@ -13551,6 +15122,40 @@ func (s XMLClassifier) GoString() string {
 	return s.String()
 }
 
+type CatalogEncryptionMode string
+
+// Enum values for CatalogEncryptionMode
+const (
+	CatalogEncryptionModeDisabled CatalogEncryptionMode = "DISABLED"
+	CatalogEncryptionModeSseKms   CatalogEncryptionMode = "SSE-KMS"
+)
+
+func (enum CatalogEncryptionMode) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum CatalogEncryptionMode) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type CloudWatchEncryptionMode string
+
+// Enum values for CloudWatchEncryptionMode
+const (
+	CloudWatchEncryptionModeDisabled CloudWatchEncryptionMode = "DISABLED"
+	CloudWatchEncryptionModeSseKms   CloudWatchEncryptionMode = "SSE-KMS"
+)
+
+func (enum CloudWatchEncryptionMode) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum CloudWatchEncryptionMode) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type ConnectionPropertyKey string
 
 // Enum values for ConnectionPropertyKey
@@ -13559,6 +15164,7 @@ const (
 	ConnectionPropertyKeyPort                ConnectionPropertyKey = "PORT"
 	ConnectionPropertyKeyUsername            ConnectionPropertyKey = "USERNAME"
 	ConnectionPropertyKeyPassword            ConnectionPropertyKey = "PASSWORD"
+	ConnectionPropertyKeyEncryptedPassword   ConnectionPropertyKey = "ENCRYPTED_PASSWORD"
 	ConnectionPropertyKeyJdbcDriverJarUri    ConnectionPropertyKey = "JDBC_DRIVER_JAR_URI"
 	ConnectionPropertyKeyJdbcDriverClassName ConnectionPropertyKey = "JDBC_DRIVER_CLASS_NAME"
 	ConnectionPropertyKeyJdbcEngine          ConnectionPropertyKey = "JDBC_ENGINE"
@@ -13566,6 +15172,7 @@ const (
 	ConnectionPropertyKeyConfigFiles         ConnectionPropertyKey = "CONFIG_FILES"
 	ConnectionPropertyKeyInstanceId          ConnectionPropertyKey = "INSTANCE_ID"
 	ConnectionPropertyKeyJdbcConnectionUrl   ConnectionPropertyKey = "JDBC_CONNECTION_URL"
+	ConnectionPropertyKeyJdbcEnforceSsl      ConnectionPropertyKey = "JDBC_ENFORCE_SSL"
 )
 
 func (enum ConnectionPropertyKey) MarshalValue() (string, error) {
@@ -13626,6 +15233,41 @@ func (enum DeleteBehavior) MarshalValue() (string, error) {
 }
 
 func (enum DeleteBehavior) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type ExistCondition string
+
+// Enum values for ExistCondition
+const (
+	ExistConditionMustExist ExistCondition = "MUST_EXIST"
+	ExistConditionNotExist  ExistCondition = "NOT_EXIST"
+	ExistConditionNone      ExistCondition = "NONE"
+)
+
+func (enum ExistCondition) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ExistCondition) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type JobBookmarksEncryptionMode string
+
+// Enum values for JobBookmarksEncryptionMode
+const (
+	JobBookmarksEncryptionModeDisabled JobBookmarksEncryptionMode = "DISABLED"
+	JobBookmarksEncryptionModeCseKms   JobBookmarksEncryptionMode = "CSE-KMS"
+)
+
+func (enum JobBookmarksEncryptionMode) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum JobBookmarksEncryptionMode) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }
@@ -13752,6 +15394,24 @@ func (enum ResourceType) MarshalValue() (string, error) {
 }
 
 func (enum ResourceType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type S3EncryptionMode string
+
+// Enum values for S3EncryptionMode
+const (
+	S3EncryptionModeDisabled S3EncryptionMode = "DISABLED"
+	S3EncryptionModeSseKms   S3EncryptionMode = "SSE-KMS"
+	S3EncryptionModeSseS3    S3EncryptionMode = "SSE-S3"
+)
+
+func (enum S3EncryptionMode) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum S3EncryptionMode) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }

@@ -129,6 +129,8 @@ type IAMAPI interface {
 
 	DeleteRoleRequest(*iam.DeleteRoleInput) iam.DeleteRoleRequest
 
+	DeleteRolePermissionsBoundaryRequest(*iam.DeleteRolePermissionsBoundaryInput) iam.DeleteRolePermissionsBoundaryRequest
+
 	DeleteRolePolicyRequest(*iam.DeleteRolePolicyInput) iam.DeleteRolePolicyRequest
 
 	DeleteSAMLProviderRequest(*iam.DeleteSAMLProviderInput) iam.DeleteSAMLProviderRequest
@@ -145,6 +147,8 @@ type IAMAPI interface {
 
 	DeleteUserRequest(*iam.DeleteUserInput) iam.DeleteUserRequest
 
+	DeleteUserPermissionsBoundaryRequest(*iam.DeleteUserPermissionsBoundaryInput) iam.DeleteUserPermissionsBoundaryRequest
+
 	DeleteUserPolicyRequest(*iam.DeleteUserPolicyInput) iam.DeleteUserPolicyRequest
 
 	DeleteVirtualMFADeviceRequest(*iam.DeleteVirtualMFADeviceInput) iam.DeleteVirtualMFADeviceRequest
@@ -158,6 +162,8 @@ type IAMAPI interface {
 	EnableMFADeviceRequest(*iam.EnableMFADeviceInput) iam.EnableMFADeviceRequest
 
 	GenerateCredentialReportRequest(*iam.GenerateCredentialReportInput) iam.GenerateCredentialReportRequest
+
+	GenerateServiceLastAccessedDetailsRequest(*iam.GenerateServiceLastAccessedDetailsInput) iam.GenerateServiceLastAccessedDetailsRequest
 
 	GetAccessKeyLastUsedRequest(*iam.GetAccessKeyLastUsedInput) iam.GetAccessKeyLastUsedRequest
 
@@ -197,6 +203,10 @@ type IAMAPI interface {
 
 	GetServerCertificateRequest(*iam.GetServerCertificateInput) iam.GetServerCertificateRequest
 
+	GetServiceLastAccessedDetailsRequest(*iam.GetServiceLastAccessedDetailsInput) iam.GetServiceLastAccessedDetailsRequest
+
+	GetServiceLastAccessedDetailsWithEntitiesRequest(*iam.GetServiceLastAccessedDetailsWithEntitiesInput) iam.GetServiceLastAccessedDetailsWithEntitiesRequest
+
 	GetServiceLinkedRoleDeletionStatusRequest(*iam.GetServiceLinkedRoleDeletionStatusInput) iam.GetServiceLinkedRoleDeletionStatusRequest
 
 	GetUserRequest(*iam.GetUserInput) iam.GetUserRequest
@@ -231,9 +241,13 @@ type IAMAPI interface {
 
 	ListPoliciesRequest(*iam.ListPoliciesInput) iam.ListPoliciesRequest
 
+	ListPoliciesGrantingServiceAccessRequest(*iam.ListPoliciesGrantingServiceAccessInput) iam.ListPoliciesGrantingServiceAccessRequest
+
 	ListPolicyVersionsRequest(*iam.ListPolicyVersionsInput) iam.ListPolicyVersionsRequest
 
 	ListRolePoliciesRequest(*iam.ListRolePoliciesInput) iam.ListRolePoliciesRequest
+
+	ListRoleTagsRequest(*iam.ListRoleTagsInput) iam.ListRoleTagsRequest
 
 	ListRolesRequest(*iam.ListRolesInput) iam.ListRolesRequest
 
@@ -249,13 +263,19 @@ type IAMAPI interface {
 
 	ListUserPoliciesRequest(*iam.ListUserPoliciesInput) iam.ListUserPoliciesRequest
 
+	ListUserTagsRequest(*iam.ListUserTagsInput) iam.ListUserTagsRequest
+
 	ListUsersRequest(*iam.ListUsersInput) iam.ListUsersRequest
 
 	ListVirtualMFADevicesRequest(*iam.ListVirtualMFADevicesInput) iam.ListVirtualMFADevicesRequest
 
 	PutGroupPolicyRequest(*iam.PutGroupPolicyInput) iam.PutGroupPolicyRequest
 
+	PutRolePermissionsBoundaryRequest(*iam.PutRolePermissionsBoundaryInput) iam.PutRolePermissionsBoundaryRequest
+
 	PutRolePolicyRequest(*iam.PutRolePolicyInput) iam.PutRolePolicyRequest
+
+	PutUserPermissionsBoundaryRequest(*iam.PutUserPermissionsBoundaryInput) iam.PutUserPermissionsBoundaryRequest
 
 	PutUserPolicyRequest(*iam.PutUserPolicyInput) iam.PutUserPolicyRequest
 
@@ -274,6 +294,14 @@ type IAMAPI interface {
 	SimulateCustomPolicyRequest(*iam.SimulateCustomPolicyInput) iam.SimulateCustomPolicyRequest
 
 	SimulatePrincipalPolicyRequest(*iam.SimulatePrincipalPolicyInput) iam.SimulatePrincipalPolicyRequest
+
+	TagRoleRequest(*iam.TagRoleInput) iam.TagRoleRequest
+
+	TagUserRequest(*iam.TagUserInput) iam.TagUserRequest
+
+	UntagRoleRequest(*iam.UntagRoleInput) iam.UntagRoleRequest
+
+	UntagUserRequest(*iam.UntagUserInput) iam.UntagUserRequest
 
 	UpdateAccessKeyRequest(*iam.UpdateAccessKeyInput) iam.UpdateAccessKeyRequest
 

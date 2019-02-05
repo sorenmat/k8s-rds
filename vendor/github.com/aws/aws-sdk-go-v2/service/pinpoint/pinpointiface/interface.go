@@ -100,6 +100,10 @@ type PinpointAPI interface {
 
 	DeleteSmsChannelRequest(*pinpoint.DeleteSmsChannelInput) pinpoint.DeleteSmsChannelRequest
 
+	DeleteUserEndpointsRequest(*pinpoint.DeleteUserEndpointsInput) pinpoint.DeleteUserEndpointsRequest
+
+	DeleteVoiceChannelRequest(*pinpoint.DeleteVoiceChannelInput) pinpoint.DeleteVoiceChannelRequest
+
 	GetAdmChannelRequest(*pinpoint.GetAdmChannelInput) pinpoint.GetAdmChannelRequest
 
 	GetApnsChannelRequest(*pinpoint.GetApnsChannelInput) pinpoint.GetApnsChannelRequest
@@ -127,6 +131,8 @@ type PinpointAPI interface {
 	GetCampaignVersionsRequest(*pinpoint.GetCampaignVersionsInput) pinpoint.GetCampaignVersionsRequest
 
 	GetCampaignsRequest(*pinpoint.GetCampaignsInput) pinpoint.GetCampaignsRequest
+
+	GetChannelsRequest(*pinpoint.GetChannelsInput) pinpoint.GetChannelsRequest
 
 	GetEmailChannelRequest(*pinpoint.GetEmailChannelInput) pinpoint.GetEmailChannelRequest
 
@@ -158,7 +164,17 @@ type PinpointAPI interface {
 
 	GetSmsChannelRequest(*pinpoint.GetSmsChannelInput) pinpoint.GetSmsChannelRequest
 
+	GetUserEndpointsRequest(*pinpoint.GetUserEndpointsInput) pinpoint.GetUserEndpointsRequest
+
+	GetVoiceChannelRequest(*pinpoint.GetVoiceChannelInput) pinpoint.GetVoiceChannelRequest
+
+	PhoneNumberValidateRequest(*pinpoint.PhoneNumberValidateInput) pinpoint.PhoneNumberValidateRequest
+
 	PutEventStreamRequest(*pinpoint.PutEventStreamInput) pinpoint.PutEventStreamRequest
+
+	PutEventsRequest(*pinpoint.PutEventsInput) pinpoint.PutEventsRequest
+
+	RemoveAttributesRequest(*pinpoint.RemoveAttributesInput) pinpoint.RemoveAttributesRequest
 
 	SendMessagesRequest(*pinpoint.SendMessagesInput) pinpoint.SendMessagesRequest
 
@@ -191,6 +207,8 @@ type PinpointAPI interface {
 	UpdateSegmentRequest(*pinpoint.UpdateSegmentInput) pinpoint.UpdateSegmentRequest
 
 	UpdateSmsChannelRequest(*pinpoint.UpdateSmsChannelInput) pinpoint.UpdateSmsChannelRequest
+
+	UpdateVoiceChannelRequest(*pinpoint.UpdateVoiceChannelInput) pinpoint.UpdateVoiceChannelRequest
 }
 
 var _ PinpointAPI = (*pinpoint.Pinpoint)(nil)

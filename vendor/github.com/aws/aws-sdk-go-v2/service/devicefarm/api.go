@@ -2781,7 +2781,7 @@ func (r ListSamplesRequest) Send() (*ListSamplesOutput, error) {
 // ListSamplesRequest returns a request value for making API operation for
 // AWS Device Farm.
 //
-// Gets information about samples, given an AWS Device Farm project ARN
+// Gets information about samples, given an AWS Device Farm job ARN.
 //
 //    // Example sending a request using the ListSamplesRequest method.
 //    req := client.ListSamplesRequest(params)
@@ -3479,6 +3479,61 @@ func (c *DeviceFarm) ScheduleRunRequest(input *ScheduleRunInput) ScheduleRunRequ
 	return ScheduleRunRequest{Request: req, Input: input, Copy: c.ScheduleRunRequest}
 }
 
+const opStopJob = "StopJob"
+
+// StopJobRequest is a API request type for the StopJob API operation.
+type StopJobRequest struct {
+	*aws.Request
+	Input *StopJobInput
+	Copy  func(*StopJobInput) StopJobRequest
+}
+
+// Send marshals and sends the StopJob API request.
+func (r StopJobRequest) Send() (*StopJobOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*StopJobOutput), nil
+}
+
+// StopJobRequest returns a request value for making API operation for
+// AWS Device Farm.
+//
+// Initiates a stop request for the current job. AWS Device Farm will immediately
+// stop the job on the device where tests have not started executing, and you
+// will not be billed for this device. On the device where tests have started
+// executing, Setup Suite and Teardown Suite tests will run to completion before
+// stopping execution on the device. You will be billed for Setup, Teardown,
+// and any tests that were in progress or already completed.
+//
+//    // Example sending a request using the StopJobRequest method.
+//    req := client.StopJobRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/StopJob
+func (c *DeviceFarm) StopJobRequest(input *StopJobInput) StopJobRequest {
+	op := &aws.Operation{
+		Name:       opStopJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopJobInput{}
+	}
+
+	output := &StopJobOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return StopJobRequest{Request: req, Input: input, Copy: c.StopJobRequest}
+}
+
 const opStopRemoteAccessSession = "StopRemoteAccessSession"
 
 // StopRemoteAccessSessionRequest is a API request type for the StopRemoteAccessSession API operation.
@@ -3834,6 +3889,56 @@ func (c *DeviceFarm) UpdateProjectRequest(input *UpdateProjectInput) UpdateProje
 	output.responseMetadata = aws.Response{Request: req}
 
 	return UpdateProjectRequest{Request: req, Input: input, Copy: c.UpdateProjectRequest}
+}
+
+const opUpdateUpload = "UpdateUpload"
+
+// UpdateUploadRequest is a API request type for the UpdateUpload API operation.
+type UpdateUploadRequest struct {
+	*aws.Request
+	Input *UpdateUploadInput
+	Copy  func(*UpdateUploadInput) UpdateUploadRequest
+}
+
+// Send marshals and sends the UpdateUpload API request.
+func (r UpdateUploadRequest) Send() (*UpdateUploadOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*UpdateUploadOutput), nil
+}
+
+// UpdateUploadRequest returns a request value for making API operation for
+// AWS Device Farm.
+//
+// Update an uploaded test specification (test spec).
+//
+//    // Example sending a request using the UpdateUploadRequest method.
+//    req := client.UpdateUploadRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/UpdateUpload
+func (c *DeviceFarm) UpdateUploadRequest(input *UpdateUploadInput) UpdateUploadRequest {
+	op := &aws.Operation{
+		Name:       opUpdateUpload,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateUploadInput{}
+	}
+
+	output := &UpdateUploadOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return UpdateUploadRequest{Request: req, Input: input, Copy: c.UpdateUploadRequest}
 }
 
 const opUpdateVPCEConfiguration = "UpdateVPCEConfiguration"
@@ -4423,6 +4528,9 @@ type CreateRemoteAccessSessionConfiguration struct {
 
 	// The billing method for the remote access session.
 	BillingMethod BillingMethod `locationName:"billingMethod" type:"string" enum:"true"`
+
+	// An array of Amazon Resource Names (ARNs) included in the VPC endpoint configuration.
+	VpceConfigurationArns []string `locationName:"vpceConfigurationArns" type:"list"`
 }
 
 // String returns the string representation
@@ -4604,7 +4712,7 @@ type CreateUploadInput struct {
 	//
 	//    * IOS_APP: An iOS upload.
 	//
-	//    * WEB_APP: A web appliction upload.
+	//    * WEB_APP: A web application upload.
 	//
 	//    * EXTERNAL_DATA: An external data upload.
 	//
@@ -4634,6 +4742,22 @@ type CreateUploadInput struct {
 	//    * XCTEST_TEST_PACKAGE: An XCode test package upload.
 	//
 	//    * XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.
+	//
+	//    * APPIUM_JAVA_JUNIT_TEST_SPEC: An Appium Java JUnit test spec upload.
+	//
+	//    * APPIUM_JAVA_TESTNG_TEST_SPEC: An Appium Java TestNG test spec upload.
+	//
+	//    * APPIUM_PYTHON_TEST_SPEC: An Appium Python test spec upload.
+	//
+	//    * APPIUM_WEB_JAVA_JUNIT_TEST_SPEC: An Appium Java JUnit test spec upload.
+	//
+	//    * APPIUM_WEB_JAVA_TESTNG_TEST_SPEC: An Appium Java TestNG test spec upload.
+	//
+	//    * APPIUM_WEB_PYTHON_TEST_SPEC: An Appium Python test spec upload.
+	//
+	//    * INSTRUMENTATION_TEST_SPEC: An instrumentation test spec upload.
+	//
+	//    * XCTEST_UI_TEST_SPEC: An XCode UI test spec upload.
 	//
 	// Note If you call CreateUpload with WEB_APP specified, AWS Device Farm throws
 	// an ArgumentException error.
@@ -5315,6 +5439,9 @@ type Device struct {
 	// The device's ARN.
 	Arn *string `locationName:"arn" min:"32" type:"string"`
 
+	// Reflects how likely a device will be available for a test run.
+	Availability DeviceAvailability `locationName:"availability" type:"string" enum:"true"`
+
 	// The device's carrier.
 	Carrier *string `locationName:"carrier" type:"string"`
 
@@ -5393,6 +5520,94 @@ func (s Device) String() string {
 
 // GoString returns the string representation
 func (s Device) GoString() string {
+	return s.String()
+}
+
+// Represents a device filter used to select a set of devices to be included
+// in a test run. This data structure is passed in as the "deviceSelectionConfiguration"
+// parameter to ScheduleRun. For an example of the JSON request syntax, see
+// ScheduleRun.
+//
+// It is also passed in as the "filters" parameter to ListDevices. For an example
+// of the JSON request syntax, see ListDevices.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/DeviceFilter
+type DeviceFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The aspect of a device such as platform or model used as the selection criteria
+	// in a device filter.
+	//
+	// Allowed values include:
+	//
+	//    * ARN: The Amazon Resource Name (ARN) of the device. For example, "arn:aws:devicefarm:us-west-2::device:12345Example".
+	//
+	//    * PLATFORM: The device platform. Valid values are "ANDROID" or "IOS".
+	//
+	//    * OS_VERSION: The operating system version. For example, "10.3.2".
+	//
+	//    * MODEL: The device model. For example, "iPad 5th Gen".
+	//
+	//    * AVAILABILITY: The current availability of the device. Valid values are
+	//    "AVAILABLE", "HIGHLY_AVAILABLE", "BUSY", or "TEMPORARY_NOT_AVAILABLE".
+	//
+	//    * FORM_FACTOR: The device form factor. Valid values are "PHONE" or "TABLET".
+	//
+	//    * MANUFACTURER: The device manufacturer. For example, "Apple".
+	//
+	//    * REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.
+	//
+	//    * REMOTE_DEBUG_ENABLED: Whether the device is enabled for remote debugging.
+	//
+	//    * INSTANCE_ARN: The Amazon Resource Name (ARN) of the device instance.
+	//
+	//    * INSTANCE_LABELS: The label of the device instance.
+	//
+	//    * FLEET_TYPE: The fleet type. Valid values are "PUBLIC" or "PRIVATE".
+	Attribute DeviceFilterAttribute `locationName:"attribute" type:"string" enum:"true"`
+
+	// The filter operator.
+	//
+	//    * The EQUALS operator is available for every attribute except INSTANCE_LABELS.
+	//
+	//    * The CONTAINS operator is available for the INSTANCE_LABELS and MODEL
+	//    attributes.
+	//
+	//    * The IN and NOT_IN operators are available for the ARN, OS_VERSION, MODEL,
+	//    MANUFACTURER, and INSTANCE_ARN attributes.
+	//
+	//    * The LESS_THAN, GREATER_THAN, LESS_THAN_OR_EQUALS, and GREATER_THAN_OR_EQUALS
+	//    operators are also available for the OS_VERSION attribute.
+	Operator DeviceFilterOperator `locationName:"operator" type:"string" enum:"true"`
+
+	// An array of one or more filter values used in a device filter.
+	//
+	// Operator Values
+	//
+	//    * The IN and NOT operators can take a values array that has more than
+	//    one element.
+	//
+	//    * The other operators require an array with a single element.
+	//
+	// Attribute Values
+	//
+	//    * The PLATFORM attribute can be set to "ANDROID" or "IOS".
+	//
+	//    * The AVAILABILITY attribute can be set to "AVAILABLE", "HIGHLY_AVAILABLE",
+	//    "BUSY", or "TEMPORARY_NOT_AVAILABLE".
+	//
+	//    * The FORM_FACTOR attribute can be set to "PHONE" or "TABLET".
+	//
+	//    * The FLEET_TYPE attribute can be set to "PUBLIC" or "PRIVATE".
+	Values []string `locationName:"values" type:"list"`
+}
+
+// String returns the string representation
+func (s DeviceFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeviceFilter) GoString() string {
 	return s.String()
 }
 
@@ -5522,6 +5737,132 @@ func (s DevicePoolCompatibilityResult) GoString() string {
 	return s.String()
 }
 
+// Represents the device filters used in a test run as well as the maximum number
+// of devices to be included in the run. It is passed in as the deviceSelectionConfiguration
+// request parameter in ScheduleRun.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/DeviceSelectionConfiguration
+type DeviceSelectionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Used to dynamically select a set of devices for a test run. A filter is made
+	// up of an attribute, an operator, and one or more values.
+	//
+	//    * Attribute: The aspect of a device such as platform or model used as
+	//    the selection criteria in a device filter.
+	//
+	// Allowed values include:
+	//
+	// ARN: The Amazon Resource Name (ARN) of the device. For example, "arn:aws:devicefarm:us-west-2::device:12345Example".
+	//
+	// PLATFORM: The device platform. Valid values are "ANDROID" or "IOS".
+	//
+	// OS_VERSION: The operating system version. For example, "10.3.2".
+	//
+	// MODEL: The device model. For example, "iPad 5th Gen".
+	//
+	// AVAILABILITY: The current availability of the device. Valid values are "AVAILABLE",
+	//    "HIGHLY_AVAILABLE", "BUSY", or "TEMPORARY_NOT_AVAILABLE".
+	//
+	// FORM_FACTOR: The device form factor. Valid values are "PHONE" or "TABLET".
+	//
+	// MANUFACTURER: The device manufacturer. For example, "Apple".
+	//
+	// REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.
+	//
+	// REMOTE_DEBUG_ENABLED: Whether the device is enabled for remote debugging.
+	//
+	// INSTANCE_ARN: The Amazon Resource Name (ARN) of the device instance.
+	//
+	// INSTANCE_LABELS: The label of the device instance.
+	//
+	// FLEET_TYPE: The fleet type. Valid values are "PUBLIC" or "PRIVATE".
+	//
+	//    * Operator: The filter operator.
+	//
+	// The EQUALS operator is available for every attribute except INSTANCE_LABELS.
+	//
+	// The CONTAINS operator is available for the INSTANCE_LABELS and MODEL attributes.
+	//
+	// The IN and NOT_IN operators are available for the ARN, OS_VERSION, MODEL,
+	//    MANUFACTURER, and INSTANCE_ARN attributes.
+	//
+	// The LESS_THAN, GREATER_THAN, LESS_THAN_OR_EQUALS, and GREATER_THAN_OR_EQUALS
+	//    operators are also available for the OS_VERSION attribute.
+	//
+	//    * Values: An array of one or more filter values.
+	//
+	// The IN and NOT operators can take a values array that has more than one element.
+	//
+	// The other operators require an array with a single element.
+	//
+	// In a request, the AVAILABILITY attribute takes "AVAILABLE", "HIGHLY_AVAILABLE",
+	//    "BUSY", or "TEMPORARY_NOT_AVAILABLE" as values.
+	//
+	// Filters is a required field
+	Filters []DeviceFilter `locationName:"filters" type:"list" required:"true"`
+
+	// The maximum number of devices to be included in a test run.
+	//
+	// MaxDevices is a required field
+	MaxDevices *int64 `locationName:"maxDevices" type:"integer" required:"true"`
+}
+
+// String returns the string representation
+func (s DeviceSelectionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeviceSelectionConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeviceSelectionConfiguration) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeviceSelectionConfiguration"}
+
+	if s.Filters == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Filters"))
+	}
+
+	if s.MaxDevices == nil {
+		invalidParams.Add(aws.NewErrParamRequired("MaxDevices"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Contains the run results requested by the device selection configuration
+// as well as how many devices were returned. For an example of the JSON response
+// syntax, see ScheduleRun.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/DeviceSelectionResult
+type DeviceSelectionResult struct {
+	_ struct{} `type:"structure"`
+
+	// The filters in a device selection result.
+	Filters []DeviceFilter `locationName:"filters" type:"list"`
+
+	// The number of devices that matched the device filter selection criteria.
+	MatchedDevicesCount *int64 `locationName:"matchedDevicesCount" type:"integer"`
+
+	// The maximum number of devices to be selected by a device filter and included
+	// in a test run.
+	MaxDevices *int64 `locationName:"maxDevices" type:"integer"`
+}
+
+// String returns the string representation
+func (s DeviceSelectionResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeviceSelectionResult) GoString() string {
+	return s.String()
+}
+
 // Represents configuration information about a test run, such as the execution
 // timeout (in minutes).
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ExecutionConfiguration
@@ -5547,6 +5888,10 @@ type ExecutionConfiguration struct {
 	// modify my app? (https://aws.amazon.com/device-farm/faq/) in the AWS Device
 	// Farm FAQs.
 	SkipAppResign *bool `locationName:"skipAppResign" type:"boolean"`
+
+	// Set to true to enable video capture; otherwise, set to false. The default
+	// is true.
+	VideoCapture *bool `locationName:"videoCapture" type:"boolean"`
 }
 
 // String returns the string representation
@@ -6889,6 +7234,13 @@ type Job struct {
 	//
 	//    * XCTEST_UI: The XCode UI test type.
 	Type TestType `locationName:"type" type:"string" enum:"true"`
+
+	// This value is set to true if video capture is enabled; otherwise, it is set
+	// to false.
+	VideoCapture *bool `locationName:"videoCapture" type:"boolean"`
+
+	// The endpoint for streaming device video.
+	VideoEndpoint *string `locationName:"videoEndpoint" type:"string"`
 }
 
 // String returns the string representation
@@ -7151,6 +7503,61 @@ type ListDevicesInput struct {
 
 	// The Amazon Resource Name (ARN) of the project.
 	Arn *string `locationName:"arn" min:"32" type:"string"`
+
+	// Used to select a set of devices. A filter is made up of an attribute, an
+	// operator, and one or more values.
+	//
+	//    * Attribute: The aspect of a device such as platform or model used as
+	//    the selction criteria in a device filter.
+	//
+	// Allowed values include:
+	//
+	// ARN: The Amazon Resource Name (ARN) of the device. For example, "arn:aws:devicefarm:us-west-2::device:12345Example".
+	//
+	// PLATFORM: The device platform. Valid values are "ANDROID" or "IOS".
+	//
+	// OS_VERSION: The operating system version. For example, "10.3.2".
+	//
+	// MODEL: The device model. For example, "iPad 5th Gen".
+	//
+	// AVAILABILITY: The current availability of the device. Valid values are "AVAILABLE",
+	//    "HIGHLY_AVAILABLE", "BUSY", or "TEMPORARY_NOT_AVAILABLE".
+	//
+	// FORM_FACTOR: The device form factor. Valid values are "PHONE" or "TABLET".
+	//
+	// MANUFACTURER: The device manufacturer. For example, "Apple".
+	//
+	// REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.
+	//
+	// REMOTE_DEBUG_ENABLED: Whether the device is enabled for remote debugging.
+	//
+	// INSTANCE_ARN: The Amazon Resource Name (ARN) of the device instance.
+	//
+	// INSTANCE_LABELS: The label of the device instance.
+	//
+	// FLEET_TYPE: The fleet type. Valid values are "PUBLIC" or "PRIVATE".
+	//
+	//    * Operator: The filter operator.
+	//
+	// The EQUALS operator is available for every attribute except INSTANCE_LABELS.
+	//
+	// The CONTAINS operator is available for the INSTANCE_LABELS and MODEL attributes.
+	//
+	// The IN and NOT_IN operators are available for the ARN, OS_VERSION, MODEL,
+	//    MANUFACTURER, and INSTANCE_ARN attributes.
+	//
+	// The LESS_THAN, GREATER_THAN, LESS_THAN_OR_EQUALS, and GREATER_THAN_OR_EQUALS
+	//    operators are also available for the OS_VERSION attribute.
+	//
+	//    * Values: An array of one or more filter values.
+	//
+	// The IN and NOT operators can take a values array that has more than one element.
+	//
+	// The other operators require an array with a single element.
+	//
+	// In a request, the AVAILABILITY attribute takes "AVAILABLE", "HIGHLY_AVAILABLE",
+	//    "BUSY", or "TEMPORARY_NOT_AVAILABLE" as values.
+	Filters []DeviceFilter `locationName:"filters" type:"list"`
 
 	// An identifier that was returned from the previous call to this operation,
 	// which can be used to return the next set of items in the list.
@@ -7853,8 +8260,7 @@ func (s ListRunsOutput) SDKResponseMetadata() aws.Response {
 type ListSamplesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the project for which you want to list
-	// samples.
+	// The Amazon Resource Name (ARN) of the job used to list samples.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" min:"32" type:"string" required:"true"`
@@ -8183,6 +8589,62 @@ type ListUploadsInput struct {
 	// An identifier that was returned from the previous call to this operation,
 	// which can be used to return the next set of items in the list.
 	NextToken *string `locationName:"nextToken" min:"4" type:"string"`
+
+	// The type of upload.
+	//
+	// Must be one of the following values:
+	//
+	//    * ANDROID_APP: An Android upload.
+	//
+	//    * IOS_APP: An iOS upload.
+	//
+	//    * WEB_APP: A web appliction upload.
+	//
+	//    * EXTERNAL_DATA: An external data upload.
+	//
+	//    * APPIUM_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package upload.
+	//
+	//    * APPIUM_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package
+	//    upload.
+	//
+	//    * APPIUM_PYTHON_TEST_PACKAGE: An Appium Python test package upload.
+	//
+	//    * APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE: An Appium Java JUnit test package
+	//    upload.
+	//
+	//    * APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE: An Appium Java TestNG test package
+	//    upload.
+	//
+	//    * APPIUM_WEB_PYTHON_TEST_PACKAGE: An Appium Python test package upload.
+	//
+	//    * CALABASH_TEST_PACKAGE: A Calabash test package upload.
+	//
+	//    * INSTRUMENTATION_TEST_PACKAGE: An instrumentation upload.
+	//
+	//    * UIAUTOMATION_TEST_PACKAGE: A uiautomation test package upload.
+	//
+	//    * UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.
+	//
+	//    * XCTEST_TEST_PACKAGE: An XCode test package upload.
+	//
+	//    * XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.
+	//
+	//    * APPIUM_JAVA_JUNIT_TEST_SPEC: An Appium Java JUnit test spec upload.
+	//
+	//    * APPIUM_JAVA_TESTNG_TEST_SPEC: An Appium Java TestNG test spec upload.
+	//
+	//    * APPIUM_PYTHON_TEST_SPEC: An Appium Python test spec upload.
+	//
+	//    * APPIUM_WEB_JAVA_JUNIT_TEST_SPEC: An Appium Java JUnit test spec upload.
+	//
+	//    * APPIUM_WEB_JAVA_TESTNG_TEST_SPEC: An Appium Java TestNG test spec upload.
+	//
+	//    * APPIUM_WEB_PYTHON_TEST_SPEC: An Appium Python test spec upload.
+	//
+	//    * INSTRUMENTATION_TEST_SPEC: An instrumentation test spec upload.
+	//
+	//    * XCTEST_UI_TEST_SPEC: An XCode UI test spec upload.
+	Type UploadType `locationName:"type" type:"string" enum:"true"`
 }
 
 // String returns the string representation
@@ -8993,30 +9455,36 @@ func (s Resolution) GoString() string {
 	return s.String()
 }
 
-// Represents a condition for a device pool.
+// Represents a condition for a device pool. It is passed in as the rules parameter
+// to CreateDevicePool and UpdateDevicePool.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/Rule
 type Rule struct {
 	_ struct{} `type:"structure"`
 
-	// The rule's stringified attribute. For example, specify the value as "\"abc\"".
+	// The rule's attribute. It is the aspect of a device such as platform or model
+	// used as selection criteria to create or update a device pool.
 	//
 	// Allowed values include:
 	//
-	//    * ARN: The ARN.
+	//    * ARN: The Amazon Resource Name (ARN) of a device. For example, "arn:aws:devicefarm:us-west-2::device:12345Example".
 	//
-	//    * FORM_FACTOR: The form factor (for example, phone or tablet).
+	//    * PLATFORM: The device platform. Valid values are "ANDROID" or "IOS".
 	//
-	//    * MANUFACTURER: The manufacturer.
+	//    * FORM_FACTOR: The device form factor. Valid values are "PHONE" or "TABLET".
 	//
-	//    * PLATFORM: The platform (for example, Android or iOS).
+	//    * MANUFACTURER: The device manufacturer. For example, "Apple".
 	//
 	//    * REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.
+	//
+	//    * REMOTE_DEBUG_ENABLED: Whether the device is enabled for remote debugging.
 	//
 	//    * APPIUM_VERSION: The Appium version for the test.
 	//
 	//    * INSTANCE_ARN: The Amazon Resource Name (ARN) of the device instance.
 	//
 	//    * INSTANCE_LABELS: The label of the device instance.
+	//
+	//    * FLEET_TYPE: The fleet type. Valid values are "PUBLIC" or "PRIVATE".
 	Attribute DeviceAttribute `locationName:"attribute" type:"string" enum:"true"`
 
 	// The rule's operator.
@@ -9035,6 +9503,12 @@ type Rule struct {
 	Operator RuleOperator `locationName:"operator" type:"string" enum:"true"`
 
 	// The rule's value.
+	//
+	// The value must be passed in as a string using escaped quotes.
+	//
+	// For example:
+	//
+	// "value": "\"ANDROID\""
 	Value *string `locationName:"value" type:"string"`
 }
 
@@ -9081,6 +9555,9 @@ type Run struct {
 
 	// The ARN of the device pool for the run.
 	DevicePoolArn *string `locationName:"devicePoolArn" min:"32" type:"string"`
+
+	// The results of a device filter used to select the devices for a test run.
+	DeviceSelectionResult *DeviceSelectionResult `locationName:"deviceSelectionResult" type:"structure"`
 
 	// For fuzz tests, this is the number of events, between 1 and 10000, that the
 	// UI fuzz test should perform.
@@ -9185,6 +9662,9 @@ type Run struct {
 
 	// The run's stop time.
 	Stopped *time.Time `locationName:"stopped" type:"timestamp" timestampFormat:"unix"`
+
+	// The ARN of the YAML-formatted test specification for the run.
+	TestSpecArn *string `locationName:"testSpecArn" min:"32" type:"string"`
 
 	// The total number of jobs for the run.
 	TotalJobs *int64 `locationName:"totalJobs" type:"integer"`
@@ -9386,8 +9866,14 @@ type ScheduleRunInput struct {
 
 	// The ARN of the device pool for the run to be scheduled.
 	//
-	// DevicePoolArn is a required field
-	DevicePoolArn *string `locationName:"devicePoolArn" min:"32" type:"string" required:"true"`
+	// Either devicePoolArn or deviceSelectionConfiguration are required in a request.
+	DevicePoolArn *string `locationName:"devicePoolArn" min:"32" type:"string"`
+
+	// The filter criteria used to dynamically select a set of devices for a test
+	// run, as well as the maximum number of devices to be included in the run.
+	//
+	// Either devicePoolArn or deviceSelectionConfiguration are required in a request.
+	DeviceSelectionConfiguration *DeviceSelectionConfiguration `locationName:"deviceSelectionConfiguration" type:"structure"`
 
 	// Specifies configuration information about a test run, such as the execution
 	// timeout (in minutes).
@@ -9423,10 +9909,6 @@ func (s *ScheduleRunInput) Validate() error {
 	if s.AppArn != nil && len(*s.AppArn) < 32 {
 		invalidParams.Add(aws.NewErrParamMinLen("AppArn", 32))
 	}
-
-	if s.DevicePoolArn == nil {
-		invalidParams.Add(aws.NewErrParamRequired("DevicePoolArn"))
-	}
 	if s.DevicePoolArn != nil && len(*s.DevicePoolArn) < 32 {
 		invalidParams.Add(aws.NewErrParamMinLen("DevicePoolArn", 32))
 	}
@@ -9444,6 +9926,11 @@ func (s *ScheduleRunInput) Validate() error {
 	if s.Configuration != nil {
 		if err := s.Configuration.Validate(); err != nil {
 			invalidParams.AddNested("Configuration", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.DeviceSelectionConfiguration != nil {
+		if err := s.DeviceSelectionConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("DeviceSelectionConfiguration", err.(aws.ErrInvalidParams))
 		}
 	}
 	if s.Test != nil {
@@ -9484,7 +9971,9 @@ func (s ScheduleRunOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
-// Represents additional test settings.
+// Represents test settings. This data structure is passed in as the "test"
+// parameter to ScheduleRun. For an example of the JSON request syntax, see
+// ScheduleRun.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ScheduleRunTest
 type ScheduleRunTest struct {
 	_ struct{} `type:"structure"`
@@ -9492,8 +9981,13 @@ type ScheduleRunTest struct {
 	// The test's filter.
 	Filter *string `locationName:"filter" type:"string"`
 
-	// The test's parameters, such as the following test framework parameters and
-	// fixture settings:
+	// The test's parameters, such as test framework parameters and fixture settings.
+	// Parameters are represented by name-value pairs of strings.
+	//
+	// For all tests:
+	//
+	//    * app_performance_monitoring: Performance monitoring is enabled by default.
+	//    Set this parameter to "false" to disable it.
 	//
 	// For Calabash tests:
 	//
@@ -9504,14 +9998,14 @@ type ScheduleRunTest struct {
 	//
 	// For Appium tests (all types):
 	//
-	//    * appium_version: The Appium version. Currently supported values are "1.4.16",
-	//    "1.6.3", "latest", and "default".
+	//    * appium_version: The Appium version. Currently supported values are "1.7.2",
+	//    "1.7.1", "1.6.5", "latest", and "default".
 	//
-	// “latest” will run the latest Appium version supported by Device Farm (1.6.3).
+	// “latest” will run the latest Appium version supported by Device Farm (1.7.2).
 	//
 	// For “default”, Device Farm will choose a compatible version of Appium for
-	//    the device. The current behavior is to run 1.4.16 on Android devices and
-	//    iOS 9 and earlier, 1.6.3 for iOS 10 and later.
+	//    the device. The current behavior is to run 1.7.2 on Android devices and
+	//    iOS 9 and earlier, 1.7.2 for iOS 10 and later.
 	//
 	// This behavior is subject to change.
 	//
@@ -9570,6 +10064,9 @@ type ScheduleRunTest struct {
 	// The ARN of the uploaded test that will be run.
 	TestPackageArn *string `locationName:"testPackageArn" min:"32" type:"string"`
 
+	// The ARN of the YAML-formatted test specification.
+	TestSpecArn *string `locationName:"testSpecArn" min:"32" type:"string"`
+
 	// The test's type.
 	//
 	// Must be one of the following values:
@@ -9624,6 +10121,9 @@ func (s *ScheduleRunTest) Validate() error {
 	if s.TestPackageArn != nil && len(*s.TestPackageArn) < 32 {
 		invalidParams.Add(aws.NewErrParamMinLen("TestPackageArn", 32))
 	}
+	if s.TestSpecArn != nil && len(*s.TestSpecArn) < 32 {
+		invalidParams.Add(aws.NewErrParamMinLen("TestSpecArn", 32))
+	}
 	if len(s.Type) == 0 {
 		invalidParams.Add(aws.NewErrParamRequired("Type"))
 	}
@@ -9632,6 +10132,69 @@ func (s *ScheduleRunTest) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/StopJobRequest
+type StopJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// Represents the Amazon Resource Name (ARN) of the Device Farm job you wish
+	// to stop.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"32" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopJobInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StopJobInput"}
+
+	if s.Arn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 32 {
+		invalidParams.Add(aws.NewErrParamMinLen("Arn", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/StopJobResult
+type StopJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The job that was stopped.
+	Job *Job `locationName:"job" type:"structure"`
+}
+
+// String returns the string representation
+func (s StopJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopJobOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s StopJobOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
 }
 
 // Represents the request to stop the remote access session.
@@ -10445,6 +11008,79 @@ func (s UpdateProjectOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/UpdateUploadRequest
+type UpdateUploadInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the uploaded test spec.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"32" type:"string" required:"true"`
+
+	// The upload's content type (for example, "application/x-yaml").
+	ContentType *string `locationName:"contentType" type:"string"`
+
+	// Set to true if the YAML file has changed and needs to be updated; otherwise,
+	// set to false.
+	EditContent *bool `locationName:"editContent" type:"boolean"`
+
+	// The upload's test spec file name. The name should not contain the '/' character.
+	// The test spec file name must end with the .yaml or .yml file extension.
+	Name *string `locationName:"name" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateUploadInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateUploadInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateUploadInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "UpdateUploadInput"}
+
+	if s.Arn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 32 {
+		invalidParams.Add(aws.NewErrParamMinLen("Arn", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/UpdateUploadResult
+type UpdateUploadOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// A test spec uploaded to Device Farm.
+	Upload *Upload `locationName:"upload" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateUploadOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateUploadOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s UpdateUploadOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/UpdateVPCEConfigurationRequest
 type UpdateVPCEConfigurationInput struct {
 	_ struct{} `type:"structure"`
@@ -10531,6 +11167,13 @@ type Upload struct {
 	// The upload's ARN.
 	Arn *string `locationName:"arn" min:"32" type:"string"`
 
+	// The upload's category. Allowed values include:
+	//
+	//    * CURATED: An upload managed by AWS Device Farm.
+	//
+	//    * PRIVATE: An upload managed by the AWS Device Farm customer.
+	Category UploadCategory `locationName:"category" type:"string" enum:"true"`
+
 	// The upload's content type (for example, "application/octet-stream").
 	ContentType *string `locationName:"contentType" type:"string"`
 
@@ -10599,6 +11242,22 @@ type Upload struct {
 	//    * XCTEST_TEST_PACKAGE: An XCode test package upload.
 	//
 	//    * XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.
+	//
+	//    * APPIUM_JAVA_JUNIT_TEST_SPEC: An Appium Java JUnit test spec upload.
+	//
+	//    * APPIUM_JAVA_TESTNG_TEST_SPEC: An Appium Java TestNG test spec upload.
+	//
+	//    * APPIUM_PYTHON_TEST_SPEC: An Appium Python test spec upload.
+	//
+	//    * APPIUM_WEB_JAVA_JUNIT_TEST_SPEC: An Appium Java JUnit test spec upload.
+	//
+	//    * APPIUM_WEB_JAVA_TESTNG_TEST_SPEC: An Appium Java TestNG test spec upload.
+	//
+	//    * APPIUM_WEB_PYTHON_TEST_SPEC: An Appium Python test spec upload.
+	//
+	//    * INSTRUMENTATION_TEST_SPEC: An instrumentation test spec upload.
+	//
+	//    * XCTEST_UI_TEST_SPEC: An XCode UI test spec upload.
 	Type UploadType `locationName:"type" type:"string" enum:"true"`
 
 	// The pre-signed Amazon S3 URL that was used to store a file through a corresponding
@@ -10699,6 +11358,7 @@ const (
 	ArtifactTypeVideo                  ArtifactType = "VIDEO"
 	ArtifactTypeCustomerArtifact       ArtifactType = "CUSTOMER_ARTIFACT"
 	ArtifactTypeCustomerArtifactLog    ArtifactType = "CUSTOMER_ARTIFACT_LOG"
+	ArtifactTypeTestspecOutput         ArtifactType = "TESTSPEC_OUTPUT"
 )
 
 func (enum ArtifactType) MarshalValue() (string, error) {
@@ -10764,6 +11424,75 @@ func (enum DeviceAttribute) MarshalValue() (string, error) {
 }
 
 func (enum DeviceAttribute) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type DeviceAvailability string
+
+// Enum values for DeviceAvailability
+const (
+	DeviceAvailabilityTemporaryNotAvailable DeviceAvailability = "TEMPORARY_NOT_AVAILABLE"
+	DeviceAvailabilityBusy                  DeviceAvailability = "BUSY"
+	DeviceAvailabilityAvailable             DeviceAvailability = "AVAILABLE"
+	DeviceAvailabilityHighlyAvailable       DeviceAvailability = "HIGHLY_AVAILABLE"
+)
+
+func (enum DeviceAvailability) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum DeviceAvailability) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type DeviceFilterAttribute string
+
+// Enum values for DeviceFilterAttribute
+const (
+	DeviceFilterAttributeArn                 DeviceFilterAttribute = "ARN"
+	DeviceFilterAttributePlatform            DeviceFilterAttribute = "PLATFORM"
+	DeviceFilterAttributeOsVersion           DeviceFilterAttribute = "OS_VERSION"
+	DeviceFilterAttributeModel               DeviceFilterAttribute = "MODEL"
+	DeviceFilterAttributeAvailability        DeviceFilterAttribute = "AVAILABILITY"
+	DeviceFilterAttributeFormFactor          DeviceFilterAttribute = "FORM_FACTOR"
+	DeviceFilterAttributeManufacturer        DeviceFilterAttribute = "MANUFACTURER"
+	DeviceFilterAttributeRemoteAccessEnabled DeviceFilterAttribute = "REMOTE_ACCESS_ENABLED"
+	DeviceFilterAttributeRemoteDebugEnabled  DeviceFilterAttribute = "REMOTE_DEBUG_ENABLED"
+	DeviceFilterAttributeInstanceArn         DeviceFilterAttribute = "INSTANCE_ARN"
+	DeviceFilterAttributeInstanceLabels      DeviceFilterAttribute = "INSTANCE_LABELS"
+	DeviceFilterAttributeFleetType           DeviceFilterAttribute = "FLEET_TYPE"
+)
+
+func (enum DeviceFilterAttribute) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum DeviceFilterAttribute) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type DeviceFilterOperator string
+
+// Enum values for DeviceFilterOperator
+const (
+	DeviceFilterOperatorEquals              DeviceFilterOperator = "EQUALS"
+	DeviceFilterOperatorLessThan            DeviceFilterOperator = "LESS_THAN"
+	DeviceFilterOperatorLessThanOrEquals    DeviceFilterOperator = "LESS_THAN_OR_EQUALS"
+	DeviceFilterOperatorGreaterThan         DeviceFilterOperator = "GREATER_THAN"
+	DeviceFilterOperatorGreaterThanOrEquals DeviceFilterOperator = "GREATER_THAN_OR_EQUALS"
+	DeviceFilterOperatorIn                  DeviceFilterOperator = "IN"
+	DeviceFilterOperatorNotIn               DeviceFilterOperator = "NOT_IN"
+	DeviceFilterOperatorContains            DeviceFilterOperator = "CONTAINS"
+)
+
+func (enum DeviceFilterOperator) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum DeviceFilterOperator) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }
@@ -11071,6 +11800,23 @@ func (enum TestType) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
+type UploadCategory string
+
+// Enum values for UploadCategory
+const (
+	UploadCategoryCurated UploadCategory = "CURATED"
+	UploadCategoryPrivate UploadCategory = "PRIVATE"
+)
+
+func (enum UploadCategory) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum UploadCategory) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type UploadStatus string
 
 // Enum values for UploadStatus
@@ -11110,6 +11856,14 @@ const (
 	UploadTypeUiautomatorTestPackage         UploadType = "UIAUTOMATOR_TEST_PACKAGE"
 	UploadTypeXctestTestPackage              UploadType = "XCTEST_TEST_PACKAGE"
 	UploadTypeXctestUiTestPackage            UploadType = "XCTEST_UI_TEST_PACKAGE"
+	UploadTypeAppiumJavaJunitTestSpec        UploadType = "APPIUM_JAVA_JUNIT_TEST_SPEC"
+	UploadTypeAppiumJavaTestngTestSpec       UploadType = "APPIUM_JAVA_TESTNG_TEST_SPEC"
+	UploadTypeAppiumPythonTestSpec           UploadType = "APPIUM_PYTHON_TEST_SPEC"
+	UploadTypeAppiumWebJavaJunitTestSpec     UploadType = "APPIUM_WEB_JAVA_JUNIT_TEST_SPEC"
+	UploadTypeAppiumWebJavaTestngTestSpec    UploadType = "APPIUM_WEB_JAVA_TESTNG_TEST_SPEC"
+	UploadTypeAppiumWebPythonTestSpec        UploadType = "APPIUM_WEB_PYTHON_TEST_SPEC"
+	UploadTypeInstrumentationTestSpec        UploadType = "INSTRUMENTATION_TEST_SPEC"
+	UploadTypeXctestUiTestSpec               UploadType = "XCTEST_UI_TEST_SPEC"
 )
 
 func (enum UploadType) MarshalValue() (string, error) {

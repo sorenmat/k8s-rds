@@ -66,6 +66,8 @@ type SSMAPI interface {
 
 	CancelCommandRequest(*ssm.CancelCommandInput) ssm.CancelCommandRequest
 
+	CancelMaintenanceWindowExecutionRequest(*ssm.CancelMaintenanceWindowExecutionInput) ssm.CancelMaintenanceWindowExecutionRequest
+
 	CreateActivationRequest(*ssm.CreateActivationInput) ssm.CreateActivationRequest
 
 	CreateAssociationRequest(*ssm.CreateAssociationInput) ssm.CreateAssociationRequest
@@ -110,6 +112,10 @@ type SSMAPI interface {
 
 	DescribeAssociationRequest(*ssm.DescribeAssociationInput) ssm.DescribeAssociationRequest
 
+	DescribeAssociationExecutionTargetsRequest(*ssm.DescribeAssociationExecutionTargetsInput) ssm.DescribeAssociationExecutionTargetsRequest
+
+	DescribeAssociationExecutionsRequest(*ssm.DescribeAssociationExecutionsInput) ssm.DescribeAssociationExecutionsRequest
+
 	DescribeAutomationExecutionsRequest(*ssm.DescribeAutomationExecutionsInput) ssm.DescribeAutomationExecutionsRequest
 
 	DescribeAutomationStepExecutionsRequest(*ssm.DescribeAutomationStepExecutionsInput) ssm.DescribeAutomationStepExecutionsRequest
@@ -142,11 +148,15 @@ type SSMAPI interface {
 
 	DescribeMaintenanceWindowExecutionsRequest(*ssm.DescribeMaintenanceWindowExecutionsInput) ssm.DescribeMaintenanceWindowExecutionsRequest
 
+	DescribeMaintenanceWindowScheduleRequest(*ssm.DescribeMaintenanceWindowScheduleInput) ssm.DescribeMaintenanceWindowScheduleRequest
+
 	DescribeMaintenanceWindowTargetsRequest(*ssm.DescribeMaintenanceWindowTargetsInput) ssm.DescribeMaintenanceWindowTargetsRequest
 
 	DescribeMaintenanceWindowTasksRequest(*ssm.DescribeMaintenanceWindowTasksInput) ssm.DescribeMaintenanceWindowTasksRequest
 
 	DescribeMaintenanceWindowsRequest(*ssm.DescribeMaintenanceWindowsInput) ssm.DescribeMaintenanceWindowsRequest
+
+	DescribeMaintenanceWindowsForTargetRequest(*ssm.DescribeMaintenanceWindowsForTargetInput) ssm.DescribeMaintenanceWindowsForTargetRequest
 
 	DescribeParametersRequest(*ssm.DescribeParametersInput) ssm.DescribeParametersRequest
 
@@ -156,9 +166,13 @@ type SSMAPI interface {
 
 	DescribePatchGroupsRequest(*ssm.DescribePatchGroupsInput) ssm.DescribePatchGroupsRequest
 
+	DescribeSessionsRequest(*ssm.DescribeSessionsInput) ssm.DescribeSessionsRequest
+
 	GetAutomationExecutionRequest(*ssm.GetAutomationExecutionInput) ssm.GetAutomationExecutionRequest
 
 	GetCommandInvocationRequest(*ssm.GetCommandInvocationInput) ssm.GetCommandInvocationRequest
+
+	GetConnectionStatusRequest(*ssm.GetConnectionStatusInput) ssm.GetConnectionStatusRequest
 
 	GetDefaultPatchBaselineRequest(*ssm.GetDefaultPatchBaselineInput) ssm.GetDefaultPatchBaselineRequest
 
@@ -191,6 +205,8 @@ type SSMAPI interface {
 	GetPatchBaselineRequest(*ssm.GetPatchBaselineInput) ssm.GetPatchBaselineRequest
 
 	GetPatchBaselineForPatchGroupRequest(*ssm.GetPatchBaselineForPatchGroupInput) ssm.GetPatchBaselineForPatchGroupRequest
+
+	LabelParameterVersionRequest(*ssm.LabelParameterVersionInput) ssm.LabelParameterVersionRequest
 
 	ListAssociationVersionsRequest(*ssm.ListAssociationVersionsInput) ssm.ListAssociationVersionsRequest
 
@@ -234,13 +250,21 @@ type SSMAPI interface {
 
 	RemoveTagsFromResourceRequest(*ssm.RemoveTagsFromResourceInput) ssm.RemoveTagsFromResourceRequest
 
+	ResumeSessionRequest(*ssm.ResumeSessionInput) ssm.ResumeSessionRequest
+
 	SendAutomationSignalRequest(*ssm.SendAutomationSignalInput) ssm.SendAutomationSignalRequest
 
 	SendCommandRequest(*ssm.SendCommandInput) ssm.SendCommandRequest
 
+	StartAssociationsOnceRequest(*ssm.StartAssociationsOnceInput) ssm.StartAssociationsOnceRequest
+
 	StartAutomationExecutionRequest(*ssm.StartAutomationExecutionInput) ssm.StartAutomationExecutionRequest
 
+	StartSessionRequest(*ssm.StartSessionInput) ssm.StartSessionRequest
+
 	StopAutomationExecutionRequest(*ssm.StopAutomationExecutionInput) ssm.StopAutomationExecutionRequest
+
+	TerminateSessionRequest(*ssm.TerminateSessionInput) ssm.TerminateSessionRequest
 
 	UpdateAssociationRequest(*ssm.UpdateAssociationInput) ssm.UpdateAssociationRequest
 

@@ -32,7 +32,8 @@ func (r AssociateWebACLRequest) Send() (*AssociateWebACLOutput, error) {
 // AssociateWebACLRequest returns a request value for making API operation for
 // AWS WAF Regional.
 //
-// Associates a web ACL with a resource.
+// Associates a web ACL with a resource, either an application load balancer
+// or Amazon API Gateway stage.
 //
 //    // Example sending a request using the AssociateWebACLRequest method.
 //    req := client.AssociateWebACLRequest(params)
@@ -223,8 +224,8 @@ func (r CreateIPSetRequest) Send() (*CreateIPSetOutput, error) {
 // CreateIPSetRequest returns a request value for making API operation for
 // AWS WAF Regional.
 //
-// Creates an IPSet, which you use to specify which web requests you want to
-// allow or block based on the IP addresses that the requests originate from.
+// Creates an IPSet, which you use to specify which web requests that you want
+// to allow or block based on the IP addresses that the requests originate from.
 // For example, if you're receiving a lot of requests from one or more individual
 // IP addresses or one or more ranges of IP addresses and you want to block
 // the requests, you can create an IPSet that contains those IP addresses and
@@ -547,8 +548,8 @@ func (r CreateRuleRequest) Send() (*CreateRuleOutput, error) {
 // Creates a Rule, which contains the IPSet objects, ByteMatchSet objects, and
 // other predicates that identify the requests that you want to block. If you
 // add more than one predicate to a Rule, a request must match all of the specifications
-// to be allowed or blocked. For example, suppose you add the following to a
-// Rule:
+// to be allowed or blocked. For example, suppose that you add the following
+// to a Rule:
 //
 //    * An IPSet that matches the IP address 192.0.2.44/32
 //
@@ -1147,6 +1148,56 @@ func (c *WAFRegional) DeleteIPSetRequest(input *DeleteIPSetInput) DeleteIPSetReq
 	output.responseMetadata = aws.Response{Request: req}
 
 	return DeleteIPSetRequest{Request: req, Input: input, Copy: c.DeleteIPSetRequest}
+}
+
+const opDeleteLoggingConfiguration = "DeleteLoggingConfiguration"
+
+// DeleteLoggingConfigurationRequest is a API request type for the DeleteLoggingConfiguration API operation.
+type DeleteLoggingConfigurationRequest struct {
+	*aws.Request
+	Input *DeleteLoggingConfigurationInput
+	Copy  func(*DeleteLoggingConfigurationInput) DeleteLoggingConfigurationRequest
+}
+
+// Send marshals and sends the DeleteLoggingConfiguration API request.
+func (r DeleteLoggingConfigurationRequest) Send() (*DeleteLoggingConfigurationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteLoggingConfigurationOutput), nil
+}
+
+// DeleteLoggingConfigurationRequest returns a request value for making API operation for
+// AWS WAF Regional.
+//
+// Permanently deletes the LoggingConfiguration from the specified web ACL.
+//
+//    // Example sending a request using the DeleteLoggingConfigurationRequest method.
+//    req := client.DeleteLoggingConfigurationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/DeleteLoggingConfiguration
+func (c *WAFRegional) DeleteLoggingConfigurationRequest(input *DeleteLoggingConfigurationInput) DeleteLoggingConfigurationRequest {
+	op := &aws.Operation{
+		Name:       opDeleteLoggingConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteLoggingConfigurationInput{}
+	}
+
+	output := &DeleteLoggingConfigurationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteLoggingConfigurationRequest{Request: req, Input: input, Copy: c.DeleteLoggingConfigurationRequest}
 }
 
 const opDeletePermissionPolicy = "DeletePermissionPolicy"
@@ -1782,7 +1833,8 @@ func (r DisassociateWebACLRequest) Send() (*DisassociateWebACLOutput, error) {
 // DisassociateWebACLRequest returns a request value for making API operation for
 // AWS WAF Regional.
 //
-// Removes a web ACL from the specified resource.
+// Removes a web ACL from the specified resource, either an application load
+// balancer or Amazon API Gateway stage.
 //
 //    // Example sending a request using the DisassociateWebACLRequest method.
 //    req := client.DisassociateWebACLRequest(params)
@@ -2082,6 +2134,56 @@ func (c *WAFRegional) GetIPSetRequest(input *GetIPSetInput) GetIPSetRequest {
 	output.responseMetadata = aws.Response{Request: req}
 
 	return GetIPSetRequest{Request: req, Input: input, Copy: c.GetIPSetRequest}
+}
+
+const opGetLoggingConfiguration = "GetLoggingConfiguration"
+
+// GetLoggingConfigurationRequest is a API request type for the GetLoggingConfiguration API operation.
+type GetLoggingConfigurationRequest struct {
+	*aws.Request
+	Input *GetLoggingConfigurationInput
+	Copy  func(*GetLoggingConfigurationInput) GetLoggingConfigurationRequest
+}
+
+// Send marshals and sends the GetLoggingConfiguration API request.
+func (r GetLoggingConfigurationRequest) Send() (*GetLoggingConfigurationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*GetLoggingConfigurationOutput), nil
+}
+
+// GetLoggingConfigurationRequest returns a request value for making API operation for
+// AWS WAF Regional.
+//
+// Returns the LoggingConfiguration for the specified web ACL.
+//
+//    // Example sending a request using the GetLoggingConfigurationRequest method.
+//    req := client.GetLoggingConfigurationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/GetLoggingConfiguration
+func (c *WAFRegional) GetLoggingConfigurationRequest(input *GetLoggingConfigurationInput) GetLoggingConfigurationRequest {
+	op := &aws.Operation{
+		Name:       opGetLoggingConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetLoggingConfigurationInput{}
+	}
+
+	output := &GetLoggingConfigurationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return GetLoggingConfigurationRequest{Request: req, Input: input, Copy: c.GetLoggingConfigurationRequest}
 }
 
 const opGetPermissionPolicy = "GetPermissionPolicy"
@@ -2674,7 +2776,8 @@ func (r GetWebACLForResourceRequest) Send() (*GetWebACLForResourceOutput, error)
 // GetWebACLForResourceRequest returns a request value for making API operation for
 // AWS WAF Regional.
 //
-// Returns the web ACL for the specified resource.
+// Returns the web ACL for the specified resource, either an application load
+// balancer or Amazon API Gateway stage.
 //
 //    // Example sending a request using the GetWebACLForResourceRequest method.
 //    req := client.GetWebACLForResourceRequest(params)
@@ -2950,6 +3053,56 @@ func (c *WAFRegional) ListIPSetsRequest(input *ListIPSetsInput) ListIPSetsReques
 	output.responseMetadata = aws.Response{Request: req}
 
 	return ListIPSetsRequest{Request: req, Input: input, Copy: c.ListIPSetsRequest}
+}
+
+const opListLoggingConfigurations = "ListLoggingConfigurations"
+
+// ListLoggingConfigurationsRequest is a API request type for the ListLoggingConfigurations API operation.
+type ListLoggingConfigurationsRequest struct {
+	*aws.Request
+	Input *ListLoggingConfigurationsInput
+	Copy  func(*ListLoggingConfigurationsInput) ListLoggingConfigurationsRequest
+}
+
+// Send marshals and sends the ListLoggingConfigurations API request.
+func (r ListLoggingConfigurationsRequest) Send() (*ListLoggingConfigurationsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListLoggingConfigurationsOutput), nil
+}
+
+// ListLoggingConfigurationsRequest returns a request value for making API operation for
+// AWS WAF Regional.
+//
+// Returns an array of LoggingConfiguration objects.
+//
+//    // Example sending a request using the ListLoggingConfigurationsRequest method.
+//    req := client.ListLoggingConfigurationsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/ListLoggingConfigurations
+func (c *WAFRegional) ListLoggingConfigurationsRequest(input *ListLoggingConfigurationsInput) ListLoggingConfigurationsRequest {
+	op := &aws.Operation{
+		Name:       opListLoggingConfigurations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListLoggingConfigurationsInput{}
+	}
+
+	output := &ListLoggingConfigurationsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListLoggingConfigurationsRequest{Request: req, Input: input, Copy: c.ListLoggingConfigurationsRequest}
 }
 
 const opListRateBasedRules = "ListRateBasedRules"
@@ -3502,6 +3655,69 @@ func (c *WAFRegional) ListXssMatchSetsRequest(input *ListXssMatchSetsInput) List
 	return ListXssMatchSetsRequest{Request: req, Input: input, Copy: c.ListXssMatchSetsRequest}
 }
 
+const opPutLoggingConfiguration = "PutLoggingConfiguration"
+
+// PutLoggingConfigurationRequest is a API request type for the PutLoggingConfiguration API operation.
+type PutLoggingConfigurationRequest struct {
+	*aws.Request
+	Input *PutLoggingConfigurationInput
+	Copy  func(*PutLoggingConfigurationInput) PutLoggingConfigurationRequest
+}
+
+// Send marshals and sends the PutLoggingConfiguration API request.
+func (r PutLoggingConfigurationRequest) Send() (*PutLoggingConfigurationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*PutLoggingConfigurationOutput), nil
+}
+
+// PutLoggingConfigurationRequest returns a request value for making API operation for
+// AWS WAF Regional.
+//
+// Associates a LoggingConfiguration with a specified web ACL.
+//
+// You can access information about all traffic that AWS WAF inspects using
+// the following steps:
+//
+// Create an Amazon Kinesis Data Firehose .
+//
+// Associate that firehose to your web ACL using a PutLoggingConfiguration request.
+//
+// When you successfully enable logging using a PutLoggingConfiguration request,
+// AWS WAF will create a service linked role with the necessary permissions
+// to write logs to the Amazon Kinesis Data Firehose. For more information,
+// see Logging Web ACL Traffic Information (http://docs.aws.amazon.com/waf/latest/developerguide/logging.html)
+// in the AWS WAF Developer Guide.
+//
+//    // Example sending a request using the PutLoggingConfigurationRequest method.
+//    req := client.PutLoggingConfigurationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/PutLoggingConfiguration
+func (c *WAFRegional) PutLoggingConfigurationRequest(input *PutLoggingConfigurationInput) PutLoggingConfigurationRequest {
+	op := &aws.Operation{
+		Name:       opPutLoggingConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutLoggingConfigurationInput{}
+	}
+
+	output := &PutLoggingConfigurationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return PutLoggingConfigurationRequest{Request: req, Input: input, Copy: c.PutLoggingConfigurationRequest}
+}
+
 const opPutPermissionPolicy = "PutPermissionPolicy"
 
 // PutPermissionPolicyRequest is a API request type for the PutPermissionPolicy API operation.
@@ -3535,8 +3751,9 @@ func (r PutPermissionPolicyRequest) Send() (*PutPermissionPolicyOutput, error) {
 //
 //    * Effect must specify Allow.
 //
-//    * The Action in the policy must be waf:UpdateWebACL and waf-regional:UpdateWebACL.
-//    Any extra or wildcard actions in the policy will be rejected.
+//    * The Action in the policy must be waf:UpdateWebACL, waf-regional:UpdateWebACL,
+//    waf:GetRuleGroup and waf-regional:GetRuleGroup . Any extra or wildcard
+//    actions in the policy will be rejected.
 //
 //    * The policy cannot include a Resource parameter.
 //
@@ -3775,9 +3992,10 @@ func (r UpdateIPSetRequest) Send() (*UpdateIPSetOutput, error) {
 //    range of IP addresses from 192.0.2.0 to 192.0.2.255) or 192.0.2.44/32
 //    (for the individual IP address 192.0.2.44).
 //
-// AWS WAF supports /8, /16, /24, and /32 IP address ranges for IPv4, and /24,
-// /32, /48, /56, /64 and /128 for IPv6. For more information about CIDR notation,
-// see the Wikipedia entry Classless Inter-Domain Routing (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).
+// AWS WAF supports IPv4 address ranges: /8 and any range between /16 through
+// /32. AWS WAF supports IPv6 address ranges: /16, /24, /32, /48, /56, /64,
+// and /128. For more information about CIDR notation, see the Wikipedia entry
+// Classless Inter-Domain Routing (https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).
 //
 // IPv6 addresses can be represented using any of the following formats:
 //
@@ -3808,6 +4026,8 @@ func (r UpdateIPSetRequest) Send() (*UpdateIPSetOutput, error) {
 // When you update an IPSet, you specify the IP addresses that you want to add
 // and/or the IP addresses that you want to delete. If you want to change an
 // IP address, you delete the existing IP address and add the new one.
+//
+// You can insert a maximum of 1000 addresses in a single request.
 //
 // For more information about how to use the AWS WAF API to allow or block HTTP
 // requests, see the AWS WAF Developer Guide (http://docs.aws.amazon.com/waf/latest/developerguide/).
@@ -4114,7 +4334,8 @@ func (r UpdateRuleRequest) Send() (*UpdateRuleOutput, error) {
 // a predicate, such as a ByteMatchSet or an IPSet, that specifies the web requests
 // that you want to allow, block, or count. If you add more than one predicate
 // to a Rule, a request must match all of the specifications to be allowed,
-// blocked, or counted. For example, suppose you add the following to a Rule:
+// blocked, or counted. For example, suppose that you add the following to a
+// Rule:
 //
 //    * A ByteMatchSet that matches the value BadBot in the User-Agent header
 //
@@ -4279,6 +4500,8 @@ func (r UpdateSizeConstraintSetRequest) Send() (*UpdateSizeConstraintSetOutput, 
 //    of the request body are not supported because the AWS resource forwards
 //    only the first 8192 bytes of your request to AWS WAF.
 //
+// You can only specify a single type of TextTransformation.
+//
 //    * A ComparisonOperator used for evaluating the selected part of the request
 //    against the specified Size, such as equals, greater than, less than, and
 //    so on.
@@ -4360,17 +4583,20 @@ func (r UpdateSqlInjectionMatchSetRequest) Send() (*UpdateSqlInjectionMatchSetOu
 //    object and add a new one.
 //
 //    * FieldToMatch: The part of web requests that you want AWS WAF to inspect
-//    and, if you want AWS WAF to inspect a header, the name of the header.
+//    and, if you want AWS WAF to inspect a header or custom query parameter,
+//    the name of the header or parameter.
 //
 //    * TextTransformation: Which text transformation, if any, to perform on
 //    the web request before inspecting the request for snippets of malicious
 //    SQL code.
 //
+// You can only specify a single type of TextTransformation.
+//
 // You use SqlInjectionMatchSet objects to specify which CloudFront requests
-// you want to allow, block, or count. For example, if you're receiving requests
-// that contain snippets of SQL code in the query string and you want to block
-// the requests, you can create a SqlInjectionMatchSet with the applicable settings,
-// and then configure AWS WAF to block the requests.
+// that you want to allow, block, or count. For example, if you're receiving
+// requests that contain snippets of SQL code in the query string and you want
+// to block the requests, you can create a SqlInjectionMatchSet with the applicable
+// settings, and then configure AWS WAF to block the requests.
 //
 // To create and configure a SqlInjectionMatchSet, perform the following steps:
 //
@@ -4441,8 +4667,8 @@ func (r UpdateWebACLRequest) Send() (*UpdateWebACLOutput, error) {
 //    the default action if a request doesn't match the criteria in any of the
 //    Rules in a WebACL.
 //
-//    * The Rules that you want to add and/or delete. If you want to replace
-//    one Rule with another, you delete the existing Rule and add the new one.
+//    * The Rules that you want to add or delete. If you want to replace one
+//    Rule with another, you delete the existing Rule and add the new one.
 //
 //    * For each Rule, whether you want AWS WAF to allow requests, block requests,
 //    or count requests that match the conditions in the Rule.
@@ -4451,9 +4677,9 @@ func (r UpdateWebACLRequest) Send() (*UpdateWebACLOutput, error) {
 //    If you add more than one Rule to a WebACL, AWS WAF evaluates each request
 //    against the Rules in order based on the value of Priority. (The Rule that
 //    has the lowest value for Priority is evaluated first.) When a web request
-//    matches all of the predicates (such as ByteMatchSets and IPSets) in a
-//    Rule, AWS WAF immediately takes the corresponding action, allow or block,
-//    and doesn't evaluate the request against the remaining Rules in the WebACL,
+//    matches all the predicates (such as ByteMatchSets and IPSets) in a Rule,
+//    AWS WAF immediately takes the corresponding action, allow or block, and
+//    doesn't evaluate the request against the remaining Rules in the WebACL,
 //    if any.
 //
 // To create and configure a WebACL, perform the following steps:
@@ -4473,6 +4699,14 @@ func (r UpdateWebACLRequest) Send() (*UpdateWebACLOutput, error) {
 // Submit an UpdateWebACL request to specify the Rules that you want to include
 // in the WebACL, to specify the default action, and to associate the WebACL
 // with a CloudFront distribution.
+//
+// The ActivatedRule can be a rule group. If you specify a rule group as your
+// ActivatedRule, you can exclude specific rules from that rule group.
+//
+// If you already have a rule group associated with a web ACL and want to submit
+// an UpdateWebACL request to exclude certain rules from that rule group, you
+// must first remove the rule group from the web ACL, the re-insert it again,
+// specifying the excluded rules. For details, see ActivatedRule$ExcludedRules.
 //
 // Be aware that if you try to add a RATE_BASED rule to a web ACL without setting
 // the rule type when first creating the rule, the UpdateWebACL request will
@@ -4534,21 +4768,24 @@ func (r UpdateXssMatchSetRequest) Send() (*UpdateXssMatchSetOutput, error) {
 // each XssMatchTuple object, you specify the following values:
 //
 //    * Action: Whether to insert the object into or delete the object from
-//    the array. To change a XssMatchTuple, you delete the existing object and
-//    add a new one.
+//    the array. To change an XssMatchTuple, you delete the existing object
+//    and add a new one.
 //
 //    * FieldToMatch: The part of web requests that you want AWS WAF to inspect
-//    and, if you want AWS WAF to inspect a header, the name of the header.
+//    and, if you want AWS WAF to inspect a header or custom query parameter,
+//    the name of the header or parameter.
 //
 //    * TextTransformation: Which text transformation, if any, to perform on
 //    the web request before inspecting the request for cross-site scripting
 //    attacks.
 //
-// You use XssMatchSet objects to specify which CloudFront requests you want
-// to allow, block, or count. For example, if you're receiving requests that
-// contain cross-site scripting attacks in the request body and you want to
-// block the requests, you can create an XssMatchSet with the applicable settings,
-// and then configure AWS WAF to block the requests.
+// You can only specify a single type of TextTransformation.
+//
+// You use XssMatchSet objects to specify which CloudFront requests that you
+// want to allow, block, or count. For example, if you're receiving requests
+// that contain cross-site scripting attacks in the request body and you want
+// to block the requests, you can create an XssMatchSet with the applicable
+// settings, and then configure AWS WAF to block the requests.
 //
 // To create and configure an XssMatchSet, perform the following steps:
 //
@@ -4593,7 +4830,14 @@ func (c *WAFRegional) UpdateXssMatchSetRequest(input *UpdateXssMatchSetInput) Up
 type AssociateWebACLInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN (Amazon Resource Name) of the resource to be protected.
+	// The ARN (Amazon Resource Name) of the resource to be protected, either an
+	// application load balancer or Amazon API Gateway stage.
+	//
+	// The ARN should be in one of the following formats:
+	//
+	//    * For an Application Load Balancer: arn:aws:elasticloadbalancing:region:account-id:loadbalancer/app/load-balancer-name/load-balancer-id
+	//
+	//    * For an Amazon API Gateway stage: arn:aws:apigateway:region::/restapis/api-id/stages/stage-name
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `min:"1" type:"string" required:"true"`
@@ -5285,7 +5529,7 @@ type CreateRuleInput struct {
 
 	// A friendly name or description for the metrics for this Rule. The name can
 	// contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain
-	// whitespace. You can't change the name of the metric after you create the
+	// white space. You can't change the name of the metric after you create the
 	// Rule.
 	//
 	// MetricName is a required field
@@ -5546,7 +5790,7 @@ type CreateWebACLInput struct {
 
 	// A friendly name or description for the metrics for this WebACL. The name
 	// can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't
-	// contain whitespace. You can't change MetricName after you create the WebACL.
+	// contain white space. You can't change MetricName after you create the WebACL.
 	//
 	// MetricName is a required field
 	MetricName *string `type:"string" required:"true"`
@@ -5945,6 +6189,66 @@ func (s DeleteIPSetOutput) GoString() string {
 
 // SDKResponseMetdata return sthe response metadata for the API.
 func (s DeleteIPSetOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/DeleteLoggingConfigurationRequest
+type DeleteLoggingConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the web ACL from which you want to delete
+	// the LoggingConfiguration.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteLoggingConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteLoggingConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteLoggingConfigurationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteLoggingConfigurationInput"}
+
+	if s.ResourceArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/DeleteLoggingConfigurationResponse
+type DeleteLoggingConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+}
+
+// String returns the string representation
+func (s DeleteLoggingConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteLoggingConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteLoggingConfigurationOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
@@ -6712,7 +7016,14 @@ type DisassociateWebACLInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN (Amazon Resource Name) of the resource from which the web ACL is
-	// being removed.
+	// being removed, either an application load balancer or Amazon API Gateway
+	// stage.
+	//
+	// The ARN should be in one of the following formats:
+	//
+	//    * For an Application Load Balancer: arn:aws:elasticloadbalancing:region:account-id:loadbalancer/app/load-balancer-name/load-balancer-id
+	//
+	//    * For an Amazon API Gateway stage: arn:aws:apigateway:region::/restapis/api-id/stages/stage-name
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `min:"1" type:"string" required:"true"`
@@ -7074,6 +7385,69 @@ func (s GetIPSetOutput) GoString() string {
 
 // SDKResponseMetdata return sthe response metadata for the API.
 func (s GetIPSetOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/GetLoggingConfigurationRequest
+type GetLoggingConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the web ACL for which you want to get the
+	// LoggingConfiguration.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetLoggingConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetLoggingConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetLoggingConfigurationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "GetLoggingConfigurationInput"}
+
+	if s.ResourceArn == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/GetLoggingConfigurationResponse
+type GetLoggingConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The LoggingConfiguration for the specified web ACL.
+	LoggingConfiguration *waf.LoggingConfiguration `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetLoggingConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetLoggingConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s GetLoggingConfigurationOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
@@ -7813,7 +8187,14 @@ func (s GetSqlInjectionMatchSetOutput) SDKResponseMetadata() aws.Response {
 type GetWebACLForResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN (Amazon Resource Name) of the resource for which to get the web ACL.
+	// The ARN (Amazon Resource Name) of the resource for which to get the web ACL,
+	// either an application load balancer or Amazon API Gateway stage.
+	//
+	// The ARN should be in one of the following formats:
+	//
+	//    * For an Application Load Balancer: arn:aws:elasticloadbalancing:region:account-id:loadbalancer/app/load-balancer-name/load-balancer-id
+	//
+	//    * For an Amazon API Gateway stage: arn:aws:apigateway:region::/restapis/api-id/stages/stage-name
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `min:"1" type:"string" required:"true"`
@@ -8316,6 +8697,79 @@ func (s ListIPSetsOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/ListLoggingConfigurationsRequest
+type ListLoggingConfigurationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the number of LoggingConfigurations that you want AWS WAF to return
+	// for this request. If you have more LoggingConfigurations than the number
+	// that you specify for Limit, the response includes a NextMarker value that
+	// you can use to get another batch of LoggingConfigurations.
+	Limit *int64 `type:"integer"`
+
+	// If you specify a value for Limit and you have more LoggingConfigurations
+	// than the value of Limit, AWS WAF returns a NextMarker value in the response
+	// that allows you to list another group of LoggingConfigurations. For the second
+	// and subsequent ListLoggingConfigurations requests, specify the value of NextMarker
+	// from the previous response to get information about another batch of ListLoggingConfigurations.
+	NextMarker *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListLoggingConfigurationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListLoggingConfigurationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListLoggingConfigurationsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListLoggingConfigurationsInput"}
+	if s.NextMarker != nil && len(*s.NextMarker) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("NextMarker", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/ListLoggingConfigurationsResponse
+type ListLoggingConfigurationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// An array of LoggingConfiguration objects.
+	LoggingConfigurations []waf.LoggingConfiguration `type:"list"`
+
+	// If you have more LoggingConfigurations than the number that you specified
+	// for Limit in the request, the response includes a NextMarker value. To list
+	// more LoggingConfigurations, submit another ListLoggingConfigurations request,
+	// and specify the NextMarker value from the response in the NextMarker value
+	// in the next request.
+	NextMarker *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListLoggingConfigurationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListLoggingConfigurationsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListLoggingConfigurationsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/ListRateBasedRulesRequest
 type ListRateBasedRulesInput struct {
 	_ struct{} `type:"structure"`
@@ -8538,6 +8992,10 @@ func (s ListRegexPatternSetsOutput) SDKResponseMetadata() aws.Response {
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/ListResourcesForWebACLRequest
 type ListResourcesForWebACLInput struct {
 	_ struct{} `type:"structure"`
+
+	// The type of resource to list, either an application load balancer or Amazon
+	// API Gateway.
+	ResourceType ResourceType `type:"string" enum:"true"`
 
 	// The unique identifier (ID) of the web ACL for which to list the associated
 	// resources.
@@ -9113,6 +9571,72 @@ func (s ListXssMatchSetsOutput) SDKResponseMetadata() aws.Response {
 	return s.responseMetadata
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/PutLoggingConfigurationRequest
+type PutLoggingConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Kinesis Data Firehose that contains the inspected traffic information,
+	// the redacted fields details, and the Amazon Resource Name (ARN) of the web
+	// ACL to monitor.
+	//
+	// LoggingConfiguration is a required field
+	LoggingConfiguration *waf.LoggingConfiguration `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s PutLoggingConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutLoggingConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutLoggingConfigurationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "PutLoggingConfigurationInput"}
+
+	if s.LoggingConfiguration == nil {
+		invalidParams.Add(aws.NewErrParamRequired("LoggingConfiguration"))
+	}
+	if s.LoggingConfiguration != nil {
+		if err := s.LoggingConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("LoggingConfiguration", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/PutLoggingConfigurationResponse
+type PutLoggingConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// The LoggingConfiguration that you submitted in the request.
+	LoggingConfiguration *waf.LoggingConfiguration `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutLoggingConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutLoggingConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s PutLoggingConfigurationOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/waf-regional-2016-11-28/PutPermissionPolicyRequest
 type PutPermissionPolicyInput struct {
 	_ struct{} `type:"structure"`
@@ -9414,6 +9938,8 @@ type UpdateIPSetInput struct {
 	//    * IPSetUpdate: Contains Action and IPSetDescriptor
 	//
 	//    * IPSetDescriptor: Contains Type and Value
+	//
+	// You can insert a maximum of 1000 addresses in a single request.
 	//
 	// Updates is a required field
 	Updates []waf.IPSetUpdate `min:"1" type:"list" required:"true"`
@@ -10235,7 +10761,7 @@ type UpdateWebACLInput struct {
 	//
 	//    * ActivatedRule: Contains Action, OverrideAction, Priority, RuleId, and
 	//    Type. ActivatedRule|OverrideAction applies only when updating or adding
-	//    a RuleGroup to a WebACL. In this case you do not use ActivatedRule|Action.
+	//    a RuleGroup to a WebACL. In this case, you do not use ActivatedRule|Action.
 	//    For all other update requests, ActivatedRule|Action is used instead of
 	//    ActivatedRule|OverrideAction.
 	//
@@ -10333,7 +10859,7 @@ type UpdateXssMatchSetInput struct {
 	ChangeToken *string `min:"1" type:"string" required:"true"`
 
 	// An array of XssMatchSetUpdate objects that you want to insert into or delete
-	// from a XssMatchSet. For more information, see the applicable data types:
+	// from an XssMatchSet. For more information, see the applicable data types:
 	//
 	//    * XssMatchSetUpdate: Contains Action and XssMatchTuple
 	//
@@ -10784,11 +11310,13 @@ type MatchFieldType string
 
 // Enum values for MatchFieldType
 const (
-	MatchFieldTypeUri         MatchFieldType = "URI"
-	MatchFieldTypeQueryString MatchFieldType = "QUERY_STRING"
-	MatchFieldTypeHeader      MatchFieldType = "HEADER"
-	MatchFieldTypeMethod      MatchFieldType = "METHOD"
-	MatchFieldTypeBody        MatchFieldType = "BODY"
+	MatchFieldTypeUri            MatchFieldType = "URI"
+	MatchFieldTypeQueryString    MatchFieldType = "QUERY_STRING"
+	MatchFieldTypeHeader         MatchFieldType = "HEADER"
+	MatchFieldTypeMethod         MatchFieldType = "METHOD"
+	MatchFieldTypeBody           MatchFieldType = "BODY"
+	MatchFieldTypeSingleQueryArg MatchFieldType = "SINGLE_QUERY_ARG"
+	MatchFieldTypeAllQueryArgs   MatchFieldType = "ALL_QUERY_ARGS"
 )
 
 func (enum MatchFieldType) MarshalValue() (string, error) {
@@ -10819,6 +11347,7 @@ const (
 	ParameterExceptionFieldRateKey                          ParameterExceptionField = "RATE_KEY"
 	ParameterExceptionFieldRuleType                         ParameterExceptionField = "RULE_TYPE"
 	ParameterExceptionFieldNextMarker                       ParameterExceptionField = "NEXT_MARKER"
+	ParameterExceptionFieldResourceArn                      ParameterExceptionField = "RESOURCE_ARN"
 )
 
 func (enum ParameterExceptionField) MarshalValue() (string, error) {
@@ -10836,6 +11365,7 @@ type ParameterExceptionReason string
 const (
 	ParameterExceptionReasonInvalidOption      ParameterExceptionReason = "INVALID_OPTION"
 	ParameterExceptionReasonIllegalCombination ParameterExceptionReason = "ILLEGAL_COMBINATION"
+	ParameterExceptionReasonIllegalArgument    ParameterExceptionReason = "ILLEGAL_ARGUMENT"
 )
 
 func (enum ParameterExceptionReason) MarshalValue() (string, error) {
@@ -10901,6 +11431,23 @@ func (enum RateKey) MarshalValue() (string, error) {
 }
 
 func (enum RateKey) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type ResourceType string
+
+// Enum values for ResourceType
+const (
+	ResourceTypeApplicationLoadBalancer ResourceType = "APPLICATION_LOAD_BALANCER"
+	ResourceTypeApiGateway              ResourceType = "API_GATEWAY"
+)
+
+func (enum ResourceType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ResourceType) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }

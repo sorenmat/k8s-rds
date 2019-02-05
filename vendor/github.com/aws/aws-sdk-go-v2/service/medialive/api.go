@@ -10,6 +10,56 @@ import (
 	"github.com/aws/aws-sdk-go-v2/private/protocol"
 )
 
+const opBatchUpdateSchedule = "BatchUpdateSchedule"
+
+// BatchUpdateScheduleRequest is a API request type for the BatchUpdateSchedule API operation.
+type BatchUpdateScheduleRequest struct {
+	*aws.Request
+	Input *BatchUpdateScheduleInput
+	Copy  func(*BatchUpdateScheduleInput) BatchUpdateScheduleRequest
+}
+
+// Send marshals and sends the BatchUpdateSchedule API request.
+func (r BatchUpdateScheduleRequest) Send() (*BatchUpdateScheduleOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*BatchUpdateScheduleOutput), nil
+}
+
+// BatchUpdateScheduleRequest returns a request value for making API operation for
+// AWS Elemental MediaLive.
+//
+// Update a channel schedule
+//
+//    // Example sending a request using the BatchUpdateScheduleRequest method.
+//    req := client.BatchUpdateScheduleRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchUpdateSchedule
+func (c *MediaLive) BatchUpdateScheduleRequest(input *BatchUpdateScheduleInput) BatchUpdateScheduleRequest {
+	op := &aws.Operation{
+		Name:       opBatchUpdateSchedule,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/prod/channels/{channelId}/schedule",
+	}
+
+	if input == nil {
+		input = &BatchUpdateScheduleInput{}
+	}
+
+	output := &BatchUpdateScheduleOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return BatchUpdateScheduleRequest{Request: req, Input: input, Copy: c.BatchUpdateScheduleRequest}
+}
+
 const opCreateChannel = "CreateChannel"
 
 // CreateChannelRequest is a API request type for the CreateChannel API operation.
@@ -310,6 +360,56 @@ func (c *MediaLive) DeleteInputSecurityGroupRequest(input *DeleteInputSecurityGr
 	return DeleteInputSecurityGroupRequest{Request: req, Input: input, Copy: c.DeleteInputSecurityGroupRequest}
 }
 
+const opDeleteReservation = "DeleteReservation"
+
+// DeleteReservationRequest is a API request type for the DeleteReservation API operation.
+type DeleteReservationRequest struct {
+	*aws.Request
+	Input *DeleteReservationInput
+	Copy  func(*DeleteReservationInput) DeleteReservationRequest
+}
+
+// Send marshals and sends the DeleteReservation API request.
+func (r DeleteReservationRequest) Send() (*DeleteReservationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DeleteReservationOutput), nil
+}
+
+// DeleteReservationRequest returns a request value for making API operation for
+// AWS Elemental MediaLive.
+//
+// Delete an expired reservation.
+//
+//    // Example sending a request using the DeleteReservationRequest method.
+//    req := client.DeleteReservationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteReservation
+func (c *MediaLive) DeleteReservationRequest(input *DeleteReservationInput) DeleteReservationRequest {
+	op := &aws.Operation{
+		Name:       opDeleteReservation,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/prod/reservations/{reservationId}",
+	}
+
+	if input == nil {
+		input = &DeleteReservationInput{}
+	}
+
+	output := &DeleteReservationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DeleteReservationRequest{Request: req, Input: input, Copy: c.DeleteReservationRequest}
+}
+
 const opDescribeChannel = "DescribeChannel"
 
 // DescribeChannelRequest is a API request type for the DescribeChannel API operation.
@@ -458,6 +558,208 @@ func (c *MediaLive) DescribeInputSecurityGroupRequest(input *DescribeInputSecuri
 	output.responseMetadata = aws.Response{Request: req}
 
 	return DescribeInputSecurityGroupRequest{Request: req, Input: input, Copy: c.DescribeInputSecurityGroupRequest}
+}
+
+const opDescribeOffering = "DescribeOffering"
+
+// DescribeOfferingRequest is a API request type for the DescribeOffering API operation.
+type DescribeOfferingRequest struct {
+	*aws.Request
+	Input *DescribeOfferingInput
+	Copy  func(*DescribeOfferingInput) DescribeOfferingRequest
+}
+
+// Send marshals and sends the DescribeOffering API request.
+func (r DescribeOfferingRequest) Send() (*DescribeOfferingOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeOfferingOutput), nil
+}
+
+// DescribeOfferingRequest returns a request value for making API operation for
+// AWS Elemental MediaLive.
+//
+// Get details for an offering.
+//
+//    // Example sending a request using the DescribeOfferingRequest method.
+//    req := client.DescribeOfferingRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeOffering
+func (c *MediaLive) DescribeOfferingRequest(input *DescribeOfferingInput) DescribeOfferingRequest {
+	op := &aws.Operation{
+		Name:       opDescribeOffering,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/offerings/{offeringId}",
+	}
+
+	if input == nil {
+		input = &DescribeOfferingInput{}
+	}
+
+	output := &DescribeOfferingOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeOfferingRequest{Request: req, Input: input, Copy: c.DescribeOfferingRequest}
+}
+
+const opDescribeReservation = "DescribeReservation"
+
+// DescribeReservationRequest is a API request type for the DescribeReservation API operation.
+type DescribeReservationRequest struct {
+	*aws.Request
+	Input *DescribeReservationInput
+	Copy  func(*DescribeReservationInput) DescribeReservationRequest
+}
+
+// Send marshals and sends the DescribeReservation API request.
+func (r DescribeReservationRequest) Send() (*DescribeReservationOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeReservationOutput), nil
+}
+
+// DescribeReservationRequest returns a request value for making API operation for
+// AWS Elemental MediaLive.
+//
+// Get details for a reservation.
+//
+//    // Example sending a request using the DescribeReservationRequest method.
+//    req := client.DescribeReservationRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeReservation
+func (c *MediaLive) DescribeReservationRequest(input *DescribeReservationInput) DescribeReservationRequest {
+	op := &aws.Operation{
+		Name:       opDescribeReservation,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/reservations/{reservationId}",
+	}
+
+	if input == nil {
+		input = &DescribeReservationInput{}
+	}
+
+	output := &DescribeReservationOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeReservationRequest{Request: req, Input: input, Copy: c.DescribeReservationRequest}
+}
+
+const opDescribeSchedule = "DescribeSchedule"
+
+// DescribeScheduleRequest is a API request type for the DescribeSchedule API operation.
+type DescribeScheduleRequest struct {
+	*aws.Request
+	Input *DescribeScheduleInput
+	Copy  func(*DescribeScheduleInput) DescribeScheduleRequest
+}
+
+// Send marshals and sends the DescribeSchedule API request.
+func (r DescribeScheduleRequest) Send() (*DescribeScheduleOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*DescribeScheduleOutput), nil
+}
+
+// DescribeScheduleRequest returns a request value for making API operation for
+// AWS Elemental MediaLive.
+//
+// Get a channel schedule
+//
+//    // Example sending a request using the DescribeScheduleRequest method.
+//    req := client.DescribeScheduleRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeSchedule
+func (c *MediaLive) DescribeScheduleRequest(input *DescribeScheduleInput) DescribeScheduleRequest {
+	op := &aws.Operation{
+		Name:       opDescribeSchedule,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/channels/{channelId}/schedule",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeScheduleInput{}
+	}
+
+	output := &DescribeScheduleOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return DescribeScheduleRequest{Request: req, Input: input, Copy: c.DescribeScheduleRequest}
+}
+
+// Paginate pages iterates over the pages of a DescribeScheduleRequest operation,
+// calling the Next method for each page. Using the paginators Next
+// method will depict whether or not there are more pages.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeSchedule operation.
+//		req := client.DescribeScheduleRequest(input)
+//		p := req.Paginate()
+//		for p.Next() {
+//			page := p.CurrentPage()
+//		}
+//
+//		if err := p.Err(); err != nil {
+//			return err
+//		}
+//
+func (p *DescribeScheduleRequest) Paginate(opts ...aws.Option) DescribeSchedulePager {
+	return DescribeSchedulePager{
+		Pager: aws.Pager{
+			NewRequest: func() (*aws.Request, error) {
+				var inCpy *DescribeScheduleInput
+				if p.Input != nil {
+					tmp := *p.Input
+					inCpy = &tmp
+				}
+
+				req := p.Copy(inCpy)
+				req.ApplyOptions(opts...)
+
+				return req.Request, nil
+			},
+		},
+	}
+}
+
+// DescribeSchedulePager is used to paginate the request. This can be done by
+// calling Next and CurrentPage.
+type DescribeSchedulePager struct {
+	aws.Pager
+}
+
+func (p *DescribeSchedulePager) CurrentPage() *DescribeScheduleOutput {
+	return p.Pager.CurrentPage().(*DescribeScheduleOutput)
 }
 
 const opListChannels = "ListChannels"
@@ -764,6 +1066,260 @@ type ListInputsPager struct {
 
 func (p *ListInputsPager) CurrentPage() *ListInputsOutput {
 	return p.Pager.CurrentPage().(*ListInputsOutput)
+}
+
+const opListOfferings = "ListOfferings"
+
+// ListOfferingsRequest is a API request type for the ListOfferings API operation.
+type ListOfferingsRequest struct {
+	*aws.Request
+	Input *ListOfferingsInput
+	Copy  func(*ListOfferingsInput) ListOfferingsRequest
+}
+
+// Send marshals and sends the ListOfferings API request.
+func (r ListOfferingsRequest) Send() (*ListOfferingsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListOfferingsOutput), nil
+}
+
+// ListOfferingsRequest returns a request value for making API operation for
+// AWS Elemental MediaLive.
+//
+// List offerings available for purchase.
+//
+//    // Example sending a request using the ListOfferingsRequest method.
+//    req := client.ListOfferingsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListOfferings
+func (c *MediaLive) ListOfferingsRequest(input *ListOfferingsInput) ListOfferingsRequest {
+	op := &aws.Operation{
+		Name:       opListOfferings,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/offerings",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListOfferingsInput{}
+	}
+
+	output := &ListOfferingsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListOfferingsRequest{Request: req, Input: input, Copy: c.ListOfferingsRequest}
+}
+
+// Paginate pages iterates over the pages of a ListOfferingsRequest operation,
+// calling the Next method for each page. Using the paginators Next
+// method will depict whether or not there are more pages.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListOfferings operation.
+//		req := client.ListOfferingsRequest(input)
+//		p := req.Paginate()
+//		for p.Next() {
+//			page := p.CurrentPage()
+//		}
+//
+//		if err := p.Err(); err != nil {
+//			return err
+//		}
+//
+func (p *ListOfferingsRequest) Paginate(opts ...aws.Option) ListOfferingsPager {
+	return ListOfferingsPager{
+		Pager: aws.Pager{
+			NewRequest: func() (*aws.Request, error) {
+				var inCpy *ListOfferingsInput
+				if p.Input != nil {
+					tmp := *p.Input
+					inCpy = &tmp
+				}
+
+				req := p.Copy(inCpy)
+				req.ApplyOptions(opts...)
+
+				return req.Request, nil
+			},
+		},
+	}
+}
+
+// ListOfferingsPager is used to paginate the request. This can be done by
+// calling Next and CurrentPage.
+type ListOfferingsPager struct {
+	aws.Pager
+}
+
+func (p *ListOfferingsPager) CurrentPage() *ListOfferingsOutput {
+	return p.Pager.CurrentPage().(*ListOfferingsOutput)
+}
+
+const opListReservations = "ListReservations"
+
+// ListReservationsRequest is a API request type for the ListReservations API operation.
+type ListReservationsRequest struct {
+	*aws.Request
+	Input *ListReservationsInput
+	Copy  func(*ListReservationsInput) ListReservationsRequest
+}
+
+// Send marshals and sends the ListReservations API request.
+func (r ListReservationsRequest) Send() (*ListReservationsOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*ListReservationsOutput), nil
+}
+
+// ListReservationsRequest returns a request value for making API operation for
+// AWS Elemental MediaLive.
+//
+// List purchased reservations.
+//
+//    // Example sending a request using the ListReservationsRequest method.
+//    req := client.ListReservationsRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListReservations
+func (c *MediaLive) ListReservationsRequest(input *ListReservationsInput) ListReservationsRequest {
+	op := &aws.Operation{
+		Name:       opListReservations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/reservations",
+		Paginator: &aws.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListReservationsInput{}
+	}
+
+	output := &ListReservationsOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return ListReservationsRequest{Request: req, Input: input, Copy: c.ListReservationsRequest}
+}
+
+// Paginate pages iterates over the pages of a ListReservationsRequest operation,
+// calling the Next method for each page. Using the paginators Next
+// method will depict whether or not there are more pages.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListReservations operation.
+//		req := client.ListReservationsRequest(input)
+//		p := req.Paginate()
+//		for p.Next() {
+//			page := p.CurrentPage()
+//		}
+//
+//		if err := p.Err(); err != nil {
+//			return err
+//		}
+//
+func (p *ListReservationsRequest) Paginate(opts ...aws.Option) ListReservationsPager {
+	return ListReservationsPager{
+		Pager: aws.Pager{
+			NewRequest: func() (*aws.Request, error) {
+				var inCpy *ListReservationsInput
+				if p.Input != nil {
+					tmp := *p.Input
+					inCpy = &tmp
+				}
+
+				req := p.Copy(inCpy)
+				req.ApplyOptions(opts...)
+
+				return req.Request, nil
+			},
+		},
+	}
+}
+
+// ListReservationsPager is used to paginate the request. This can be done by
+// calling Next and CurrentPage.
+type ListReservationsPager struct {
+	aws.Pager
+}
+
+func (p *ListReservationsPager) CurrentPage() *ListReservationsOutput {
+	return p.Pager.CurrentPage().(*ListReservationsOutput)
+}
+
+const opPurchaseOffering = "PurchaseOffering"
+
+// PurchaseOfferingRequest is a API request type for the PurchaseOffering API operation.
+type PurchaseOfferingRequest struct {
+	*aws.Request
+	Input *PurchaseOfferingInput
+	Copy  func(*PurchaseOfferingInput) PurchaseOfferingRequest
+}
+
+// Send marshals and sends the PurchaseOffering API request.
+func (r PurchaseOfferingRequest) Send() (*PurchaseOfferingOutput, error) {
+	err := r.Request.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Request.Data.(*PurchaseOfferingOutput), nil
+}
+
+// PurchaseOfferingRequest returns a request value for making API operation for
+// AWS Elemental MediaLive.
+//
+// Purchase an offering and create a reservation.
+//
+//    // Example sending a request using the PurchaseOfferingRequest method.
+//    req := client.PurchaseOfferingRequest(params)
+//    resp, err := req.Send()
+//    if err == nil {
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/PurchaseOffering
+func (c *MediaLive) PurchaseOfferingRequest(input *PurchaseOfferingInput) PurchaseOfferingRequest {
+	op := &aws.Operation{
+		Name:       opPurchaseOffering,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/offerings/{offeringId}/purchase",
+	}
+
+	if input == nil {
+		input = &PurchaseOfferingInput{}
+	}
+
+	output := &PurchaseOfferingOutput{}
+	req := c.newRequest(op, input, output)
+	output.responseMetadata = aws.Response{Request: req}
+
+	return PurchaseOfferingRequest{Request: req, Input: input, Copy: c.PurchaseOfferingRequest}
 }
 
 const opStartChannel = "StartChannel"
@@ -1999,7 +2555,7 @@ type AudioSelector struct {
 	// identify this Selector. Selector names should be unique per input.
 	//
 	// Name is a required field
-	Name *string `locationName:"name" type:"string" required:"true"`
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
 	// The audio selector settings.
 	SelectorSettings *AudioSelectorSettings `locationName:"selectorSettings" type:"structure"`
@@ -2021,6 +2577,9 @@ func (s *AudioSelector) Validate() error {
 
 	if s.Name == nil {
 		invalidParams.Add(aws.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("Name", 1))
 	}
 	if s.SelectorSettings != nil {
 		if err := s.SelectorSettings.Validate(); err != nil {
@@ -2258,6 +2817,314 @@ func (s AvailSettings) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "scte35TimeSignalApos", v, metadata)
+	}
+	return nil
+}
+
+// A list of schedule actions to create (in a request) or that have been created
+// (in a response).
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchScheduleActionCreateRequest
+type BatchScheduleActionCreateRequest struct {
+	_ struct{} `type:"structure"`
+
+	// A list of schedule actions to create.
+	//
+	// ScheduleActions is a required field
+	ScheduleActions []ScheduleAction `locationName:"scheduleActions" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s BatchScheduleActionCreateRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchScheduleActionCreateRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchScheduleActionCreateRequest) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "BatchScheduleActionCreateRequest"}
+
+	if s.ScheduleActions == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ScheduleActions"))
+	}
+	if s.ScheduleActions != nil {
+		for i, v := range s.ScheduleActions {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ScheduleActions", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s BatchScheduleActionCreateRequest) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.ScheduleActions) > 0 {
+		v := s.ScheduleActions
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "scheduleActions", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// List of actions that have been created in the schedule.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchScheduleActionCreateResult
+type BatchScheduleActionCreateResult struct {
+	_ struct{} `type:"structure"`
+
+	// List of actions that have been created in the schedule.
+	//
+	// ScheduleActions is a required field
+	ScheduleActions []ScheduleAction `locationName:"scheduleActions" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s BatchScheduleActionCreateResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchScheduleActionCreateResult) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s BatchScheduleActionCreateResult) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.ScheduleActions) > 0 {
+		v := s.ScheduleActions
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "scheduleActions", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// A list of schedule actions to delete.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchScheduleActionDeleteRequest
+type BatchScheduleActionDeleteRequest struct {
+	_ struct{} `type:"structure"`
+
+	// A list of schedule actions to delete.
+	//
+	// ActionNames is a required field
+	ActionNames []string `locationName:"actionNames" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s BatchScheduleActionDeleteRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchScheduleActionDeleteRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchScheduleActionDeleteRequest) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "BatchScheduleActionDeleteRequest"}
+
+	if s.ActionNames == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ActionNames"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s BatchScheduleActionDeleteRequest) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.ActionNames) > 0 {
+		v := s.ActionNames
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "actionNames", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddValue(protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v1)})
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// List of actions that have been deleted from the schedule.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchScheduleActionDeleteResult
+type BatchScheduleActionDeleteResult struct {
+	_ struct{} `type:"structure"`
+
+	// List of actions that have been deleted from the schedule.
+	//
+	// ScheduleActions is a required field
+	ScheduleActions []ScheduleAction `locationName:"scheduleActions" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s BatchScheduleActionDeleteResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchScheduleActionDeleteResult) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s BatchScheduleActionDeleteResult) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.ScheduleActions) > 0 {
+		v := s.ScheduleActions
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "scheduleActions", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// A request to create actions (add actions to the schedule), delete actions
+// (remove actions from the schedule), or both create and delete actions.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchUpdateScheduleRequest
+type BatchUpdateScheduleInput struct {
+	_ struct{} `type:"structure"`
+
+	// ChannelId is a required field
+	ChannelId *string `location:"uri" locationName:"channelId" type:"string" required:"true"`
+
+	// Schedule actions to create in the schedule.
+	Creates *BatchScheduleActionCreateRequest `locationName:"creates" type:"structure"`
+
+	// Schedule actions to delete from the schedule.
+	Deletes *BatchScheduleActionDeleteRequest `locationName:"deletes" type:"structure"`
+}
+
+// String returns the string representation
+func (s BatchUpdateScheduleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchUpdateScheduleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchUpdateScheduleInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "BatchUpdateScheduleInput"}
+
+	if s.ChannelId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ChannelId"))
+	}
+	if s.Creates != nil {
+		if err := s.Creates.Validate(); err != nil {
+			invalidParams.AddNested("Creates", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.Deletes != nil {
+		if err := s.Deletes.Validate(); err != nil {
+			invalidParams.AddNested("Deletes", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s BatchUpdateScheduleInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.Creates != nil {
+		v := s.Creates
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "creates", v, metadata)
+	}
+	if s.Deletes != nil {
+		v := s.Deletes
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "deletes", v, metadata)
+	}
+	if s.ChannelId != nil {
+		v := *s.ChannelId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "channelId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchUpdateScheduleResponse
+type BatchUpdateScheduleOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// List of actions that have been created in the schedule.
+	Creates *BatchScheduleActionCreateResult `locationName:"creates" type:"structure"`
+
+	// List of actions that have been deleted from the schedule.
+	Deletes *BatchScheduleActionDeleteResult `locationName:"deletes" type:"structure"`
+}
+
+// String returns the string representation
+func (s BatchUpdateScheduleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchUpdateScheduleOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s BatchUpdateScheduleOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s BatchUpdateScheduleOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Creates != nil {
+		v := s.Creates
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "creates", v, metadata)
+	}
+	if s.Deletes != nil {
+		v := s.Deletes
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "deletes", v, metadata)
 	}
 	return nil
 }
@@ -2927,7 +3794,7 @@ type CaptionSelector struct {
 	// within an event.
 	//
 	// Name is a required field
-	Name *string `locationName:"name" type:"string" required:"true"`
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
 	// Caption selector settings.
 	SelectorSettings *CaptionSelectorSettings `locationName:"selectorSettings" type:"structure"`
@@ -2949,6 +3816,9 @@ func (s *CaptionSelector) Validate() error {
 
 	if s.Name == nil {
 		invalidParams.Add(aws.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(aws.NewErrParamMinLen("Name", 1))
 	}
 	if s.SelectorSettings != nil {
 		if err := s.SelectorSettings.Validate(); err != nil {
@@ -3108,6 +3978,9 @@ type Channel struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level being written to CloudWatch Logs.
+	LogLevel LogLevel `locationName:"logLevel" type:"string" enum:"true"`
+
 	// The name of the channel. (user-mutable)
 	Name *string `locationName:"name" type:"string"`
 
@@ -3192,6 +4065,12 @@ func (s Channel) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "inputSpecification", v, metadata)
 	}
+	if len(s.LogLevel) > 0 {
+		v := s.LogLevel
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "logLevel", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
 	if s.Name != nil {
 		v := *s.Name
 
@@ -3271,6 +4150,9 @@ type ChannelSummary struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level being written to CloudWatch Logs.
+	LogLevel LogLevel `locationName:"logLevel" type:"string" enum:"true"`
+
 	// The name of the channel. (user-mutable)
 	Name *string `locationName:"name" type:"string"`
 
@@ -3349,6 +4231,12 @@ func (s ChannelSummary) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "inputSpecification", v, metadata)
 	}
+	if len(s.LogLevel) > 0 {
+		v := s.LogLevel
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "logLevel", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
 	if s.Name != nil {
 		v := *s.Name
 
@@ -3387,6 +4275,9 @@ type CreateChannelInput struct {
 	InputAttachments []InputAttachment `locationName:"inputAttachments" type:"list"`
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
+
+	// The log level the user wants for their channel.
+	LogLevel LogLevel `locationName:"logLevel" type:"string" enum:"true"`
 
 	Name *string `locationName:"name" type:"string"`
 
@@ -3469,6 +4360,12 @@ func (s CreateChannelInput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "inputSpecification", v, metadata)
 	}
+	if len(s.LogLevel) > 0 {
+		v := s.LogLevel
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "logLevel", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
 	if s.Name != nil {
 		v := *s.Name
 
@@ -3545,9 +4442,13 @@ type CreateInputInput struct {
 
 	InputSecurityGroups []string `locationName:"inputSecurityGroups" type:"list"`
 
+	MediaConnectFlows []MediaConnectFlowRequest `locationName:"mediaConnectFlows" type:"list"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	RequestId *string `locationName:"requestId" type:"string" idempotencyToken:"true"`
+
+	RoleArn *string `locationName:"roleArn" type:"string"`
 
 	Sources []InputSourceRequest `locationName:"sources" type:"list"`
 
@@ -3592,6 +4493,18 @@ func (s CreateInputInput) MarshalFields(e protocol.FieldEncoder) error {
 		ls0.End()
 
 	}
+	if len(s.MediaConnectFlows) > 0 {
+		v := s.MediaConnectFlows
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "mediaConnectFlows", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
 	if s.Name != nil {
 		v := *s.Name
 
@@ -3609,6 +4522,12 @@ func (s CreateInputInput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "requestId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	if len(s.Sources) > 0 {
 		v := s.Sources
@@ -3803,6 +4722,9 @@ type DeleteChannelOutput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
+	LogLevel LogLevel `locationName:"logLevel" type:"string" enum:"true"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	PipelinesRunningCount *int64 `locationName:"pipelinesRunningCount" type:"integer"`
@@ -3888,6 +4810,12 @@ func (s DeleteChannelOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "inputSpecification", v, metadata)
+	}
+	if len(s.LogLevel) > 0 {
+		v := s.LogLevel
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "logLevel", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
 	if s.Name != nil {
 		v := *s.Name
@@ -4060,6 +4988,218 @@ func (s DeleteInputSecurityGroupOutput) MarshalFields(e protocol.FieldEncoder) e
 	return nil
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteReservationRequest
+type DeleteReservationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ReservationId is a required field
+	ReservationId *string `location:"uri" locationName:"reservationId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteReservationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteReservationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteReservationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DeleteReservationInput"}
+
+	if s.ReservationId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ReservationId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteReservationInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.ReservationId != nil {
+		v := *s.ReservationId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "reservationId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteReservationResponse
+type DeleteReservationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	Count *int64 `locationName:"count" type:"integer"`
+
+	CurrencyCode *string `locationName:"currencyCode" type:"string"`
+
+	Duration *int64 `locationName:"duration" type:"integer"`
+
+	// Units for duration, e.g. 'MONTHS'
+	DurationUnits OfferingDurationUnits `locationName:"durationUnits" type:"string" enum:"true"`
+
+	End *string `locationName:"end" type:"string"`
+
+	FixedPrice *float64 `locationName:"fixedPrice" type:"double"`
+
+	Name *string `locationName:"name" type:"string"`
+
+	OfferingDescription *string `locationName:"offeringDescription" type:"string"`
+
+	OfferingId *string `locationName:"offeringId" type:"string"`
+
+	// Offering type, e.g. 'NO_UPFRONT'
+	OfferingType OfferingType `locationName:"offeringType" type:"string" enum:"true"`
+
+	Region *string `locationName:"region" type:"string"`
+
+	ReservationId *string `locationName:"reservationId" type:"string"`
+
+	// Resource configuration (codec, resolution, bitrate, ...)
+	ResourceSpecification *ReservationResourceSpecification `locationName:"resourceSpecification" type:"structure"`
+
+	Start *string `locationName:"start" type:"string"`
+
+	// Current reservation state
+	State ReservationState `locationName:"state" type:"string" enum:"true"`
+
+	UsagePrice *float64 `locationName:"usagePrice" type:"double"`
+}
+
+// String returns the string representation
+func (s DeleteReservationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteReservationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DeleteReservationOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DeleteReservationOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Arn != nil {
+		v := *s.Arn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Count != nil {
+		v := *s.Count
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "count", protocol.Int64Value(v), metadata)
+	}
+	if s.CurrencyCode != nil {
+		v := *s.CurrencyCode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "currencyCode", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Duration != nil {
+		v := *s.Duration
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "duration", protocol.Int64Value(v), metadata)
+	}
+	if len(s.DurationUnits) > 0 {
+		v := s.DurationUnits
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "durationUnits", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.End != nil {
+		v := *s.End
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "end", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.FixedPrice != nil {
+		v := *s.FixedPrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "fixedPrice", protocol.Float64Value(v), metadata)
+	}
+	if s.Name != nil {
+		v := *s.Name
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.OfferingDescription != nil {
+		v := *s.OfferingDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.OfferingId != nil {
+		v := *s.OfferingId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.OfferingType) > 0 {
+		v := s.OfferingType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.Region != nil {
+		v := *s.Region
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "region", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ReservationId != nil {
+		v := *s.ReservationId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "reservationId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ResourceSpecification != nil {
+		v := s.ResourceSpecification
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "resourceSpecification", v, metadata)
+	}
+	if s.Start != nil {
+		v := *s.Start
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "start", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.State) > 0 {
+		v := s.State
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "state", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.UsagePrice != nil {
+		v := *s.UsagePrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "usagePrice", protocol.Float64Value(v), metadata)
+	}
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeChannelRequest
 type DescribeChannelInput struct {
 	_ struct{} `type:"structure"`
@@ -4124,6 +5264,9 @@ type DescribeChannelOutput struct {
 	InputAttachments []InputAttachment `locationName:"inputAttachments" type:"list"`
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
+
+	// The log level the user wants for their channel.
+	LogLevel LogLevel `locationName:"logLevel" type:"string" enum:"true"`
 
 	Name *string `locationName:"name" type:"string"`
 
@@ -4211,6 +5354,12 @@ func (s DescribeChannelOutput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "inputSpecification", v, metadata)
 	}
+	if len(s.LogLevel) > 0 {
+		v := s.LogLevel
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "logLevel", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
 	if s.Name != nil {
 		v := *s.Name
 
@@ -4297,7 +5446,11 @@ type DescribeInputOutput struct {
 
 	Id *string `locationName:"id" type:"string"`
 
+	MediaConnectFlows []MediaConnectFlow `locationName:"mediaConnectFlows" type:"list"`
+
 	Name *string `locationName:"name" type:"string"`
+
+	RoleArn *string `locationName:"roleArn" type:"string"`
 
 	SecurityGroups []string `locationName:"securityGroups" type:"list"`
 
@@ -4361,11 +5514,29 @@ func (s DescribeInputOutput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "id", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	if len(s.MediaConnectFlows) > 0 {
+		v := s.MediaConnectFlows
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "mediaConnectFlows", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
 	if s.Name != nil {
 		v := *s.Name
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	if len(s.SecurityGroups) > 0 {
 		v := s.SecurityGroups
@@ -4520,6 +5691,494 @@ func (s DescribeInputSecurityGroupOutput) MarshalFields(e protocol.FieldEncoder)
 
 		metadata := protocol.Metadata{}
 		ls0 := e.List(protocol.BodyTarget, "whitelistRules", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeOfferingRequest
+type DescribeOfferingInput struct {
+	_ struct{} `type:"structure"`
+
+	// OfferingId is a required field
+	OfferingId *string `location:"uri" locationName:"offeringId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeOfferingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOfferingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeOfferingInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeOfferingInput"}
+
+	if s.OfferingId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("OfferingId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeOfferingInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.OfferingId != nil {
+		v := *s.OfferingId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "offeringId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeOfferingResponse
+type DescribeOfferingOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CurrencyCode *string `locationName:"currencyCode" type:"string"`
+
+	Duration *int64 `locationName:"duration" type:"integer"`
+
+	// Units for duration, e.g. 'MONTHS'
+	DurationUnits OfferingDurationUnits `locationName:"durationUnits" type:"string" enum:"true"`
+
+	FixedPrice *float64 `locationName:"fixedPrice" type:"double"`
+
+	OfferingDescription *string `locationName:"offeringDescription" type:"string"`
+
+	OfferingId *string `locationName:"offeringId" type:"string"`
+
+	// Offering type, e.g. 'NO_UPFRONT'
+	OfferingType OfferingType `locationName:"offeringType" type:"string" enum:"true"`
+
+	Region *string `locationName:"region" type:"string"`
+
+	// Resource configuration (codec, resolution, bitrate, ...)
+	ResourceSpecification *ReservationResourceSpecification `locationName:"resourceSpecification" type:"structure"`
+
+	UsagePrice *float64 `locationName:"usagePrice" type:"double"`
+}
+
+// String returns the string representation
+func (s DescribeOfferingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOfferingOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeOfferingOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeOfferingOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Arn != nil {
+		v := *s.Arn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.CurrencyCode != nil {
+		v := *s.CurrencyCode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "currencyCode", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Duration != nil {
+		v := *s.Duration
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "duration", protocol.Int64Value(v), metadata)
+	}
+	if len(s.DurationUnits) > 0 {
+		v := s.DurationUnits
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "durationUnits", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.FixedPrice != nil {
+		v := *s.FixedPrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "fixedPrice", protocol.Float64Value(v), metadata)
+	}
+	if s.OfferingDescription != nil {
+		v := *s.OfferingDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.OfferingId != nil {
+		v := *s.OfferingId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.OfferingType) > 0 {
+		v := s.OfferingType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.Region != nil {
+		v := *s.Region
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "region", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ResourceSpecification != nil {
+		v := s.ResourceSpecification
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "resourceSpecification", v, metadata)
+	}
+	if s.UsagePrice != nil {
+		v := *s.UsagePrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "usagePrice", protocol.Float64Value(v), metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeReservationRequest
+type DescribeReservationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ReservationId is a required field
+	ReservationId *string `location:"uri" locationName:"reservationId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeReservationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeReservationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeReservationInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeReservationInput"}
+
+	if s.ReservationId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ReservationId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeReservationInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.ReservationId != nil {
+		v := *s.ReservationId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "reservationId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeReservationResponse
+type DescribeReservationOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	Count *int64 `locationName:"count" type:"integer"`
+
+	CurrencyCode *string `locationName:"currencyCode" type:"string"`
+
+	Duration *int64 `locationName:"duration" type:"integer"`
+
+	// Units for duration, e.g. 'MONTHS'
+	DurationUnits OfferingDurationUnits `locationName:"durationUnits" type:"string" enum:"true"`
+
+	End *string `locationName:"end" type:"string"`
+
+	FixedPrice *float64 `locationName:"fixedPrice" type:"double"`
+
+	Name *string `locationName:"name" type:"string"`
+
+	OfferingDescription *string `locationName:"offeringDescription" type:"string"`
+
+	OfferingId *string `locationName:"offeringId" type:"string"`
+
+	// Offering type, e.g. 'NO_UPFRONT'
+	OfferingType OfferingType `locationName:"offeringType" type:"string" enum:"true"`
+
+	Region *string `locationName:"region" type:"string"`
+
+	ReservationId *string `locationName:"reservationId" type:"string"`
+
+	// Resource configuration (codec, resolution, bitrate, ...)
+	ResourceSpecification *ReservationResourceSpecification `locationName:"resourceSpecification" type:"structure"`
+
+	Start *string `locationName:"start" type:"string"`
+
+	// Current reservation state
+	State ReservationState `locationName:"state" type:"string" enum:"true"`
+
+	UsagePrice *float64 `locationName:"usagePrice" type:"double"`
+}
+
+// String returns the string representation
+func (s DescribeReservationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeReservationOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeReservationOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeReservationOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Arn != nil {
+		v := *s.Arn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Count != nil {
+		v := *s.Count
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "count", protocol.Int64Value(v), metadata)
+	}
+	if s.CurrencyCode != nil {
+		v := *s.CurrencyCode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "currencyCode", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Duration != nil {
+		v := *s.Duration
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "duration", protocol.Int64Value(v), metadata)
+	}
+	if len(s.DurationUnits) > 0 {
+		v := s.DurationUnits
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "durationUnits", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.End != nil {
+		v := *s.End
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "end", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.FixedPrice != nil {
+		v := *s.FixedPrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "fixedPrice", protocol.Float64Value(v), metadata)
+	}
+	if s.Name != nil {
+		v := *s.Name
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.OfferingDescription != nil {
+		v := *s.OfferingDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.OfferingId != nil {
+		v := *s.OfferingId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.OfferingType) > 0 {
+		v := s.OfferingType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.Region != nil {
+		v := *s.Region
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "region", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ReservationId != nil {
+		v := *s.ReservationId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "reservationId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ResourceSpecification != nil {
+		v := s.ResourceSpecification
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "resourceSpecification", v, metadata)
+	}
+	if s.Start != nil {
+		v := *s.Start
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "start", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.State) > 0 {
+		v := s.State
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "state", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.UsagePrice != nil {
+		v := *s.UsagePrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "usagePrice", protocol.Float64Value(v), metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeScheduleRequest
+type DescribeScheduleInput struct {
+	_ struct{} `type:"structure"`
+
+	// ChannelId is a required field
+	ChannelId *string `location:"uri" locationName:"channelId" type:"string" required:"true"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeScheduleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeScheduleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeScheduleInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "DescribeScheduleInput"}
+
+	if s.ChannelId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ChannelId"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeScheduleInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.ChannelId != nil {
+		v := *s.ChannelId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "channelId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeScheduleResponse
+type DescribeScheduleOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	ScheduleActions []ScheduleAction `locationName:"scheduleActions" type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeScheduleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeScheduleOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s DescribeScheduleOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s DescribeScheduleOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.ScheduleActions) > 0 {
+		v := s.ScheduleActions
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "scheduleActions", metadata)
 		ls0.Start()
 		for _, v1 := range v {
 			ls0.ListAddFields(v1)
@@ -5637,6 +7296,117 @@ func (s FecOutputSettings) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Start time for the action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/FixedModeScheduleActionStartSettings
+type FixedModeScheduleActionStartSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Start time for the action to start in the channel. (Not the time for the
+	// action to be added to the schedule: actions are always added to the schedule
+	// immediately.) UTC format: yyyy-mm-ddThh:mm:ss.nnnZ. All the letters are digits
+	// (for example, mm might be 01) except for the two constants "T" for time and
+	// "Z" for "UTC format".
+	//
+	// Time is a required field
+	Time *string `locationName:"time" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s FixedModeScheduleActionStartSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FixedModeScheduleActionStartSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FixedModeScheduleActionStartSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "FixedModeScheduleActionStartSettings"}
+
+	if s.Time == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Time"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s FixedModeScheduleActionStartSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Time != nil {
+		v := *s.Time
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "time", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Settings to specify if an action follows another.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/FollowModeScheduleActionStartSettings
+type FollowModeScheduleActionStartSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Identifies whether this action starts relative to the start or relative to
+	// the end of the reference action.
+	//
+	// FollowPoint is a required field
+	FollowPoint FollowPoint `locationName:"followPoint" type:"string" required:"true" enum:"true"`
+
+	// The action name of another action that this one refers to.
+	//
+	// ReferenceActionName is a required field
+	ReferenceActionName *string `locationName:"referenceActionName" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s FollowModeScheduleActionStartSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FollowModeScheduleActionStartSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FollowModeScheduleActionStartSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "FollowModeScheduleActionStartSettings"}
+	if len(s.FollowPoint) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("FollowPoint"))
+	}
+
+	if s.ReferenceActionName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ReferenceActionName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s FollowModeScheduleActionStartSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.FollowPoint) > 0 {
+		v := s.FollowPoint
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "followPoint", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.ReferenceActionName != nil {
+		v := *s.ReferenceActionName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "referenceActionName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GlobalConfiguration
 type GlobalConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -5644,12 +7414,12 @@ type GlobalConfiguration struct {
 	// Value to set the initial audio gain for the Live Event.
 	InitialAudioGain *int64 `locationName:"initialAudioGain" type:"integer"`
 
-	// Indicates the action to take when an input completes (e.g. end-of-file.)
-	// Options include immediately switching to the next sequential input (via "switchInput"),
-	// switching to the next input and looping back to the first input when last
-	// input ends (via "switchAndLoopInputs") or not switching inputs and instead
-	// transcoding black / color / slate images per the "Input Loss Behavior" configuration
-	// until an activateInput REST command is received (via "none").
+	// Indicates the action to take when the current input completes (e.g. end-of-file).
+	// When switchAndLoopInputs is configured the encoder will restart at the beginning
+	// of the first input. When "none" is configured the encoder will transcode
+	// either black, a solid color, or a user specified slate images per the "Input
+	// Loss Behavior" configuration until the next input switch occurs (which is
+	// controlled through the Channel Schedule API).
 	InputEndAction GlobalConfigurationInputEndAction `locationName:"inputEndAction" type:"string" enum:"true"`
 
 	// Settings for system actions when input is lost.
@@ -5744,8 +7514,9 @@ type H264Settings struct {
 	// be the value configured in the fixedAfd parameter.
 	AfdSignaling AfdSignaling `locationName:"afdSignaling" type:"string" enum:"true"`
 
-	// Average bitrate in bits/second. Required for VBR, CBR, and ABR. For MS Smooth
-	// outputs, bitrates must be unique when rounded down to the nearest multiple
+	// Average bitrate in bits/second. Required when the rate control mode is VBR
+	// or CBR. Not used for QVBR. In an MS Smooth output group, each output must
+	// have a unique value when its bitrate is rounded down to the nearest multiple
 	// of 1000.
 	Bitrate *int64 `locationName:"bitrate" min:"1000" type:"integer"`
 
@@ -5810,7 +7581,8 @@ type H264Settings struct {
 	// while high can produce better quality for certain content.
 	LookAheadRateControl H264LookAheadRateControl `locationName:"lookAheadRateControl" type:"string" enum:"true"`
 
-	// Maximum bitrate in bits/second (for VBR mode only).
+	// For QVBR: See the tooltip for Quality level For VBR: Set the maximum bitrate
+	// in order to accommodate expected spikes in the complexity of the video.
 	MaxBitrate *int64 `locationName:"maxBitrate" min:"1000" type:"integer"`
 
 	// Only meaningful if sceneChangeDetect is set to enabled. Enforces separation
@@ -5842,13 +7614,28 @@ type H264Settings struct {
 	// H.264 Profile.
 	Profile H264Profile `locationName:"profile" type:"string" enum:"true"`
 
-	// Rate control mode.
+	// Controls the target quality for the video encode. Applies only when the rate
+	// control mode is QVBR. Set values for the QVBR quality level field and Max
+	// bitrate field that suit your most important viewing devices. Recommended
+	// values are:- Primary screen: Quality level: 8 to 10. Max bitrate: 4M- PC
+	// or tablet: Quality level: 7. Max bitrate: 1.5M to 3M- Smartphone: Quality
+	// level: 6. Max bitrate: 1M to 1.5M
+	QvbrQualityLevel *int64 `locationName:"qvbrQualityLevel" min:"1" type:"integer"`
+
+	// Rate control mode. QVBR: Quality will match the specified quality level except
+	// when it is constrained by themaximum bitrate. Recommended if you or your
+	// viewers pay for bandwidth.VBR: Quality and bitrate vary, depending on the
+	// video complexity. Recommended instead of QVBRif you want to maintain a specific
+	// average bitrate over the duration of the channel.CBR: Quality varies, depending
+	// on the video complexity. Recommended only if you distributeyour assets to
+	// devices that cannot handle variable bitrates.
 	RateControlMode H264RateControlMode `locationName:"rateControlMode" type:"string" enum:"true"`
 
 	// Sets the scan type of the output to progressive or top-field-first interlaced.
 	ScanType H264ScanType `locationName:"scanType" type:"string" enum:"true"`
 
-	// Scene change detection. Inserts I-frames on scene changes when enabled.
+	// Scene change detection.- On: inserts I-frames when scene change is detected.-
+	// Off: does not force an I-frame when scene change is detected.
 	SceneChangeDetect H264SceneChangeDetect `locationName:"sceneChangeDetect" type:"string" enum:"true"`
 
 	// Number of slices per picture. Must be less than or equal to the number of
@@ -5865,6 +7652,10 @@ type H264Settings struct {
 	// If set to enabled, adjust quantization within each frame based on spatial
 	// variation of content complexity.
 	SpatialAq H264SpatialAq `locationName:"spatialAq" type:"string" enum:"true"`
+
+	// If set to fixed, use gopNumBFrames B-frames per sub-GOP. If set to dynamic,
+	// optimize the number of B-frames used for each sub-GOP to improve visual quality.
+	SubgopLength H264SubGopLength `locationName:"subgopLength" type:"string" enum:"true"`
 
 	// Produces a bitstream compliant with SMPTE RP-2027.
 	Syntax H264Syntax `locationName:"syntax" type:"string" enum:"true"`
@@ -5903,6 +7694,9 @@ func (s *H264Settings) Validate() error {
 	}
 	if s.ParDenominator != nil && *s.ParDenominator < 1 {
 		invalidParams.Add(aws.NewErrParamMinValue("ParDenominator", 1))
+	}
+	if s.QvbrQualityLevel != nil && *s.QvbrQualityLevel < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("QvbrQualityLevel", 1))
 	}
 	if s.Slices != nil && *s.Slices < 1 {
 		invalidParams.Add(aws.NewErrParamMinValue("Slices", 1))
@@ -6072,6 +7866,12 @@ func (s H264Settings) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "profile", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
+	if s.QvbrQualityLevel != nil {
+		v := *s.QvbrQualityLevel
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "qvbrQualityLevel", protocol.Int64Value(v), metadata)
+	}
 	if len(s.RateControlMode) > 0 {
 		v := s.RateControlMode
 
@@ -6107,6 +7907,12 @@ func (s H264Settings) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "spatialAq", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.SubgopLength) > 0 {
+		v := s.SubgopLength
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "subgopLength", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
 	if len(s.Syntax) > 0 {
 		v := s.Syntax
@@ -6458,13 +8264,17 @@ type HlsGroupSettings struct {
 	// Period of insertion of EXT-X-PROGRAM-DATE-TIME entry, in seconds.
 	ProgramDateTimePeriod *int64 `locationName:"programDateTimePeriod" type:"integer"`
 
+	// When set to "enabled", includes the media playlists from both pipelines in
+	// the master manifest (.m3u8) file.
+	RedundantManifest HlsRedundantManifest `locationName:"redundantManifest" type:"string" enum:"true"`
+
 	// Length of MPEG-2 Transport Stream segments to create (in seconds). Note that
 	// segments will end on the next keyframe after this number of seconds, so actual
 	// segment length may be longer.
 	SegmentLength *int64 `locationName:"segmentLength" min:"1" type:"integer"`
 
-	// When set to useInputSegmentation, the output segment or fragment points are
-	// set by the RAI markers from the input streams.
+	// useInputSegmentation has been deprecated. The configured segment size is
+	// always used.
 	SegmentationMode HlsSegmentationMode `locationName:"segmentationMode" type:"string" enum:"true"`
 
 	// Number of segments to write to a subdirectory before starting a new one.
@@ -6717,6 +8527,12 @@ func (s HlsGroupSettings) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "programDateTimePeriod", protocol.Int64Value(v), metadata)
+	}
+	if len(s.RedundantManifest) > 0 {
+		v := s.RedundantManifest
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "redundantManifest", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
 	if s.SegmentLength != nil {
 		v := *s.SegmentLength
@@ -7030,6 +8846,52 @@ func (s HlsSettings) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Settings for the action to emit HLS metadata
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/HlsTimedMetadataScheduleActionSettings
+type HlsTimedMetadataScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Base64 string formatted according to the ID3 specification: http://id3.org/id3v2.4.0-structure
+	//
+	// Id3 is a required field
+	Id3 *string `locationName:"id3" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s HlsTimedMetadataScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s HlsTimedMetadataScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *HlsTimedMetadataScheduleActionSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "HlsTimedMetadataScheduleActionSettings"}
+
+	if s.Id3 == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Id3"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s HlsTimedMetadataScheduleActionSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Id3 != nil {
+		v := *s.Id3
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "id3", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/HlsWebdavSettings
 type HlsWebdavSettings struct {
 	_ struct{} `type:"structure"`
@@ -7115,8 +8977,15 @@ type Input struct {
 	// The generated ID of the input (unique for user account, immutable).
 	Id *string `locationName:"id" type:"string"`
 
+	// A list of MediaConnect Flows for this input.
+	MediaConnectFlows []MediaConnectFlow `locationName:"mediaConnectFlows" type:"list"`
+
 	// The user-assigned name (This is a mutable value).
 	Name *string `locationName:"name" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the role this input assumes during and
+	// after creation.
+	RoleArn *string `locationName:"roleArn" type:"string"`
 
 	// A list of IDs for all the security groups attached to the input.
 	SecurityGroups []string `locationName:"securityGroups" type:"list"`
@@ -7177,11 +9046,29 @@ func (s Input) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "id", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
+	if len(s.MediaConnectFlows) > 0 {
+		v := s.MediaConnectFlows
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "mediaConnectFlows", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
 	if s.Name != nil {
 		v := *s.Name
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	if len(s.SecurityGroups) > 0 {
 		v := s.SecurityGroups
@@ -7226,6 +9113,10 @@ func (s Input) MarshalFields(e protocol.FieldEncoder) error {
 type InputAttachment struct {
 	_ struct{} `type:"structure"`
 
+	// User-specified name for the attachment. This is required if the user wants
+	// to use this input in an input switch action.
+	InputAttachmentName *string `locationName:"inputAttachmentName" type:"string"`
+
 	// The ID of the input
 	InputId *string `locationName:"inputId" type:"string"`
 
@@ -7260,6 +9151,12 @@ func (s *InputAttachment) Validate() error {
 
 // MarshalFields encodes the AWS API shape using the passed in protocol encoder.
 func (s InputAttachment) MarshalFields(e protocol.FieldEncoder) error {
+	if s.InputAttachmentName != nil {
+		v := *s.InputAttachmentName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "inputAttachmentName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
 	if s.InputId != nil {
 		v := *s.InputId
 
@@ -7944,6 +9841,52 @@ func (s InputSpecification) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Settings for the action to switch an input.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/InputSwitchScheduleActionSettings
+type InputSwitchScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the input attachment that should be switched to by this action.
+	//
+	// InputAttachmentNameReference is a required field
+	InputAttachmentNameReference *string `locationName:"inputAttachmentNameReference" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s InputSwitchScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputSwitchScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputSwitchScheduleActionSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "InputSwitchScheduleActionSettings"}
+
+	if s.InputAttachmentNameReference == nil {
+		invalidParams.Add(aws.NewErrParamRequired("InputAttachmentNameReference"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s InputSwitchScheduleActionSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.InputAttachmentNameReference != nil {
+		v := *s.InputAttachmentNameReference
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "inputAttachmentNameReference", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 // Whitelist rule
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/InputWhitelistRule
 type InputWhitelistRule struct {
@@ -8343,6 +10286,326 @@ func (s ListInputsOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListOfferingsRequest
+type ListOfferingsInput struct {
+	_ struct{} `type:"structure"`
+
+	ChannelConfiguration *string `location:"querystring" locationName:"channelConfiguration" type:"string"`
+
+	Codec *string `location:"querystring" locationName:"codec" type:"string"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	MaximumBitrate *string `location:"querystring" locationName:"maximumBitrate" type:"string"`
+
+	MaximumFramerate *string `location:"querystring" locationName:"maximumFramerate" type:"string"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	Resolution *string `location:"querystring" locationName:"resolution" type:"string"`
+
+	ResourceType *string `location:"querystring" locationName:"resourceType" type:"string"`
+
+	SpecialFeature *string `location:"querystring" locationName:"specialFeature" type:"string"`
+
+	VideoQuality *string `location:"querystring" locationName:"videoQuality" type:"string"`
+}
+
+// String returns the string representation
+func (s ListOfferingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListOfferingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListOfferingsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListOfferingsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListOfferingsInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.ChannelConfiguration != nil {
+		v := *s.ChannelConfiguration
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "channelConfiguration", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Codec != nil {
+		v := *s.Codec
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "codec", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.MaximumBitrate != nil {
+		v := *s.MaximumBitrate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maximumBitrate", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.MaximumFramerate != nil {
+		v := *s.MaximumFramerate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maximumFramerate", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Resolution != nil {
+		v := *s.Resolution
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "resolution", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ResourceType != nil {
+		v := *s.ResourceType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "resourceType", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SpecialFeature != nil {
+		v := *s.SpecialFeature
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "specialFeature", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.VideoQuality != nil {
+		v := *s.VideoQuality
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "videoQuality", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListOfferingsResponse
+type ListOfferingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	Offerings []Offering `locationName:"offerings" type:"list"`
+}
+
+// String returns the string representation
+func (s ListOfferingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListOfferingsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListOfferingsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListOfferingsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Offerings) > 0 {
+		v := s.Offerings
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "offerings", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListReservationsRequest
+type ListReservationsInput struct {
+	_ struct{} `type:"structure"`
+
+	Codec *string `location:"querystring" locationName:"codec" type:"string"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	MaximumBitrate *string `location:"querystring" locationName:"maximumBitrate" type:"string"`
+
+	MaximumFramerate *string `location:"querystring" locationName:"maximumFramerate" type:"string"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	Resolution *string `location:"querystring" locationName:"resolution" type:"string"`
+
+	ResourceType *string `location:"querystring" locationName:"resourceType" type:"string"`
+
+	SpecialFeature *string `location:"querystring" locationName:"specialFeature" type:"string"`
+
+	VideoQuality *string `location:"querystring" locationName:"videoQuality" type:"string"`
+}
+
+// String returns the string representation
+func (s ListReservationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListReservationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListReservationsInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ListReservationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListReservationsInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.Codec != nil {
+		v := *s.Codec
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "codec", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.MaxResults != nil {
+		v := *s.MaxResults
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maxResults", protocol.Int64Value(v), metadata)
+	}
+	if s.MaximumBitrate != nil {
+		v := *s.MaximumBitrate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maximumBitrate", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.MaximumFramerate != nil {
+		v := *s.MaximumFramerate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "maximumFramerate", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Resolution != nil {
+		v := *s.Resolution
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "resolution", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ResourceType != nil {
+		v := *s.ResourceType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "resourceType", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SpecialFeature != nil {
+		v := *s.SpecialFeature
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "specialFeature", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.VideoQuality != nil {
+		v := *s.VideoQuality
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.QueryTarget, "videoQuality", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListReservationsResponse
+type ListReservationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	Reservations []Reservation `locationName:"reservations" type:"list"`
+}
+
+// String returns the string representation
+func (s ListReservationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListReservationsOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s ListReservationsOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ListReservationsOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.NextToken != nil {
+		v := *s.NextToken
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "nextToken", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.Reservations) > 0 {
+		v := s.Reservations
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "reservations", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
 	}
 	return nil
 }
@@ -9069,6 +11332,66 @@ func (s M3u8Settings) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// The settings for a MediaConnect Flow.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/MediaConnectFlow
+type MediaConnectFlow struct {
+	_ struct{} `type:"structure"`
+
+	// The unique ARN of the MediaConnect Flow being used as a source.
+	FlowArn *string `locationName:"flowArn" type:"string"`
+}
+
+// String returns the string representation
+func (s MediaConnectFlow) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MediaConnectFlow) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s MediaConnectFlow) MarshalFields(e protocol.FieldEncoder) error {
+	if s.FlowArn != nil {
+		v := *s.FlowArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "flowArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// The settings for a MediaConnect Flow.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/MediaConnectFlowRequest
+type MediaConnectFlowRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the MediaConnect Flow that you want to use as a source.
+	FlowArn *string `locationName:"flowArn" type:"string"`
+}
+
+// String returns the string representation
+func (s MediaConnectFlowRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MediaConnectFlowRequest) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s MediaConnectFlowRequest) MarshalFields(e protocol.FieldEncoder) error {
+	if s.FlowArn != nil {
+		v := *s.FlowArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "flowArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Mp2Settings
 type Mp2Settings struct {
 	_ struct{} `type:"structure"`
@@ -9178,19 +11501,11 @@ type MsSmoothGroupSettings struct {
 	// to exhausting the numRetries on one segment, or exceeding filecacheDuration.
 	RestartDelay *int64 `locationName:"restartDelay" type:"integer"`
 
-	// When set to useInputSegmentation, the output segment or fragment points are
-	// set by the RAI markers from the input streams.
+	// useInputSegmentation has been deprecated. The configured segment size is
+	// always used.
 	SegmentationMode SmoothGroupSegmentationMode `locationName:"segmentationMode" type:"string" enum:"true"`
 
-	// Outputs that are "output locked" can use this delay. Assign a delay to the
-	// output that is "secondary". Do not assign a delay to the "primary" output.
-	// The delay means that the primary output will always reach the downstream
-	// system before the secondary, which helps ensure that the downstream system
-	// always uses the primary output. (If there were no delay, the downstream system
-	// might flip-flop between whichever output happens to arrive first.) If the
-	// primary fails, the downstream system will switch to the secondary output.
-	// When the primary is restarted, the downstream system will switch back to
-	// the primary (because once again it is always arriving first)
+	// Number of milliseconds to delay the output from the second pipeline.
 	SendDelayMs *int64 `locationName:"sendDelayMs" type:"integer"`
 
 	// If set to scte35, use incoming SCTE-35 messages to generate a sparse track
@@ -9428,6 +11743,127 @@ func (s NetworkInputSettings) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "serverValidation", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	return nil
+}
+
+// Reserved resources available for purchase
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Offering
+type Offering struct {
+	_ struct{} `type:"structure"`
+
+	// Unique offering ARN, e.g. 'arn:aws:medialive:us-west-2:123456789012:offering:87654321'
+	Arn *string `locationName:"arn" type:"string"`
+
+	// Currency code for usagePrice and fixedPrice in ISO-4217 format, e.g. 'USD'
+	CurrencyCode *string `locationName:"currencyCode" type:"string"`
+
+	// Lease duration, e.g. '12'
+	Duration *int64 `locationName:"duration" type:"integer"`
+
+	// Units for duration, e.g. 'MONTHS'
+	DurationUnits OfferingDurationUnits `locationName:"durationUnits" type:"string" enum:"true"`
+
+	// One-time charge for each reserved resource, e.g. '0.0' for a NO_UPFRONT offering
+	FixedPrice *float64 `locationName:"fixedPrice" type:"double"`
+
+	// Offering description, e.g. 'HD AVC output at 10-20 Mbps, 30 fps, and standard
+	// VQ in US West (Oregon)'
+	OfferingDescription *string `locationName:"offeringDescription" type:"string"`
+
+	// Unique offering ID, e.g. '87654321'
+	OfferingId *string `locationName:"offeringId" type:"string"`
+
+	// Offering type, e.g. 'NO_UPFRONT'
+	OfferingType OfferingType `locationName:"offeringType" type:"string" enum:"true"`
+
+	// AWS region, e.g. 'us-west-2'
+	Region *string `locationName:"region" type:"string"`
+
+	// Resource configuration details
+	ResourceSpecification *ReservationResourceSpecification `locationName:"resourceSpecification" type:"structure"`
+
+	// Recurring usage charge for each reserved resource, e.g. '157.0'
+	UsagePrice *float64 `locationName:"usagePrice" type:"double"`
+}
+
+// String returns the string representation
+func (s Offering) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Offering) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Offering) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Arn != nil {
+		v := *s.Arn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.CurrencyCode != nil {
+		v := *s.CurrencyCode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "currencyCode", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Duration != nil {
+		v := *s.Duration
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "duration", protocol.Int64Value(v), metadata)
+	}
+	if len(s.DurationUnits) > 0 {
+		v := s.DurationUnits
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "durationUnits", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.FixedPrice != nil {
+		v := *s.FixedPrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "fixedPrice", protocol.Float64Value(v), metadata)
+	}
+	if s.OfferingDescription != nil {
+		v := *s.OfferingDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.OfferingId != nil {
+		v := *s.OfferingId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.OfferingType) > 0 {
+		v := s.OfferingType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.Region != nil {
+		v := *s.Region
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "region", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ResourceSpecification != nil {
+		v := s.ResourceSpecification
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "resourceSpecification", v, metadata)
+	}
+	if s.UsagePrice != nil {
+		v := *s.UsagePrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "usagePrice", protocol.Float64Value(v), metadata)
 	}
 	return nil
 }
@@ -9951,6 +12387,133 @@ func (s PassThroughSettings) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/PurchaseOfferingRequest
+type PurchaseOfferingInput struct {
+	_ struct{} `type:"structure"`
+
+	// Count is a required field
+	Count *int64 `locationName:"count" min:"1" type:"integer" required:"true"`
+
+	Name *string `locationName:"name" type:"string"`
+
+	// OfferingId is a required field
+	OfferingId *string `location:"uri" locationName:"offeringId" type:"string" required:"true"`
+
+	RequestId *string `locationName:"requestId" type:"string" idempotencyToken:"true"`
+
+	Start *string `locationName:"start" type:"string"`
+}
+
+// String returns the string representation
+func (s PurchaseOfferingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PurchaseOfferingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PurchaseOfferingInput) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "PurchaseOfferingInput"}
+
+	if s.Count == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Count"))
+	}
+	if s.Count != nil && *s.Count < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("Count", 1))
+	}
+
+	if s.OfferingId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("OfferingId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s PurchaseOfferingInput) MarshalFields(e protocol.FieldEncoder) error {
+	e.SetValue(protocol.HeaderTarget, "Content-Type", protocol.StringValue("application/x-amz-json-1.1"), protocol.Metadata{})
+
+	if s.Count != nil {
+		v := *s.Count
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "count", protocol.Int64Value(v), metadata)
+	}
+	if s.Name != nil {
+		v := *s.Name
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	var RequestId string
+	if s.RequestId != nil {
+		RequestId = *s.RequestId
+	} else {
+		RequestId = protocol.GetIdempotencyToken()
+	}
+	{
+		v := RequestId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "requestId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Start != nil {
+		v := *s.Start
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "start", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.OfferingId != nil {
+		v := *s.OfferingId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.PathTarget, "offeringId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	return nil
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/PurchaseOfferingResponse
+type PurchaseOfferingOutput struct {
+	_ struct{} `type:"structure"`
+
+	responseMetadata aws.Response
+
+	// Reserved resources available to use
+	Reservation *Reservation `locationName:"reservation" type:"structure"`
+}
+
+// String returns the string representation
+func (s PurchaseOfferingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PurchaseOfferingOutput) GoString() string {
+	return s.String()
+}
+
+// SDKResponseMetdata return sthe response metadata for the API.
+func (s PurchaseOfferingOutput) SDKResponseMetadata() aws.Response {
+	return s.responseMetadata
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s PurchaseOfferingOutput) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Reservation != nil {
+		v := s.Reservation
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "reservation", v, metadata)
+	}
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RemixSettings
 type RemixSettings struct {
 	_ struct{} `type:"structure"`
@@ -10033,6 +12596,265 @@ func (s RemixSettings) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Reserved resources available to use
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Reservation
+type Reservation struct {
+	_ struct{} `type:"structure"`
+
+	// Unique reservation ARN, e.g. 'arn:aws:medialive:us-west-2:123456789012:reservation:1234567'
+	Arn *string `locationName:"arn" type:"string"`
+
+	// Number of reserved resources
+	Count *int64 `locationName:"count" type:"integer"`
+
+	// Currency code for usagePrice and fixedPrice in ISO-4217 format, e.g. 'USD'
+	CurrencyCode *string `locationName:"currencyCode" type:"string"`
+
+	// Lease duration, e.g. '12'
+	Duration *int64 `locationName:"duration" type:"integer"`
+
+	// Units for duration, e.g. 'MONTHS'
+	DurationUnits OfferingDurationUnits `locationName:"durationUnits" type:"string" enum:"true"`
+
+	// Reservation UTC end date and time in ISO-8601 format, e.g. '2019-03-01T00:00:00'
+	End *string `locationName:"end" type:"string"`
+
+	// One-time charge for each reserved resource, e.g. '0.0' for a NO_UPFRONT offering
+	FixedPrice *float64 `locationName:"fixedPrice" type:"double"`
+
+	// User specified reservation name
+	Name *string `locationName:"name" type:"string"`
+
+	// Offering description, e.g. 'HD AVC output at 10-20 Mbps, 30 fps, and standard
+	// VQ in US West (Oregon)'
+	OfferingDescription *string `locationName:"offeringDescription" type:"string"`
+
+	// Unique offering ID, e.g. '87654321'
+	OfferingId *string `locationName:"offeringId" type:"string"`
+
+	// Offering type, e.g. 'NO_UPFRONT'
+	OfferingType OfferingType `locationName:"offeringType" type:"string" enum:"true"`
+
+	// AWS region, e.g. 'us-west-2'
+	Region *string `locationName:"region" type:"string"`
+
+	// Unique reservation ID, e.g. '1234567'
+	ReservationId *string `locationName:"reservationId" type:"string"`
+
+	// Resource configuration details
+	ResourceSpecification *ReservationResourceSpecification `locationName:"resourceSpecification" type:"structure"`
+
+	// Reservation UTC start date and time in ISO-8601 format, e.g. '2018-03-01T00:00:00'
+	Start *string `locationName:"start" type:"string"`
+
+	// Current state of reservation, e.g. 'ACTIVE'
+	State ReservationState `locationName:"state" type:"string" enum:"true"`
+
+	// Recurring usage charge for each reserved resource, e.g. '157.0'
+	UsagePrice *float64 `locationName:"usagePrice" type:"double"`
+}
+
+// String returns the string representation
+func (s Reservation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Reservation) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Reservation) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Arn != nil {
+		v := *s.Arn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "arn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Count != nil {
+		v := *s.Count
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "count", protocol.Int64Value(v), metadata)
+	}
+	if s.CurrencyCode != nil {
+		v := *s.CurrencyCode
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "currencyCode", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.Duration != nil {
+		v := *s.Duration
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "duration", protocol.Int64Value(v), metadata)
+	}
+	if len(s.DurationUnits) > 0 {
+		v := s.DurationUnits
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "durationUnits", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.End != nil {
+		v := *s.End
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "end", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.FixedPrice != nil {
+		v := *s.FixedPrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "fixedPrice", protocol.Float64Value(v), metadata)
+	}
+	if s.Name != nil {
+		v := *s.Name
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.OfferingDescription != nil {
+		v := *s.OfferingDescription
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringDescription", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.OfferingId != nil {
+		v := *s.OfferingId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.OfferingType) > 0 {
+		v := s.OfferingType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "offeringType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.Region != nil {
+		v := *s.Region
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "region", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ReservationId != nil {
+		v := *s.ReservationId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "reservationId", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ResourceSpecification != nil {
+		v := s.ResourceSpecification
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "resourceSpecification", v, metadata)
+	}
+	if s.Start != nil {
+		v := *s.Start
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "start", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if len(s.State) > 0 {
+		v := s.State
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "state", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.UsagePrice != nil {
+		v := *s.UsagePrice
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "usagePrice", protocol.Float64Value(v), metadata)
+	}
+	return nil
+}
+
+// Resource configuration (codec, resolution, bitrate, ...)
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ReservationResourceSpecification
+type ReservationResourceSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// Codec, e.g. 'AVC'
+	Codec ReservationCodec `locationName:"codec" type:"string" enum:"true"`
+
+	// Maximum bitrate, e.g. 'MAX_20_MBPS'
+	MaximumBitrate ReservationMaximumBitrate `locationName:"maximumBitrate" type:"string" enum:"true"`
+
+	// Maximum framerate, e.g. 'MAX_30_FPS' (Outputs only)
+	MaximumFramerate ReservationMaximumFramerate `locationName:"maximumFramerate" type:"string" enum:"true"`
+
+	// Resolution, e.g. 'HD'
+	Resolution ReservationResolution `locationName:"resolution" type:"string" enum:"true"`
+
+	// Resource type, 'INPUT', 'OUTPUT', or 'CHANNEL'
+	ResourceType ReservationResourceType `locationName:"resourceType" type:"string" enum:"true"`
+
+	// Special feature, e.g. 'AUDIO_NORMALIZATION' (Channels only)
+	SpecialFeature ReservationSpecialFeature `locationName:"specialFeature" type:"string" enum:"true"`
+
+	// Video quality, e.g. 'STANDARD' (Outputs only)
+	VideoQuality ReservationVideoQuality `locationName:"videoQuality" type:"string" enum:"true"`
+}
+
+// String returns the string representation
+func (s ReservationResourceSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ReservationResourceSpecification) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ReservationResourceSpecification) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.Codec) > 0 {
+		v := s.Codec
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "codec", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.MaximumBitrate) > 0 {
+		v := s.MaximumBitrate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "maximumBitrate", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.MaximumFramerate) > 0 {
+		v := s.MaximumFramerate
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "maximumFramerate", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.Resolution) > 0 {
+		v := s.Resolution
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "resolution", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.ResourceType) > 0 {
+		v := s.ResourceType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "resourceType", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.SpecialFeature) > 0 {
+		v := s.SpecialFeature
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "specialFeature", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.VideoQuality) > 0 {
+		v := s.VideoQuality
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "videoQuality", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RtmpCaptionInfoDestinationSettings
 type RtmpCaptionInfoDestinationSettings struct {
 	_ struct{} `type:"structure"`
@@ -10078,6 +12900,11 @@ type RtmpGroupSettings struct {
 	// be passed. If set to 'field1608' then only the data carried in 608 from field
 	// 1 video will be passed.
 	CaptionData RtmpCaptionData `locationName:"captionData" type:"string" enum:"true"`
+
+	// Controls the behavior of this RTMP group if input becomes unavailable.- emitOutput:
+	// Emit a slate until input returns.- pauseOutput: Stop transmitting data until
+	// input returns. This does not close the underlying RTMP connection.
+	InputLossAction InputLossActionForRtmpOut `locationName:"inputLossAction" type:"string" enum:"true"`
 
 	// If a streaming output fails, number of seconds to wait until a restart is
 	// initiated. A value of 0 means never restart.
@@ -10132,6 +12959,12 @@ func (s RtmpGroupSettings) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "captionData", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.InputLossAction) > 0 {
+		v := s.InputLossAction
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "inputLossAction", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
 	if s.RestartDelay != nil {
 		v := *s.RestartDelay
@@ -10218,6 +13051,279 @@ func (s RtmpOutputSettings) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "numRetries", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+// Contains information on a single schedule action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ScheduleAction
+type ScheduleAction struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the action, must be unique within the schedule. This name provides
+	// the main reference to an action once it is added to the schedule. A name
+	// is unique if it is no longer in the schedule. The schedule is automatically
+	// cleaned up to remove actions with a start time of more than 1 hour ago (approximately)
+	// so at that point a name can be reused.
+	//
+	// ActionName is a required field
+	ActionName *string `locationName:"actionName" type:"string" required:"true"`
+
+	// Settings for this schedule action.
+	//
+	// ScheduleActionSettings is a required field
+	ScheduleActionSettings *ScheduleActionSettings `locationName:"scheduleActionSettings" type:"structure" required:"true"`
+
+	// The time for the action to start in the channel.
+	//
+	// ScheduleActionStartSettings is a required field
+	ScheduleActionStartSettings *ScheduleActionStartSettings `locationName:"scheduleActionStartSettings" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s ScheduleAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScheduleAction) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScheduleAction) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ScheduleAction"}
+
+	if s.ActionName == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ActionName"))
+	}
+
+	if s.ScheduleActionSettings == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ScheduleActionSettings"))
+	}
+
+	if s.ScheduleActionStartSettings == nil {
+		invalidParams.Add(aws.NewErrParamRequired("ScheduleActionStartSettings"))
+	}
+	if s.ScheduleActionSettings != nil {
+		if err := s.ScheduleActionSettings.Validate(); err != nil {
+			invalidParams.AddNested("ScheduleActionSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.ScheduleActionStartSettings != nil {
+		if err := s.ScheduleActionStartSettings.Validate(); err != nil {
+			invalidParams.AddNested("ScheduleActionStartSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ScheduleAction) MarshalFields(e protocol.FieldEncoder) error {
+	if s.ActionName != nil {
+		v := *s.ActionName
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "actionName", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.ScheduleActionSettings != nil {
+		v := s.ScheduleActionSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "scheduleActionSettings", v, metadata)
+	}
+	if s.ScheduleActionStartSettings != nil {
+		v := s.ScheduleActionStartSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "scheduleActionStartSettings", v, metadata)
+	}
+	return nil
+}
+
+// Holds the settings for a single schedule action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ScheduleActionSettings
+type ScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Settings to emit HLS metadata
+	HlsTimedMetadataSettings *HlsTimedMetadataScheduleActionSettings `locationName:"hlsTimedMetadataSettings" type:"structure"`
+
+	// Settings to switch an input
+	InputSwitchSettings *InputSwitchScheduleActionSettings `locationName:"inputSwitchSettings" type:"structure"`
+
+	// Settings for SCTE-35 return_to_network message
+	Scte35ReturnToNetworkSettings *Scte35ReturnToNetworkScheduleActionSettings `locationName:"scte35ReturnToNetworkSettings" type:"structure"`
+
+	// Settings for SCTE-35 splice_insert message
+	Scte35SpliceInsertSettings *Scte35SpliceInsertScheduleActionSettings `locationName:"scte35SpliceInsertSettings" type:"structure"`
+
+	// Settings for SCTE-35 time_signal message
+	Scte35TimeSignalSettings *Scte35TimeSignalScheduleActionSettings `locationName:"scte35TimeSignalSettings" type:"structure"`
+
+	// Settings to activate a static image overlay
+	StaticImageActivateSettings *StaticImageActivateScheduleActionSettings `locationName:"staticImageActivateSettings" type:"structure"`
+
+	// Settings to deactivate a static image overlay
+	StaticImageDeactivateSettings *StaticImageDeactivateScheduleActionSettings `locationName:"staticImageDeactivateSettings" type:"structure"`
+}
+
+// String returns the string representation
+func (s ScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScheduleActionSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ScheduleActionSettings"}
+	if s.HlsTimedMetadataSettings != nil {
+		if err := s.HlsTimedMetadataSettings.Validate(); err != nil {
+			invalidParams.AddNested("HlsTimedMetadataSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.InputSwitchSettings != nil {
+		if err := s.InputSwitchSettings.Validate(); err != nil {
+			invalidParams.AddNested("InputSwitchSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.Scte35ReturnToNetworkSettings != nil {
+		if err := s.Scte35ReturnToNetworkSettings.Validate(); err != nil {
+			invalidParams.AddNested("Scte35ReturnToNetworkSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.Scte35SpliceInsertSettings != nil {
+		if err := s.Scte35SpliceInsertSettings.Validate(); err != nil {
+			invalidParams.AddNested("Scte35SpliceInsertSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.Scte35TimeSignalSettings != nil {
+		if err := s.Scte35TimeSignalSettings.Validate(); err != nil {
+			invalidParams.AddNested("Scte35TimeSignalSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.StaticImageActivateSettings != nil {
+		if err := s.StaticImageActivateSettings.Validate(); err != nil {
+			invalidParams.AddNested("StaticImageActivateSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ScheduleActionSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.HlsTimedMetadataSettings != nil {
+		v := s.HlsTimedMetadataSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "hlsTimedMetadataSettings", v, metadata)
+	}
+	if s.InputSwitchSettings != nil {
+		v := s.InputSwitchSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "inputSwitchSettings", v, metadata)
+	}
+	if s.Scte35ReturnToNetworkSettings != nil {
+		v := s.Scte35ReturnToNetworkSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "scte35ReturnToNetworkSettings", v, metadata)
+	}
+	if s.Scte35SpliceInsertSettings != nil {
+		v := s.Scte35SpliceInsertSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "scte35SpliceInsertSettings", v, metadata)
+	}
+	if s.Scte35TimeSignalSettings != nil {
+		v := s.Scte35TimeSignalSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "scte35TimeSignalSettings", v, metadata)
+	}
+	if s.StaticImageActivateSettings != nil {
+		v := s.StaticImageActivateSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "staticImageActivateSettings", v, metadata)
+	}
+	if s.StaticImageDeactivateSettings != nil {
+		v := s.StaticImageDeactivateSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "staticImageDeactivateSettings", v, metadata)
+	}
+	return nil
+}
+
+// Settings to specify the start time for an action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ScheduleActionStartSettings
+type ScheduleActionStartSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Holds the start time for the action.
+	FixedModeScheduleActionStartSettings *FixedModeScheduleActionStartSettings `locationName:"fixedModeScheduleActionStartSettings" type:"structure"`
+
+	// Specifies an action to follow for scheduling this action.
+	FollowModeScheduleActionStartSettings *FollowModeScheduleActionStartSettings `locationName:"followModeScheduleActionStartSettings" type:"structure"`
+}
+
+// String returns the string representation
+func (s ScheduleActionStartSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScheduleActionStartSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScheduleActionStartSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "ScheduleActionStartSettings"}
+	if s.FixedModeScheduleActionStartSettings != nil {
+		if err := s.FixedModeScheduleActionStartSettings.Validate(); err != nil {
+			invalidParams.AddNested("FixedModeScheduleActionStartSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+	if s.FollowModeScheduleActionStartSettings != nil {
+		if err := s.FollowModeScheduleActionStartSettings.Validate(); err != nil {
+			invalidParams.AddNested("FollowModeScheduleActionStartSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s ScheduleActionStartSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.FixedModeScheduleActionStartSettings != nil {
+		v := s.FixedModeScheduleActionStartSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "fixedModeScheduleActionStartSettings", v, metadata)
+	}
+	if s.FollowModeScheduleActionStartSettings != nil {
+		v := s.FollowModeScheduleActionStartSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "followModeScheduleActionStartSettings", v, metadata)
 	}
 	return nil
 }
@@ -10364,6 +13470,408 @@ func (s Scte27SourceSettings) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Corresponds to SCTE-35 delivery_not_restricted_flag parameter. To declare
+// delivery restrictions, include this element and its four "restriction" flags.
+// To declare that there are no restrictions, omit this element.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Scte35DeliveryRestrictions
+type Scte35DeliveryRestrictions struct {
+	_ struct{} `type:"structure"`
+
+	// Corresponds to SCTE-35 archive_allowed_flag.
+	//
+	// ArchiveAllowedFlag is a required field
+	ArchiveAllowedFlag Scte35ArchiveAllowedFlag `locationName:"archiveAllowedFlag" type:"string" required:"true" enum:"true"`
+
+	// Corresponds to SCTE-35 device_restrictions parameter.
+	//
+	// DeviceRestrictions is a required field
+	DeviceRestrictions Scte35DeviceRestrictions `locationName:"deviceRestrictions" type:"string" required:"true" enum:"true"`
+
+	// Corresponds to SCTE-35 no_regional_blackout_flag parameter.
+	//
+	// NoRegionalBlackoutFlag is a required field
+	NoRegionalBlackoutFlag Scte35NoRegionalBlackoutFlag `locationName:"noRegionalBlackoutFlag" type:"string" required:"true" enum:"true"`
+
+	// Corresponds to SCTE-35 web_delivery_allowed_flag parameter.
+	//
+	// WebDeliveryAllowedFlag is a required field
+	WebDeliveryAllowedFlag Scte35WebDeliveryAllowedFlag `locationName:"webDeliveryAllowedFlag" type:"string" required:"true" enum:"true"`
+}
+
+// String returns the string representation
+func (s Scte35DeliveryRestrictions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Scte35DeliveryRestrictions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Scte35DeliveryRestrictions) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "Scte35DeliveryRestrictions"}
+	if len(s.ArchiveAllowedFlag) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("ArchiveAllowedFlag"))
+	}
+	if len(s.DeviceRestrictions) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("DeviceRestrictions"))
+	}
+	if len(s.NoRegionalBlackoutFlag) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("NoRegionalBlackoutFlag"))
+	}
+	if len(s.WebDeliveryAllowedFlag) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("WebDeliveryAllowedFlag"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Scte35DeliveryRestrictions) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.ArchiveAllowedFlag) > 0 {
+		v := s.ArchiveAllowedFlag
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "archiveAllowedFlag", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.DeviceRestrictions) > 0 {
+		v := s.DeviceRestrictions
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "deviceRestrictions", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.NoRegionalBlackoutFlag) > 0 {
+		v := s.NoRegionalBlackoutFlag
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "noRegionalBlackoutFlag", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if len(s.WebDeliveryAllowedFlag) > 0 {
+		v := s.WebDeliveryAllowedFlag
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "webDeliveryAllowedFlag", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	return nil
+}
+
+// Holds one set of SCTE-35 Descriptor Settings.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Scte35Descriptor
+type Scte35Descriptor struct {
+	_ struct{} `type:"structure"`
+
+	// SCTE-35 Descriptor Settings.
+	//
+	// Scte35DescriptorSettings is a required field
+	Scte35DescriptorSettings *Scte35DescriptorSettings `locationName:"scte35DescriptorSettings" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s Scte35Descriptor) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Scte35Descriptor) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Scte35Descriptor) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "Scte35Descriptor"}
+
+	if s.Scte35DescriptorSettings == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Scte35DescriptorSettings"))
+	}
+	if s.Scte35DescriptorSettings != nil {
+		if err := s.Scte35DescriptorSettings.Validate(); err != nil {
+			invalidParams.AddNested("Scte35DescriptorSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Scte35Descriptor) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Scte35DescriptorSettings != nil {
+		v := s.Scte35DescriptorSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "scte35DescriptorSettings", v, metadata)
+	}
+	return nil
+}
+
+// SCTE-35 Descriptor settings.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Scte35DescriptorSettings
+type Scte35DescriptorSettings struct {
+	_ struct{} `type:"structure"`
+
+	// SCTE-35 Segmentation Descriptor.
+	//
+	// SegmentationDescriptorScte35DescriptorSettings is a required field
+	SegmentationDescriptorScte35DescriptorSettings *Scte35SegmentationDescriptor `locationName:"segmentationDescriptorScte35DescriptorSettings" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s Scte35DescriptorSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Scte35DescriptorSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Scte35DescriptorSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "Scte35DescriptorSettings"}
+
+	if s.SegmentationDescriptorScte35DescriptorSettings == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SegmentationDescriptorScte35DescriptorSettings"))
+	}
+	if s.SegmentationDescriptorScte35DescriptorSettings != nil {
+		if err := s.SegmentationDescriptorScte35DescriptorSettings.Validate(); err != nil {
+			invalidParams.AddNested("SegmentationDescriptorScte35DescriptorSettings", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Scte35DescriptorSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.SegmentationDescriptorScte35DescriptorSettings != nil {
+		v := s.SegmentationDescriptorScte35DescriptorSettings
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "segmentationDescriptorScte35DescriptorSettings", v, metadata)
+	}
+	return nil
+}
+
+// Settings for a SCTE-35 return_to_network message.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Scte35ReturnToNetworkScheduleActionSettings
+type Scte35ReturnToNetworkScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The splice_event_id for the SCTE-35 splice_insert, as defined in SCTE-35.
+	//
+	// SpliceEventId is a required field
+	SpliceEventId *int64 `locationName:"spliceEventId" type:"long" required:"true"`
+}
+
+// String returns the string representation
+func (s Scte35ReturnToNetworkScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Scte35ReturnToNetworkScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Scte35ReturnToNetworkScheduleActionSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "Scte35ReturnToNetworkScheduleActionSettings"}
+
+	if s.SpliceEventId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SpliceEventId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Scte35ReturnToNetworkScheduleActionSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.SpliceEventId != nil {
+		v := *s.SpliceEventId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "spliceEventId", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+// Corresponds to SCTE-35 segmentation_descriptor.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Scte35SegmentationDescriptor
+type Scte35SegmentationDescriptor struct {
+	_ struct{} `type:"structure"`
+
+	// Holds the four SCTE-35 delivery restriction parameters.
+	DeliveryRestrictions *Scte35DeliveryRestrictions `locationName:"deliveryRestrictions" type:"structure"`
+
+	// Corresponds to SCTE-35 segment_num. A value that is valid for the specified
+	// segmentation_type_id.
+	SegmentNum *int64 `locationName:"segmentNum" type:"integer"`
+
+	// Corresponds to SCTE-35 segmentation_event_cancel_indicator.
+	//
+	// SegmentationCancelIndicator is a required field
+	SegmentationCancelIndicator Scte35SegmentationCancelIndicator `locationName:"segmentationCancelIndicator" type:"string" required:"true" enum:"true"`
+
+	// Corresponds to SCTE-35 segmentation_duration. Optional. The duration for
+	// the time_signal, in 90 KHz ticks. To convert seconds to ticks, multiple the
+	// seconds by 90,000. Enter time in 90 KHz clock ticks. If you do not enter
+	// a duration, the time_signal will continue until you insert a cancellation
+	// message.
+	SegmentationDuration *int64 `locationName:"segmentationDuration" type:"long"`
+
+	// Corresponds to SCTE-35 segmentation_event_id.
+	//
+	// SegmentationEventId is a required field
+	SegmentationEventId *int64 `locationName:"segmentationEventId" type:"long" required:"true"`
+
+	// Corresponds to SCTE-35 segmentation_type_id. One of the segmentation_type_id
+	// values listed in the SCTE-35 specification. On the console, enter the ID
+	// in decimal (for example, "52"). In the CLI, API, or an SDK, enter the ID
+	// in hex (for example, "0x34") or decimal (for example, "52").
+	SegmentationTypeId *int64 `locationName:"segmentationTypeId" type:"integer"`
+
+	// Corresponds to SCTE-35 segmentation_upid. Enter a string containing the hexadecimal
+	// representation of the characters that make up the SCTE-35 segmentation_upid
+	// value. Must contain an even number of hex characters. Do not include spaces
+	// between each hex pair. For example, the ASCII "ADS Information" becomes hex
+	// "41445320496e666f726d6174696f6e.
+	SegmentationUpid *string `locationName:"segmentationUpid" type:"string"`
+
+	// Corresponds to SCTE-35 segmentation_upid_type. On the console, enter one
+	// of the types listed in the SCTE-35 specification, converted to a decimal.
+	// For example, "0x0C" hex from the specification is "12" in decimal. In the
+	// CLI, API, or an SDK, enter one of the types listed in the SCTE-35 specification,
+	// in either hex (for example, "0x0C" ) or in decimal (for example, "12").
+	SegmentationUpidType *int64 `locationName:"segmentationUpidType" type:"integer"`
+
+	// Corresponds to SCTE-35 segments_expected. A value that is valid for the specified
+	// segmentation_type_id.
+	SegmentsExpected *int64 `locationName:"segmentsExpected" type:"integer"`
+
+	// Corresponds to SCTE-35 sub_segment_num. A value that is valid for the specified
+	// segmentation_type_id.
+	SubSegmentNum *int64 `locationName:"subSegmentNum" type:"integer"`
+
+	// Corresponds to SCTE-35 sub_segments_expected. A value that is valid for the
+	// specified segmentation_type_id.
+	SubSegmentsExpected *int64 `locationName:"subSegmentsExpected" type:"integer"`
+}
+
+// String returns the string representation
+func (s Scte35SegmentationDescriptor) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Scte35SegmentationDescriptor) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Scte35SegmentationDescriptor) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "Scte35SegmentationDescriptor"}
+	if len(s.SegmentationCancelIndicator) == 0 {
+		invalidParams.Add(aws.NewErrParamRequired("SegmentationCancelIndicator"))
+	}
+
+	if s.SegmentationEventId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SegmentationEventId"))
+	}
+	if s.DeliveryRestrictions != nil {
+		if err := s.DeliveryRestrictions.Validate(); err != nil {
+			invalidParams.AddNested("DeliveryRestrictions", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Scte35SegmentationDescriptor) MarshalFields(e protocol.FieldEncoder) error {
+	if s.DeliveryRestrictions != nil {
+		v := s.DeliveryRestrictions
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "deliveryRestrictions", v, metadata)
+	}
+	if s.SegmentNum != nil {
+		v := *s.SegmentNum
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "segmentNum", protocol.Int64Value(v), metadata)
+	}
+	if len(s.SegmentationCancelIndicator) > 0 {
+		v := s.SegmentationCancelIndicator
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "segmentationCancelIndicator", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	if s.SegmentationDuration != nil {
+		v := *s.SegmentationDuration
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "segmentationDuration", protocol.Int64Value(v), metadata)
+	}
+	if s.SegmentationEventId != nil {
+		v := *s.SegmentationEventId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "segmentationEventId", protocol.Int64Value(v), metadata)
+	}
+	if s.SegmentationTypeId != nil {
+		v := *s.SegmentationTypeId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "segmentationTypeId", protocol.Int64Value(v), metadata)
+	}
+	if s.SegmentationUpid != nil {
+		v := *s.SegmentationUpid
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "segmentationUpid", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.SegmentationUpidType != nil {
+		v := *s.SegmentationUpidType
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "segmentationUpidType", protocol.Int64Value(v), metadata)
+	}
+	if s.SegmentsExpected != nil {
+		v := *s.SegmentsExpected
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "segmentsExpected", protocol.Int64Value(v), metadata)
+	}
+	if s.SubSegmentNum != nil {
+		v := *s.SubSegmentNum
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "subSegmentNum", protocol.Int64Value(v), metadata)
+	}
+	if s.SubSegmentsExpected != nil {
+		v := *s.SubSegmentsExpected
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "subSegmentsExpected", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Scte35SpliceInsert
 type Scte35SpliceInsert struct {
 	_ struct{} `type:"structure"`
@@ -10428,6 +13936,66 @@ func (s Scte35SpliceInsert) MarshalFields(e protocol.FieldEncoder) error {
 	return nil
 }
 
+// Settings for a SCTE-35 splice_insert message.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Scte35SpliceInsertScheduleActionSettings
+type Scte35SpliceInsertScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Optional, the duration for the splice_insert, in 90 KHz ticks. To convert
+	// seconds to ticks, multiple the seconds by 90,000. If you enter a duration,
+	// there is an expectation that the downstream system can read the duration
+	// and cue in at that time. If you do not enter a duration, the splice_insert
+	// will continue indefinitely and there is an expectation that you will enter
+	// a return_to_network to end the splice_insert at the appropriate time.
+	Duration *int64 `locationName:"duration" type:"long"`
+
+	// The splice_event_id for the SCTE-35 splice_insert, as defined in SCTE-35.
+	//
+	// SpliceEventId is a required field
+	SpliceEventId *int64 `locationName:"spliceEventId" type:"long" required:"true"`
+}
+
+// String returns the string representation
+func (s Scte35SpliceInsertScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Scte35SpliceInsertScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Scte35SpliceInsertScheduleActionSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "Scte35SpliceInsertScheduleActionSettings"}
+
+	if s.SpliceEventId == nil {
+		invalidParams.Add(aws.NewErrParamRequired("SpliceEventId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Scte35SpliceInsertScheduleActionSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Duration != nil {
+		v := *s.Duration
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "duration", protocol.Int64Value(v), metadata)
+	}
+	if s.SpliceEventId != nil {
+		v := *s.SpliceEventId
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "spliceEventId", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Scte35TimeSignalApos
 type Scte35TimeSignalApos struct {
 	_ struct{} `type:"structure"`
@@ -10488,6 +14056,65 @@ func (s Scte35TimeSignalApos) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "webDeliveryAllowedFlag", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	return nil
+}
+
+// Settings for a SCTE-35 time_signal.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/Scte35TimeSignalScheduleActionSettings
+type Scte35TimeSignalScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The list of SCTE-35 descriptors accompanying the SCTE-35 time_signal.
+	//
+	// Scte35Descriptors is a required field
+	Scte35Descriptors []Scte35Descriptor `locationName:"scte35Descriptors" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s Scte35TimeSignalScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Scte35TimeSignalScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Scte35TimeSignalScheduleActionSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "Scte35TimeSignalScheduleActionSettings"}
+
+	if s.Scte35Descriptors == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Scte35Descriptors"))
+	}
+	if s.Scte35Descriptors != nil {
+		for i, v := range s.Scte35Descriptors {
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Scte35Descriptors", i), err.(aws.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s Scte35TimeSignalScheduleActionSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if len(s.Scte35Descriptors) > 0 {
+		v := s.Scte35Descriptors
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "scte35Descriptors", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
 	}
 	return nil
 }
@@ -10632,6 +14259,9 @@ type StartChannelOutput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
+	LogLevel LogLevel `locationName:"logLevel" type:"string" enum:"true"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	PipelinesRunningCount *int64 `locationName:"pipelinesRunningCount" type:"integer"`
@@ -10718,6 +14348,12 @@ func (s StartChannelOutput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "inputSpecification", v, metadata)
 	}
+	if len(s.LogLevel) > 0 {
+		v := s.LogLevel
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "logLevel", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
 	if s.Name != nil {
 		v := *s.Name
 
@@ -10741,6 +14377,204 @@ func (s StartChannelOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "state", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
+	return nil
+}
+
+// Settings for the action to activate a static image.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StaticImageActivateScheduleActionSettings
+type StaticImageActivateScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The duration in milliseconds for the image to remain on the video. If omitted
+	// or set to 0 the duration is unlimited and the image will remain until it
+	// is explicitly deactivated.
+	Duration *int64 `locationName:"duration" type:"integer"`
+
+	// The time in milliseconds for the image to fade in. The fade-in starts at
+	// the start time of the overlay. Default is 0 (no fade-in).
+	FadeIn *int64 `locationName:"fadeIn" type:"integer"`
+
+	// Applies only if a duration is specified. The time in milliseconds for the
+	// image to fade out. The fade-out starts when the duration time is hit, so
+	// it effectively extends the duration. Default is 0 (no fade-out).
+	FadeOut *int64 `locationName:"fadeOut" type:"integer"`
+
+	// The height of the image when inserted into the video, in pixels. The overlay
+	// will be scaled up or down to the specified height. Leave blank to use the
+	// native height of the overlay.
+	Height *int64 `locationName:"height" min:"1" type:"integer"`
+
+	// The location and filename of the image file to overlay on the video. The
+	// file must be a 32-bit BMP, PNG, or TGA file, and must not be larger (in pixels)
+	// than the input video.
+	//
+	// Image is a required field
+	Image *InputLocation `locationName:"image" type:"structure" required:"true"`
+
+	// Placement of the left edge of the overlay relative to the left edge of the
+	// video frame, in pixels. 0 (the default) is the left edge of the frame. If
+	// the placement causes the overlay to extend beyond the right edge of the underlying
+	// video, then the overlay is cropped on the right.
+	ImageX *int64 `locationName:"imageX" type:"integer"`
+
+	// Placement of the top edge of the overlay relative to the top edge of the
+	// video frame, in pixels. 0 (the default) is the top edge of the frame. If
+	// the placement causes the overlay to extend beyond the bottom edge of the
+	// underlying video, then the overlay is cropped on the bottom.
+	ImageY *int64 `locationName:"imageY" type:"integer"`
+
+	// The number of the layer, 0 to 7. There are 8 layers that can be overlaid
+	// on the video, each layer with a different image. The layers are in Z order,
+	// which means that overlays with higher values of layer are inserted on top
+	// of overlays with lower values of layer. Default is 0.
+	Layer *int64 `locationName:"layer" type:"integer"`
+
+	// Opacity of image where 0 is transparent and 100 is fully opaque. Default
+	// is 100.
+	Opacity *int64 `locationName:"opacity" type:"integer"`
+
+	// The width of the image when inserted into the video, in pixels. The overlay
+	// will be scaled up or down to the specified width. Leave blank to use the
+	// native width of the overlay.
+	Width *int64 `locationName:"width" min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s StaticImageActivateScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StaticImageActivateScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StaticImageActivateScheduleActionSettings) Validate() error {
+	invalidParams := aws.ErrInvalidParams{Context: "StaticImageActivateScheduleActionSettings"}
+	if s.Height != nil && *s.Height < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("Height", 1))
+	}
+
+	if s.Image == nil {
+		invalidParams.Add(aws.NewErrParamRequired("Image"))
+	}
+	if s.Width != nil && *s.Width < 1 {
+		invalidParams.Add(aws.NewErrParamMinValue("Width", 1))
+	}
+	if s.Image != nil {
+		if err := s.Image.Validate(); err != nil {
+			invalidParams.AddNested("Image", err.(aws.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s StaticImageActivateScheduleActionSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.Duration != nil {
+		v := *s.Duration
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "duration", protocol.Int64Value(v), metadata)
+	}
+	if s.FadeIn != nil {
+		v := *s.FadeIn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "fadeIn", protocol.Int64Value(v), metadata)
+	}
+	if s.FadeOut != nil {
+		v := *s.FadeOut
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "fadeOut", protocol.Int64Value(v), metadata)
+	}
+	if s.Height != nil {
+		v := *s.Height
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "height", protocol.Int64Value(v), metadata)
+	}
+	if s.Image != nil {
+		v := s.Image
+
+		metadata := protocol.Metadata{}
+		e.SetFields(protocol.BodyTarget, "image", v, metadata)
+	}
+	if s.ImageX != nil {
+		v := *s.ImageX
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "imageX", protocol.Int64Value(v), metadata)
+	}
+	if s.ImageY != nil {
+		v := *s.ImageY
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "imageY", protocol.Int64Value(v), metadata)
+	}
+	if s.Layer != nil {
+		v := *s.Layer
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "layer", protocol.Int64Value(v), metadata)
+	}
+	if s.Opacity != nil {
+		v := *s.Opacity
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "opacity", protocol.Int64Value(v), metadata)
+	}
+	if s.Width != nil {
+		v := *s.Width
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "width", protocol.Int64Value(v), metadata)
+	}
+	return nil
+}
+
+// Settings for the action to deactivate the image in a specific layer.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StaticImageDeactivateScheduleActionSettings
+type StaticImageDeactivateScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The time in milliseconds for the image to fade out. Default is 0 (no fade-out).
+	FadeOut *int64 `locationName:"fadeOut" type:"integer"`
+
+	// The image overlay layer to deactivate, 0 to 7. Default is 0.
+	Layer *int64 `locationName:"layer" type:"integer"`
+}
+
+// String returns the string representation
+func (s StaticImageDeactivateScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StaticImageDeactivateScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// MarshalFields encodes the AWS API shape using the passed in protocol encoder.
+func (s StaticImageDeactivateScheduleActionSettings) MarshalFields(e protocol.FieldEncoder) error {
+	if s.FadeOut != nil {
+		v := *s.FadeOut
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "fadeOut", protocol.Int64Value(v), metadata)
+	}
+	if s.Layer != nil {
+		v := *s.Layer
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "layer", protocol.Int64Value(v), metadata)
 	}
 	return nil
 }
@@ -10872,6 +14706,9 @@ type StopChannelOutput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
+	LogLevel LogLevel `locationName:"logLevel" type:"string" enum:"true"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	PipelinesRunningCount *int64 `locationName:"pipelinesRunningCount" type:"integer"`
@@ -10957,6 +14794,12 @@ func (s StopChannelOutput) MarshalFields(e protocol.FieldEncoder) error {
 
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "inputSpecification", v, metadata)
+	}
+	if len(s.LogLevel) > 0 {
+		v := s.LogLevel
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "logLevel", protocol.QuotedValue{ValueMarshaler: v}, metadata)
 	}
 	if s.Name != nil {
 		v := *s.Name
@@ -11332,6 +15175,9 @@ type UpdateChannelInput struct {
 
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
+	// The log level the user wants for their channel.
+	LogLevel LogLevel `locationName:"logLevel" type:"string" enum:"true"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	RoleArn *string `locationName:"roleArn" type:"string"`
@@ -11413,6 +15259,12 @@ func (s UpdateChannelInput) MarshalFields(e protocol.FieldEncoder) error {
 		metadata := protocol.Metadata{}
 		e.SetFields(protocol.BodyTarget, "inputSpecification", v, metadata)
 	}
+	if len(s.LogLevel) > 0 {
+		v := s.LogLevel
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "logLevel", protocol.QuotedValue{ValueMarshaler: v}, metadata)
+	}
 	if s.Name != nil {
 		v := *s.Name
 
@@ -11480,7 +15332,11 @@ type UpdateInputInput struct {
 
 	InputSecurityGroups []string `locationName:"inputSecurityGroups" type:"list"`
 
+	MediaConnectFlows []MediaConnectFlowRequest `locationName:"mediaConnectFlows" type:"list"`
+
 	Name *string `locationName:"name" type:"string"`
+
+	RoleArn *string `locationName:"roleArn" type:"string"`
 
 	Sources []InputSourceRequest `locationName:"sources" type:"list"`
 }
@@ -11537,11 +15393,29 @@ func (s UpdateInputInput) MarshalFields(e protocol.FieldEncoder) error {
 		ls0.End()
 
 	}
+	if len(s.MediaConnectFlows) > 0 {
+		v := s.MediaConnectFlows
+
+		metadata := protocol.Metadata{}
+		ls0 := e.List(protocol.BodyTarget, "mediaConnectFlows", metadata)
+		ls0.Start()
+		for _, v1 := range v {
+			ls0.ListAddFields(v1)
+		}
+		ls0.End()
+
+	}
 	if s.Name != nil {
 		v := *s.Name
 
 		metadata := protocol.Metadata{}
 		e.SetValue(protocol.BodyTarget, "name", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
+	}
+	if s.RoleArn != nil {
+		v := *s.RoleArn
+
+		metadata := protocol.Metadata{}
+		e.SetValue(protocol.BodyTarget, "roleArn", protocol.QuotedValue{ValueMarshaler: protocol.StringValue(v)}, metadata)
 	}
 	if len(s.Sources) > 0 {
 		v := s.Sources
@@ -13088,6 +16962,24 @@ func (enum FixedAfd) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
+// Follow reference point.
+type FollowPoint string
+
+// Enum values for FollowPoint
+const (
+	FollowPointEnd   FollowPoint = "END"
+	FollowPointStart FollowPoint = "START"
+)
+
+func (enum FollowPoint) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum FollowPoint) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type GlobalConfigurationInputEndAction string
 
 // Enum values for GlobalConfigurationInputEndAction
@@ -13354,8 +17246,9 @@ type H264RateControlMode string
 
 // Enum values for H264RateControlMode
 const (
-	H264RateControlModeCbr H264RateControlMode = "CBR"
-	H264RateControlModeVbr H264RateControlMode = "VBR"
+	H264RateControlModeCbr  H264RateControlMode = "CBR"
+	H264RateControlModeQvbr H264RateControlMode = "QVBR"
+	H264RateControlModeVbr  H264RateControlMode = "VBR"
 )
 
 func (enum H264RateControlMode) MarshalValue() (string, error) {
@@ -13414,6 +17307,23 @@ func (enum H264SpatialAq) MarshalValue() (string, error) {
 }
 
 func (enum H264SpatialAq) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+type H264SubGopLength string
+
+// Enum values for H264SubGopLength
+const (
+	H264SubGopLengthDynamic H264SubGopLength = "DYNAMIC"
+	H264SubGopLengthFixed   H264SubGopLength = "FIXED"
+)
+
+func (enum H264SubGopLength) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum H264SubGopLength) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }
@@ -13725,6 +17635,23 @@ func (enum HlsProgramDateTime) MarshalValueBuf(b []byte) ([]byte, error) {
 	return append(b, enum...), nil
 }
 
+type HlsRedundantManifest string
+
+// Enum values for HlsRedundantManifest
+const (
+	HlsRedundantManifestDisabled HlsRedundantManifest = "DISABLED"
+	HlsRedundantManifestEnabled  HlsRedundantManifest = "ENABLED"
+)
+
+func (enum HlsRedundantManifest) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum HlsRedundantManifest) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type HlsSegmentationMode string
 
 // Enum values for HlsSegmentationMode
@@ -13916,6 +17843,23 @@ func (enum InputLossActionForMsSmoothOut) MarshalValueBuf(b []byte) ([]byte, err
 	return append(b, enum...), nil
 }
 
+type InputLossActionForRtmpOut string
+
+// Enum values for InputLossActionForRtmpOut
+const (
+	InputLossActionForRtmpOutEmitOutput  InputLossActionForRtmpOut = "EMIT_OUTPUT"
+	InputLossActionForRtmpOutPauseOutput InputLossActionForRtmpOut = "PAUSE_OUTPUT"
+)
+
+func (enum InputLossActionForRtmpOut) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum InputLossActionForRtmpOut) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type InputLossActionForUdpOut string
 
 // Enum values for InputLossActionForUdpOut
@@ -14051,11 +17995,13 @@ type InputType string
 
 // Enum values for InputType
 const (
-	InputTypeUdpPush  InputType = "UDP_PUSH"
-	InputTypeRtpPush  InputType = "RTP_PUSH"
-	InputTypeRtmpPush InputType = "RTMP_PUSH"
-	InputTypeRtmpPull InputType = "RTMP_PULL"
-	InputTypeUrlPull  InputType = "URL_PULL"
+	InputTypeUdpPush      InputType = "UDP_PUSH"
+	InputTypeRtpPush      InputType = "RTP_PUSH"
+	InputTypeRtmpPush     InputType = "RTMP_PUSH"
+	InputTypeRtmpPull     InputType = "RTMP_PULL"
+	InputTypeUrlPull      InputType = "URL_PULL"
+	InputTypeMp4File      InputType = "MP4_FILE"
+	InputTypeMediaconnect InputType = "MEDIACONNECT"
 )
 
 func (enum InputType) MarshalValue() (string, error) {
@@ -14063,6 +18009,27 @@ func (enum InputType) MarshalValue() (string, error) {
 }
 
 func (enum InputType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// The log level the user wants for their channel.
+type LogLevel string
+
+// Enum values for LogLevel
+const (
+	LogLevelError    LogLevel = "ERROR"
+	LogLevelWarning  LogLevel = "WARNING"
+	LogLevelInfo     LogLevel = "INFO"
+	LogLevelDebug    LogLevel = "DEBUG"
+	LogLevelDisabled LogLevel = "DISABLED"
+)
+
+func (enum LogLevel) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum LogLevel) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }
@@ -14462,6 +18429,193 @@ func (enum NetworkInputServerValidation) MarshalValueBuf(b []byte) ([]byte, erro
 	return append(b, enum...), nil
 }
 
+// Units for duration, e.g. 'MONTHS'
+type OfferingDurationUnits string
+
+// Enum values for OfferingDurationUnits
+const (
+	OfferingDurationUnitsMonths OfferingDurationUnits = "MONTHS"
+)
+
+func (enum OfferingDurationUnits) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum OfferingDurationUnits) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Offering type, e.g. 'NO_UPFRONT'
+type OfferingType string
+
+// Enum values for OfferingType
+const (
+	OfferingTypeNoUpfront OfferingType = "NO_UPFRONT"
+)
+
+func (enum OfferingType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum OfferingType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Codec, 'MPEG2', 'AVC', 'HEVC', or 'AUDIO'
+type ReservationCodec string
+
+// Enum values for ReservationCodec
+const (
+	ReservationCodecMpeg2 ReservationCodec = "MPEG2"
+	ReservationCodecAvc   ReservationCodec = "AVC"
+	ReservationCodecHevc  ReservationCodec = "HEVC"
+	ReservationCodecAudio ReservationCodec = "AUDIO"
+)
+
+func (enum ReservationCodec) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ReservationCodec) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Maximum bitrate in megabits per second
+type ReservationMaximumBitrate string
+
+// Enum values for ReservationMaximumBitrate
+const (
+	ReservationMaximumBitrateMax10Mbps ReservationMaximumBitrate = "MAX_10_MBPS"
+	ReservationMaximumBitrateMax20Mbps ReservationMaximumBitrate = "MAX_20_MBPS"
+	ReservationMaximumBitrateMax50Mbps ReservationMaximumBitrate = "MAX_50_MBPS"
+)
+
+func (enum ReservationMaximumBitrate) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ReservationMaximumBitrate) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Maximum framerate in frames per second (Outputs only)
+type ReservationMaximumFramerate string
+
+// Enum values for ReservationMaximumFramerate
+const (
+	ReservationMaximumFramerateMax30Fps ReservationMaximumFramerate = "MAX_30_FPS"
+	ReservationMaximumFramerateMax60Fps ReservationMaximumFramerate = "MAX_60_FPS"
+)
+
+func (enum ReservationMaximumFramerate) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ReservationMaximumFramerate) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Resolution based on lines of vertical resolution; SD is less than 720 lines,
+// HD is 720 to 1080 lines, UHD is greater than 1080 lines
+type ReservationResolution string
+
+// Enum values for ReservationResolution
+const (
+	ReservationResolutionSd  ReservationResolution = "SD"
+	ReservationResolutionHd  ReservationResolution = "HD"
+	ReservationResolutionUhd ReservationResolution = "UHD"
+)
+
+func (enum ReservationResolution) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ReservationResolution) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Resource type, 'INPUT', 'OUTPUT', or 'CHANNEL'
+type ReservationResourceType string
+
+// Enum values for ReservationResourceType
+const (
+	ReservationResourceTypeInput   ReservationResourceType = "INPUT"
+	ReservationResourceTypeOutput  ReservationResourceType = "OUTPUT"
+	ReservationResourceTypeChannel ReservationResourceType = "CHANNEL"
+)
+
+func (enum ReservationResourceType) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ReservationResourceType) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Special features, 'ADVANCED_AUDIO' or 'AUDIO_NORMALIZATION'
+type ReservationSpecialFeature string
+
+// Enum values for ReservationSpecialFeature
+const (
+	ReservationSpecialFeatureAdvancedAudio      ReservationSpecialFeature = "ADVANCED_AUDIO"
+	ReservationSpecialFeatureAudioNormalization ReservationSpecialFeature = "AUDIO_NORMALIZATION"
+)
+
+func (enum ReservationSpecialFeature) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ReservationSpecialFeature) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Current reservation state
+type ReservationState string
+
+// Enum values for ReservationState
+const (
+	ReservationStateActive   ReservationState = "ACTIVE"
+	ReservationStateExpired  ReservationState = "EXPIRED"
+	ReservationStateCanceled ReservationState = "CANCELED"
+	ReservationStateDeleted  ReservationState = "DELETED"
+)
+
+func (enum ReservationState) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ReservationState) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Video quality, e.g. 'STANDARD' (Outputs only)
+type ReservationVideoQuality string
+
+// Enum values for ReservationVideoQuality
+const (
+	ReservationVideoQualityStandard ReservationVideoQuality = "STANDARD"
+	ReservationVideoQualityEnhanced ReservationVideoQuality = "ENHANCED"
+	ReservationVideoQualityPremium  ReservationVideoQuality = "PREMIUM"
+)
+
+func (enum ReservationVideoQuality) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum ReservationVideoQuality) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type RtmpCacheFullBehavior string
 
 // Enum values for RtmpCacheFullBehavior
@@ -14565,6 +18719,90 @@ func (enum Scte35AposWebDeliveryAllowedBehavior) MarshalValueBuf(b []byte) ([]by
 	return append(b, enum...), nil
 }
 
+// Corresponds to the archive_allowed parameter. A value of ARCHIVE_NOT_ALLOWED
+// corresponds to 0 (false) in the SCTE-35 specification. If you include one
+// of the "restriction" flags then you must include all four of them.
+type Scte35ArchiveAllowedFlag string
+
+// Enum values for Scte35ArchiveAllowedFlag
+const (
+	Scte35ArchiveAllowedFlagArchiveNotAllowed Scte35ArchiveAllowedFlag = "ARCHIVE_NOT_ALLOWED"
+	Scte35ArchiveAllowedFlagArchiveAllowed    Scte35ArchiveAllowedFlag = "ARCHIVE_ALLOWED"
+)
+
+func (enum Scte35ArchiveAllowedFlag) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum Scte35ArchiveAllowedFlag) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Corresponds to the device_restrictions parameter in a segmentation_descriptor.
+// If you include one of the "restriction" flags then you must include all four
+// of them.
+type Scte35DeviceRestrictions string
+
+// Enum values for Scte35DeviceRestrictions
+const (
+	Scte35DeviceRestrictionsNone           Scte35DeviceRestrictions = "NONE"
+	Scte35DeviceRestrictionsRestrictGroup0 Scte35DeviceRestrictions = "RESTRICT_GROUP0"
+	Scte35DeviceRestrictionsRestrictGroup1 Scte35DeviceRestrictions = "RESTRICT_GROUP1"
+	Scte35DeviceRestrictionsRestrictGroup2 Scte35DeviceRestrictions = "RESTRICT_GROUP2"
+)
+
+func (enum Scte35DeviceRestrictions) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum Scte35DeviceRestrictions) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Corresponds to the no_regional_blackout_flag parameter. A value of REGIONAL_BLACKOUT
+// corresponds to 0 (false) in the SCTE-35 specification. If you include one
+// of the "restriction" flags then you must include all four of them.
+type Scte35NoRegionalBlackoutFlag string
+
+// Enum values for Scte35NoRegionalBlackoutFlag
+const (
+	Scte35NoRegionalBlackoutFlagRegionalBlackout   Scte35NoRegionalBlackoutFlag = "REGIONAL_BLACKOUT"
+	Scte35NoRegionalBlackoutFlagNoRegionalBlackout Scte35NoRegionalBlackoutFlag = "NO_REGIONAL_BLACKOUT"
+)
+
+func (enum Scte35NoRegionalBlackoutFlag) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum Scte35NoRegionalBlackoutFlag) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Corresponds to SCTE-35 segmentation_event_cancel_indicator. SEGMENTATION_EVENT_NOT_CANCELED
+// corresponds to 0 in the SCTE-35 specification and indicates that this is
+// an insertion request. SEGMENTATION_EVENT_CANCELED corresponds to 1 in the
+// SCTE-35 specification and indicates that this is a cancelation request, in
+// which case complete this field and the existing event ID to cancel.
+type Scte35SegmentationCancelIndicator string
+
+// Enum values for Scte35SegmentationCancelIndicator
+const (
+	Scte35SegmentationCancelIndicatorSegmentationEventNotCanceled Scte35SegmentationCancelIndicator = "SEGMENTATION_EVENT_NOT_CANCELED"
+	Scte35SegmentationCancelIndicatorSegmentationEventCanceled    Scte35SegmentationCancelIndicator = "SEGMENTATION_EVENT_CANCELED"
+)
+
+func (enum Scte35SegmentationCancelIndicator) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum Scte35SegmentationCancelIndicator) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
 type Scte35SpliceInsertNoRegionalBlackoutBehavior string
 
 // Enum values for Scte35SpliceInsertNoRegionalBlackoutBehavior
@@ -14595,6 +18833,26 @@ func (enum Scte35SpliceInsertWebDeliveryAllowedBehavior) MarshalValue() (string,
 }
 
 func (enum Scte35SpliceInsertWebDeliveryAllowedBehavior) MarshalValueBuf(b []byte) ([]byte, error) {
+	b = b[0:0]
+	return append(b, enum...), nil
+}
+
+// Corresponds to the web_delivery_allowed_flag parameter. A value of WEB_DELIVERY_NOT_ALLOWED
+// corresponds to 0 (false) in the SCTE-35 specification. If you include one
+// of the "restriction" flags then you must include all four of them.
+type Scte35WebDeliveryAllowedFlag string
+
+// Enum values for Scte35WebDeliveryAllowedFlag
+const (
+	Scte35WebDeliveryAllowedFlagWebDeliveryNotAllowed Scte35WebDeliveryAllowedFlag = "WEB_DELIVERY_NOT_ALLOWED"
+	Scte35WebDeliveryAllowedFlagWebDeliveryAllowed    Scte35WebDeliveryAllowedFlag = "WEB_DELIVERY_ALLOWED"
+)
+
+func (enum Scte35WebDeliveryAllowedFlag) MarshalValue() (string, error) {
+	return string(enum), nil
+}
+
+func (enum Scte35WebDeliveryAllowedFlag) MarshalValueBuf(b []byte) ([]byte, error) {
 	b = b[0:0]
 	return append(b, enum...), nil
 }

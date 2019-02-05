@@ -87,6 +87,7 @@
         "requestUri":"/datasets/{datasetName}/content"
       },
       "input":{"shape":"CreateDatasetContentRequest"},
+      "output":{"shape":"CreateDatasetContentResponse"},
       "errors":[
         {"shape":"InvalidRequestException"},
         {"shape":"ResourceNotFoundException"},
@@ -322,6 +323,22 @@
         {"shape":"ThrottlingException"}
       ]
     },
+    "ListDatasetContents":{
+      "name":"ListDatasetContents",
+      "http":{
+        "method":"GET",
+        "requestUri":"/datasets/{datasetName}/contents"
+      },
+      "input":{"shape":"ListDatasetContentsRequest"},
+      "output":{"shape":"ListDatasetContentsResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"InternalFailureException"},
+        {"shape":"ServiceUnavailableException"},
+        {"shape":"ThrottlingException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "ListDatasets":{
       "name":"ListDatasets",
       "http":{
@@ -365,6 +382,23 @@
         {"shape":"InternalFailureException"},
         {"shape":"ServiceUnavailableException"},
         {"shape":"ThrottlingException"}
+      ]
+    },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"GET",
+        "requestUri":"/tags"
+      },
+      "input":{"shape":"ListTagsForResourceRequest"},
+      "output":{"shape":"ListTagsForResourceResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"InternalFailureException"},
+        {"shape":"ServiceUnavailableException"},
+        {"shape":"ThrottlingException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceNotFoundException"}
       ]
     },
     "PutLoggingOptions":{
@@ -427,6 +461,42 @@
         {"shape":"InternalFailureException"},
         {"shape":"ServiceUnavailableException"},
         {"shape":"ThrottlingException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/tags",
+        "responseCode":204
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "output":{"shape":"TagResourceResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"InternalFailureException"},
+        {"shape":"ServiceUnavailableException"},
+        {"shape":"ThrottlingException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/tags",
+        "responseCode":204
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "output":{"shape":"UntagResourceResponse"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"InternalFailureException"},
+        {"shape":"ServiceUnavailableException"},
+        {"shape":"ThrottlingException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceNotFoundException"}
       ]
     },
     "UpdateChannel":{
@@ -615,6 +685,12 @@
       "min":1,
       "pattern":"^[a-zA-Z0-9_]+$"
     },
+    "ChannelStatistics":{
+      "type":"structure",
+      "members":{
+        "size":{"shape":"EstimatedResourceSize"}
+      }
+    },
     "ChannelStatus":{
       "type":"string",
       "enum":[
@@ -636,12 +712,34 @@
         "lastUpdateTime":{"shape":"Timestamp"}
       }
     },
+    "ComputeType":{
+      "type":"string",
+      "enum":[
+        "ACU_1",
+        "ACU_2"
+      ]
+    },
+    "ContainerDatasetAction":{
+      "type":"structure",
+      "required":[
+        "image",
+        "executionRoleArn",
+        "resourceConfiguration"
+      ],
+      "members":{
+        "image":{"shape":"Image"},
+        "executionRoleArn":{"shape":"RoleArn"},
+        "resourceConfiguration":{"shape":"ResourceConfiguration"},
+        "variables":{"shape":"Variables"}
+      }
+    },
     "CreateChannelRequest":{
       "type":"structure",
       "required":["channelName"],
       "members":{
         "channelName":{"shape":"ChannelName"},
-        "retentionPeriod":{"shape":"RetentionPeriod"}
+        "retentionPeriod":{"shape":"RetentionPeriod"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateChannelResponse":{
@@ -663,6 +761,12 @@
         }
       }
     },
+    "CreateDatasetContentResponse":{
+      "type":"structure",
+      "members":{
+        "versionId":{"shape":"DatasetContentVersion"}
+      }
+    },
     "CreateDatasetRequest":{
       "type":"structure",
       "required":[
@@ -672,14 +776,18 @@
       "members":{
         "datasetName":{"shape":"DatasetName"},
         "actions":{"shape":"DatasetActions"},
-        "triggers":{"shape":"DatasetTriggers"}
+        "triggers":{"shape":"DatasetTriggers"},
+        "contentDeliveryRules":{"shape":"DatasetContentDeliveryRules"},
+        "retentionPeriod":{"shape":"RetentionPeriod"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateDatasetResponse":{
       "type":"structure",
       "members":{
         "datasetName":{"shape":"DatasetName"},
-        "datasetArn":{"shape":"DatasetArn"}
+        "datasetArn":{"shape":"DatasetArn"},
+        "retentionPeriod":{"shape":"RetentionPeriod"}
       }
     },
     "CreateDatastoreRequest":{
@@ -687,7 +795,8 @@
       "required":["datastoreName"],
       "members":{
         "datastoreName":{"shape":"DatastoreName"},
-        "retentionPeriod":{"shape":"RetentionPeriod"}
+        "retentionPeriod":{"shape":"RetentionPeriod"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateDatastoreResponse":{
@@ -706,7 +815,8 @@
       ],
       "members":{
         "pipelineName":{"shape":"PipelineName"},
-        "pipelineActivities":{"shape":"PipelineActivities"}
+        "pipelineActivities":{"shape":"PipelineActivities"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreatePipelineResponse":{
@@ -723,16 +833,19 @@
         "arn":{"shape":"DatasetArn"},
         "actions":{"shape":"DatasetActions"},
         "triggers":{"shape":"DatasetTriggers"},
+        "contentDeliveryRules":{"shape":"DatasetContentDeliveryRules"},
         "status":{"shape":"DatasetStatus"},
         "creationTime":{"shape":"Timestamp"},
-        "lastUpdateTime":{"shape":"Timestamp"}
+        "lastUpdateTime":{"shape":"Timestamp"},
+        "retentionPeriod":{"shape":"RetentionPeriod"}
       }
     },
     "DatasetAction":{
       "type":"structure",
       "members":{
         "actionName":{"shape":"DatasetActionName"},
-        "queryAction":{"shape":"SqlQueryDatasetAction"}
+        "queryAction":{"shape":"SqlQueryDatasetAction"},
+        "containerAction":{"shape":"ContainerDatasetAction"}
       }
     },
     "DatasetActionName":{
@@ -741,6 +854,26 @@
       "min":1,
       "pattern":"^[a-zA-Z0-9_]+$"
     },
+    "DatasetActionSummaries":{
+      "type":"list",
+      "member":{"shape":"DatasetActionSummary"},
+      "max":1,
+      "min":1
+    },
+    "DatasetActionSummary":{
+      "type":"structure",
+      "members":{
+        "actionName":{"shape":"DatasetActionName"},
+        "actionType":{"shape":"DatasetActionType"}
+      }
+    },
+    "DatasetActionType":{
+      "type":"string",
+      "enum":[
+        "QUERY",
+        "CONTAINER"
+      ]
+    },
     "DatasetActions":{
       "type":"list",
       "member":{"shape":"DatasetAction"},
@@ -748,6 +881,26 @@
       "min":1
     },
     "DatasetArn":{"type":"string"},
+    "DatasetContentDeliveryDestination":{
+      "type":"structure",
+      "members":{
+        "iotEventsDestinationConfiguration":{"shape":"IotEventsDestinationConfiguration"}
+      }
+    },
+    "DatasetContentDeliveryRule":{
+      "type":"structure",
+      "required":["destination"],
+      "members":{
+        "entryName":{"shape":"EntryName"},
+        "destination":{"shape":"DatasetContentDeliveryDestination"}
+      }
+    },
+    "DatasetContentDeliveryRules":{
+      "type":"list",
+      "member":{"shape":"DatasetContentDeliveryRule"},
+      "max":20,
+      "min":0
+    },
     "DatasetContentState":{
       "type":"string",
       "enum":[
@@ -763,7 +916,31 @@
         "reason":{"shape":"Reason"}
       }
     },
-    "DatasetContentVersion":{"type":"string"},
+    "DatasetContentSummaries":{
+      "type":"list",
+      "member":{"shape":"DatasetContentSummary"}
+    },
+    "DatasetContentSummary":{
+      "type":"structure",
+      "members":{
+        "version":{"shape":"DatasetContentVersion"},
+        "status":{"shape":"DatasetContentStatus"},
+        "creationTime":{"shape":"Timestamp"},
+        "scheduleTime":{"shape":"Timestamp"}
+      }
+    },
+    "DatasetContentVersion":{
+      "type":"string",
+      "max":36,
+      "min":7
+    },
+    "DatasetContentVersionValue":{
+      "type":"structure",
+      "required":["datasetName"],
+      "members":{
+        "datasetName":{"shape":"DatasetName"}
+      }
+    },
     "DatasetEntries":{
       "type":"list",
       "member":{"shape":"DatasetEntry"}
@@ -799,13 +976,16 @@
         "datasetName":{"shape":"DatasetName"},
         "status":{"shape":"DatasetStatus"},
         "creationTime":{"shape":"Timestamp"},
-        "lastUpdateTime":{"shape":"Timestamp"}
+        "lastUpdateTime":{"shape":"Timestamp"},
+        "triggers":{"shape":"DatasetTriggers"},
+        "actions":{"shape":"DatasetActionSummaries"}
       }
     },
     "DatasetTrigger":{
       "type":"structure",
       "members":{
-        "schedule":{"shape":"Schedule"}
+        "schedule":{"shape":"Schedule"},
+        "dataset":{"shape":"TriggeringDataset"}
       }
     },
     "DatasetTriggers":{
@@ -842,6 +1022,12 @@
       "max":128,
       "min":1,
       "pattern":"^[a-zA-Z0-9_]+$"
+    },
+    "DatastoreStatistics":{
+      "type":"structure",
+      "members":{
+        "size":{"shape":"EstimatedResourceSize"}
+      }
     },
     "DatastoreStatus":{
       "type":"string",
@@ -924,6 +1110,17 @@
         }
       }
     },
+    "DeltaTime":{
+      "type":"structure",
+      "required":[
+        "offsetSeconds",
+        "timeExpression"
+      ],
+      "members":{
+        "offsetSeconds":{"shape":"OffsetSeconds"},
+        "timeExpression":{"shape":"TimeExpression"}
+      }
+    },
     "DescribeChannelRequest":{
       "type":"structure",
       "required":["channelName"],
@@ -932,13 +1129,19 @@
           "shape":"ChannelName",
           "location":"uri",
           "locationName":"channelName"
+        },
+        "includeStatistics":{
+          "shape":"IncludeStatisticsFlag",
+          "location":"querystring",
+          "locationName":"includeStatistics"
         }
       }
     },
     "DescribeChannelResponse":{
       "type":"structure",
       "members":{
-        "channel":{"shape":"Channel"}
+        "channel":{"shape":"Channel"},
+        "statistics":{"shape":"ChannelStatistics"}
       }
     },
     "DescribeDatasetRequest":{
@@ -966,13 +1169,19 @@
           "shape":"DatastoreName",
           "location":"uri",
           "locationName":"datastoreName"
+        },
+        "includeStatistics":{
+          "shape":"IncludeStatisticsFlag",
+          "location":"querystring",
+          "locationName":"includeStatistics"
         }
       }
     },
     "DescribeDatastoreResponse":{
       "type":"structure",
       "members":{
-        "datastore":{"shape":"Datastore"}
+        "datastore":{"shape":"Datastore"},
+        "statistics":{"shape":"DatastoreStatistics"}
       }
     },
     "DescribeLoggingOptionsRequest":{
@@ -1035,10 +1244,18 @@
         "next":{"shape":"ActivityName"}
       }
     },
+    "DoubleValue":{"type":"double"},
     "EndTime":{"type":"timestamp"},
     "EntryName":{"type":"string"},
     "ErrorCode":{"type":"string"},
     "ErrorMessage":{"type":"string"},
+    "EstimatedResourceSize":{
+      "type":"structure",
+      "members":{
+        "estimatedSizeInBytes":{"shape":"SizeInBytes"},
+        "estimatedOn":{"shape":"Timestamp"}
+      }
+    },
     "FilterActivity":{
       "type":"structure",
       "required":[
@@ -1080,6 +1297,11 @@
         "status":{"shape":"DatasetContentStatus"}
       }
     },
+    "Image":{
+      "type":"string",
+      "max":255
+    },
+    "IncludeStatisticsFlag":{"type":"boolean"},
     "InternalFailureException":{
       "type":"structure",
       "members":{
@@ -1096,6 +1318,23 @@
       },
       "error":{"httpStatusCode":400},
       "exception":true
+    },
+    "IotEventsDestinationConfiguration":{
+      "type":"structure",
+      "required":[
+        "inputName",
+        "roleArn"
+      ],
+      "members":{
+        "inputName":{"shape":"IotEventsInputName"},
+        "roleArn":{"shape":"RoleArn"}
+      }
+    },
+    "IotEventsInputName":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"^[a-zA-Z][a-zA-Z0-9_]*$"
     },
     "LambdaActivity":{
       "type":"structure",
@@ -1144,6 +1383,34 @@
       "type":"structure",
       "members":{
         "channelSummaries":{"shape":"ChannelSummaries"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListDatasetContentsRequest":{
+      "type":"structure",
+      "required":["datasetName"],
+      "members":{
+        "datasetName":{
+          "shape":"DatasetName",
+          "location":"uri",
+          "locationName":"datasetName"
+        },
+        "nextToken":{
+          "shape":"NextToken",
+          "location":"querystring",
+          "locationName":"nextToken"
+        },
+        "maxResults":{
+          "shape":"MaxResults",
+          "location":"querystring",
+          "locationName":"maxResults"
+        }
+      }
+    },
+    "ListDatasetContentsResponse":{
+      "type":"structure",
+      "members":{
+        "datasetContentSummaries":{"shape":"DatasetContentSummaries"},
         "nextToken":{"shape":"NextToken"}
       }
     },
@@ -1211,6 +1478,23 @@
       "members":{
         "pipelineSummaries":{"shape":"PipelineSummaries"},
         "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListTagsForResourceRequest":{
+      "type":"structure",
+      "required":["resourceArn"],
+      "members":{
+        "resourceArn":{
+          "shape":"ResourceArn",
+          "location":"querystring",
+          "locationName":"resourceArn"
+        }
+      }
+    },
+    "ListTagsForResourceResponse":{
+      "type":"structure",
+      "members":{
+        "tags":{"shape":"TagList"}
       }
     },
     "LogResult":{"type":"string"},
@@ -1289,6 +1573,18 @@
       "member":{"shape":"Message"}
     },
     "NextToken":{"type":"string"},
+    "OffsetSeconds":{"type":"integer"},
+    "OutputFileName":{
+      "type":"string",
+      "pattern":"[\\w\\.-]{1,255}"
+    },
+    "OutputFileUriValue":{
+      "type":"structure",
+      "required":["fileName"],
+      "members":{
+        "fileName":{"shape":"OutputFileName"}
+      }
+    },
     "Pipeline":{
       "type":"structure",
       "members":{
@@ -1349,6 +1645,18 @@
         "loggingOptions":{"shape":"LoggingOptions"}
       }
     },
+    "QueryFilter":{
+      "type":"structure",
+      "members":{
+        "deltaTime":{"shape":"DeltaTime"}
+      }
+    },
+    "QueryFilters":{
+      "type":"list",
+      "member":{"shape":"QueryFilter"},
+      "max":1,
+      "min":0
+    },
     "Reason":{"type":"string"},
     "RemoveAttributesActivity":{
       "type":"structure",
@@ -1393,6 +1701,22 @@
       },
       "error":{"httpStatusCode":409},
       "exception":true
+    },
+    "ResourceArn":{
+      "type":"string",
+      "max":2048,
+      "min":20
+    },
+    "ResourceConfiguration":{
+      "type":"structure",
+      "required":[
+        "computeType",
+        "volumeSizeInGB"
+      ],
+      "members":{
+        "computeType":{"shape":"ComputeType"},
+        "volumeSizeInGB":{"shape":"VolumeSizeInGB"}
+      }
     },
     "ResourceNotFoundException":{
       "type":"structure",
@@ -1496,12 +1820,14 @@
       "exception":true,
       "fault":true
     },
+    "SizeInBytes":{"type":"double"},
     "SqlQuery":{"type":"string"},
     "SqlQueryDatasetAction":{
       "type":"structure",
       "required":["sqlQuery"],
       "members":{
-        "sqlQuery":{"shape":"SqlQuery"}
+        "sqlQuery":{"shape":"SqlQuery"},
+        "filters":{"shape":"QueryFilters"}
       }
     },
     "StartPipelineReprocessingRequest":{
@@ -1524,6 +1850,64 @@
       }
     },
     "StartTime":{"type":"timestamp"},
+    "StringValue":{
+      "type":"string",
+      "max":1024,
+      "min":0
+    },
+    "Tag":{
+      "type":"structure",
+      "required":[
+        "key",
+        "value"
+      ],
+      "members":{
+        "key":{"shape":"TagKey"},
+        "value":{"shape":"TagValue"}
+      }
+    },
+    "TagKey":{
+      "type":"string",
+      "max":256,
+      "min":1
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"},
+      "max":50,
+      "min":1
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"},
+      "max":50,
+      "min":1
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "resourceArn",
+        "tags"
+      ],
+      "members":{
+        "resourceArn":{
+          "shape":"ResourceArn",
+          "location":"querystring",
+          "locationName":"resourceArn"
+        },
+        "tags":{"shape":"TagList"}
+      }
+    },
+    "TagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "min":1
+    },
     "ThrottlingException":{
       "type":"structure",
       "members":{
@@ -1532,8 +1916,40 @@
       "error":{"httpStatusCode":429},
       "exception":true
     },
+    "TimeExpression":{"type":"string"},
     "Timestamp":{"type":"timestamp"},
+    "TriggeringDataset":{
+      "type":"structure",
+      "required":["name"],
+      "members":{
+        "name":{"shape":"DatasetName"}
+      }
+    },
     "UnlimitedRetentionPeriod":{"type":"boolean"},
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "resourceArn",
+        "tagKeys"
+      ],
+      "members":{
+        "resourceArn":{
+          "shape":"ResourceArn",
+          "location":"querystring",
+          "locationName":"resourceArn"
+        },
+        "tagKeys":{
+          "shape":"TagKeyList",
+          "location":"querystring",
+          "locationName":"tagKeys"
+        }
+      }
+    },
+    "UntagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "UpdateChannelRequest":{
       "type":"structure",
       "required":["channelName"],
@@ -1559,7 +1975,9 @@
           "locationName":"datasetName"
         },
         "actions":{"shape":"DatasetActions"},
-        "triggers":{"shape":"DatasetTriggers"}
+        "triggers":{"shape":"DatasetTriggers"},
+        "contentDeliveryRules":{"shape":"DatasetContentDeliveryRules"},
+        "retentionPeriod":{"shape":"RetentionPeriod"}
       }
     },
     "UpdateDatastoreRequest":{
@@ -1588,6 +2006,36 @@
         },
         "pipelineActivities":{"shape":"PipelineActivities"}
       }
+    },
+    "Variable":{
+      "type":"structure",
+      "required":["name"],
+      "members":{
+        "name":{"shape":"VariableName"},
+        "stringValue":{"shape":"StringValue"},
+        "doubleValue":{
+          "shape":"DoubleValue",
+          "box":true
+        },
+        "datasetContentVersionValue":{"shape":"DatasetContentVersionValue"},
+        "outputFileUriValue":{"shape":"OutputFileUriValue"}
+      }
+    },
+    "VariableName":{
+      "type":"string",
+      "max":256,
+      "min":1
+    },
+    "Variables":{
+      "type":"list",
+      "member":{"shape":"Variable"},
+      "max":50,
+      "min":0
+    },
+    "VolumeSizeInGB":{
+      "type":"integer",
+      "max":50,
+      "min":1
     },
     "errorMessage":{"type":"string"},
     "resourceArn":{"type":"string"},
