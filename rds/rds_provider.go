@@ -97,7 +97,7 @@ func (r *RDS) RestoreDatabaseFromSnapshot(db *crd.Database, password string) (st
 	res := r.rdsclient().DescribeDBInstancesRequest(k)
 	_, err = res.Send()
 	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
-		log.Printf("DB instance %v not found trying to create it\n", *restoreSnapshotInput.DBInstanceIdentifier)
+		log.Printf("DB instance %v not found trying to restore it\n", *restoreSnapshotInput.DBInstanceIdentifier)
 		// seems like we didn't find a database with this name, let's create on
 		res := r.rdsclient().RestoreDBInstanceFromDBSnapshotRequest(restoreSnapshotInput)
 		_, err = res.Send()
@@ -115,10 +115,10 @@ func (r *RDS) RestoreDatabaseFromSnapshot(db *crd.Database, password string) (st
 	}
 
 	if modifyInstanceInput == nil {
-		log.Printf("DB instance %v created.\n", *restoreSnapshotInput.DBInstanceIdentifier)
+		log.Printf("DB instance %v restored.\n", *restoreSnapshotInput.DBInstanceIdentifier)
 	} else {
 		// apply needed modifications
-		log.Printf("DB instance %v created. Applying some modifications\n", *restoreSnapshotInput.DBInstanceIdentifier)
+		log.Printf("DB instance %v restored. Applying some modifications\n", *restoreSnapshotInput.DBInstanceIdentifier)
 		resModify := r.rdsclient().ModifyDBInstanceRequest(modifyInstanceInput)
 		_, err = resModify.Send()
 		if err != nil {
