@@ -301,7 +301,6 @@ func convertSpecToRestoreSnapshotInput(v *crd.Database, dbSubnetGroupName string
 
 	if modifyInstance {
 		return restoreSnapshotInput, modifyInstanceInput
-	} else {
-		return restoreSnapshotInput, nil
 	}
+	return restoreSnapshotInput, nil
 }
