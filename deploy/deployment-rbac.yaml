@@ -16,18 +16,6 @@ spec:
       containers:
       - image: cloud104/k8s-rds:latest
         env:
-        - name: AWS_REGION
-          value: us-east-1
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              key: AWS_ACCESS_KEY_ID
-              name: k8s-rds
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              key: AWS_SECRET_ACCESS_KEY
-              name: k8s-rds
         imagePullPolicy: Always
         name: k8s-rds
       restartPolicy: Always
