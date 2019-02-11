@@ -133,7 +133,7 @@ func getSubnets(svc *ec2.EC2, public bool) ([]string, error) {
 	params := &ec2.DescribeInstancesInput{
 		Filters: []ec2.Filter{
 			{
-				Name: aws.String("privateDnsName"),
+				Name: aws.String("private-dns-name"),
 				Values: []string{
 					name,
 				},
