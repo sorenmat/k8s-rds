@@ -1,10 +1,6 @@
-FROM golang
+FROM alpine:latest  
+RUN apk --no-cache add ca-certificates
 
-RUN mkdir -p /go/src/github.com/cloud104/k8s-rds
-WORKDIR /go/src/github.com/cloud104/k8s-rds
-COPY . .
-RUN go build -ldflags "-linkmode external -extldflags -static" -a main.go
+COPY k8s-rds .
 
-FROM scratch
-COPY --from=0 /go/src/github.com/cloud104/k8s-rds /k8s-rds
-ENTRYPOINT ["/k8s-rds"]
+CMD ["/k8s-rds"]
