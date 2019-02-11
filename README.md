@@ -15,7 +15,7 @@ The codes will search for the first node, and take the subnets from that node. A
 
 ## Building
 
-`go build`
+`CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o k8s-rds .`
 
 ## Installing
 
