@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/sorenmat/k8s-rds/crd"
+	"github.com/cloud104/k8s-rds/crd"
 
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"

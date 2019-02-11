@@ -3,7 +3,7 @@ package rds
 import (
 	"testing"
 
-	"github.com/sorenmat/k8s-rds/crd"
+	"github.com/cloud104/k8s-rds/crd"
 
 	"github.com/stretchr/testify/assert"
 	"k8s.io/api/core/v1"

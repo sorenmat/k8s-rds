@@ -8,12 +8,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/cloud104/k8s-rds/client"
+	"github.com/cloud104/k8s-rds/crd"
+	"github.com/cloud104/k8s-rds/kube"
+	"github.com/cloud104/k8s-rds/rds"
 	"github.com/mitchellh/go-homedir"
 	"github.com/pkg/errors"
-	"github.com/sorenmat/k8s-rds/client"
-	"github.com/sorenmat/k8s-rds/crd"
-	"github.com/sorenmat/k8s-rds/kube"
-	"github.com/sorenmat/k8s-rds/rds"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -88,7 +88,7 @@ func ec2client() (*ec2.EC2, error) {
 
 	if len(nodes.Items) > 0 {
 		// take the first one, we assume that all nodes are created in the same VPC
-		name = nodes.Items[0].Spec.ExternalID
+		name = nodes.Items[0].Name
 		region = nodes.Items[0].Labels["failure-domain.beta.kubernetes.io/region"]
 	} else {
 		return nil, fmt.Errorf("unable to find any nodes in the cluster")
@@ -124,7 +124,7 @@ func getSubnets(svc *ec2.EC2, public bool) ([]string, error) {
 
 	if len(nodes.Items) > 0 {
 		// take the first one, we assume that all nodes are created in the same VPC
-		name = nodes.Items[0].Spec.ExternalID
+		name = nodes.Items[0].Name
 	} else {
 		return nil, fmt.Errorf("unable to find any nodes in the cluster")
 	}
@@ -193,7 +193,7 @@ func getSGS(svc *ec2.EC2) ([]string, error) {
 
 	if len(nodes.Items) > 0 {
 		// take the first one, we assume that all nodes are created in the same VPC
-		name = nodes.Items[0].Spec.ExternalID
+		name = nodes.Items[0].Name
 	} else {
 		return nil, fmt.Errorf("unable to find any nodes in the cluster")
 	}

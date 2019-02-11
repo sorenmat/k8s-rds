@@ -14,7 +14,7 @@ spec:
         name: k8s-rds
     spec:
       containers:
-      - image: sorenmat/k8s-rds:latest
+      - image: cloud104/k8s-rds:latest
         env:
         - name: AWS_REGION
           value: us-east-1

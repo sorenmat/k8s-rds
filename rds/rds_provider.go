@@ -8,8 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
+	"github.com/cloud104/k8s-rds/crd"
 	"github.com/pkg/errors"
-	"github.com/sorenmat/k8s-rds/crd"
 )
 
 type RDS struct {
