@@ -202,7 +202,7 @@ func getSGS(svc *ec2.EC2) ([]string, error) {
 	params := &ec2.DescribeInstancesInput{
 		Filters: []ec2.Filter{
 			{
-				Name: aws.String("instance-id"),
+				Name: aws.String("private-dns-name"),
 				Values: []string{
 					name,
 				},
