@@ -110,27 +110,30 @@ func getEndpoint(dbName *string, svc *rds.RDS) (string, error) {
 func (r *RDS) DeleteDatabase(db *crd.Database) {
 	// delete the database instance
 	svc := r.rdsclient()
+	dbName := db.Name + "-" + db.Namespace
+	log.Printf("DBName %v to be deleted\n", dbName)
 	res := svc.DeleteDBInstanceRequest(&rds.DeleteDBInstanceInput{
-		DBInstanceIdentifier: aws.String(db.Spec.DBName),
-		SkipFinalSnapshot:    aws.Bool(true),
+		DBInstanceIdentifier: aws.String(dbName),
+		// TODO production
+		SkipFinalSnapshot: aws.Bool(true),
 	})
 	_, err := res.Send()
 	if err != nil {
-		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName)))
+		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete database %v", dbName)))
 	} else {
-		log.Printf("Waiting for db instance %v to be deleted\n", db.Spec.DBName)
+		log.Printf("Waiting for db instance %v to be deleted\n", dbName)
 		time.Sleep(5 * time.Second)
-		k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
+		k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(dbName)}
 		err = r.rdsclient().WaitUntilDBInstanceDeleted(k)
 		if err != nil {
 			log.Println(err)
 		} else {
-			log.Println("Deleted DB instance: ", db.Spec.DBName)
+			log.Println("Deleted DB instance: ", dbName)
 		}
 	}
 
 	// delete the subnet group attached to the instance
-	subnetName := db.Name + "-subnet"
+	subnetName := db.Name + "-subnet-" + db.Namespace
 	dres := svc.DeleteDBSubnetGroupRequest(&rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
 	_, err = dres.Send()
 	if err != nil {
