@@ -1,10 +1,13 @@
 package rds
 
 import (
+	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/cloud104/k8s-rds/crd"
+	"github.com/pkg/errors"
 	"log"
+	"time"
 )
 
 type AWS struct {
@@ -14,14 +17,50 @@ type AWS struct {
 func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
 	svc := a.RDS
 	input := convertSpecToInputRestore(db)
-	res := svc.RestoreDBInstanceFromDBSnapshotRequest(input)
+
+	// search for the instance
+	log.Printf("Trying to find db instance %v\n", db.Spec.DBName)
+	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
+	res := a.RDS.DescribeDBInstancesRequest(k)
 	_, err := res.Send()
 
-	if err != nil {
-		log.Println(err)
-		return "", nil
+	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
+		log.Printf("DB instance %v not found trying to create it\n", db.Spec.DBName)
+		// seems like we didn't find a database with this name, let's create on
+		res := svc.RestoreDBInstanceFromDBSnapshotRequest(input)
+		_, err = res.Send()
+		if err != nil {
+			return "", errors.Wrap(err, "CreateDBInstance")
+		}
+	} else if err != nil {
+		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", input.DBInstanceIdentifier))
 	}
-	return "", nil
+	log.Printf("Waiting for db instance %v to become available\n", input.DBInstanceIdentifier)
+	time.Sleep(5 * time.Second)
+	err = a.RDS.WaitUntilDBInstanceAvailable(k)
+	if err != nil {
+		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", input.DBInstanceIdentifier))
+	}
+
+	// Get the newly created database so we can get the endpoint
+	dbHostname, err := getEndpoint(input.DBInstanceIdentifier, a.RDS)
+	if err != nil {
+		return "", err
+	}
+	return dbHostname, nil
+}
+
+func getEndpoint(dbName *string, svc *rds.RDS) (string, error) {
+	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: dbName}
+	res := svc.DescribeDBInstancesRequest(k)
+	instance, err := res.Send()
+	if err != nil || len(instance.DBInstances) == 0 {
+		return "", fmt.Errorf("wasn't able to describe the db instance with id %v", dbName)
+	}
+	rdsdb := instance.DBInstances[0]
+
+	dbHostname := *rdsdb.Endpoint.Address
+	return dbHostname, nil
 }
 
 func convertSpecToInputRestore(v *crd.Database) *rds.RestoreDBInstanceFromDBSnapshotInput {
