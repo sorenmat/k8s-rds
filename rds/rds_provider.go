@@ -50,6 +50,32 @@ func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
 	return dbHostname, nil
 }
 
+func (a *AWS) DeleteDatabase(db *crd.Database) {
+	// delete the database instance
+	svc := a.RDS
+	dbName := db.Name + "-" + db.Namespace
+	log.Printf("DBName %v to be deleted\n", dbName)
+	res := svc.DeleteDBInstanceRequest(&rds.DeleteDBInstanceInput{
+		DBInstanceIdentifier: aws.String(dbName),
+		// TODO production
+		SkipFinalSnapshot: aws.Bool(true),
+	})
+	_, err := res.Send()
+	if err != nil {
+		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete database %v", dbName)))
+	} else {
+		log.Printf("Waiting for db instance %v to be deleted\n", dbName)
+		time.Sleep(5 * time.Second)
+		k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(dbName)}
+		err = svc.WaitUntilDBInstanceDeleted(k)
+		if err != nil {
+			log.Println(err)
+		} else {
+			log.Println("Deleted DB instance: ", dbName)
+		}
+	}
+}
+
 func getEndpoint(dbName *string, svc *rds.RDS) (string, error) {
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: dbName}
 	res := svc.DescribeDBInstancesRequest(k)

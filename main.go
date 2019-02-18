@@ -156,7 +156,23 @@ func main() {
 					}
 				}
 			},
-			DeleteFunc: func(obj interface{}) {},
+			DeleteFunc: func(obj interface{}) {
+				db := obj.(*crd.Database)
+				log.Printf("deleting database: %s \n", db.Name)
+				r := k8srds.AWS{RDS: rdsclient}
+				r.DeleteDatabase(db)
+				kubectl, err := getKubectl()
+				if err != nil {
+					log.Println(err)
+					return
+				}
+				k := kube.Kube{Client: kubectl}
+				err = k.DeleteService(db.Namespace, db.Name)
+				if err != nil {
+					log.Println(err)
+				}
+				log.Printf("Deletion of database %v done\n", db.Name)
+			},
 			UpdateFunc: func(oldObj, newObj interface{}) {
 			},
 		},
