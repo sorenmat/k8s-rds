@@ -1,23 +1,16 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: k8s-rds
-type: Opaque
-data:
-  mykey: cGFzc3dvcmRvcnNvbWV0aGluZw==
----
 apiVersion: k8s.io/v1
 kind: Database
 metadata:
-  name: mypgsql
+  name: myoraclesql
   namespace: default
 spec:
-  class: db.t2.medium
-  engine: postgres
-  dbname: thepgsql
-  name: thatpgsql
-  password:
-    key: mykey
-    name: k8s-rds
-  username: postgres
+  class: db.t2.small
+  engine: oracle-se2
+  dbname: k8srds-oracle
   size: 10
+  name: oracle
+  instanceIdentifier: oracle
+  storagetype: gp2
+  subnetGroupName: private
+  copyTagsToSnapshot: true
+  availabilityZone: us-east-2a

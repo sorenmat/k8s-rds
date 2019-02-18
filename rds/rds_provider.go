@@ -111,28 +111,3 @@ func convertSpecToInputRestore(v *crd.Database) *rds.RestoreDBInstanceFromDBSnap
 
 	return input
 }
-
-func convertSpecToInputCreate(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
-	input := &rds.CreateDBInstanceInput{
-		DBName:                aws.String(v.Spec.DBName),
-		AllocatedStorage:      aws.Int64(v.Spec.Size),
-		DBInstanceClass:       aws.String(v.Spec.Class),
-		DBInstanceIdentifier:  aws.String(v.Name + "-" + v.Namespace),
-		VpcSecurityGroupIds:   securityGroups,
-		Engine:                aws.String(v.Spec.Engine),
-		MasterUserPassword:    aws.String(password),
-		MasterUsername:        aws.String(v.Spec.Username),
-		DBSubnetGroupName:     aws.String(subnetName),
-		PubliclyAccessible:    aws.Bool(v.Spec.PubliclyAccessible),
-		MultiAZ:               aws.Bool(v.Spec.MultiAZ),
-		StorageEncrypted:      aws.Bool(v.Spec.StorageEncrypted),
-		BackupRetentionPeriod: aws.Int64(v.Spec.BackupRetentionPeriod),
-	}
-	if v.Spec.StorageType != "" {
-		input.StorageType = aws.String(v.Spec.StorageType)
-	}
-	if v.Spec.Iops > 0 {
-		input.Iops = aws.Int64(v.Spec.Iops)
-	}
-	return input
-}
