@@ -11,7 +11,6 @@ import (
 )
 
 // This file implement all the (CRUD) client methods we need to access our CRD object
-
 func CrdClient(cl *rest.RESTClient, scheme *runtime.Scheme, namespace string) *Crdclient {
 	return &Crdclient{cl: cl, ns: namespace, plural: "databases",
 		codec: runtime.NewParameterCodec(scheme)}
