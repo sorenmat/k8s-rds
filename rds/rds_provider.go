@@ -35,7 +35,7 @@ func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
 	} else if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", input.DBInstanceIdentifier))
 	}
-	log.Printf("Waiting for db instance %v to become available\n", input.DBInstanceIdentifier)
+	log.Printf("Waiting for db instance %v to become available\n", *input.DBInstanceIdentifier)
 	time.Sleep(5 * time.Second)
 	err = a.RDS.WaitUntilDBInstanceAvailable(k)
 	if err != nil {
@@ -53,7 +53,7 @@ func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
 func (a *AWS) DeleteDatabase(db *crd.Database) {
 	// delete the database instance
 	svc := a.RDS
-	dbName := db.Name + "-" + db.Namespace
+	dbName := db.Spec.DBInstanceIdentifier
 	log.Printf("DBName %v to be deleted\n", dbName)
 	res := svc.DeleteDBInstanceRequest(&rds.DeleteDBInstanceInput{
 		DBInstanceIdentifier: aws.String(dbName),
