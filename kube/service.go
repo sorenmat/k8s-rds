@@ -7,7 +7,6 @@ import (
 	"github.com/pkg/errors"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -17,17 +16,9 @@ type Kube struct {
 
 // create an External named service object for Kubernetes
 func (k *Kube) createServiceObj(s *v1.Service, namespace string, hostname string, internalname string) *v1.Service {
-	var ports []v1.ServicePort
-
-	ports = append(ports, v1.ServicePort{
-		Name:       fmt.Sprintf("pgsql"),
-		Port:       int32(5432),
-		TargetPort: intstr.IntOrString{IntVal: int32(5432)},
-	})
 	s.Spec.Type = "ExternalName"
 	s.Spec.ExternalName = hostname
 
-	s.Spec.Ports = ports
 	s.Name = internalname
 	s.Annotations = map[string]string{"origin": "rds"}
 	s.Namespace = namespace
