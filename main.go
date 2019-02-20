@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"log"
 	"time"
 
@@ -73,15 +74,15 @@ func ec2config(region string) *aws.Config {
 	}
 }
 
-func rdsclient() (*rds.RDS, error) {
+func configClient() (aws.Config, error) {
 	kubectl, err := getKubectl()
 	if err != nil {
-		return nil, err
+		return aws.Config{}, err
 	}
 
 	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
 	if err != nil {
-		return nil, errors.Wrap(err, "unable to get nodes")
+		return aws.Config{}, errors.Wrap(err, "unable to get nodes")
 	}
 	name := ""
 	region := ""
@@ -91,7 +92,7 @@ func rdsclient() (*rds.RDS, error) {
 		name = nodes.Items[0].Name
 		region = nodes.Items[0].Labels["failure-domain.beta.kubernetes.io/region"]
 	} else {
-		return nil, fmt.Errorf("unable to find any nodes in the cluster")
+		return aws.Config{}, fmt.Errorf("unable to find any nodes in the cluster")
 	}
 	log.Printf("Found node with ID: %v in region %v", name, region)
 
@@ -103,8 +104,24 @@ func rdsclient() (*rds.RDS, error) {
 	// Set the AWS Region that the service clients should use
 	cfg.Region = region
 	cfg.HTTPClient.Timeout = 5 * time.Second
-	return rds.New(cfg), nil
+	return cfg, nil
+}
 
+func clientRDS() (*rds.RDS, error) {
+	client, err := configClient()
+	if err != nil {
+		return nil, err
+	}
+	return rds.New(client), nil
+}
+
+func clientEC2() (*ec2.EC2, error) {
+	client, err := configClient()
+	if err != nil {
+		return nil, err
+	}
+
+	return ec2.New(client), nil
 }
 
 func main() {
@@ -121,8 +138,7 @@ func main() {
 	}
 
 	// note: if the CRD exist our CreateCRD function is set to exit without an error
-	err = crd.CreateCRD(clientset)
-	if err != nil {
+	if err = crd.CreateCRD(clientset); err != nil {
 		panic(err)
 	}
 
@@ -132,7 +148,7 @@ func main() {
 		panic(err)
 	}
 
-	rdsclient, err := rdsclient()
+	rdsclient, err := clientRDS()
 	if err != nil {
 		log.Fatal("unable to create a client for EC2 ", err)
 	}
