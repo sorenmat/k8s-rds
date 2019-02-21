@@ -124,6 +124,129 @@ func clientEC2() (*ec2.EC2, error) {
 	return ec2.New(client), nil
 }
 
+func getSubnets(svc *ec2.EC2, public bool) ([]string, error) {
+	kubectl, err := getKubectl()
+	if err != nil {
+		return nil, err
+	}
+
+	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get nodes")
+	}
+	name := ""
+
+	if len(nodes.Items) > 0 {
+		// take the first one, we assume that all nodes are created in the same VPC
+		name = nodes.Items[0].Name
+	} else {
+		return nil, fmt.Errorf("unable to find any nodes in the cluster")
+	}
+	log.Printf("Taking subnets from node %v", name)
+
+	params := &ec2.DescribeInstancesInput{
+		Filters: []ec2.Filter{
+			{
+				Name: aws.String("private-dns-name"),
+				Values: []string{
+					name,
+				},
+			},
+		},
+	}
+	log.Println("trying to describe instance")
+	req := svc.DescribeInstancesRequest(params)
+	res, err := req.Send()
+	if err != nil {
+		log.Println(err)
+		return nil, errors.Wrap(err, "unable to describe AWS instance")
+	}
+	log.Println("got instance response")
+
+	var result []string
+	if len(res.Reservations) >= 1 {
+		vpcID := res.Reservations[0].Instances[0].VpcId
+		for _, v := range res.Reservations[0].Instances[0].SecurityGroups {
+			log.Println("Security groupid: ", *v.GroupId)
+		}
+		log.Printf("Found VPC %v will search for subnet in that VPC\n", *vpcID)
+
+		res := svc.DescribeSubnetsRequest(&ec2.DescribeSubnetsInput{Filters: []ec2.Filter{{Name: aws.String("vpc-id"), Values: []string{*vpcID}}}})
+		subnets, err := res.Send()
+
+		if err != nil {
+			return nil, errors.Wrap(err, fmt.Sprintf("unable to describe subnet in VPC %v", *vpcID))
+		}
+		for _, sn := range subnets.Subnets {
+			if *sn.MapPublicIpOnLaunch == public {
+				result = append(result, *sn.SubnetId)
+			} else {
+				log.Printf("Skipping subnet %v since it's public state was %v and we were looking for %v\n", *sn.SubnetId, *sn.MapPublicIpOnLaunch, public)
+			}
+		}
+
+	}
+	log.Printf("Found the follwing subnets: ")
+	for _, v := range result {
+		log.Printf(v + " ")
+	}
+	return result, nil
+}
+
+func getSGS(svc *ec2.EC2) ([]string, error) {
+	kubectl, err := getKubectl()
+	if err != nil {
+		return nil, err
+	}
+
+	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get nodes")
+	}
+	name := ""
+
+	if len(nodes.Items) > 0 {
+		// take the first one, we assume that all nodes are created in the same VPC
+		name = nodes.Items[0].Name
+	} else {
+		return nil, fmt.Errorf("unable to find any nodes in the cluster")
+	}
+	log.Printf("Taking security groups from node %v", name)
+
+	params := &ec2.DescribeInstancesInput{
+		Filters: []ec2.Filter{
+			{
+				Name: aws.String("private-dns-name"),
+				Values: []string{
+					name,
+				},
+			},
+		},
+	}
+	log.Println("trying to describe instance")
+	req := svc.DescribeInstancesRequest(params)
+	res, err := req.Send()
+	if err != nil {
+		log.Println(err)
+		return nil, errors.Wrap(err, "unable to describe AWS instance")
+	}
+	log.Println("got instance response")
+
+	var result []string
+	if len(res.Reservations) >= 1 {
+		for _, v := range res.Reservations[0].Instances[0].SecurityGroups {
+			fmt.Println("Security groupid: ", *v.GroupId)
+			result = append(result, *v.GroupId)
+		}
+	}
+
+	log.Printf("Found the follwing security groups: ")
+	for _, v := range result {
+		log.Printf(v + " ")
+	}
+	return result, nil
+}
+
 func main() {
 	log.Println("Starting k8s-rds")
 	config, err := getClientConfig(kubeconfig())
