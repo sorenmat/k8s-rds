@@ -272,6 +272,7 @@ func main() {
 	}
 
 	rdsclient, err := clientRDS()
+	ec2client, err := clientEC2()
 	if err != nil {
 		log.Fatal("unable to create a client for EC2 ", err)
 	}
@@ -286,7 +287,16 @@ func main() {
 			AddFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
 				client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
-				err = handleRestoreDatabase(db, rdsclient, client)
+
+				// Based in the field, it creates or restores
+				if db.Spec.DBSnapshotIdentifier != "" {
+					log.Printf("Seems that it restoring")
+					err = handleRestoreDatabase(db, rdsclient, client)
+				} else {
+					log.Printf("Seems that it creating")
+					err = handleCreateDatabase(db, ec2client, client)
+				}
+
 				if err != nil {
 					log.Printf("database creation failed: %v", err)
 					err := updateStatus(db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, client)
@@ -344,6 +354,58 @@ func handleRestoreDatabase(db *crd.Database, rdsclient *rds.RDS, crdclient *clie
 
 	k := kube.Kube{Client: kubectl}
 	hostname, err := r.RestoreDatabase(db)
+	if err != nil {
+		return err
+	}
+	log.Printf("Creating service '%v' for %v\n", db.Name, hostname)
+	k.CreateService(db.Namespace, hostname, db.Name)
+
+	err = updateStatus(db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
+	if err != nil {
+		return err
+	}
+	log.Printf("Creation of database %v done\n", db.Name)
+	return nil
+}
+
+func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *client.Crdclient) error {
+	if db.Status.State == "Created" {
+		log.Printf("database %v already created, skipping\n", db.Name)
+		return nil
+	}
+	// validate dbname is only alpha numeric
+	err := updateStatus(db, crd.DatabaseStatus{Message: "Creating", State: "Creating"}, crdclient)
+	if err != nil {
+		return fmt.Errorf("database CRD status update failed: %v", err)
+	}
+	log.Println("trying to get subnets")
+	subnets, err := getSubnets(ec2client, db.Spec.PubliclyAccessible)
+	if err != nil {
+		return fmt.Errorf("unable to get subnets from instance: %v", err)
+
+	}
+	log.Println("trying to get security groups")
+	sgs, err := getSGS(ec2client)
+	if err != nil {
+		return fmt.Errorf("unable to get security groups from instance: %v", err)
+
+	}
+
+	r := k8srds.AWS{EC2: ec2client, Subnets: subnets, SecurityGroups: sgs}
+
+	log.Println("trying to get kubectl")
+	kubectl, err := getKubectl()
+	if err != nil {
+		return err
+	}
+
+	k := kube.Kube{Client: kubectl}
+	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
+	pw, err := k.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
+	if err != nil {
+		return err
+	}
+	hostname, err := r.CreateDatabase(db, pw)
 	if err != nil {
 		return err
 	}
