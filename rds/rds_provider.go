@@ -118,14 +118,33 @@ func (a *AWS) DeleteDatabase(db *crd.Database) {
 			log.Println("Deleted DB instance: ", dbName)
 		}
 	}
+
+	// delete subnetgroup only for creation process
+	if db.Spec.DBSnapshotIdentifier == "" {
+		log.Printf("SubnetGroup %v to be deleted\n", db.Spec.DBSubnetGroupName)
+		a.deleteSubnetGroup(db)
+	}
+}
+
+func (a *AWS) deleteSubnetGroup(db *crd.Database) {
+	svc := a.RDS
+	// delete the subnet group attached to the instance
+	subnetName := db.Spec.DBSubnetGroupName
+	dres := svc.DeleteDBSubnetGroupRequest(&rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
+	_, err := dres.Send()
+	if err != nil {
+		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete subnet %v", subnetName)))
+	} else {
+		log.Println("Deleted DBSubnet group: ", subnetName)
+	}
 }
 
 func (a *AWS) ensureSubnets(db *crd.Database) (string, error) {
 	if len(a.Subnets) == 0 {
 		log.Println("Error: unable to continue due to lack of subnets, perhaps we couldn't lookup the subnets")
 	}
-	subnetDescription := "subnet for " + db.Name + " in namespace " + db.Namespace
-	subnetName := db.Name + "-subnet-" + db.Namespace
+	subnetDescription := "subnet k8s-rds"
+	subnetName := db.Spec.DBSubnetGroupName
 
 	svc := a.RDS
 
