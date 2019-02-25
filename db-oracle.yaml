@@ -13,4 +13,5 @@ spec:
   storagetype: gp2
   subnetGroupName: private
   copyTagsToSnapshot: true
+  snapshotIdentifier: arn:aws:rds:us-east-2:911270218041:snapshot:database-matriz-v26
   availabilityZone: us-east-2a

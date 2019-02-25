@@ -59,19 +59,24 @@ func (a *AWS) CreateDatabase(db *crd.Database, password string) (string, error) 
 }
 
 func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
-	svc := a.RDS
-	input := convertSpecToInputRestore(db)
+	log.Println("Trying to find the correct subnets")
+	subnetName, err := a.ensureSubnets(db)
+	if err != nil {
+		return "", err
+	}
+
+	input := convertSpecToInputRestore(db, subnetName, a.SecurityGroups)
 
 	// search for the instance
 	log.Printf("Trying to find db instance %v\n", db.Spec.DBName)
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
 	res := a.RDS.DescribeDBInstancesRequest(k)
-	_, err := res.Send()
+	_, err = res.Send()
 
 	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
 		log.Printf("DB instance %v not found trying to create it\n", db.Spec.DBName)
 		// seems like we didn't find a database with this name, let's create on
-		res := svc.RestoreDBInstanceFromDBSnapshotRequest(input)
+		res := a.RDS.RestoreDBInstanceFromDBSnapshotRequest(input)
 		_, err = res.Send()
 		if err != nil {
 			return "", errors.Wrap(err, "CreateDBInstance")
@@ -184,7 +189,7 @@ func getEndpoint(dbName *string, svc *rds.RDS) (string, error) {
 	return dbHostname, nil
 }
 
-func convertSpecToInputRestore(v *crd.Database) *rds.RestoreDBInstanceFromDBSnapshotInput {
+func convertSpecToInputRestore(v *crd.Database, subnetName string, securityGroups []string) *rds.RestoreDBInstanceFromDBSnapshotInput {
 	var tags []rds.Tag
 
 	input := &rds.RestoreDBInstanceFromDBSnapshotInput{
@@ -193,16 +198,16 @@ func convertSpecToInputRestore(v *crd.Database) *rds.RestoreDBInstanceFromDBSnap
 		PubliclyAccessible:   aws.Bool(v.Spec.PubliclyAccessible),
 		MultiAZ:              aws.Bool(v.Spec.MultiAZ),
 		Engine:               aws.String(v.Spec.Engine),
-		DBSubnetGroupName:    aws.String(v.Spec.DBSubnetGroupName),
 		DBName:               aws.String(v.Spec.DBName),
+		DBSubnetGroupName:    aws.String(subnetName),
+		DBSnapshotIdentifier: aws.String(v.Spec.DBSnapshotIdentifier),
 		DBInstanceIdentifier: aws.String(v.Spec.DBInstanceIdentifier),
 		DBInstanceClass:      aws.String(v.Spec.Class),
+		AvailabilityZone:     aws.String(v.Spec.AvailabilityZone),
 		CopyTagsToSnapshot:   aws.Bool(v.Spec.CopyTagsToSnapshot),
 	}
 
 	input.LicenseModel = aws.String("license-included")
-	input.DBSnapshotIdentifier = aws.String("arn:aws:rds:us-east-2:911270218041:snapshot:database-matriz-v26")
-	input.AvailabilityZone = aws.String("us-east-2a")
 
 	return input
 }

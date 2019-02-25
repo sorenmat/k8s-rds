@@ -271,7 +271,6 @@ func main() {
 		panic(err)
 	}
 
-	rdsclient, err := clientRDS()
 	ec2client, err := clientEC2()
 	if err != nil {
 		log.Fatal("unable to create a client for EC2 ", err)
@@ -291,7 +290,7 @@ func main() {
 				// Based in the field, it creates or restores
 				if db.Spec.DBSnapshotIdentifier != "" {
 					log.Printf("Seems that it restoring")
-					err = handleRestoreDatabase(db, rdsclient, client)
+					err = handleRestoreDatabase(db, ec2client, client)
 				} else {
 					log.Printf("Seems that it creating")
 					err = handleCreateDatabase(db, ec2client, client)
@@ -306,6 +305,7 @@ func main() {
 				}
 			},
 			DeleteFunc: func(obj interface{}) {
+				rdsclient, err := clientRDS()
 				db := obj.(*crd.Database)
 				log.Printf("deleting database: %s \n", db.Name)
 				r := k8srds.AWS{RDS: rdsclient}
@@ -334,7 +334,7 @@ func main() {
 	select {}
 }
 
-func handleRestoreDatabase(db *crd.Database, rdsclient *rds.RDS, crdclient *client.Crdclient) error {
+func handleRestoreDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *client.Crdclient) error {
 	if db.Status.State == "Created" {
 		log.Printf("database %v already created, skipping\n", db.Name)
 		return nil
@@ -344,8 +344,25 @@ func handleRestoreDatabase(db *crd.Database, rdsclient *rds.RDS, crdclient *clie
 	if err != nil {
 		return fmt.Errorf("database CRD status update failed: %v", err)
 	}
+	log.Println("trying to get subnets")
+	subnets, err := getSubnets(ec2client, db.Spec.PubliclyAccessible)
+	if err != nil {
+		return fmt.Errorf("unable to get subnets from instance: %v", err)
 
-	r := k8srds.AWS{RDS: rdsclient}
+	}
+	log.Println("trying to get security groups")
+	sgs, err := getSGS(ec2client)
+	if err != nil {
+		return fmt.Errorf("unable to get security groups from instance: %v", err)
+
+	}
+
+	rdsclient, err := clientRDS()
+	if err != nil {
+		log.Fatal("unable to create a client for RDS ", err)
+	}
+
+	r := k8srds.AWS{RDS: rdsclient, EC2: ec2client, Subnets: subnets, SecurityGroups: sgs}
 	log.Println("trying to get kubectl")
 	kubectl, err := getKubectl()
 	if err != nil {
@@ -391,7 +408,11 @@ func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clien
 
 	}
 
-	r := k8srds.AWS{EC2: ec2client, Subnets: subnets, SecurityGroups: sgs}
+	rdsclient, err := clientRDS()
+	if err != nil {
+		log.Fatal("unable to create a client for RDS ", err)
+	}
+	r := k8srds.AWS{RDS: rdsclient, EC2: ec2client, Subnets: subnets, SecurityGroups: sgs}
 
 	log.Println("trying to get kubectl")
 	kubectl, err := getKubectl()
