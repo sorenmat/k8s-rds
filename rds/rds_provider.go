@@ -106,8 +106,6 @@ func (a *AWS) DeleteDatabase(db *crd.Database) {
 	log.Printf("DBName %v to be deleted\n", dbName)
 	res := svc.DeleteDBInstanceRequest(&rds.DeleteDBInstanceInput{
 		DBInstanceIdentifier: aws.String(dbName),
-		// TODO production
-		SkipFinalSnapshot: aws.Bool(true),
 	})
 	_, err := res.Send()
 	if err != nil {
@@ -125,10 +123,10 @@ func (a *AWS) DeleteDatabase(db *crd.Database) {
 	}
 
 	// delete subnetgroup only for creation process
-	if db.Spec.DBSnapshotIdentifier == "" {
-		log.Printf("SubnetGroup %v to be deleted\n", db.Spec.DBSubnetGroupName)
-		a.deleteSubnetGroup(db)
-	}
+	//if db.Spec.DBSnapshotIdentifier == "" {
+	//	log.Printf("SubnetGroup %v to be deleted\n", db.Spec.DBSubnetGroupName)
+	//	a.deleteSubnetGroup(db)
+	//}
 }
 
 func (a *AWS) deleteSubnetGroup(db *crd.Database) {
