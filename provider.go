@@ -1,15 +1,14 @@
 package main
 
 import (
-	"github.com/sorenmat/k8s-rds/client"
 	"github.com/sorenmat/k8s-rds/crd"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 )
 
 // DatabaseProvider is the interface for creating and deleting databases
 // this is the main interface that should be implemented if a new provider is created
 type DatabaseProvider interface {
-	CreateDatabase(*crd.Database, *client.Crdclient, string) (string, error)
+	CreateDatabase(*crd.Database, string) (string, error)
 	DeleteDatabase(*crd.Database) error
 }
 

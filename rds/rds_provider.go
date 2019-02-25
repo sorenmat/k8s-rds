@@ -6,16 +6,42 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/pkg/errors"
 	"github.com/sorenmat/k8s-rds/crd"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
 )
 
 type RDS struct {
 	EC2            *ec2.EC2
 	Subnets        []string
 	SecurityGroups []string
+}
+
+func New(db *crd.Database, kc *kubernetes.Clientset) (*RDS, error) {
+	ec2client, err := ec2client(kc)
+	if err != nil {
+		log.Fatal("unable to create a client for EC2 ", err)
+	}
+
+	log.Println("trying to get subnets")
+	subnets, err := getSubnets(kc, ec2client, db.Spec.PubliclyAccessible)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get subnets from instance: %v", err)
+
+	}
+	log.Println("trying to get security groups")
+	sgs, err := getSGS(kc, ec2client)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get security groups from instance: %v", err)
+
+	}
+
+	r := RDS{EC2: ec2client, Subnets: subnets, SecurityGroups: sgs}
+	return &r, nil
 }
 
 // CreateDatabase creates a database from the CRD database object, is also ensures that the correct
@@ -107,7 +133,7 @@ func getEndpoint(dbName *string, svc *rds.RDS) (string, error) {
 	return dbHostname, nil
 }
 
-func (r *RDS) DeleteDatabase(db *crd.Database) {
+func (r *RDS) DeleteDatabase(db *crd.Database) error {
 	// delete the database instance
 	svc := r.rdsclient()
 	res := svc.DeleteDBInstanceRequest(&rds.DeleteDBInstanceInput{
@@ -116,7 +142,9 @@ func (r *RDS) DeleteDatabase(db *crd.Database) {
 	})
 	_, err := res.Send()
 	if err != nil {
-		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName)))
+		e := errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName))
+		log.Println(e)
+		return e
 	} else {
 		log.Printf("Waiting for db instance %v to be deleted\n", db.Spec.DBName)
 		time.Sleep(5 * time.Second)
@@ -124,6 +152,7 @@ func (r *RDS) DeleteDatabase(db *crd.Database) {
 		err = r.rdsclient().WaitUntilDBInstanceDeleted(k)
 		if err != nil {
 			log.Println(err)
+			return err
 		} else {
 			log.Println("Deleted DB instance: ", db.Spec.DBName)
 		}
@@ -134,10 +163,13 @@ func (r *RDS) DeleteDatabase(db *crd.Database) {
 	dres := svc.DeleteDBSubnetGroupRequest(&rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
 	_, err = dres.Send()
 	if err != nil {
-		log.Println(errors.Wrap(err, fmt.Sprintf("unable to delete subnet %v", subnetName)))
+		e := errors.Wrap(err, fmt.Sprintf("unable to delete subnet %v", subnetName))
+		log.Println(e)
+		return e
 	} else {
 		log.Println("Deleted DBSubnet group: ", subnetName)
 	}
+	return nil
 }
 
 func (r *RDS) rdsclient() *rds.RDS {
@@ -167,4 +199,152 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 		input.Iops = aws.Int64(v.Spec.Iops)
 	}
 	return input
+}
+
+// getSubnets returns a list of subnets that the RDS instance should be attached to
+// We do this by finding a node in the cluster, take the VPC id from that node a list
+// the security groups in the VPC
+func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.EC2, public bool) ([]string, error) {
+
+	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get nodes")
+	}
+	name := ""
+
+	if len(nodes.Items) > 0 {
+		// take the first one, we assume that all nodes are created in the same VPC
+		name = nodes.Items[0].Spec.ExternalID
+	} else {
+		return nil, fmt.Errorf("unable to find any nodes in the cluster")
+	}
+	log.Printf("Taking subnets from node %v", name)
+
+	params := &ec2.DescribeInstancesInput{
+		Filters: []ec2.Filter{
+			{
+				Name: aws.String("instance-id"),
+				Values: []string{
+					name,
+				},
+			},
+		},
+	}
+	log.Println("trying to describe instance")
+	req := svc.DescribeInstancesRequest(params)
+	res, err := req.Send()
+	if err != nil {
+		log.Println(err)
+		return nil, errors.Wrap(err, "unable to describe AWS instance")
+	}
+	log.Println("got instance response")
+
+	var result []string
+	if len(res.Reservations) >= 1 {
+		vpcID := res.Reservations[0].Instances[0].VpcId
+		for _, v := range res.Reservations[0].Instances[0].SecurityGroups {
+			log.Println("Security groupid: ", *v.GroupId)
+		}
+		log.Printf("Found VPC %v will search for subnet in that VPC\n", *vpcID)
+
+		res := svc.DescribeSubnetsRequest(&ec2.DescribeSubnetsInput{Filters: []ec2.Filter{{Name: aws.String("vpc-id"), Values: []string{*vpcID}}}})
+		subnets, err := res.Send()
+
+		if err != nil {
+			return nil, errors.Wrap(err, fmt.Sprintf("unable to describe subnet in VPC %v", *vpcID))
+		}
+		for _, sn := range subnets.Subnets {
+			if *sn.MapPublicIpOnLaunch == public {
+				result = append(result, *sn.SubnetId)
+			} else {
+				log.Printf("Skipping subnet %v since it's public state was %v and we were looking for %v\n", *sn.SubnetId, *sn.MapPublicIpOnLaunch, public)
+			}
+		}
+
+	}
+	log.Printf("Found the follwing subnets: ")
+	for _, v := range result {
+		log.Printf(v + " ")
+	}
+	return result, nil
+}
+
+func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
+
+	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get nodes")
+	}
+	name := ""
+
+	if len(nodes.Items) > 0 {
+		// take the first one, we assume that all nodes are created in the same VPC
+		name = nodes.Items[0].Spec.ExternalID
+	} else {
+		return nil, fmt.Errorf("unable to find any nodes in the cluster")
+	}
+	log.Printf("Taking security groups from node %v", name)
+
+	params := &ec2.DescribeInstancesInput{
+		Filters: []ec2.Filter{
+			{
+				Name: aws.String("instance-id"),
+				Values: []string{
+					name,
+				},
+			},
+		},
+	}
+	log.Println("trying to describe instance")
+	req := svc.DescribeInstancesRequest(params)
+	res, err := req.Send()
+	if err != nil {
+		log.Println(err)
+		return nil, errors.Wrap(err, "unable to describe AWS instance")
+	}
+	log.Println("got instance response")
+
+	var result []string
+	if len(res.Reservations) >= 1 {
+		for _, v := range res.Reservations[0].Instances[0].SecurityGroups {
+			fmt.Println("Security groupid: ", *v.GroupId)
+			result = append(result, *v.GroupId)
+		}
+	}
+
+	log.Printf("Found the follwing security groups: ")
+	for _, v := range result {
+		log.Printf(v + " ")
+	}
+	return result, nil
+}
+
+func ec2client(kubectl *kubernetes.Clientset) (*ec2.EC2, error) {
+
+	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get nodes")
+	}
+	name := ""
+	region := ""
+
+	if len(nodes.Items) > 0 {
+		// take the first one, we assume that all nodes are created in the same VPC
+		name = nodes.Items[0].Spec.ExternalID
+		region = nodes.Items[0].Labels["failure-domain.beta.kubernetes.io/region"]
+	} else {
+		return nil, fmt.Errorf("unable to find any nodes in the cluster")
+	}
+	log.Printf("Found node with ID: %v in region %v", name, region)
+
+	cfg, err := external.LoadDefaultAWSConfig()
+	if err != nil {
+		panic("unable to load SDK config, " + err.Error())
+	}
+
+	// Set the AWS Region that the service clients should use
+	cfg.Region = region
+	cfg.HTTPClient.Timeout = 5 * time.Second
+	return ec2.New(cfg), nil
+
 }
