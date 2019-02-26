@@ -11,14 +11,16 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/pkg/errors"
 	"github.com/sorenmat/k8s-rds/crd"
+	"github.com/sorenmat/k8s-rds/provider"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
 type RDS struct {
-	EC2            *ec2.EC2
-	Subnets        []string
-	SecurityGroups []string
+	EC2             *ec2.EC2
+	Subnets         []string
+	SecurityGroups  []string
+	ServiceProvider provider.ServiceProvider
 }
 
 func New(db *crd.Database, kc *kubernetes.Clientset) (*RDS, error) {
@@ -46,7 +48,7 @@ func New(db *crd.Database, kc *kubernetes.Clientset) (*RDS, error) {
 
 // CreateDatabase creates a database from the CRD database object, is also ensures that the correct
 // subnets are created for the database so we can access it
-func (r *RDS) CreateDatabase(db *crd.Database, password string) (string, error) {
+func (r *RDS) CreateDatabase(db *crd.Database) (string, error) {
 	// Ensure that the subnets for the DB is create or updated
 	log.Println("Trying to find the correct subnets")
 	subnetName, err := r.ensureSubnets(db)
@@ -54,7 +56,12 @@ func (r *RDS) CreateDatabase(db *crd.Database, password string) (string, error) 
 		return "", err
 	}
 
-	input := convertSpecToInput(db, subnetName, r.SecurityGroups, password)
+	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
+	pw, err := r.ServiceProvider.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
+	if err != nil {
+		return "", err
+	}
+	input := convertSpecToInput(db, subnetName, r.SecurityGroups, pw)
 
 	// search for the instance
 	log.Printf("Trying to find db instance %v\n", db.Spec.DBName)
@@ -206,7 +213,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 // the security groups in the VPC
 func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.EC2, public bool) ([]string, error) {
 
-	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
@@ -271,7 +278,7 @@ func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.EC2, public bool) ([]str
 
 func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
 
-	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
@@ -321,7 +328,7 @@ func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
 
 func ec2client(kubectl *kubernetes.Clientset) (*ec2.EC2, error) {
 
-	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
