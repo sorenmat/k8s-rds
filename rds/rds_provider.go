@@ -3,6 +3,7 @@ package rds
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -57,7 +58,7 @@ func (r *RDS) CreateDatabase(db *crd.Database) (string, error) {
 	}
 
 	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
-	pw, err := r.ServiceProvider.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
+	pw, err := r.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
 	if err != nil {
 		return "", err
 	}
@@ -79,7 +80,7 @@ func (r *RDS) CreateDatabase(db *crd.Database) (string, error) {
 	} else if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", input.DBInstanceIdentifier))
 	}
-	log.Printf("Waiting for db instance %v to become available\n", input.DBInstanceIdentifier)
+	log.Printf("Waiting for db instance %v to become available\n", *input.DBInstanceIdentifier)
 	time.Sleep(5 * time.Second)
 	err = r.rdsclient().WaitUntilDBInstanceAvailable(k)
 	if err != nil {
@@ -144,7 +145,7 @@ func (r *RDS) DeleteDatabase(db *crd.Database) error {
 	// delete the database instance
 	svc := r.rdsclient()
 	res := svc.DeleteDBInstanceRequest(&rds.DeleteDBInstanceInput{
-		DBInstanceIdentifier: aws.String(db.Spec.DBName),
+		DBInstanceIdentifier: aws.String(dbidentifier(db)),
 		SkipFinalSnapshot:    aws.Bool(true),
 	})
 	_, err := res.Send()
@@ -155,7 +156,8 @@ func (r *RDS) DeleteDatabase(db *crd.Database) error {
 	} else {
 		log.Printf("Waiting for db instance %v to be deleted\n", db.Spec.DBName)
 		time.Sleep(5 * time.Second)
-		k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(db.Spec.DBName)}
+
+		k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(dbidentifier(db))}
 		err = r.rdsclient().WaitUntilDBInstanceDeleted(k)
 		if err != nil {
 			log.Println(err)
@@ -182,13 +184,15 @@ func (r *RDS) DeleteDatabase(db *crd.Database) error {
 func (r *RDS) rdsclient() *rds.RDS {
 	return rds.New(r.EC2.Config)
 }
-
+func dbidentifier(v *crd.Database) string {
+	return v.Name + "-" + v.Namespace
+}
 func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
 	input := &rds.CreateDBInstanceInput{
 		DBName:                aws.String(v.Spec.DBName),
 		AllocatedStorage:      aws.Int64(v.Spec.Size),
 		DBInstanceClass:       aws.String(v.Spec.Class),
-		DBInstanceIdentifier:  aws.String(v.Name + "-" + v.Namespace),
+		DBInstanceIdentifier:  aws.String(dbidentifier(v)),
 		VpcSecurityGroupIds:   securityGroups,
 		Engine:                aws.String(v.Spec.Engine),
 		MasterUserPassword:    aws.String(password),
@@ -221,7 +225,7 @@ func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.EC2, public bool) ([]str
 
 	if len(nodes.Items) > 0 {
 		// take the first one, we assume that all nodes are created in the same VPC
-		name = nodes.Items[0].Spec.ExternalID
+		name = getIDFromProvider(nodes.Items[0].Spec.ProviderID)
 	} else {
 		return nil, fmt.Errorf("unable to find any nodes in the cluster")
 	}
@@ -275,7 +279,11 @@ func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.EC2, public bool) ([]str
 	}
 	return result, nil
 }
-
+func getIDFromProvider(x string) string {
+	pos := strings.LastIndex(x, "/") + 1
+	name := x[pos:]
+	return name
+}
 func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
 
 	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
@@ -286,7 +294,7 @@ func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
 
 	if len(nodes.Items) > 0 {
 		// take the first one, we assume that all nodes are created in the same VPC
-		name = nodes.Items[0].Spec.ExternalID
+		name = getIDFromProvider(nodes.Items[0].Spec.ProviderID)
 	} else {
 		return nil, fmt.Errorf("unable to find any nodes in the cluster")
 	}
@@ -314,7 +322,7 @@ func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
 	var result []string
 	if len(res.Reservations) >= 1 {
 		for _, v := range res.Reservations[0].Instances[0].SecurityGroups {
-			fmt.Println("Security groupid: ", *v.GroupId)
+			log.Println("Security groupid: ", *v.GroupId)
 			result = append(result, *v.GroupId)
 		}
 	}
@@ -337,7 +345,7 @@ func ec2client(kubectl *kubernetes.Clientset) (*ec2.EC2, error) {
 
 	if len(nodes.Items) > 0 {
 		// take the first one, we assume that all nodes are created in the same VPC
-		name = nodes.Items[0].Spec.ExternalID
+		name = getIDFromProvider(nodes.Items[0].Spec.ProviderID)
 		region = nodes.Items[0].Labels["failure-domain.beta.kubernetes.io/region"]
 	} else {
 		return nil, fmt.Errorf("unable to find any nodes in the cluster")

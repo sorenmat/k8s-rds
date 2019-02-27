@@ -6,7 +6,7 @@ import (
 	"github.com/sorenmat/k8s-rds/crd"
 
 	"github.com/stretchr/testify/assert"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 )
 
 func TestConvertSpecToInput(t *testing.T) {
@@ -38,4 +38,9 @@ func TestConvertSpecToInput(t *testing.T) {
 	assert.Equal(t, 2, len(i.VpcSecurityGroupIds))
 	assert.Equal(t, "bad", *i.StorageType)
 	assert.Equal(t, int64(1000), *i.Iops)
+}
+
+func TestgetIDFromProvider(t *testing.T) {
+	x := getIDFromProvider("aws:///eu-west-1a/i-02ab67f4da79c3caa")
+	assert.Equal(t, "i-02ab67f4da79c3caa", x)
 }
