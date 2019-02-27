@@ -5,38 +5,22 @@ import (
 	"log"
 	"time"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/aws/external"
-	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/mitchellh/go-homedir"
-	"github.com/pkg/errors"
 	"github.com/sorenmat/k8s-rds/client"
 	"github.com/sorenmat/k8s-rds/crd"
 	"github.com/sorenmat/k8s-rds/kube"
+	"github.com/sorenmat/k8s-rds/local"
+	"github.com/sorenmat/k8s-rds/provider"
 	"github.com/sorenmat/k8s-rds/rds"
 	"github.com/spf13/cobra"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
+
 	"k8s.io/client-go/tools/clientcmd"
 )
 
 const Failed = "Failed"
-
-func home() string {
-	dir, err := homedir.Dir()
-	home, err := homedir.Expand(dir)
-	if err != nil {
-		panic(err.Error())
-	}
-	return home
-}
-
-func kubeconfig() string {
-	return home() + "/.kube/config"
-}
 
 // return rest config, if path not specified assume in cluster config
 func getClientConfig(kubeconfig string) (*rest.Config, error) {
@@ -53,7 +37,7 @@ func getKubectl() (*kubernetes.Clientset, error) {
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		log.Println("Appears we are not running in a cluster")
-		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig())
+		config, err = clientcmd.BuildConfigFromFlags("", kube.Config())
 		if err != nil {
 			return nil, err
 		}
@@ -68,46 +52,6 @@ func getKubectl() (*kubernetes.Clientset, error) {
 	return kubectl, nil
 }
 
-func ec2config(region string) *aws.Config {
-	return &aws.Config{
-		Region: region,
-	}
-}
-
-func ec2client() (*ec2.EC2, error) {
-	kubectl, err := getKubectl()
-	if err != nil {
-		return nil, err
-	}
-
-	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to get nodes")
-	}
-	name := ""
-	region := ""
-
-	if len(nodes.Items) > 0 {
-		// take the first one, we assume that all nodes are created in the same VPC
-		name = nodes.Items[0].Spec.ExternalID
-		region = nodes.Items[0].Labels["failure-domain.beta.kubernetes.io/region"]
-	} else {
-		return nil, fmt.Errorf("unable to find any nodes in the cluster")
-	}
-	log.Printf("Found node with ID: %v in region %v", name, region)
-
-	cfg, err := external.LoadDefaultAWSConfig()
-	if err != nil {
-		panic("unable to load SDK config, " + err.Error())
-	}
-
-	// Set the AWS Region that the service clients should use
-	cfg.Region = region
-	cfg.HTTPClient.Timeout = 5 * time.Second
-	return ec2.New(cfg), nil
-
-}
-
 func main() {
 	var provider string
 	var rootCmd = &cobra.Command{
@@ -119,13 +63,16 @@ func main() {
 		},
 	}
 	rootCmd.PersistentFlags().StringVar(&provider, "provider", "aws", "Type of provider (aws, local)")
-	rootCmd.Execute()
+	err := rootCmd.Execute()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func execute(dbprovider string) {
 	log.Println("Starting k8s-rds")
 
-	config, err := getClientConfig(kubeconfig())
+	config, err := getClientConfig(kube.Config())
 	if err != nil {
 		panic(err.Error())
 	}
@@ -159,7 +106,7 @@ func execute(dbprovider string) {
 			AddFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
 				client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
-				err = handleCreateDatabase(db, client)
+				err = handleCreateDatabase(db, client, dbprovider)
 				if err != nil {
 					log.Printf("database creation failed: %v", err)
 					err := updateStatus(db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, client)
@@ -172,22 +119,18 @@ func execute(dbprovider string) {
 				db := obj.(*crd.Database)
 				log.Printf("deleting database: %s \n", db.Name)
 
-				log.Println("trying to get kubectl")
-				kubectl, err := getKubectl()
-				if err != nil {
-					log.Println(err)
-					return
-				}
-				r, err := provider(db)
+				r, err := getProvider(db, dbprovider)
 				if err != nil {
 					log.Println(err)
 					return
 				}
 
-				r.DeleteDatabase(db)
+				err = r.DeleteDatabase(db)
+				if err != nil {
+					log.Println(err)
+				}
 
-				k := kube.Kube{Client: kubectl}
-				err = k.DeleteService(db.Namespace, db.Name)
+				err = r.DeleteService(db.Namespace, db.Name)
 				if err != nil {
 					log.Println(err)
 				}
@@ -205,20 +148,31 @@ func execute(dbprovider string) {
 	select {}
 }
 
-func provider(db *crd.Database) (DatabaseProvider, error) {
+func getProvider(db *crd.Database, dbprovider string) (provider.DatabaseProvider, error) {
 	kubectl, err := getKubectl()
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	r, err := rds.New(db, kubectl)
-	if err != nil {
-		return nil, err
+	switch dbprovider {
+	case "aws":
+		r, err := rds.New(db, kubectl)
+		if err != nil {
+			return nil, err
+		}
+		return r, nil
+
+	case "local":
+		r, err := local.New(db, kubectl)
+		if err != nil {
+			return nil, err
+		}
+		return r, nil
 	}
-	return r, nil
+	return nil, fmt.Errorf("unable to find provider for %v", dbprovider)
 }
 
-func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient) error {
+func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovider string) error {
 	if db.Status.State == "Created" {
 		log.Printf("database %v already created, skipping\n", db.Name)
 		return nil
@@ -230,27 +184,21 @@ func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient) error {
 	}
 
 	log.Println("trying to get kubectl")
-	kubectl, err := getKubectl()
-	if err != nil {
-		return err
-	}
-	r, err := provider(db)
+
+	r, err := getProvider(db, dbprovider)
 	if err != nil {
 		return err
 	}
 
-	k := kube.Kube{Client: kubectl}
-	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
-	pw, err := k.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
-	if err != nil {
-		return err
-	}
-	hostname, err := r.CreateDatabase(db, pw)
+	hostname, err := r.CreateDatabase(db)
 	if err != nil {
 		return err
 	}
 	log.Printf("Creating service '%v' for %v\n", db.Name, hostname)
-	k.CreateService(db.Namespace, hostname, db.Name)
+	err = r.CreateService(db.Namespace, hostname, db.Name)
+	if err != nil {
+		return err
+	}
 
 	err = updateStatus(db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
 	if err != nil {
@@ -267,7 +215,7 @@ func updateStatus(db *crd.Database, status crd.DatabaseStatus, crdclient *client
 	}
 
 	db.Status = status
-	db, err = crdclient.Update(db)
+	_, err = crdclient.Update(db)
 	if err != nil {
 		return err
 	}
