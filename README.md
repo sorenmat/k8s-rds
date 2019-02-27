@@ -86,9 +86,11 @@ And on the AWS RDS page
 
 - [X] Basic RDS support
 
+- [X] Local PostgreSQL support
+
 - [ ] Cluster support
 
 - [ ] Google Cloud SQL for PostgreSQL support
 
-- [ ] Local PostgreSQL support
+
 
