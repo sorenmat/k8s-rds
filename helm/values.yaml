@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: k8s-rds
+  repository: gcr.io/totvscloud104/k8s-rds
   tag: latest
   pullPolicy: IfNotPresent
 
