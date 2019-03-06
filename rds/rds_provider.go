@@ -168,7 +168,7 @@ func (r *RDS) DeleteDatabase(db *crd.Database) error {
 	}
 
 	// delete the subnet group attached to the instance
-	subnetName := db.Name + "-subnet"
+	subnetName := db.Name + "-subnet-" + db.Namespace
 	dres := svc.DeleteDBSubnetGroupRequest(&rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
 	_, err = dres.Send()
 	if err != nil {
