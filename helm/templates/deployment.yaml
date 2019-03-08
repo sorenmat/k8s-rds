@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: {{ include "k8s-rds.fullname" . }}
-  namespace: default
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -13,6 +13,8 @@ spec:
       labels:
         name: {{ include "k8s-rds.fullname" . }}
     spec:
+      imagePullSecrets:
+      - name: {{ include "k8s-rds.fullname" . }}-pull-secret
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         env:
