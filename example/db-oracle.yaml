@@ -1,0 +1,17 @@
+apiVersion: k8s.io/v1
+kind: Database
+metadata:
+  name: c6fg10
+  namespace: default
+spec:
+  class: db.t2.small
+  engine: oracle-se2
+  dbname: c6fg10
+  size: 10
+  name: c6fg10
+  instanceIdentifier: c6fg10
+  storagetype: gp2
+  subnetGroupName: private
+  copyTagsToSnapshot: true
+  snapshotIdentifier: arn:aws:rds:us-east-2:911270218041:snapshot:database-matriz-v26
+  availabilityZone: us-east-2a

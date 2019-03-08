@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  test:
+    image: cloud104/k8s-rds
+    build:
+      context: .
+    command: go test

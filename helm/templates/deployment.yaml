@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-rds.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: {{ include "k8s-rds.fullname" . }}
+  template:
+    metadata:
+      labels:
+        name: {{ include "k8s-rds.fullname" . }}
+    spec:
+      imagePullSecrets:
+      - name: {{ include "k8s-rds.fullname" . }}-pull-secret
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        env:
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: {{ include "k8s-rds.fullname" . }}
+      restartPolicy: Always
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+      serviceAccountName: {{ include "k8s-rds.fullname" . }}-operator

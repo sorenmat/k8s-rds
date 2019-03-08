@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysecret
+  name: k8s-rds
 type: Opaque
 data:
   mykey: cGFzc3dvcmRvcnNvbWV0aGluZw==
@@ -16,8 +16,9 @@ spec:
   engine: postgres
   dbname: thepgsql
   name: thatpgsql
+  subnetGroupName: private
   password:
     key: mykey
-    name: mysecret
+    name: k8s-rds
   username: postgres
   size: 10

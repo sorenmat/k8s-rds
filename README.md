@@ -1,7 +1,7 @@
 # k8s-rds
 
-[![Build Status](https://travis-ci.org/sorenmat/k8s-rds.svg?branch=master)](https://travis-ci.org/sorenmat/k8s-rds)
-[![Go Report Card](https://goreportcard.com/badge/github.com/sorenmat/k8s-rds)](https://goreportcard.com/report/github.com/sorenmat/k8s-rds)
+[![Build Status](https://travis-ci.org/cloud104/k8s-rds.svg?branch=master)](https://travis-ci.org/sorenmat/k8s-rds)
+[![Go Report Card](https://goreportcard.com/badge/github.com/cloud104/k8s-rds)](https://goreportcard.com/report/github.com/cloud104/k8s-rds)
 
 A Custom Resource Definition for provisioning AWS RDS databases.
 
@@ -15,7 +15,7 @@ The codes will search for the first node, and take the subnets from that node. A
 
 ## Building
 
-`go build`
+`CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o k8s-rds .`
 
 ## Installing
 

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/sorenmat/k8s-rds/client"
-	"github.com/sorenmat/k8s-rds/crd"
+	"github.com/cloud104/k8s-rds/client"
+	"github.com/cloud104/k8s-rds/crd"
 	"k8s.io/api/core/v1"
 )
 

@@ -63,6 +63,11 @@ type DatabaseSpec struct {
 	StorageType           string               `json:"storagetype,omitempty"`
 	Iops                  int64                `json:"iops,omitempty"`
 	BackupRetentionPeriod int64                `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
+	DBSubnetGroupName     string               `json:"subnetGroupName"`
+	DBSnapshotIdentifier  string               `json:"snapshotIdentifier"`
+	DBInstanceIdentifier  string               `json:"instanceIdentifier"`
+	AvailabilityZone      string               `json:"availabilityZone"`
+	CopyTagsToSnapshot    bool                 `json:"copyTagsToSnapshot,omitempty"`
 }
 
 type DatabaseStatus struct {

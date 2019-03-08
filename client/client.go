@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/sorenmat/k8s-rds/crd"
+	"github.com/cloud104/k8s-rds/crd"
 
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
@@ -11,7 +11,6 @@ import (
 )
 
 // This file implement all the (CRUD) client methods we need to access our CRD object
-
 func CrdClient(cl *rest.RESTClient, scheme *runtime.Scheme, namespace string) *Crdclient {
 	return &Crdclient{cl: cl, ns: namespace, plural: "databases",
 		codec: runtime.NewParameterCodec(scheme)}
