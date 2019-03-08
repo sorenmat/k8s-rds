@@ -1,2 +1,3 @@
 k8s-rds
 /vendor
+helm/secrets
