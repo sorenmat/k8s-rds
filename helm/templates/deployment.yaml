@@ -1,27 +1,42 @@
+{{- $root := . }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ include "k8s-rds.fullname" . }}
+  name: {{ include "k8s-rds.shortname" . }}
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      name: {{ include "k8s-rds.fullname" . }}
+      name: {{ include "k8s-rds.shortname" . }}
   template:
     metadata:
       labels:
-        name: {{ include "k8s-rds.fullname" . }}
+        name: {{ include "k8s-rds.shortname" . }}
     spec:
       imagePullSecrets:
-      - name: {{ include "k8s-rds.fullname" . }}-pull-secret
+      - name: {{ include "k8s-rds.shortname" . }}
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        env:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        name: {{ include "k8s-rds.fullname" . }}
+        name: {{ include "k8s-rds.shortname" . }}
+        env:
+          {{- range $key, $value := .Values.envs }}
+          {{- $val := $value | toString }}
+          {{- if (and (ne $val "<nil>") (ne $val "")) }}
+          - name: {{ $key | upper }}
+            value: {{ $val | quote }}
+          {{- end }}
+          {{- end }}
+          {{- range $key, $val := .Values.secrets }}
+          - name: {{ $key | upper }}
+            valueFrom:
+              secretKeyRef:
+                key: {{ $key | lower }}
+                name: {{ include "k8s-rds.shortname" $root }}-secret
+          {{- end }}
       restartPolicy: Always
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
-      serviceAccountName: {{ include "k8s-rds.fullname" . }}-operator
+      serviceAccountName: {{ include "k8s-rds.fullname" . }}
