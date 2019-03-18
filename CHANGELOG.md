@@ -1,7 +1,14 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+### Feature
+- Update vendor version
+- add changelog
+
 ### Feautre
+- Modify vendors
+- Creates helm
+- add only the vendor folder
 - delete vendor
 
 

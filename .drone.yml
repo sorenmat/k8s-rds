@@ -1,0 +1,63 @@
+workspace:
+  base: /go
+  path: src/github.com/cloud104/k8s-rds
+
+pipeline:
+  deps:
+    image: instrumentisto/dep:alpine
+    commands:
+      - dep ensure -vendor-only
+
+  test:
+    image: golang:alpine
+    group: build
+    commands:
+      - CGO_ENABLED=0 GOOS=linux go test ./...
+
+  build:
+    image: instrumentisto/dep:alpine
+    group: build
+    commands:
+      - GOOS=linux CGO_ENABLED=0 go build
+
+  publish-feature:
+    image: plugins/gcr
+    group: deploy
+    repo: gcr.io/totvscloud104/k8s-rds
+    secrets: [ gcr_json_key ]
+    tags:
+      - "latest"
+      - ${DRONE_BRANCH/\//-}-${DRONE_BUILD_NUMBER}
+    when:
+      branch:
+        include: [ feature/*, hotfix/* ]
+
+  tag:
+    image: cloud104/drone-github-tag
+    secrets: [ plugin_github_token ]
+    when:
+      branch:
+        include: [ develop ]
+
+  publish:
+    image: plugins/gcr
+    repo: gcr.io/totvscloud104/k8s-rds
+    build_args:
+      - PACKAGE=endpoint
+    secrets: [ gcr_json_key ]
+    auto_tag: true
+    group: deploy
+    when:
+      event: tag
+
+  chart:
+    image: cloud104/drone-chartmuseum
+    group: deploy
+    chart_path: helm
+    log_level: debug
+    secrets: [ repo_username, repo_password, repo_url ]
+
+  slack:
+    image: plugins/slack
+    username: ${DRONE_REPO_NAME}
+    secrets: [ webhook ]

@@ -1,7 +1,9 @@
 version: "3.7"
 services:
   test:
-    image: cloud104/k8s-rds
-    build:
-      context: .
+    image: instrumentisto/dep:alpine
+    entrypoint: ""
+    working_dir: /go/src/github.com/cloud104/k8s-rds
     command: go test
+    volumes:
+      - .:/go/src/github.com/cloud104/k8s-rds

@@ -11,6 +11,5 @@ install:
 after_success:
   - scripts/deploy.sh
 
-
 notifications:
   email: false
