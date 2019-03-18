@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"log"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
@@ -80,7 +81,7 @@ func configClient() (aws.Config, error) {
 		return aws.Config{}, err
 	}
 
-	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		return aws.Config{}, errors.Wrap(err, "unable to get nodes")
 	}
@@ -130,7 +131,7 @@ func getSubnets(svc *ec2.EC2, public bool) ([]string, error) {
 		return nil, err
 	}
 
-	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
@@ -199,7 +200,7 @@ func getSGS(svc *ec2.EC2) ([]string, error) {
 		return nil, err
 	}
 
-	nodes, err := kubectl.Core().Nodes().List(metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
