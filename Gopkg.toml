@@ -1,7 +1,6 @@
-
 # Gopkg.toml example
 #
-# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# Refer to https://golang.github.io/dep/docs/Gopkg.toml.html
 # for detailed Gopkg.toml documentation.
 #
 # required = ["github.com/user/thing/cmd/thing"]
@@ -17,25 +16,34 @@
 #   source = "github.com/myfork/project2"
 #
 # [[override]]
-#  name = "github.com/x/y"
-#  version = "2.4.0"
+#   name = "github.com/x/y"
+#   version = "2.4.0"
+#
+# [prune]
+#   non-go = false
+#   go-tests = true
+#   unused-packages = true
 
 
 [[constraint]]
   name = "github.com/aws/aws-sdk-go-v2"
-  version = "v2.0.0-preview.4"
+  version = "0.7.0"
 
 [[constraint]]
-  branch = "master"
+  name = "github.com/ghodss/yaml"
+  version = "1.0.0"
+
+[[constraint]]
   name = "github.com/mitchellh/go-homedir"
+  version = "1.1.0"
 
 [[constraint]]
   name = "github.com/pkg/errors"
-  version = "0.8.0"
+  version = "0.8.1"
 
 [[constraint]]
-  branch = "master"
-  name = "k8s.io/api"
+  name = "github.com/stretchr/testify"
+  version = "1.3.0"
 
 [[constraint]]
   branch = "master"
@@ -43,8 +51,8 @@
 
 [[constraint]]
   branch = "master"
-  name = "k8s.io/apimachinery"
-
-[[constraint]]
   name = "k8s.io/client-go"
-  version = "10.0.0"
+
+[prune]
+  go-tests = true
+  unused-packages = true
