@@ -2,15 +2,17 @@ package rds
 
 import (
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/cloud104/k8s-rds/crd"
 	"github.com/pkg/errors"
-	"log"
-	"time"
 )
 
+// AWS ...
 type AWS struct {
 	RDS            *rds.RDS
 	EC2            *ec2.EC2
@@ -18,6 +20,7 @@ type AWS struct {
 	SecurityGroups []string
 }
 
+// CreateDatabase ...
 func (a *AWS) CreateDatabase(db *crd.Database, password string) (string, error) {
 	log.Println("Trying to find the correct subnets")
 	subnetName, err := a.ensureSubnets(db)
@@ -58,6 +61,7 @@ func (a *AWS) CreateDatabase(db *crd.Database, password string) (string, error) 
 	return dbHostname, nil
 }
 
+// RestoreDatabase ...
 func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
 	log.Println("Trying to find the correct subnets")
 	subnetName, err := a.ensureSubnets(db)
@@ -91,6 +95,13 @@ func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
 		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", input.DBInstanceIdentifier))
 	}
 
+	log.Printf("Will reboot instance %v to apply params\n", input.DBInstanceIdentifier)
+	r := &rds.RebootDBInstanceInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
+	_, err = a.RDS.RebootDBInstanceRequest(r).Send()
+	if err != nil {
+		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in RebootDBInstanceRequest for db instance %v", input.DBInstanceIdentifier))
+	}
+
 	// Get the newly created database so we can get the endpoint
 	dbHostname, err := getEndpoint(input.DBInstanceIdentifier, a.RDS)
 	if err != nil {
@@ -99,6 +110,7 @@ func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
 	return dbHostname, nil
 }
 
+// DeleteDatabase ...
 func (a *AWS) DeleteDatabase(db *crd.Database) {
 	// delete the database instance
 	svc := a.RDS
@@ -129,6 +141,7 @@ func (a *AWS) DeleteDatabase(db *crd.Database) {
 	//}
 }
 
+// deleteSubnetGroup ...
 func (a *AWS) deleteSubnetGroup(db *crd.Database) {
 	svc := a.RDS
 	// delete the subnet group attached to the instance
