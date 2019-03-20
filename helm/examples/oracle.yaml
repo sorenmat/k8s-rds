@@ -2,6 +2,7 @@ apiVersion: k8s.io/v1
 kind: Database
 metadata:
   name: c12345-test
+  namespace: c12345-test
 spec:
   class: db.t2.micro
   engine: oracle-se2
