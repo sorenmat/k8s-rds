@@ -1,15 +1,14 @@
 apiVersion: k8s.io/v1
 kind: Database
 metadata:
-  name: c6fg10
-  namespace: default
+  name: c12345-test
 spec:
-  class: db.t2.small
+  class: db.t2.micro
   engine: oracle-se2
-  dbname: c6fg10
+  dbname: testdb
   size: 10
-  name: c6fg10
-  instanceIdentifier: c6fg10
+  name: c12345-test
+  instanceIdentifier: c12345-test
   storagetype: gp2
   subnetGroupName: private
   copyTagsToSnapshot: true
