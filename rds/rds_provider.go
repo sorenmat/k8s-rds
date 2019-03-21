@@ -116,7 +116,7 @@ func (a *AWS) DeleteDatabase(db *crd.Database) {
 	svc := a.RDS
 	dbName := db.Spec.DBInstanceIdentifier
 	t := time.Now()
-	finalSnapshotIdentifier := fmt.Sprintf("%v-%v", aws.String(dbName), t.Format("20060102150405"))
+	finalSnapshotIdentifier := fmt.Sprintf("k8s-rds-%v-%v", dbName, t.Format("20060102150405"))
 
 	log.Printf("DB: %v to be deleted, with finalSnapshot: %v\n", dbName, finalSnapshotIdentifier)
 	res := svc.DeleteDBInstanceRequest(&rds.DeleteDBInstanceInput{
