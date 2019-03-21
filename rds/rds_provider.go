@@ -76,7 +76,6 @@ func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
 	res := a.RDS.DescribeDBInstancesRequest(k)
 	_, err = res.Send()
-
 	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
 		log.Printf("DB instance %v not found trying to create it\n", db.Spec.DBName)
 		// seems like we didn't find a database with this name, let's create on
@@ -85,21 +84,29 @@ func (a *AWS) RestoreDatabase(db *crd.Database) (string, error) {
 		if err != nil {
 			return "", errors.Wrap(err, "CreateDBInstance")
 		}
+
+		log.Printf("Waiting for db instance %v to become available after creation\n", *input.DBInstanceIdentifier)
+		time.Sleep(5 * time.Second)
+		err = a.RDS.WaitUntilDBInstanceAvailable(k)
+		if err != nil {
+			return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", input.DBInstanceIdentifier))
+		}
+
+		log.Printf("Reboot instance after creation %v to apply params\n", *input.DBInstanceIdentifier)
+		r := &rds.RebootDBInstanceInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
+		_, err = a.RDS.RebootDBInstanceRequest(r).Send()
+		if err != nil {
+			return "", errors.Wrap(err, fmt.Sprintf("something went wrong in RebootDBInstanceRequest for db instance %v", input.DBInstanceIdentifier))
+		}
 	} else if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", input.DBInstanceIdentifier))
 	}
+
 	log.Printf("Waiting for db instance %v to become available\n", *input.DBInstanceIdentifier)
 	time.Sleep(5 * time.Second)
 	err = a.RDS.WaitUntilDBInstanceAvailable(k)
 	if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", input.DBInstanceIdentifier))
-	}
-
-	log.Printf("Will reboot instance %v to apply params\n", input.DBInstanceIdentifier)
-	r := &rds.RebootDBInstanceInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
-	_, err = a.RDS.RebootDBInstanceRequest(r).Send()
-	if err != nil {
-		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in RebootDBInstanceRequest for db instance %v", input.DBInstanceIdentifier))
 	}
 
 	// Get the newly created database so we can get the endpoint
