@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: gcr.io/totvscloud104/k8s-rds
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   pullSecret:
 
 resources: {}
