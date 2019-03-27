@@ -14,12 +14,12 @@ metadata:
   namespace: c12345-test
 spec:
   class: db.t2.micro
-  engine: postgres
   dbname: testdb
+  engine: postgres
   name: c12345-test
+  size: 10
   subnetGroupName: private
+  username: postgres
   password:
     key: password
     name: c12345-test
-  username: postgres
-  size: 10
