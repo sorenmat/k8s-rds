@@ -375,7 +375,7 @@ func handleRestoreDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clie
 	if err != nil {
 		return err
 	}
-	log.Printf("Creating service '%v' for %v\n", db.Name, hostname)
+	log.Printf("Creating service db.Name: '%v' hostname: '%v' db.Namespace: '%v'\n", db.Name, hostname, db.Namespace)
 	k.CreateService(db.Namespace, hostname, db.Name)
 
 	err = updateStatus(db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
@@ -431,7 +431,7 @@ func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clien
 	if err != nil {
 		return err
 	}
-	log.Printf("Creating service '%v' for %v\n", db.Name, hostname)
+	log.Printf("Creating service db.Name: '%v' hostname: '%v' db.Namespace: '%v'\n", db.Name, hostname, db.Namespace)
 	k.CreateService(db.Namespace, hostname, db.Name)
 
 	err = updateStatus(db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)

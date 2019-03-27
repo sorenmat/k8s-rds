@@ -1,17 +1,21 @@
 include secrets/values.mk
 
-RELEASE:=c12345-release-test
-NAMESPACE:=c12345-test
+RELEASE:=k8s-rds
+NAMESPACE:=k8s-rds
 VALUES?=./values.yaml
+EXAMPLE_NAMESPACE:=c12345-test
 
-example-restore:
-	kubectl -n ${NAMESPACE} apply -f ./examples/oracle.yaml
+example-oracle:
+	kubectl -n ${EXAMPLE_NAMESPACE} apply -f ./examples/oracle.yaml
 
-example-restore-delete:
-	kubectl -n ${NAMESPACE} delete -f ./examples/oracle.yaml
+example-oracle-delete:
+	kubectl -n ${EXAMPLE_NAMESPACE} delete -f ./examples/oracle.yaml
 
-# example-create:
-# 	kubectl -n ${NAMESPACE} apply -f ./examples/postgres.yaml
+# example-postgres:
+# 	kubectl -n ${EXAMPLE_NAMESPACE} apply -f ./examples/postgres.yaml
+
+# example-postgres-delete:
+# 	kubectl -n ${EXAMPLE_NAMESPACE} delete -f ./examples/postgres.yaml
 
 template:
 	@helm template . \
