@@ -16,6 +16,7 @@ func CrdClient(cl *rest.RESTClient, scheme *runtime.Scheme, namespace string) *C
 		codec: runtime.NewParameterCodec(scheme)}
 }
 
+// Crdclient ...
 type Crdclient struct {
 	cl     *rest.RESTClient
 	ns     string
@@ -23,47 +24,44 @@ type Crdclient struct {
 	codec  runtime.ParameterCodec
 }
 
+// Create ...
 func (f *Crdclient) Create(obj *crd.Database) (*crd.Database, error) {
 	var result crd.Database
-	err := f.cl.Post().
-		Namespace(f.ns).Resource(f.plural).
-		Body(obj).Do().Into(&result)
+	err := f.cl.Post().Namespace(f.ns).Resource(f.plural).Body(obj).Do().Into(&result)
 	return &result, err
 }
 
+// Update ...
 func (f *Crdclient) Update(obj *crd.Database) (*crd.Database, error) {
 	var result crd.Database
-	err := f.cl.Put().
-		Namespace(f.ns).Resource(f.plural).Name(obj.Name).
-		Body(obj).Do().Into(&result)
+
+	err := f.cl.Put().Namespace(f.ns).Resource(f.plural).Name(obj.Name).Body(obj).Do().Into(&result)
 	return &result, err
 }
 
+// Delete ...
 func (f *Crdclient) Delete(name string, options *meta_v1.DeleteOptions) error {
 	return f.cl.Delete().
-		Namespace(f.ns).Resource(f.plural).
-		Name(name).Body(options).Do().
+		Namespace(f.ns).Resource(f.plural).Name(name).Body(options).Do().
 		Error()
 }
 
+// Get ...
 func (f *Crdclient) Get(name string) (*crd.Database, error) {
 	var result crd.Database
-	err := f.cl.Get().
-		Namespace(f.ns).Resource(f.plural).
-		Name(name).Do().Into(&result)
+	err := f.cl.Get().Namespace(f.ns).Resource(f.plural).Name(name).Do().Into(&result)
 	return &result, err
 }
 
+// List ...
 func (f *Crdclient) List(opts meta_v1.ListOptions) (*crd.DatabaseList, error) {
 	var result crd.DatabaseList
-	err := f.cl.Get().
-		Namespace(f.ns).Resource(f.plural).
-		VersionedParams(&opts, f.codec).
-		Do().Into(&result)
+	err := f.cl.Get().Namespace(f.ns).Resource(f.plural).VersionedParams(&opts, f.codec).Do().Into(&result)
 	return &result, err
 }
 
 // Create a new List watch for our CRD
+// NewListWatch ...
 func (f *Crdclient) NewListWatch() *cache.ListWatch {
 	return cache.NewListWatchFromClient(f.cl, f.plural, f.ns, fields.Everything())
 }
