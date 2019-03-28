@@ -1,8 +1,7 @@
 apiVersion: k8s.io/v1
 kind: Database
 metadata:
-  name: c12345-test
-  namespace: c12345-test
+  name: c12345-name
 spec:
   availabilityZone: us-east-2a
   class: db.t2.micro
@@ -10,7 +9,6 @@ spec:
   dbname: testdb
   engine: oracle-se2
   instanceIdentifier: c12345-test
-  name: c12345-test
   size: 10
   snapshotIdentifier: arn:aws:rds:us-east-2:911270218041:snapshot:database-matriz-v26
   storagetype: gp2
