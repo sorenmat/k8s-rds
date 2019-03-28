@@ -1,21 +1,8 @@
-include secrets/values.mk
+include ./secrets/values.mk
 
 RELEASE:=k8s-rds
 NAMESPACE:=k8s-rds
 VALUES?=./values.yaml
-EXAMPLE_NAMESPACE:=c12345-test
-
-example-oracle:
-	kubectl -n ${EXAMPLE_NAMESPACE} apply -f ./examples/oracle.yaml
-
-example-oracle-delete:
-	kubectl -n ${EXAMPLE_NAMESPACE} delete -f ./examples/oracle.yaml
-
-# example-postgres:
-# 	kubectl -n ${EXAMPLE_NAMESPACE} apply -f ./examples/postgres.yaml
-
-# example-postgres-delete:
-# 	kubectl -n ${EXAMPLE_NAMESPACE} delete -f ./examples/postgres.yaml
 
 template:
 	@helm template . \
@@ -53,4 +40,4 @@ delete:
 delete-nm:
 	kubectl delete ns ${NAMESPACE} --timeout 10s --timeout=60s
 
-.PHONY: template upgrade install delete delete-nm
+.PHONY: template upgrade install delete delete-nm logs run
