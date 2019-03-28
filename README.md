@@ -85,10 +85,9 @@ And on the AWS RDS page
 # TODO
 
 - [X] Basic RDS support
-
 - [ ] Cluster support
-
 - [ ] Google Cloud SQL for PostgreSQL support
-
 - [ ] Local PostgreSQL support
-
+- [ ] Transform into a configurable cli
+- [ ] Azure support
+- [ ] Make it read from a VERSION file and print
