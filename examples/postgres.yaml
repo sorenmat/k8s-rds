@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: c12345-name
+  name: c12345-test
 type: Opaque
 data:
   password: cGFzc3dvcmRvcnNvbWV0aGluZw==
@@ -9,15 +9,20 @@ data:
 apiVersion: k8s.io/v1
 kind: Database
 metadata:
-  name: c12345-name
+  name: c12345-test
 spec:
   class: db.t2.micro
   dbname: testdb
   engine: postgres
+  engineVersion: 10.5
   instanceIdentifier: c12345-test
+  parameterGroup: default.postgres10
   size: 10
   subnetGroupName: private
   username: postgres
   password:
     key: password
-    name: c12345-name
+    name: c12345-test
+  tags:
+    foo: bar
+    something: nothing

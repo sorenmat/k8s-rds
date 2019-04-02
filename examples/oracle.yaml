@@ -1,15 +1,19 @@
 apiVersion: k8s.io/v1
 kind: Database
 metadata:
-  name: c12345-name
+  name: c12345-test
 spec:
   availabilityZone: us-east-2a
   class: db.t2.micro
   copyTagsToSnapshot: true
   dbname: testdb
   engine: oracle-se2
-  instanceIdentifier: c12345-test
+  engineVersion: 12.1.0.2.v11
+  parameterGroup: taf-oracle-se2-12-1
   size: 10
   snapshotIdentifier: arn:aws:rds:us-east-2:911270218041:snapshot:database-matriz-v26
   storagetype: gp2
   subnetGroupName: private
+  tags:
+    foo: bar
+    something: nothing
