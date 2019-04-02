@@ -85,9 +85,20 @@ And on the AWS RDS page
 # TODO
 
 - [X] Basic RDS support
-- [ ] Cluster support
-- [ ] Google Cloud SQL for PostgreSQL support
-- [ ] Local PostgreSQL support
-- [ ] Transform into a configurable cli
-- [ ] Azure support
-- [ ] Make it read from a VERSION file and print
+- [] Cluster support
+- [] Google Cloud SQL for PostgreSQL support
+- [] Local PostgreSQL support
+- [] Transform rds creation into a configurable cli
+- [] Azure support
+- [] Make it read from a VERSION file and log
+- [] Tests
+
+## TEST
+
+- [] Parallel running
+- [] Pass parameter group
+- [] Get latest snapshot when restoring
+  - [] On delete check if snapshot was done correctly
+- [] Delete check snapshot
+- [] Create/Restore postgres
+- [] Create/Restore oracle
