@@ -1,7 +1,7 @@
 package crd
 
 import (
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -51,44 +51,52 @@ type Database struct {
 
 // DatabaseSpec main structure describing the database instance
 type DatabaseSpec struct {
-	Username              string               `json:"username"`
-	Password              v1.SecretKeySelector `json:"password"`
-	DBName                string               `json:"dbname"`
-	Engine                string               `json:"engine"` // "postgres"
-	Class                 string               `json:"class"`  // like "db.t2.micro"
-	Size                  int64                `json:"size"`   // size in gb
-	MultiAZ               bool                 `json:"multiaz,omitempty"`
-	PubliclyAccessible    bool                 `json:"publicaccess,omitempty"`
-	StorageEncrypted      bool                 `json:"encrypted,omitempty"`
-	StorageType           string               `json:"storagetype,omitempty"`
-	Iops                  int64                `json:"iops,omitempty"`
-	BackupRetentionPeriod int64                `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
-	DBSubnetGroupName     string               `json:"subnetGroupName"`
-	DBSnapshotIdentifier  string               `json:"snapshotIdentifier"`
-	DBInstanceIdentifier  string               `json:"instanceIdentifier"`
 	AvailabilityZone      string               `json:"availabilityZone"`
+	BackupRetentionPeriod int64                `json:"backupRetentionPeriod,omitempty"`
+	Class                 string               `json:"class"`
 	CopyTagsToSnapshot    bool                 `json:"copyTagsToSnapshot,omitempty"`
+	DBName                string               `json:"dbname"`
+	DBParameterGroupName  string               `json:"parameterGroup,omitempty"`
+	DBSnapshotIdentifier  string               `json:"snapshotIdentifier"`
+	DBSubnetGroupName     string               `json:"subnetGroupName"`
+	Engine                string               `json:"engine"`
+	EngineVersion         string               `json:"engineVersion"`
+	Iops                  int64                `json:"iops,omitempty"`
+	MultiAZ               bool                 `json:"multiaz,omitempty"`
+	Password              v1.SecretKeySelector `json:"password"`
+	PubliclyAccessible    bool                 `json:"publicAccess,omitempty"`
+	Size                  int64                `json:"size"`
+	StorageEncrypted      bool                 `json:"encrypted,omitempty"`
+	StorageType           string               `json:"storageType,omitempty"`
+	Tags                  map[string]string    `json:"tags"`
+	Username              string               `json:"username"`
+	VpcSecurityGroupIds   string               `json:"vpcSecurityGroupIds,omitempty"`
 }
 
+// DatabaseStatus ...
 type DatabaseStatus struct {
 	State   string `json:"state,omitempty" description:"State of the deploy"`
 	Message string `json:"message,omitempty" description:"Detailed message around the state"`
 }
 
+// DatabaseList ...
 type DatabaseList struct {
 	meta_v1.TypeMeta `json:",inline"`
 	meta_v1.ListMeta `json:"metadata"`
 	Items            []Database `json:"items"`
 }
 
+// DeepCopyObject ...
 func (d *Database) DeepCopyObject() runtime.Object {
 	return d
 }
 
+// DeepCopyObject ...
 func (d *DatabaseList) DeepCopyObject() runtime.Object {
 	return d
 }
 
+// SchemeGroupVersion ...
 var SchemeGroupVersion = schema.GroupVersion{Group: CRDGroup, Version: CRDVersion}
 
 func addKnownTypes(scheme *runtime.Scheme) error {
@@ -100,7 +108,7 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	return nil
 }
 
-// Create a Rest client with the new CRD Schema
+// NewClient Create a Rest client with the new CRD Schema
 func NewClient(cfg *rest.Config) (*rest.RESTClient, *runtime.Scheme, error) {
 	scheme := runtime.NewScheme()
 	SchemeBuilder := runtime.NewSchemeBuilder(addKnownTypes)

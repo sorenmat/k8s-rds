@@ -25,18 +25,104 @@ import (
 )
 
 const Failed = "Failed"
+const version = "0.0.8"
+const dryRunDelete = false
 
-func home() string {
-	dir, err := homedir.Dir()
-	home, err := homedir.Expand(dir)
+func main() {
+	log.Printf("Starting k8s-rds, version: %v", version)
+	config, err := getClientConfig(kubeconfig())
 	if err != nil {
 		panic(err.Error())
 	}
-	return home
-}
 
-func kubeconfig() string {
-	return home() + "/.kube/config"
+	// create clientset and create our CRD, this only need to run once
+	clientset, err := apiextcs.NewForConfig(config)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// note: if the CRD exist our CreateCRD function is set to exit without an error
+	if err = crd.CreateCRD(clientset); err != nil {
+		panic(err)
+	}
+
+	// Create a new clientset which include our CRD schema
+	crdcs, scheme, err := crd.NewClient(config)
+	if err != nil {
+		panic(err)
+	}
+
+	ec2client, err := clientEC2()
+	if err != nil {
+		log.Fatal("unable to create a client for EC2 ", err)
+	}
+
+	rdsclient, err := clientRDS()
+	if err != nil {
+		log.Fatal("unable to create a client for RDS ", err)
+	}
+
+	// Create a CRD client interface
+	crdclient := client.CrdClient(crdcs, scheme, "")
+	log.Println("Watching for database changes...")
+	_, controller := cache.NewInformer(
+		crdclient.NewListWatch(),
+		&crd.Database{},
+		time.Minute*2,
+		cache.ResourceEventHandlerFuncs{
+			AddFunc: func(obj interface{}) {
+				db := obj.(*crd.Database)
+				client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
+
+				// Based in the field, it creates or restores
+				if db.Spec.DBSnapshotIdentifier != "" {
+					log.Printf("Seems that it restoring")
+					err = handleRestoreDatabase(db, ec2client, client)
+				} else {
+					log.Printf("Seems that it creating")
+					err = handleCreateDatabase(db, ec2client, client)
+				}
+
+				if err != nil {
+					log.Printf("database creation/restore failed: %v", err)
+					err := updateStatus(db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, client)
+					if err != nil {
+						log.Printf("database CRD status update failed: %v", err)
+					}
+				}
+			},
+			DeleteFunc: func(obj interface{}) {
+				db := obj.(*crd.Database)
+				kubectl, err := getKubectl()
+				if err != nil {
+					log.Println(err)
+					return
+				}
+
+				k := kube.Kube{Client: kubectl}
+				err = k.DeleteService(db.Namespace, db.Name)
+				if err != nil {
+					log.Println(err)
+				}
+
+				log.Printf("deleting database: %s \n", db.Name)
+				r := k8srds.AWS{RDS: rdsclient}
+				if !dryRunDelete {
+					r.DeleteDatabase(db)
+				}
+
+				log.Printf("Deletion of database %v done\n", db.Name)
+			},
+			UpdateFunc: func(oldObj, newObj interface{}) {
+			},
+		},
+	)
+
+	stop := make(chan struct{})
+	go controller.Run(stop)
+
+	// Wait forever
+	select {}
 }
 
 // return rest config, if path not specified assume in cluster config
@@ -48,6 +134,36 @@ func getClientConfig(kubeconfig string) (*rest.Config, error) {
 		}
 	}
 	return cfg, err
+}
+
+func kubeconfig() string {
+	return home() + "/.kube/config"
+}
+
+func home() string {
+	dir, err := homedir.Dir()
+	home, err := homedir.Expand(dir)
+	if err != nil {
+		panic(err.Error())
+	}
+	return home
+}
+
+func clientRDS() (*rds.RDS, error) {
+	client, err := configClient()
+	if err != nil {
+		return nil, err
+	}
+	return rds.New(client), nil
+}
+
+func clientEC2() (*ec2.EC2, error) {
+	client, err := configClient()
+	if err != nil {
+		return nil, err
+	}
+
+	return ec2.New(client), nil
 }
 
 func getKubectl() (*kubernetes.Clientset, error) {
@@ -67,12 +183,6 @@ func getKubectl() (*kubernetes.Clientset, error) {
 		return nil, err
 	}
 	return kubectl, nil
-}
-
-func ec2config(region string) *aws.Config {
-	return &aws.Config{
-		Region: region,
-	}
 }
 
 func configClient() (aws.Config, error) {
@@ -106,23 +216,6 @@ func configClient() (aws.Config, error) {
 	cfg.Region = region
 	cfg.HTTPClient.Timeout = 5 * time.Second
 	return cfg, nil
-}
-
-func clientRDS() (*rds.RDS, error) {
-	client, err := configClient()
-	if err != nil {
-		return nil, err
-	}
-	return rds.New(client), nil
-}
-
-func clientEC2() (*ec2.EC2, error) {
-	client, err := configClient()
-	if err != nil {
-		return nil, err
-	}
-
-	return ec2.New(client), nil
 }
 
 func getSubnets(svc *ec2.EC2, public bool) ([]string, error) {
@@ -246,93 +339,6 @@ func getSGS(svc *ec2.EC2) ([]string, error) {
 		log.Printf(v + " ")
 	}
 	return result, nil
-}
-
-func main() {
-	log.Println("Starting k8s-rds")
-	config, err := getClientConfig(kubeconfig())
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// create clientset and create our CRD, this only need to run once
-	clientset, err := apiextcs.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// note: if the CRD exist our CreateCRD function is set to exit without an error
-	if err = crd.CreateCRD(clientset); err != nil {
-		panic(err)
-	}
-
-	// Create a new clientset which include our CRD schema
-	crdcs, scheme, err := crd.NewClient(config)
-	if err != nil {
-		panic(err)
-	}
-
-	ec2client, err := clientEC2()
-	if err != nil {
-		log.Fatal("unable to create a client for EC2 ", err)
-	}
-	// Create a CRD client interface
-	crdclient := client.CrdClient(crdcs, scheme, "")
-	log.Println("Watching for database changes...")
-	_, controller := cache.NewInformer(
-		crdclient.NewListWatch(),
-		&crd.Database{},
-		time.Minute*2,
-		cache.ResourceEventHandlerFuncs{
-			AddFunc: func(obj interface{}) {
-				db := obj.(*crd.Database)
-				client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
-
-				// Based in the field, it creates or restores
-				if db.Spec.DBSnapshotIdentifier != "" {
-					log.Printf("Seems that it restoring")
-					err = handleRestoreDatabase(db, ec2client, client)
-				} else {
-					log.Printf("Seems that it creating")
-					err = handleCreateDatabase(db, ec2client, client)
-				}
-
-				if err != nil {
-					log.Printf("database creation failed: %v", err)
-					err := updateStatus(db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, client)
-					if err != nil {
-						log.Printf("database CRD status update failed: %v", err)
-					}
-				}
-			},
-			DeleteFunc: func(obj interface{}) {
-				rdsclient, err := clientRDS()
-				db := obj.(*crd.Database)
-				log.Printf("deleting database: %s \n", db.Name)
-				r := k8srds.AWS{RDS: rdsclient}
-				r.DeleteDatabase(db)
-				kubectl, err := getKubectl()
-				if err != nil {
-					log.Println(err)
-					return
-				}
-				k := kube.Kube{Client: kubectl}
-				err = k.DeleteService(db.Namespace, db.Name)
-				if err != nil {
-					log.Println(err)
-				}
-				log.Printf("Deletion of database %v done\n", db.Name)
-			},
-			UpdateFunc: func(oldObj, newObj interface{}) {
-			},
-		},
-	)
-
-	stop := make(chan struct{})
-	go controller.Run(stop)
-
-	// Wait forever
-	select {}
 }
 
 func handleRestoreDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *client.Crdclient) error {
