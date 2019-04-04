@@ -141,7 +141,7 @@ func kubeconfig() string {
 }
 
 func home() string {
-	dir, err := homedir.Dir()
+	dir, _ := homedir.Dir()
 	home, err := homedir.Expand(dir)
 	if err != nil {
 		panic(err.Error())
@@ -382,7 +382,10 @@ func handleRestoreDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clie
 		return err
 	}
 	log.Printf("Creating service db.Name: '%v' hostname: '%v' db.Namespace: '%v'\n", db.Name, hostname, db.Namespace)
-	k.CreateService(db.Namespace, hostname, db.Name)
+	err = k.CreateService(db.Namespace, hostname, db.Name)
+	if err != nil {
+		return err
+	}
 
 	err = updateStatus(db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
 	if err != nil {
@@ -438,7 +441,10 @@ func handleCreateDatabase(db *crd.Database, ec2client *ec2.EC2, crdclient *clien
 		return err
 	}
 	log.Printf("Creating service db.Name: '%v' hostname: '%v' db.Namespace: '%v'\n", db.Name, hostname, db.Namespace)
-	k.CreateService(db.Namespace, hostname, db.Name)
+	err = k.CreateService(db.Namespace, hostname, db.Name)
+	if err != nil {
+		return err
+	}
 
 	err = updateStatus(db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
 	if err != nil {
@@ -455,7 +461,7 @@ func updateStatus(db *crd.Database, status crd.DatabaseStatus, crdclient *client
 	}
 
 	db.Status = status
-	db, err = crdclient.Update(db)
+	_, err = crdclient.Update(db)
 	if err != nil {
 		return err
 	}
