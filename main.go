@@ -24,6 +24,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
+// Failed ...
 const Failed = "Failed"
 const version = "0.0.8"
 const dryRunDelete = false
