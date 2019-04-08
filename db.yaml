@@ -16,6 +16,7 @@ spec:
   engine: postgres
   dbname: thepgsql
   name: thatpgsql
+  deleteprotection: false
   password:
     key: mykey
     name: mysecret

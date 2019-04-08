@@ -1,7 +1,7 @@
 package crd
 
 import (
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -63,6 +63,7 @@ type DatabaseSpec struct {
 	StorageType           string               `json:"storagetype,omitempty"`
 	Iops                  int64                `json:"iops,omitempty"`
 	BackupRetentionPeriod int64                `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
+	DeleteProtection      bool                 `json:"deleteprotection,omitempty"`
 }
 
 type DatabaseStatus struct {
