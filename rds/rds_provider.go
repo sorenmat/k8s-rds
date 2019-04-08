@@ -142,6 +142,10 @@ func getEndpoint(dbName *string, svc *rds.RDS) (string, error) {
 }
 
 func (r *RDS) DeleteDatabase(db *crd.Database) error {
+	if db.Spec.DeleteProtection {
+		log.Printf("Trying to delete a %v in %v which is a deleted protected database", db.Name, db.Namespace)
+		return nil
+	}
 	// delete the database instance
 	svc := r.rdsclient()
 	res := svc.DeleteDBInstanceRequest(&rds.DeleteDBInstanceInput{
