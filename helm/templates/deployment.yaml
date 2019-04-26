@@ -16,11 +16,30 @@ spec:
     spec:
       imagePullSecrets:
       - name: {{ include "k8s-rds.shortname" . }}-image-pull-secret
+      # initContainers:
+      # - name: vault-authenticator
+      #   image: sethvargo/vault-kubernetes-authenticator:0.2.0
+      #   imagePullPolicy: Always
+      #   volumeMounts:
+      #   - name: vault-auth
+      #     mountPath: /var/run/secrets/vaultproject.io
+      #   env:
+      #   - name: VAULT_ROLE
+      #     value: myapp-role
+      #   securityContext:
+      #     allowPrivilegeEscalation: false
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: {{ include "k8s-rds.shortname" . }}
+        volumeMounts:
+        - name: vault-auth
+          mountPath: /home/vault
+        - name: vault-secrets
+          mountPath: /var/run/secrets/vaultproject.io
         env:
+          - name: HOME
+            value: /home/vault
           {{- range $key, $value := .Values.envs }}
           {{- $val := $value | toString }}
           {{- if (and (ne $val "<nil>") (ne $val "")) }}
@@ -35,6 +54,13 @@ spec:
                 key: {{ $key | lower }}
                 name: {{ include "k8s-rds.shortname" $root }}
           {{- end }}
+      volumes:
+      - name: vault-auth
+        emptyDir:
+          medium: Memory
+      - name: vault-secrets
+        emptyDir:
+          medium: Memory
       restartPolicy: Always
       securityContext:
         runAsNonRoot: true
