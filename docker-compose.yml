@@ -7,3 +7,15 @@ services:
     command: go test
     volumes:
       - .:/go/src/github.com/cloud104/k8s-rds
+  vault:
+    image: vault
+    ports:
+      - 8200:8200
+    volumes:
+      - vault:/vault/file
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=tks
+    cap_add:
+      - IPC_LOCK
+volumes:
+  vault: {}
