@@ -192,6 +192,14 @@ func dbidentifier(v *crd.Database) string {
 	return v.Name + "-" + v.Namespace
 }
 func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
+	tags := []rds.Tag{}
+	for k, v := range v.Annotations {
+		tags = append(tags, rds.Tag{Key: aws.String(k), Value: aws.String(v)})
+	}
+	for k, v := range v.Labels {
+		tags = append(tags, rds.Tag{Key: aws.String(k), Value: aws.String(v)})
+	}
+
 	input := &rds.CreateDBInstanceInput{
 		DBName:                aws.String(v.Spec.DBName),
 		AllocatedStorage:      aws.Int64(v.Spec.Size),
@@ -206,6 +214,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 		MultiAZ:               aws.Bool(v.Spec.MultiAZ),
 		StorageEncrypted:      aws.Bool(v.Spec.StorageEncrypted),
 		BackupRetentionPeriod: aws.Int64(v.Spec.BackupRetentionPeriod),
+		Tags:                  tags,
 	}
 	if v.Spec.StorageType != "" {
 		input.StorageType = aws.String(v.Spec.StorageType)
