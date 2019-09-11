@@ -1,6 +1,7 @@
 package rds
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"strings"
@@ -18,7 +19,7 @@ import (
 )
 
 type RDS struct {
-	EC2             *ec2.EC2
+	EC2             *ec2.Client
 	Subnets         []string
 	SecurityGroups  []string
 	ServiceProvider provider.ServiceProvider
@@ -68,12 +69,12 @@ func (r *RDS) CreateDatabase(db *crd.Database) (string, error) {
 	log.Printf("Trying to find db instance %v\n", db.Spec.DBName)
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
 	res := r.rdsclient().DescribeDBInstancesRequest(k)
-	_, err = res.Send()
+	_, err = res.Send(context.Background())
 	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
 		log.Printf("DB instance %v not found trying to create it\n", db.Spec.DBName)
 		// seems like we didn't find a database with this name, let's create on
 		res := r.rdsclient().CreateDBInstanceRequest(input)
-		_, err = res.Send()
+		_, err = res.Send(context.Background())
 		if err != nil {
 			return "", errors.Wrap(err, "CreateDBInstance")
 		}
@@ -82,7 +83,7 @@ func (r *RDS) CreateDatabase(db *crd.Database) (string, error) {
 	}
 	log.Printf("Waiting for db instance %v to become available\n", *input.DBInstanceIdentifier)
 	time.Sleep(5 * time.Second)
-	err = r.rdsclient().WaitUntilDBInstanceAvailable(k)
+	err = r.rdsclient().WaitUntilDBInstanceAvailable(context.Background(), k)
 	if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", input.DBInstanceIdentifier))
 	}
@@ -107,7 +108,7 @@ func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 
 	sf := &rds.DescribeDBSubnetGroupsInput{DBSubnetGroupName: aws.String(subnetName)}
 	res := svc.DescribeDBSubnetGroupsRequest(sf)
-	_, err := res.Send()
+	_, err := res.Send(context.Background())
 	log.Println("Subnets:", r.Subnets)
 	if err != nil {
 		// assume we didn't find it..
@@ -118,7 +119,7 @@ func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 			Tags:                     []rds.Tag{{Key: aws.String("DBName"), Value: aws.String(db.Spec.DBName)}},
 		}
 		res := svc.CreateDBSubnetGroupRequest(subnet)
-		_, err := res.Send()
+		_, err := res.Send(context.Background())
 		if err != nil {
 			return "", errors.Wrap(err, "CreateDBSubnetGroup")
 		}
@@ -128,10 +129,10 @@ func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 	return subnetName, nil
 }
 
-func getEndpoint(dbName *string, svc *rds.RDS) (string, error) {
+func getEndpoint(dbName *string, svc *rds.Client) (string, error) {
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: dbName}
 	res := svc.DescribeDBInstancesRequest(k)
-	instance, err := res.Send()
+	instance, err := res.Send(context.Background())
 	if err != nil || len(instance.DBInstances) == 0 {
 		return "", fmt.Errorf("wasn't able to describe the db instance with id %v", dbName)
 	}
@@ -152,7 +153,7 @@ func (r *RDS) DeleteDatabase(db *crd.Database) error {
 		DBInstanceIdentifier: aws.String(dbidentifier(db)),
 		SkipFinalSnapshot:    aws.Bool(true),
 	})
-	_, err := res.Send()
+	_, err := res.Send(context.Background())
 	if err != nil {
 		e := errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName))
 		log.Println(e)
@@ -162,7 +163,7 @@ func (r *RDS) DeleteDatabase(db *crd.Database) error {
 		time.Sleep(5 * time.Second)
 
 		k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: aws.String(dbidentifier(db))}
-		err = r.rdsclient().WaitUntilDBInstanceDeleted(k)
+		err = r.rdsclient().WaitUntilDBInstanceDeleted(context.Background(), k)
 		if err != nil {
 			log.Println(err)
 			return err
@@ -174,7 +175,7 @@ func (r *RDS) DeleteDatabase(db *crd.Database) error {
 	// delete the subnet group attached to the instance
 	subnetName := db.Name + "-subnet-" + db.Namespace
 	dres := svc.DeleteDBSubnetGroupRequest(&rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
-	_, err = dres.Send()
+	_, err = dres.Send(context.Background())
 	if err != nil {
 		e := errors.Wrap(err, fmt.Sprintf("unable to delete subnet %v", subnetName))
 		log.Println(e)
@@ -185,7 +186,7 @@ func (r *RDS) DeleteDatabase(db *crd.Database) error {
 	return nil
 }
 
-func (r *RDS) rdsclient() *rds.RDS {
+func (r *RDS) rdsclient() *rds.Client {
 	return rds.New(r.EC2.Config)
 }
 func dbidentifier(v *crd.Database) string {
@@ -228,7 +229,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 // getSubnets returns a list of subnets that the RDS instance should be attached to
 // We do this by finding a node in the cluster, take the VPC id from that node a list
 // the security groups in the VPC
-func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.EC2, public bool) ([]string, error) {
+func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.Client, public bool) ([]string, error) {
 
 	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
@@ -256,7 +257,7 @@ func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.EC2, public bool) ([]str
 	}
 	log.Println("trying to describe instance")
 	req := svc.DescribeInstancesRequest(params)
-	res, err := req.Send()
+	res, err := req.Send(context.Background())
 	if err != nil {
 		log.Println(err)
 		return nil, errors.Wrap(err, "unable to describe AWS instance")
@@ -272,7 +273,7 @@ func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.EC2, public bool) ([]str
 		log.Printf("Found VPC %v will search for subnet in that VPC\n", *vpcID)
 
 		res := svc.DescribeSubnetsRequest(&ec2.DescribeSubnetsInput{Filters: []ec2.Filter{{Name: aws.String("vpc-id"), Values: []string{*vpcID}}}})
-		subnets, err := res.Send()
+		subnets, err := res.Send(context.Background())
 
 		if err != nil {
 			return nil, errors.Wrap(err, fmt.Sprintf("unable to describe subnet in VPC %v", *vpcID))
@@ -297,7 +298,7 @@ func getIDFromProvider(x string) string {
 	name := x[pos:]
 	return name
 }
-func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
+func getSGS(kubectl *kubernetes.Clientset, svc *ec2.Client) ([]string, error) {
 
 	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
@@ -325,7 +326,7 @@ func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
 	}
 	log.Println("trying to describe instance")
 	req := svc.DescribeInstancesRequest(params)
-	res, err := req.Send()
+	res, err := req.Send(context.Background())
 	if err != nil {
 		log.Println(err)
 		return nil, errors.Wrap(err, "unable to describe AWS instance")
@@ -347,7 +348,7 @@ func getSGS(kubectl *kubernetes.Clientset, svc *ec2.EC2) ([]string, error) {
 	return result, nil
 }
 
-func ec2client(kubectl *kubernetes.Clientset) (*ec2.EC2, error) {
+func ec2client(kubectl *kubernetes.Clientset) (*ec2.Client, error) {
 
 	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
@@ -372,7 +373,5 @@ func ec2client(kubectl *kubernetes.Clientset) (*ec2.EC2, error) {
 
 	// Set the AWS Region that the service clients should use
 	cfg.Region = region
-	cfg.HTTPClient.Timeout = 5 * time.Second
 	return ec2.New(cfg), nil
-
 }
