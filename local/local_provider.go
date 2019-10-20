@@ -105,6 +105,8 @@ func (r *Local) createPVC(name, namespace string, size int64) error {
 		"repository": "https://github.com/sorenmat/k8s-rds",
 	}
 
+	storageClass := "default"
+
 	pvc.Spec = corev1.PersistentVolumeClaimSpec{
 		AccessModes: []corev1.PersistentVolumeAccessMode{
 			"ReadWriteOnce",
@@ -117,6 +119,8 @@ func (r *Local) createPVC(name, namespace string, size int64) error {
 					size, defaultLocalRDSPVSizeUnit)),
 			},
 		},
+
+		StorageClassName: &storageClass,
 	}
 
 	if newPVC {
