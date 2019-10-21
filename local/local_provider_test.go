@@ -154,7 +154,7 @@ func TestUpdateDatabase(t *testing.T) {
 			Resource: "persistentvolumeclaims",
 		},
 		{
-			Action:   "update",
+			Action:   "get",
 			Group:    "",
 			Resource: "persistentvolumeclaims",
 		},

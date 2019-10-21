@@ -1,6 +1,8 @@
 package client
 
 import (
+	"log"
+
 	"github.com/sorenmat/k8s-rds/crd"
 
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -37,6 +39,8 @@ func (f *Crdclient) Update(obj *crd.Database) (*crd.Database, error) {
 	err := f.cl.Put().
 		Namespace(f.ns).Resource(f.plural).Name(obj.Name).
 		Body(obj).Do().Into(&result)
+	log.Printf("New resource version of the DB %s is %s\n", result.Name,
+		result.ResourceVersion)
 	return &result, err
 }
 

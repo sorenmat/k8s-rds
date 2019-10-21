@@ -173,14 +173,18 @@ func getProvider(db *crd.Database, dbprovider string) (provider.DatabaseProvider
 }
 
 func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovider string) error {
-	if db.Status.State == "Created" {
+	// we don't need to skip when it is a local provider without running pod
+	if db.Status.State == "Created" && dbprovider == "aws" {
 		log.Printf("database %v already created, skipping\n", db.Name)
 		return nil
 	}
 	// validate dbname is only alpha numeric
-	err := updateStatus(db, crd.DatabaseStatus{Message: "Creating", State: "Creating"}, crdclient)
-	if err != nil {
-		return fmt.Errorf("database CRD status update failed: %v", err)
+	// This check is needed in case local provider with already created db
+	if db.Status.State != "Created" {
+		err := updateStatus(db, crd.DatabaseStatus{Message: "Creating", State: "Creating"}, crdclient)
+		if err != nil {
+			return fmt.Errorf("database CRD status update failed: %v", err)
+		}
 	}
 
 	log.Println("trying to get kubectl")
@@ -194,6 +198,7 @@ func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovi
 	if err != nil {
 		return err
 	}
+
 	log.Printf("Creating service '%v' for %v\n", db.Name, hostname)
 	err = r.CreateService(db.Namespace, hostname, db.Name)
 	if err != nil {
