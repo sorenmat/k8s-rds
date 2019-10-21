@@ -131,9 +131,21 @@ func (r *Local) createPVC(name, namespace string, size int64) error {
 		}
 	} else {
 		log.Printf("updating pvc %v", name)
-		_, err = r.kc.CoreV1().PersistentVolumeClaims(namespace).Update(pvc)
+		oldPvc, err := r.kc.CoreV1().PersistentVolumeClaims(namespace).Get(pvc.Name,
+			metav1.GetOptions{})
 		if err != nil {
 			return err
+		}
+
+		if oldPvc.Spec.Resources.Requests.StorageEphemeral().Cmp(*pvc.Spec.Resources.Requests.StorageEphemeral()) == 0 {
+			log.Printf("Specs %s has same size: not updating pvc \n",
+				name)
+			return nil
+		}
+		_, err = r.kc.CoreV1().PersistentVolumeClaims(namespace).Update(pvc)
+		if err != nil {
+			return e.Wrap(err,
+				fmt.Sprintf("Error: PVC %s has problems while updating %v", name, err))
 		}
 	}
 
@@ -204,7 +216,6 @@ func (r *Local) DeleteDatabase(db *crd.Database) error {
 func int32Ptr(i int32) *int32 { return &i }
 
 func toSpec(db *crd.Database) v1.DeploymentSpec {
-	fmt.Println("Key:", db.Spec.Password.Key)
 	return v1.DeploymentSpec{
 		Replicas: int32Ptr(1),
 		Selector: &metav1.LabelSelector{
