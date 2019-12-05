@@ -53,23 +53,32 @@ func getKubectl() (*kubernetes.Clientset, error) {
 }
 
 func main() {
-	var provider string
+	var (
+		provider          string
+		excludeNamespaces []string
+		includeNamespaces []string
+	)
 	var rootCmd = &cobra.Command{
 		Use:   "k8s-rds",
 		Short: "Kubernetes database provisioner",
 		Long:  `Kubernetes database provisioner`,
 		Run: func(cmd *cobra.Command, args []string) {
-			execute(provider)
+			execute(provider, excludeNamespaces, includeNamespaces)
 		},
 	}
 	rootCmd.PersistentFlags().StringVar(&provider, "provider", "aws", "Type of provider (aws, local)")
+	rootCmd.PersistentFlags().StringSliceVar(&excludeNamespaces, "exclude-namespaces", nil, "list of namespaces to exclude. Mutually exclusive with --include-namespaces.")
+	rootCmd.PersistentFlags().StringSliceVar(&includeNamespaces, "include-namespaces", nil, "list of namespaces to include. Mutually exclusive with --exclude-namespaces.")
+	if len(excludeNamespaces) > 0 && len(includeNamespaces) > 0 {
+		panic("--include-namespaces and --exclude-namespaces are mutually exclusive")
+	}
 	err := rootCmd.Execute()
 	if err != nil {
 		panic(err)
 	}
 }
 
-func execute(dbprovider string) {
+func execute(dbprovider string, excludeNamespaces, includeNamespaces []string) {
 	log.Println("Starting k8s-rds")
 
 	config, err := getClientConfig(kube.Config())
@@ -105,6 +114,9 @@ func execute(dbprovider string) {
 		cache.ResourceEventHandlerFuncs{
 			AddFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
+				if excluded(db, excludeNamespaces, includeNamespaces) {
+					return
+				}
 				client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
 				err = handleCreateDatabase(db, client, dbprovider)
 				if err != nil {
@@ -117,6 +129,9 @@ func execute(dbprovider string) {
 			},
 			DeleteFunc: func(obj interface{}) {
 				db := obj.(*crd.Database)
+				if excluded(db, excludeNamespaces, includeNamespaces) {
+					return
+				}
 				log.Printf("deleting database: %s \n", db.Name)
 
 				r, err := getProvider(db, dbprovider)
@@ -225,4 +240,25 @@ func updateStatus(db *crd.Database, status crd.DatabaseStatus, crdclient *client
 		return err
 	}
 	return nil
+}
+
+func excluded(db *crd.Database, excludeNamespaces, includeNamespaces []string) bool {
+	if len(excludeNamespaces) > 0 && stringInSlice(db.Namespace, excludeNamespaces) {
+		log.Printf("database %s is in excluded namespace %s. Ignoring...", db.Name, db.Namespace)
+		return true
+	}
+	if len(includeNamespaces) > 0 && !stringInSlice(db.Namespace, includeNamespaces) {
+		log.Printf("database %s is in a non included namespace %s. Ignoring...", db.Name, db.Namespace)
+		return true
+	}
+	return false
+}
+
+func stringInSlice(str string, slice []string) bool {
+	for _, s := range slice {
+		if str == s {
+			return true
+		}
+	}
+	return false
 }
