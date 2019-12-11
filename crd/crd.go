@@ -13,15 +13,25 @@ import (
 )
 
 const (
-	CRDPlural   string = "databases"
-	CRDGroup    string = "k8s.io"
-	CRDVersion  string = "v1"
-	FullCRDName string = "databases." + CRDGroup
+	CRDPlural          string = "databases"
+	CRDGroup           string = "k8s.io"
+	CRDVersion         string = "v1"
+	FullCRDName        string = "databases." + CRDGroup
+	StorageTypePattern string = `gp2|io1`
+	DBNamePattern      string = "^[A-Za-z]\\w+$"
+	DBUsernamePattern  string = "^[A-Za-z]\\w+$"
 )
 
-// CreateCRD creates the CRD resource, ignore error if it already exists
-func CreateCRD(clientset apiextcs.Interface) error {
-	crd := &apiextv1beta1.CustomResourceDefinition{
+func intptr(x int64) *int64 {
+	return &x
+}
+
+func floatptr(x float64) *float64 {
+	return &x
+}
+
+func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
+	return &apiextv1beta1.CustomResourceDefinition{
 		ObjectMeta: meta_v1.ObjectMeta{Name: FullCRDName},
 		Spec: apiextv1beta1.CustomResourceDefinitionSpec{
 			Group:   CRDGroup,
@@ -31,9 +41,86 @@ func CreateCRD(clientset apiextcs.Interface) error {
 				Plural: "databases",
 				Kind:   "Database",
 			},
+			Validation: &apiextv1beta1.CustomResourceValidation{
+				OpenAPIV3Schema: &apiextv1beta1.JSONSchemaProps{
+					Type: "object",
+					Properties: map[string]apiextv1beta1.JSONSchemaProps{
+						"spec": apiextv1beta1.JSONSchemaProps{
+							Type: "object",
+							Properties: map[string]apiextv1beta1.JSONSchemaProps{
+								"username": apiextv1beta1.JSONSchemaProps{
+									Type:        "string",
+									Description: "User Name to access the database",
+									MinLength:   intptr(1),
+									MaxLength:   intptr(16),
+									Pattern:     DBUsernamePattern,
+								},
+								"dbname": apiextv1beta1.JSONSchemaProps{
+									Type:        "string",
+									Description: "Database name",
+									MinLength:   intptr(1),
+									MaxLength:   intptr(63),
+									Pattern:     DBNamePattern,
+								},
+								"engine": apiextv1beta1.JSONSchemaProps{
+									Type:        "string",
+									Description: "database engine. Ex: postgres, mysql, aurora-postgresql, etc",
+								},
+								"class": apiextv1beta1.JSONSchemaProps{
+									Type:        "string",
+									Description: "instance class name. Ex: db.m5.24xlarge or db.m3.medium",
+								},
+								"size": apiextv1beta1.JSONSchemaProps{
+									Type:        "integer",
+									Description: "Database size in Gb",
+									Minimum:     floatptr(20),
+									Maximum:     floatptr(64000),
+								},
+								"multiaz": apiextv1beta1.JSONSchemaProps{
+									Type:        "boolean",
+									Description: "should it be available in multiple regions?",
+								},
+								"publiclyaccessible": apiextv1beta1.JSONSchemaProps{
+									Type:        "boolean",
+									Description: "is the database publicly accessible?",
+								},
+								"storageencrypted": apiextv1beta1.JSONSchemaProps{
+									Type:        "boolean",
+									Description: "should the storage be encrypted?",
+								},
+								"storagetype": apiextv1beta1.JSONSchemaProps{
+									Type:        "string",
+									Description: "gp2 (General Purpose SSD) or io1 (Provisioned IOPS SSD)",
+									Pattern:     StorageTypePattern,
+								},
+								"iops": apiextv1beta1.JSONSchemaProps{
+									Type:        "integer",
+									Description: "I/O operations per second",
+									Minimum:     floatptr(1000),
+									Maximum:     floatptr(80000),
+								},
+								"backupretentionperiod": apiextv1beta1.JSONSchemaProps{
+									Type:        "integer",
+									Description: "Retention period in days. 0 means disabled, 7 is the default and 35 is the maximum",
+									Minimum:     floatptr(0),
+									Maximum:     floatptr(35),
+								},
+								"deleteprotection": apiextv1beta1.JSONSchemaProps{
+									Type:        "boolean",
+									Description: "Enable or disable deletion protection",
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
+}
 
+// CreateCRD creates the CRD resource, ignore error if it already exists
+func CreateCRD(clientset apiextcs.Interface) error {
+	crd := NewDatabaseCRD()
 	_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Create(crd)
 	if err != nil && apierrors.IsAlreadyExists(err) {
 		return nil

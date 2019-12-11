@@ -10,6 +10,7 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/spf13/cobra v0.0.5
 	github.com/stretchr/testify v1.4.0
+	github.com/xeipuuv/gojsonschema v1.2.0
 	k8s.io/api v0.0.0-20190905160310-fb749d2f1064
 	k8s.io/apiextensions-apiserver v0.0.0-20190906235842-a644246473f1
 	k8s.io/apimachinery v0.0.0-20190831074630-461753078381
