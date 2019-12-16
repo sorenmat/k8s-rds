@@ -200,10 +200,14 @@ func (r *Local) DeleteDatabase(db *crd.Database) error {
 			continue
 		}
 
-		if err := r.kc.CoreV1().PersistentVolumeClaims(db.Namespace).Delete(db.Name,
-			&metav1.DeleteOptions{}); err != nil {
-			fmt.Printf("ERROR: error while deleting the pvc: %v\n", err)
-			continue
+		if db.Spec.DeleteProtection {
+			log.Printf("Trying to delete a %v in %v which is a deleted protected database", db.Name, db.Namespace)
+		} else {
+			if err := r.kc.CoreV1().PersistentVolumeClaims(db.Namespace).Delete(db.Name,
+				&metav1.DeleteOptions{}); err != nil {
+				fmt.Printf("ERROR: error while deleting the pvc: %v\n", err)
+				continue
+			}
 		}
 
 		return nil
