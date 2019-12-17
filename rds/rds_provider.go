@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 	"time"
 
@@ -201,14 +202,40 @@ func (r *RDS) rdsclient() *rds.Client {
 func dbidentifier(v *crd.Database) string {
 	return v.Name + "-" + v.Namespace
 }
-func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
+
+const (
+	maxTagLengthAllowed = 255
+	tagRegexp           = `^kube.*$`
+)
+
+func toTags(annotations, labels map[string]string) []rds.Tag {
 	tags := []rds.Tag{}
-	for k, v := range v.Annotations {
+	r := regexp.MustCompile(tagRegexp)
+
+	for k, v := range annotations {
+		if len(k) > maxTagLengthAllowed || len(v) > maxTagLengthAllowed ||
+			r.Match([]byte(k)) {
+			log.Printf("WARNING: Not Adding annotation KV to tags: %v %v", k, v)
+			continue
+		}
+
 		tags = append(tags, rds.Tag{Key: aws.String(k), Value: aws.String(v)})
 	}
-	for k, v := range v.Labels {
+	for k, v := range labels {
+		if len(k) > maxTagLengthAllowed || len(v) > maxTagLengthAllowed {
+			log.Printf("WARNING: Not Adding CRD labels KV to tags: %v %v", k, v)
+			continue
+		}
+
 		tags = append(tags, rds.Tag{Key: aws.String(k), Value: aws.String(v)})
 	}
+
+	return tags
+}
+
+func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
+
+	tags := toTags(v.Annotations, v.Labels)
 
 	input := &rds.CreateDBInstanceInput{
 		DBName:                aws.String(v.Spec.DBName),
