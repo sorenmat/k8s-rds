@@ -251,6 +251,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 		MultiAZ:               aws.Bool(v.Spec.MultiAZ),
 		StorageEncrypted:      aws.Bool(v.Spec.StorageEncrypted),
 		BackupRetentionPeriod: aws.Int64(v.Spec.BackupRetentionPeriod),
+		DeletionProtection:    aws.Bool(v.Spec.DeleteProtection),
 		Tags:                  tags,
 	}
 	if v.Spec.StorageType != "" {
