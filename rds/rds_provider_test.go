@@ -44,3 +44,83 @@ func TestgetIDFromProvider(t *testing.T) {
 	x := getIDFromProvider("aws:///eu-west-1a/i-02ab67f4da79c3caa")
 	assert.Equal(t, "i-02ab67f4da79c3caa", x)
 }
+
+// 270 characters length
+const testRandString = "banjmdvgeezuadqvehvqaxxmzwykirejkwvktkxmvjdevcfhqootqyfdfvqatjiebglktdswnvzxcpnstvrurpfjfuxhsjvgogrnhazjizakttdncmjnbofvwcsccigfcyxzlunfndcjteuqmjpslqvefvobfnejjxtwbyrkcvsvqokkrskrryzbhhayegyuwhugyorkltmsipvznxkonqzzwihjdejqgzfjivjdqmieidkowryfjnnyrxszsyhnpfeepxyoliskexxpjtxn"
+
+func TestToTags(t *testing.T) {
+	tests := []struct {
+		Annotations map[string]string
+		Labels      map[string]string
+		Result      map[string]string
+	}{
+		{
+			Annotations: map[string]string{
+				"annotation-key1-test": "test-value",
+				"annotation-key2-test": "test-value",
+			},
+			Labels: map[string]string{
+				"label-key1-test": "test-value",
+				"label-key2-test": "test-value",
+			},
+			Result: map[string]string{
+				"annotation-key1-test": "test-value",
+				"annotation-key2-test": "test-value",
+				"label-key1-test":      "test-value",
+				"label-key2-test":      "test-value",
+			},
+		},
+
+		{
+			Annotations: map[string]string{
+				"annotation-key1-test": "test-value",
+				"kubectl-key2-test":    "test-value",
+			},
+			Labels: map[string]string{
+				"kubectl-key1-test": "test-value",
+				"label-key2-test":   "test-value",
+			},
+			Result: map[string]string{
+				"annotation-key1-test": "test-value",
+				"label-key2-test":      "test-value",
+				"kubectl-key1-test":    "test-value",
+			},
+		},
+
+		{
+			Annotations: map[string]string{
+				"annotation-key1-test": testRandString,
+				"kubectl-key2-test":    "test-value",
+			},
+			Labels: map[string]string{
+				"kubectl-key1-test": "test-value",
+				"label-key2-test":   testRandString,
+				"label-key3-test":   "test",
+			},
+			Result: map[string]string{
+				"label-key3-test":   "test",
+				"kubectl-key1-test": "test-value",
+			},
+		},
+	}
+
+	for testInd, test := range tests {
+
+		tags := toTags(test.Annotations, test.Labels)
+
+		if len(tags) != len(test.Result) {
+			t.Fatalf("Not desired result %v != %v len(%v, %v): %v", tags, test.Result,
+				len(tags), len(test.Result), testInd)
+		}
+
+		for _, tag := range tags {
+			_, ok := test.Result[*tag.Key]
+			if !ok {
+				t.Fatalf("Not desired result in per component comparison %v != %v key %v: %v",
+					tags, test.Result, *tag.Key, testInd)
+			}
+
+		}
+
+	}
+}

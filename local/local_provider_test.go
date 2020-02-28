@@ -52,17 +52,45 @@ func TestCreateDatabase(t *testing.T) {
 	kc := testclient.NewSimpleClientset()
 	l, err := New(db, kc)
 	assert.NoError(t, err)
+	// we need it to not wait for status
+	l.SkipWaiting = true
 	host, err := l.CreateDatabase(db)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, host)
 
-	assert.Equal(t, "get", kc.Fake.Actions()[0].GetVerb())
-	assert.Equal(t, "apps", kc.Fake.Actions()[0].GetResource().GroupResource().Group)
-	assert.Equal(t, "deployments", kc.Fake.Actions()[0].GetResource().GroupResource().Resource)
-	// create it
-	assert.Equal(t, "create", kc.Fake.Actions()[1].GetVerb())
-	assert.Equal(t, "apps", kc.Fake.Actions()[1].GetResource().GroupResource().Group)
-	assert.Equal(t, "deployments", kc.Fake.Actions()[1].GetResource().GroupResource().Resource)
+	sequence := []struct {
+		Action   string
+		Group    string
+		Resource string
+	}{
+		{
+			Action:   "get",
+			Group:    "",
+			Resource: "persistentvolumeclaims",
+		},
+		{
+			Action:   "create",
+			Group:    "",
+			Resource: "persistentvolumeclaims",
+		},
+		{
+			Action:   "get",
+			Group:    "apps",
+			Resource: "deployments",
+		},
+		{
+			Action:   "create",
+			Group:    "apps",
+			Resource: "deployments",
+		},
+	}
+
+	for i, action := range kc.Fake.Actions() {
+		assert.Equal(t, sequence[i].Action, action.GetVerb())
+		assert.Equal(t, sequence[i].Group, action.GetResource().GroupResource().Group)
+		assert.Equal(t, sequence[i].Resource, action.GetResource().GroupResource().Resource)
+	}
+
 }
 
 func TestUpdateDatabase(t *testing.T) {
@@ -85,18 +113,66 @@ func TestUpdateDatabase(t *testing.T) {
 	kc := testclient.NewSimpleClientset()
 	l, err := New(db, kc)
 	assert.NoError(t, err)
+	// we need it to not wait for status
+	l.SkipWaiting = true
 	host, err := l.CreateDatabase(db)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, host)
-	assert.Equal(t, 2, len(kc.Fake.Actions()))
-	host, err = l.CreateDatabase(db)
-
 	assert.Equal(t, 4, len(kc.Fake.Actions()))
-	assert.Equal(t, "get", kc.Fake.Actions()[2].GetVerb())
-	assert.Equal(t, "apps", kc.Fake.Actions()[2].GetResource().GroupResource().Group)
-	assert.Equal(t, "deployments", kc.Fake.Actions()[2].GetResource().GroupResource().Resource)
-	// create it
-	assert.Equal(t, "update", kc.Fake.Actions()[3].GetVerb())
-	assert.Equal(t, "apps", kc.Fake.Actions()[3].GetResource().GroupResource().Group)
-	assert.Equal(t, "deployments", kc.Fake.Actions()[3].GetResource().GroupResource().Resource)
+	host, err = l.CreateDatabase(db)
+	assert.Equal(t, 8, len(kc.Fake.Actions()))
+
+	sequence := []struct {
+		Action   string
+		Group    string
+		Resource string
+	}{
+		{
+			Action:   "get",
+			Group:    "",
+			Resource: "persistentvolumeclaims",
+		},
+		{
+			Action:   "create",
+			Group:    "",
+			Resource: "persistentvolumeclaims",
+		},
+		{
+			Action:   "get",
+			Group:    "apps",
+			Resource: "deployments",
+		},
+		{
+			Action:   "create",
+			Group:    "apps",
+			Resource: "deployments",
+		},
+
+		{
+			Action:   "get",
+			Group:    "",
+			Resource: "persistentvolumeclaims",
+		},
+		{
+			Action:   "get",
+			Group:    "",
+			Resource: "persistentvolumeclaims",
+		},
+		{
+			Action:   "get",
+			Group:    "apps",
+			Resource: "deployments",
+		},
+		{
+			Action:   "update",
+			Group:    "apps",
+			Resource: "deployments",
+		},
+	}
+
+	for i, action := range kc.Fake.Actions() {
+		assert.Equal(t, sequence[i].Action, action.GetVerb())
+		assert.Equal(t, sequence[i].Group, action.GetResource().GroupResource().Group)
+		assert.Equal(t, sequence[i].Resource, action.GetResource().GroupResource().Resource)
+	}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 	"time"
 
@@ -22,6 +23,7 @@ type RDS struct {
 	EC2             *ec2.Client
 	Subnets         []string
 	SecurityGroups  []string
+	VpcId           string
 	ServiceProvider provider.ServiceProvider
 }
 
@@ -31,8 +33,16 @@ func New(db *crd.Database, kc *kubernetes.Clientset) (*RDS, error) {
 		log.Fatal("unable to create a client for EC2 ", err)
 	}
 
+	nodeInfo, err := describeNodeEC2Instance(kc, ec2client)
+	if err != nil {
+		log.Println(err)
+		return nil, errors.Wrap(err, "unable AWS metadata")
+	}
+
+	vpcId := *nodeInfo.Reservations[0].Instances[0].VpcId
+
 	log.Println("trying to get subnets")
-	subnets, err := getSubnets(kc, ec2client, db.Spec.PubliclyAccessible)
+	subnets, err := getSubnets(nodeInfo, ec2client, db.Spec.PubliclyAccessible)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get subnets from instance: %v", err)
 
@@ -44,7 +54,7 @@ func New(db *crd.Database, kc *kubernetes.Clientset) (*RDS, error) {
 
 	}
 
-	r := RDS{EC2: ec2client, Subnets: subnets, SecurityGroups: sgs}
+	r := RDS{EC2: ec2client, Subnets: subnets, SecurityGroups: sgs, VpcId: vpcId}
 	return &r, nil
 }
 
@@ -101,8 +111,8 @@ func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 	if len(r.Subnets) == 0 {
 		log.Println("Error: unable to continue due to lack of subnets, perhaps we couldn't lookup the subnets")
 	}
-	subnetDescription := "subnet for " + db.Name + " in namespace " + db.Namespace
-	subnetName := db.Name + "-subnet-" + db.Namespace
+	subnetDescription := "RDS Subnet Group for VPC: " + r.VpcId
+	subnetName := "db-subnetgroup-" + r.VpcId
 
 	svc := r.rdsclient()
 
@@ -116,7 +126,7 @@ func (r *RDS) ensureSubnets(db *crd.Database) (string, error) {
 			DBSubnetGroupDescription: aws.String(subnetDescription),
 			DBSubnetGroupName:        aws.String(subnetName),
 			SubnetIds:                r.Subnets,
-			Tags:                     []rds.Tag{{Key: aws.String("DBName"), Value: aws.String(db.Spec.DBName)}},
+			Tags:                     []rds.Tag{{Key: aws.String("Warning"), Value: aws.String("Managed by k8s-rds.")}},
 		}
 		res := svc.CreateDBSubnetGroupRequest(subnet)
 		_, err := res.Send(context.Background())
@@ -192,14 +202,40 @@ func (r *RDS) rdsclient() *rds.Client {
 func dbidentifier(v *crd.Database) string {
 	return v.Name + "-" + v.Namespace
 }
-func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
+
+const (
+	maxTagLengthAllowed = 255
+	tagRegexp           = `^kube.*$`
+)
+
+func toTags(annotations, labels map[string]string) []rds.Tag {
 	tags := []rds.Tag{}
-	for k, v := range v.Annotations {
+	r := regexp.MustCompile(tagRegexp)
+
+	for k, v := range annotations {
+		if len(k) > maxTagLengthAllowed || len(v) > maxTagLengthAllowed ||
+			r.Match([]byte(k)) {
+			log.Printf("WARNING: Not Adding annotation KV to tags: %v %v", k, v)
+			continue
+		}
+
 		tags = append(tags, rds.Tag{Key: aws.String(k), Value: aws.String(v)})
 	}
-	for k, v := range v.Labels {
+	for k, v := range labels {
+		if len(k) > maxTagLengthAllowed || len(v) > maxTagLengthAllowed {
+			log.Printf("WARNING: Not Adding CRD labels KV to tags: %v %v", k, v)
+			continue
+		}
+
 		tags = append(tags, rds.Tag{Key: aws.String(k), Value: aws.String(v)})
 	}
+
+	return tags
+}
+
+func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
+
+	tags := toTags(v.Annotations, v.Labels)
 
 	input := &rds.CreateDBInstanceInput{
 		DBName:                aws.String(v.Spec.DBName),
@@ -215,6 +251,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 		MultiAZ:               aws.Bool(v.Spec.MultiAZ),
 		StorageEncrypted:      aws.Bool(v.Spec.StorageEncrypted),
 		BackupRetentionPeriod: aws.Int64(v.Spec.BackupRetentionPeriod),
+		DeletionProtection:    aws.Bool(v.Spec.DeleteProtection),
 		Tags:                  tags,
 	}
 	if v.Spec.StorageType != "" {
@@ -226,23 +263,21 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 	return input
 }
 
-// getSubnets returns a list of subnets that the RDS instance should be attached to
-// We do this by finding a node in the cluster, take the VPC id from that node a list
-// the security groups in the VPC
-func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.Client, public bool) ([]string, error) {
-
+// describeNodeEC2Instance returns the AWS Metadata for the firt Node from the cluster
+func describeNodeEC2Instance(kubectl *kubernetes.Clientset, svc *ec2.Client) (*ec2.DescribeInstancesResponse, error) {
 	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
 	name := ""
 
-	if len(nodes.Items) > 0 {
-		// take the first one, we assume that all nodes are created in the same VPC
-		name = getIDFromProvider(nodes.Items[0].Spec.ProviderID)
-	} else {
+	if len(nodes.Items) == 0 {
 		return nil, fmt.Errorf("unable to find any nodes in the cluster")
 	}
+
+	// take the first one, we assume that all nodes are created in the same VPC
+	name = getIDFromProvider(nodes.Items[0].Spec.ProviderID)
+
 	log.Printf("Taking subnets from node %v", name)
 
 	params := &ec2.DescribeInstancesInput{
@@ -257,42 +292,48 @@ func getSubnets(kubectl *kubernetes.Clientset, svc *ec2.Client, public bool) ([]
 	}
 	log.Println("trying to describe instance")
 	req := svc.DescribeInstancesRequest(params)
-	res, err := req.Send(context.Background())
+	nodeInfo, err := req.Send(context.Background())
 	if err != nil {
-		log.Println(err)
 		return nil, errors.Wrap(err, "unable to describe AWS instance")
 	}
-	log.Println("got instance response")
-
-	var result []string
-	if len(res.Reservations) >= 1 {
-		vpcID := res.Reservations[0].Instances[0].VpcId
-		for _, v := range res.Reservations[0].Instances[0].SecurityGroups {
-			log.Println("Security groupid: ", *v.GroupId)
-		}
-		log.Printf("Found VPC %v will search for subnet in that VPC\n", *vpcID)
-
-		res := svc.DescribeSubnetsRequest(&ec2.DescribeSubnetsInput{Filters: []ec2.Filter{{Name: aws.String("vpc-id"), Values: []string{*vpcID}}}})
-		subnets, err := res.Send(context.Background())
-
-		if err != nil {
-			return nil, errors.Wrap(err, fmt.Sprintf("unable to describe subnet in VPC %v", *vpcID))
-		}
-		for _, sn := range subnets.Subnets {
-			if *sn.MapPublicIpOnLaunch == public {
-				result = append(result, *sn.SubnetId)
-			} else {
-				log.Printf("Skipping subnet %v since it's public state was %v and we were looking for %v\n", *sn.SubnetId, *sn.MapPublicIpOnLaunch, public)
-			}
-		}
-
+	if len(nodeInfo.Reservations) == 0 {
+		log.Println(err)
+		return nil, fmt.Errorf("unable to describe AWS instance")
 	}
+
+	return nodeInfo, nil
+}
+
+// getSubnets returns a list of subnets within the VPC from the Kubernetes Node.
+func getSubnets(nodeInfo *ec2.DescribeInstancesResponse, svc *ec2.Client, public bool) ([]string, error) {
+	var result []string
+	vpcID := nodeInfo.Reservations[0].Instances[0].VpcId
+	for _, v := range nodeInfo.Reservations[0].Instances[0].SecurityGroups {
+		log.Println("Security groupid: ", *v.GroupId)
+	}
+	log.Printf("Found VPC %v will search for subnet in that VPC\n", *vpcID)
+
+	res := svc.DescribeSubnetsRequest(&ec2.DescribeSubnetsInput{Filters: []ec2.Filter{{Name: aws.String("vpc-id"), Values: []string{*vpcID}}}})
+	subnets, err := res.Send(context.Background())
+
+	if err != nil {
+		return nil, errors.Wrap(err, fmt.Sprintf("unable to describe subnet in VPC %v", *vpcID))
+	}
+	for _, sn := range subnets.Subnets {
+		if *sn.MapPublicIpOnLaunch == public {
+			result = append(result, *sn.SubnetId)
+		} else {
+			log.Printf("Skipping subnet %v since it's public state was %v and we were looking for %v\n", *sn.SubnetId, *sn.MapPublicIpOnLaunch, public)
+		}
+	}
+
 	log.Printf("Found the follwing subnets: ")
 	for _, v := range result {
 		log.Printf(v + " ")
 	}
 	return result, nil
 }
+
 func getIDFromProvider(x string) string {
 	pos := strings.LastIndex(x, "/") + 1
 	name := x[pos:]
