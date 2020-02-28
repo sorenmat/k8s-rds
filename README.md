@@ -60,7 +60,7 @@ spec:
     key: mykey # the key in the secret
     name: mysecret # the name of the secret
   username: postgres # Database username
-  size: 10 # size in BG
+  size: 20 # size in GB
   backupretentionperiod: 10 # days to keep backup, 0 means diable
   deleteprotection: true # don't delete the database even though the object is delete in k8s
   encrypted: true # should the database be encrypted
