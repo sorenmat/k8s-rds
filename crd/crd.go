@@ -45,69 +45,73 @@ func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
 				OpenAPIV3Schema: &apiextv1beta1.JSONSchemaProps{
 					Type: "object",
 					Properties: map[string]apiextv1beta1.JSONSchemaProps{
-						"spec": apiextv1beta1.JSONSchemaProps{
+						"spec": {
 							Type: "object",
 							Properties: map[string]apiextv1beta1.JSONSchemaProps{
-								"username": apiextv1beta1.JSONSchemaProps{
+								"username": {
 									Type:        "string",
 									Description: "User Name to access the database",
 									MinLength:   intptr(1),
 									MaxLength:   intptr(16),
 									Pattern:     DBUsernamePattern,
 								},
-								"dbname": apiextv1beta1.JSONSchemaProps{
+								"dbname": {
 									Type:        "string",
 									Description: "Database name",
 									MinLength:   intptr(1),
 									MaxLength:   intptr(63),
 									Pattern:     DBNamePattern,
 								},
-								"engine": apiextv1beta1.JSONSchemaProps{
+								"engine": {
 									Type:        "string",
 									Description: "database engine. Ex: postgres, mysql, aurora-postgresql, etc",
 								},
-								"class": apiextv1beta1.JSONSchemaProps{
+								"class": {
 									Type:        "string",
 									Description: "instance class name. Ex: db.m5.24xlarge or db.m3.medium",
 								},
-								"size": apiextv1beta1.JSONSchemaProps{
+								"size": {
 									Type:        "integer",
 									Description: "Database size in Gb",
 									Minimum:     floatptr(20),
 									Maximum:     floatptr(64000),
 								},
-								"multiaz": apiextv1beta1.JSONSchemaProps{
+								"multiaz": {
 									Type:        "boolean",
 									Description: "should it be available in multiple regions?",
 								},
-								"publiclyaccessible": apiextv1beta1.JSONSchemaProps{
+								"publiclyaccessible": {
 									Type:        "boolean",
 									Description: "is the database publicly accessible?",
 								},
-								"storageencrypted": apiextv1beta1.JSONSchemaProps{
+								"storageencrypted": {
 									Type:        "boolean",
 									Description: "should the storage be encrypted?",
 								},
-								"storagetype": apiextv1beta1.JSONSchemaProps{
+								"storagetype": {
 									Type:        "string",
 									Description: "gp2 (General Purpose SSD) or io1 (Provisioned IOPS SSD)",
 									Pattern:     StorageTypePattern,
 								},
-								"iops": apiextv1beta1.JSONSchemaProps{
+								"iops": {
 									Type:        "integer",
 									Description: "I/O operations per second",
 									Minimum:     floatptr(1000),
 									Maximum:     floatptr(80000),
 								},
-								"backupretentionperiod": apiextv1beta1.JSONSchemaProps{
+								"backupretentionperiod": {
 									Type:        "integer",
 									Description: "Retention period in days. 0 means disabled, 7 is the default and 35 is the maximum",
 									Minimum:     floatptr(0),
 									Maximum:     floatptr(35),
 								},
-								"deleteprotection": apiextv1beta1.JSONSchemaProps{
+								"deleteprotection": {
 									Type:        "boolean",
 									Description: "Enable or disable deletion protection",
+								},
+								"tags": {
+									Type:        "string",
+									Description: "Tags to create on the database instance format key=value,key1=value1",
 								},
 							},
 						},
@@ -151,6 +155,7 @@ type DatabaseSpec struct {
 	Iops                  int64                `json:"iops,omitempty"`
 	BackupRetentionPeriod int64                `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
 	DeleteProtection      bool                 `json:"deleteprotection,omitempty"`
+	Tags                  string               `json:"tags,omitempty"` // key=value,key1=value1
 }
 
 type DatabaseStatus struct {
@@ -183,7 +188,7 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	return nil
 }
 
-// Create a Rest client with the new CRD Schema
+// NewClient Creates a Rest client with the new CRD Schema
 func NewClient(cfg *rest.Config) (*rest.RESTClient, *runtime.Scheme, error) {
 	scheme := runtime.NewScheme()
 	SchemeBuilder := runtime.NewSchemeBuilder(addKnownTypes)

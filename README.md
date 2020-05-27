@@ -67,6 +67,7 @@ spec:
   iops: 1000 # number of iops
   multiaz: true # multi AZ support
   storagetype: gp2 # type of the underlying storage
+  tags: "key=value,key1=value1"
  
 ```
 
