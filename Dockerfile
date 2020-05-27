@@ -1,4 +1,4 @@
-FROM golang:1.13.0-alpine3.10 AS builder
+FROM golang:1.14.0-alpine AS builder
 
 WORKDIR /app
 RUN apk --no-cache add git make
@@ -9,7 +9,7 @@ RUN make mod tools
 COPY . .
 RUN make test lint build
 
-FROM alpine:3.10
+FROM alpine
 
 MAINTAINER Soren Mathiasen <sorenm@mymessages.dk>
 
