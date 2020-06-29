@@ -12,19 +12,31 @@ import (
 )
 
 func TestMarshal(t *testing.T) {
+	backupRetentionPeriod := int64(10)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"}, Spec: DatabaseSpec{BackupRetentionPeriod: 10,
-			Class:              "db.t2.micro",
-			DBName:             "database_name",
-			Engine:             "postgres",
-			MultiAZ:            true,
-			Password:           v1.SecretKeySelector{Key: "key", LocalObjectReference: v1.LocalObjectReference{Name: "DB-Secret"}},
-			PubliclyAccessible: false,
-			Size:               20,
-			StorageEncrypted:   true,
-			StorageType:        "gp2",
-			Username:           "dbuser",
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		Spec: DatabaseSpec{
+			BackupRetentionPeriod: &backupRetentionPeriod,
+			Class:                 "db.t2.micro",
+			DBName:                "database_name",
+			Engine:                "postgres",
+			MultiAZ:               true,
+			Password:              v1.SecretKeySelector{Key: "key", LocalObjectReference: v1.LocalObjectReference{Name: "DB-Secret"}},
+			PubliclyAccessible:    false,
+			Size:                  20,
+			StorageEncrypted:      true,
+			StorageType:           "gp2",
+			Username:              "dbuser",
+			DBSnapshotIdentifier:  "rds-snapshot",
+			SecurityGroups:        []string{"DBSnapshotIdentifier"},
+			Subnets: []string{
+				"subnet-0a378a72330fea864",
+				"subnet-0c4fb739e201fc2a3",
+				"subnet-0739bd9fa24055c4b",
+			},
+			DBSubnetGroupName:    "rds-subnet-group",
+			DBParameterGroupName: "default.postgres10",
 		},
 	}
 	j, err := yaml.Marshal(d)
@@ -35,11 +47,12 @@ func TestMarshal(t *testing.T) {
 }
 
 func TestCRDValidationWithValidInput(t *testing.T) {
+	backupRetentionPeriod := int64(10)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 10,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -50,6 +63,15 @@ func TestCRDValidationWithValidInput(t *testing.T) {
 			StorageEncrypted:      true,
 			StorageType:           "gp2",
 			Username:              "dbuser",
+			DBSnapshotIdentifier:  "rds-snapshot",
+			SecurityGroups:        []string{"DBSnapshotIdentifier"},
+			Subnets: []string{
+				"subnet-0a378a72330fea864",
+				"subnet-0c4fb739e201fc2a3",
+				"subnet-0739bd9fa24055c4b",
+			},
+			DBSubnetGroupName:    "rds-subnet-group",
+			DBParameterGroupName: "default.postgres10",
 		},
 	}
 
@@ -62,11 +84,12 @@ func TestCRDValidationWithValidInput(t *testing.T) {
 }
 
 func TestDatabaseSizeIsTooSmall(t *testing.T) {
+	backupRetentionPeriod := int64(10)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 10,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -90,11 +113,12 @@ func TestDatabaseSizeIsTooSmall(t *testing.T) {
 }
 
 func TestDatabaseSizeIsTooBig(t *testing.T) {
+	backupRetentionPeriod := int64(10)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 10,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -118,11 +142,12 @@ func TestDatabaseSizeIsTooBig(t *testing.T) {
 }
 
 func TestBackupRetentionPeriodIsTooLong(t *testing.T) {
+	backupRetentionPeriod := int64(36)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 36,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -146,11 +171,12 @@ func TestBackupRetentionPeriodIsTooLong(t *testing.T) {
 }
 
 func TestInvalidDatabaseNameWithDashSeparator(t *testing.T) {
+	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 30,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "database-name",
 			Engine:                "postgres",
@@ -174,11 +200,12 @@ func TestInvalidDatabaseNameWithDashSeparator(t *testing.T) {
 }
 
 func TestInvalidDatabaseNameStartingWithANumber(t *testing.T) {
+	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 30,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "1database_name",
 			Engine:                "postgres",
@@ -202,11 +229,12 @@ func TestInvalidDatabaseNameStartingWithANumber(t *testing.T) {
 }
 
 func TestInvalidUsername(t *testing.T) {
+	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 30,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -230,11 +258,12 @@ func TestInvalidUsername(t *testing.T) {
 }
 
 func TestInvalidStorageType(t *testing.T) {
+	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 30,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -258,11 +287,12 @@ func TestInvalidStorageType(t *testing.T) {
 }
 
 func TestIopsTooSmall(t *testing.T) {
+	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 30,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -286,11 +316,12 @@ func TestIopsTooSmall(t *testing.T) {
 }
 
 func TestIopsTooBig(t *testing.T) {
+	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: 30,
+			BackupRetentionPeriod: &backupRetentionPeriod,
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
