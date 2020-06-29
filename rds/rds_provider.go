@@ -30,28 +30,41 @@ type RDS struct {
 func New(db *crd.Database, kc *kubernetes.Clientset) (*RDS, error) {
 	ec2client, err := ec2client(kc)
 	if err != nil {
-		log.Fatal("unable to create a client for EC2 ", err)
+		log.Fatal("Unable to create a client for EC2 ", err)
 	}
 
 	nodeInfo, err := describeNodeEC2Instance(kc, ec2client)
 	if err != nil {
 		log.Println(err)
-		return nil, errors.Wrap(err, "unable AWS metadata")
+		return nil, errors.Wrap(err, "Unable AWS metadata")
 	}
 
 	vpcId := *nodeInfo.Reservations[0].Instances[0].VpcId
 
-	log.Println("trying to get subnets")
-	subnets, err := getSubnets(nodeInfo, ec2client, db.Spec.PubliclyAccessible)
-	if err != nil {
-		return nil, fmt.Errorf("unable to get subnets from instance: %v", err)
+	log.Println("Trying to get subnets")
+	subnets := db.Spec.Subnets
+	if db.Spec.DBSubnetGroupName == "" || len(subnets) < 2 {
+		subnets, err = getSubnets(nodeInfo, ec2client, db.Spec.PubliclyAccessible)
+		if err != nil {
+			return nil, fmt.Errorf("unable to get subnets from instance: %v", err)
 
+		}
+	} else {
+		log.Println("Got the following Subnets from spec")
+		for _, v := range subnets {
+			log.Printf(v + " ")
+		}
 	}
-	log.Println("trying to get security groups")
-	sgs, err := getSGS(kc, ec2client)
-	if err != nil {
-		return nil, fmt.Errorf("unable to get security groups from instance: %v", err)
+	sgs := db.Spec.SecurityGroups
+	if len(sgs) == 0 {
+		log.Println("Trying to get security groups")
+		sgs, err = getSGS(kc, ec2client)
+		if err != nil {
+			return nil, fmt.Errorf("unable to get security groups from instance: %v", err)
 
+		}
+	} else {
+		log.Println("Got Security Groups from spec")
 	}
 
 	r := RDS{EC2: ec2client, Subnets: subnets, SecurityGroups: sgs, VpcId: vpcId}
@@ -61,11 +74,25 @@ func New(db *crd.Database, kc *kubernetes.Clientset) (*RDS, error) {
 // CreateDatabase creates a database from the CRD database object, is also ensures that the correct
 // subnets are created for the database so we can access it
 func (r *RDS) CreateDatabase(db *crd.Database) (string, error) {
-	// Ensure that the subnets for the DB is create or updated
-	log.Println("Trying to find the correct subnets")
-	subnetName, err := r.ensureSubnets(db)
-	if err != nil {
-		return "", err
+	if db.Spec.DBSnapshotIdentifier == "" {
+		return r.CreateDatabaseInstance(db)
+	} else {
+		return r.RestoreDatabaseFromSnapshot(db)
+	}
+}
+
+// CreateDatabase creates a database from the CRD database object, is also ensures that the correct
+// subnets are created for the database so we can access it
+func (r *RDS) CreateDatabaseInstance(db *crd.Database) (string, error) {
+	var err error
+	dbSubnetGroupName := db.Spec.DBSubnetGroupName
+	if dbSubnetGroupName == "" {
+		// Ensure that the subnets for the DB is create or updated
+		log.Println("Trying to find the correct subnets")
+		dbSubnetGroupName, err = r.ensureSubnets(db)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
@@ -73,7 +100,7 @@ func (r *RDS) CreateDatabase(db *crd.Database) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	input := convertSpecToInput(db, subnetName, r.SecurityGroups, pw)
+	input := convertSpecToInstanceInput(db, dbSubnetGroupName, r.SecurityGroups, pw)
 
 	// search for the instance
 	log.Printf("Trying to find db instance %v\n", db.Spec.DBName)
@@ -100,6 +127,77 @@ func (r *RDS) CreateDatabase(db *crd.Database) (string, error) {
 
 	// Get the newly created database so we can get the endpoint
 	dbHostname, err := getEndpoint(input.DBInstanceIdentifier, r.rdsclient())
+	if err != nil {
+		return "", err
+	}
+	return dbHostname, nil
+}
+
+// RestoreDatabaseFromSnapshot creates a database instance from a snapshot using the CRD database object, is also ensures that the correct
+// subnets are created for the database so we can access it
+func (r *RDS) RestoreDatabaseFromSnapshot(db *crd.Database) (string, error) {
+	var err error
+	dbSubnetGroupName := db.Spec.DBSubnetGroupName
+	if dbSubnetGroupName == "" {
+		// Ensure that the subnets for the DB is create or updated
+		log.Println("Trying to find the correct subnets")
+		dbSubnetGroupName, err = r.ensureSubnets(db)
+		if err != nil {
+			return "", err
+		}
+	}
+	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
+	pw, err := r.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
+	if err != nil {
+		return "", err
+	}
+	restoreSnapshotInput, modifyInstanceInput := convertSpecToRestoreSnapshotInput(db, dbSubnetGroupName, r.SecurityGroups, pw)
+
+	// search for the instance
+	log.Printf("Trying to find db instance %v\n", *restoreSnapshotInput.DBInstanceIdentifier)
+	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: restoreSnapshotInput.DBInstanceIdentifier}
+	res := r.rdsclient().DescribeDBInstancesRequest(k)
+	_, err = res.Send(context.Background())
+	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
+		log.Printf("DB instance %v not found trying to restore it\n", *restoreSnapshotInput.DBInstanceIdentifier)
+		// seems like we didn't find a database with this name, let's create on
+		res := r.rdsclient().RestoreDBInstanceFromDBSnapshotRequest(restoreSnapshotInput)
+		_, err = res.Send(context.Background())
+		if err != nil {
+			return "", errors.Wrap(err, "RestoreDBInstanceFromDBSnapshot")
+		}
+	} else if err != nil {
+		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", restoreSnapshotInput.DBInstanceIdentifier))
+	} else {
+		return "", errors.New(fmt.Sprintf("DB instance %v already exists. Will not restore", *restoreSnapshotInput.DBInstanceIdentifier))
+	}
+	log.Printf("Waiting for db instance %v to become available\n", *restoreSnapshotInput.DBInstanceIdentifier)
+	time.Sleep(5 * time.Second)
+	err = r.rdsclient().WaitUntilDBInstanceAvailable(context.Background(), k)
+	if err != nil {
+		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", *restoreSnapshotInput.DBInstanceIdentifier))
+	}
+
+	if modifyInstanceInput == nil {
+		log.Printf("DB instance %v restored.\n", *restoreSnapshotInput.DBInstanceIdentifier)
+	} else {
+		// apply needed modifications
+		log.Printf("DB instance %v restored. Applying some modifications\n", *restoreSnapshotInput.DBInstanceIdentifier)
+		resModify := r.rdsclient().ModifyDBInstanceRequest(modifyInstanceInput)
+		_, err = resModify.Send(context.Background())
+		if err != nil {
+			return "", errors.Wrap(err, "ModifyDBInstance")
+		}
+		log.Printf("Waiting for db instance %v to become available\n", *restoreSnapshotInput.DBInstanceIdentifier)
+		time.Sleep(5 * time.Second)
+		err = r.rdsclient().WaitUntilDBInstanceAvailable(context.Background(), k)
+		if err != nil {
+			return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", *restoreSnapshotInput.DBInstanceIdentifier))
+		}
+	}
+
+	// Get the newly created database so we can get the endpoint
+	dbHostname, err := getEndpoint(restoreSnapshotInput.DBInstanceIdentifier, r.rdsclient())
 	if err != nil {
 		return "", err
 	}
@@ -246,7 +344,7 @@ func gettags(db *crd.Database) []rds.Tag {
 	return tags
 }
 
-func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
+func convertSpecToInstanceInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {
 	tags := toTags(v.Annotations, v.Labels)
 	tags = append(tags, gettags(v)...)
 
@@ -276,7 +374,65 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 	return input
 }
 
-// describeNodeEC2Instance returns the AWS Metadata for the firt Node from the cluster
+func convertSpecToRestoreSnapshotInput(v *crd.Database, dbSubnetGroupName string, securityGroups []string, password string) (*rds.RestoreDBInstanceFromDBSnapshotInput, *rds.ModifyDBInstanceInput) {
+	restoreSnapshotInput := &rds.RestoreDBInstanceFromDBSnapshotInput{
+		DBInstanceClass:      aws.String(v.Spec.Class),
+		DBInstanceIdentifier: aws.String(v.Name + "-" + v.Namespace),
+		DBSnapshotIdentifier: aws.String(v.Spec.DBSnapshotIdentifier),
+		Engine:               aws.String(v.Spec.Engine),
+		DBSubnetGroupName:    aws.String(dbSubnetGroupName),
+		VpcSecurityGroupIds:  securityGroups,
+		PubliclyAccessible:   aws.Bool(v.Spec.PubliclyAccessible),
+		MultiAZ:              aws.Bool(v.Spec.MultiAZ),
+	}
+
+	switch v.Spec.Engine {
+	case "mariadb":
+		fallthrough
+	case "mysql":
+		fallthrough
+	case "postgres":
+		restoreSnapshotInput.DBName = aws.String("")
+	default:
+		restoreSnapshotInput.DBName = aws.String(v.Spec.DBName)
+	}
+
+	if v.Spec.StorageType != "" {
+		restoreSnapshotInput.StorageType = aws.String(v.Spec.StorageType)
+	}
+	if v.Spec.Iops > 0 {
+		restoreSnapshotInput.Iops = aws.Int64(v.Spec.Iops)
+	}
+	if v.Spec.DBParameterGroupName != "" {
+		restoreSnapshotInput.DBParameterGroupName = aws.String(v.Spec.DBParameterGroupName)
+	}
+
+	modifyInstance := false
+	modifyInstanceInput := &rds.ModifyDBInstanceInput{
+		DBInstanceIdentifier: aws.String(v.Name + "-" + v.Namespace),
+	}
+
+	if password != "" {
+		modifyInstanceInput.MasterUserPassword = aws.String(password)
+		modifyInstance = true
+	}
+	if v.Spec.Size > 0 {
+		modifyInstanceInput.AllocatedStorage = aws.Int64(v.Spec.Size)
+		modifyInstance = true
+	}
+
+	if v.Spec.BackupRetentionPeriod != int64(0) {
+		modifyInstanceInput.BackupRetentionPeriod = aws.Int64(v.Spec.BackupRetentionPeriod)
+		modifyInstance = true
+	}
+
+	if modifyInstance {
+		return restoreSnapshotInput, modifyInstanceInput
+	}
+	return restoreSnapshotInput, nil
+}
+
+// describeNodeEC2Instance returns the AWS Metadata for the first Node from the cluster
 func describeNodeEC2Instance(kubectl *kubernetes.Clientset, svc *ec2.Client) (*ec2.DescribeInstancesResponse, error) {
 	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
@@ -291,8 +447,6 @@ func describeNodeEC2Instance(kubectl *kubernetes.Clientset, svc *ec2.Client) (*e
 	// take the first one, we assume that all nodes are created in the same VPC
 	name = getIDFromProvider(nodes.Items[0].Spec.ProviderID)
 
-	log.Printf("Taking subnets from node %v", name)
-
 	params := &ec2.DescribeInstancesInput{
 		Filters: []ec2.Filter{
 			{
@@ -303,7 +457,7 @@ func describeNodeEC2Instance(kubectl *kubernetes.Clientset, svc *ec2.Client) (*e
 			},
 		},
 	}
-	log.Println("trying to describe instance")
+	log.Println("Trying to describe instance")
 	req := svc.DescribeInstancesRequest(params)
 	nodeInfo, err := req.Send(context.Background())
 	if err != nil {
@@ -320,8 +474,10 @@ func describeNodeEC2Instance(kubectl *kubernetes.Clientset, svc *ec2.Client) (*e
 // getSubnets returns a list of subnets within the VPC from the Kubernetes Node.
 func getSubnets(nodeInfo *ec2.DescribeInstancesResponse, svc *ec2.Client, public bool) ([]string, error) {
 	var result []string
-	vpcID := nodeInfo.Reservations[0].Instances[0].VpcId
-	for _, v := range nodeInfo.Reservations[0].Instances[0].SecurityGroups {
+	firstInstance := nodeInfo.Reservations[0].Instances[0]
+	log.Printf("Taking subnets from node %v", *firstInstance.InstanceId)
+	vpcID := firstInstance.VpcId
+	for _, v := range firstInstance.SecurityGroups {
 		log.Println("Security groupid: ", *v.GroupId)
 	}
 	log.Printf("Found VPC %v will search for subnet in that VPC\n", *vpcID)
@@ -340,7 +496,7 @@ func getSubnets(nodeInfo *ec2.DescribeInstancesResponse, svc *ec2.Client, public
 		}
 	}
 
-	log.Printf("Found the follwing subnets: ")
+	log.Printf("Found the following subnets: ")
 	for _, v := range result {
 		log.Printf(v + " ")
 	}
@@ -378,19 +534,19 @@ func getSGS(kubectl *kubernetes.Clientset, svc *ec2.Client) ([]string, error) {
 			},
 		},
 	}
-	log.Println("trying to describe instance")
+	log.Println("Trying to describe instance")
 	req := svc.DescribeInstancesRequest(params)
 	res, err := req.Send(context.Background())
 	if err != nil {
 		log.Println(err)
-		return nil, errors.Wrap(err, "unable to describe AWS instance")
+		return nil, errors.Wrap(err, "Unable to describe AWS instance")
 	}
-	log.Println("got instance response")
+	log.Println("Got instance response")
 
 	var result []string
 	if len(res.Reservations) >= 1 {
 		for _, v := range res.Reservations[0].Instances[0].SecurityGroups {
-			log.Println("Security groupid: ", *v.GroupId)
+			log.Println("Security Group Id: ", *v.GroupId)
 			result = append(result, *v.GroupId)
 		}
 	}

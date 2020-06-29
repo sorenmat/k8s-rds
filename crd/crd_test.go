@@ -12,12 +12,11 @@ import (
 )
 
 func TestMarshal(t *testing.T) {
-	backupRetentionPeriod := int64(10)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(10),
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -47,12 +46,11 @@ func TestMarshal(t *testing.T) {
 }
 
 func TestCRDValidationWithValidInput(t *testing.T) {
-	backupRetentionPeriod := int64(10)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(10),
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -84,12 +82,11 @@ func TestCRDValidationWithValidInput(t *testing.T) {
 }
 
 func TestDatabaseSizeIsTooSmall(t *testing.T) {
-	backupRetentionPeriod := int64(10)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(10),
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -113,12 +110,11 @@ func TestDatabaseSizeIsTooSmall(t *testing.T) {
 }
 
 func TestDatabaseSizeIsTooBig(t *testing.T) {
-	backupRetentionPeriod := int64(10)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(10),
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -142,12 +138,11 @@ func TestDatabaseSizeIsTooBig(t *testing.T) {
 }
 
 func TestBackupRetentionPeriodIsTooLong(t *testing.T) {
-	backupRetentionPeriod := int64(36)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(36),
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -171,12 +166,11 @@ func TestBackupRetentionPeriodIsTooLong(t *testing.T) {
 }
 
 func TestInvalidDatabaseNameWithDashSeparator(t *testing.T) {
-	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(30),
 			Class:                 "db.t2.micro",
 			DBName:                "database-name",
 			Engine:                "postgres",
@@ -200,12 +194,11 @@ func TestInvalidDatabaseNameWithDashSeparator(t *testing.T) {
 }
 
 func TestInvalidDatabaseNameStartingWithANumber(t *testing.T) {
-	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(30),
 			Class:                 "db.t2.micro",
 			DBName:                "1database_name",
 			Engine:                "postgres",
@@ -229,12 +222,11 @@ func TestInvalidDatabaseNameStartingWithANumber(t *testing.T) {
 }
 
 func TestInvalidUsername(t *testing.T) {
-	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(30),
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -258,12 +250,11 @@ func TestInvalidUsername(t *testing.T) {
 }
 
 func TestInvalidStorageType(t *testing.T) {
-	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(30),
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -287,12 +278,11 @@ func TestInvalidStorageType(t *testing.T) {
 }
 
 func TestIopsTooSmall(t *testing.T) {
-	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(30),
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",
@@ -316,12 +306,11 @@ func TestIopsTooSmall(t *testing.T) {
 }
 
 func TestIopsTooBig(t *testing.T) {
-	backupRetentionPeriod := int64(30)
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
 		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
 		Spec: DatabaseSpec{
-			BackupRetentionPeriod: &backupRetentionPeriod,
+			BackupRetentionPeriod: int64(30),
 			Class:                 "db.t2.micro",
 			DBName:                "database_name",
 			Engine:                "postgres",

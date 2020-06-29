@@ -123,7 +123,6 @@ func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
 								},
 								"subnets": {
 									Type:        "array",
-									MinItems:    intptr(2),
 									Description: "Override automatic subnet detection, minimum 2",
 								},
 								"dbsubnetgroupname": {
@@ -174,14 +173,14 @@ type DatabaseSpec struct {
 	StorageEncrypted      bool                 `json:"encrypted,omitempty"`
 	StorageType           string               `json:"storagetype,omitempty"`
 	Iops                  int64                `json:"iops,omitempty"`
-	BackupRetentionPeriod *int64               `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
+	BackupRetentionPeriod int64                `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
 	DeleteProtection      bool                 `json:"deleteprotection,omitempty"`
 	Tags                  string               `json:"tags,omitempty"` // key=value,key1=value1
 	DBSnapshotIdentifier  string               `json:"dbsnapshotidentifier,omitempty"`
 	SecurityGroups        []string             `json:"securitygroups"`
 	Subnets               []string             `json:"subnets"`
-	DBSubnetGroupName     string               `json:"subnetgroup,omitempty"`    // DB subnet group name
-	DBParameterGroupName  string               `json:"parametergroup,omitempty"` // DB parameter group name
+	DBSubnetGroupName     string               `json:"dbsubnetgroupname,omitempty"` // DB subnet group name
+	DBParameterGroupName  string               `json:"parametergroup,omitempty"`    // DB parameter group name
 }
 
 type DatabaseStatus struct {
