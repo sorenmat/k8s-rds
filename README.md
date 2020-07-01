@@ -54,6 +54,7 @@ metadata:
 spec:
   class: db.t2.medium # type of the db instance
   engine: postgres # what engine to use postgres, mysql, aurora-postgresql etc.
+  version: "9.6"
   dbname: pgsql # name of the initial created database
   name: pgsql # name of the database at the provider
   password: # link to database secret

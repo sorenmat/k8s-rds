@@ -267,6 +267,9 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 		DeletionProtection:    aws.Bool(v.Spec.DeleteProtection),
 		Tags:                  tags,
 	}
+	if v.Spec.Version != "" {
+		input.EngineVersion = aws.String(v.Spec.Version)
+	}
 	if v.Spec.StorageType != "" {
 		input.StorageType = aws.String(v.Spec.StorageType)
 	}

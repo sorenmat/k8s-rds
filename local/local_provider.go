@@ -220,6 +220,10 @@ func (r *Local) DeleteDatabase(db *crd.Database) error {
 func int32Ptr(i int32) *int32 { return &i }
 
 func toSpec(db *crd.Database) v1.DeploymentSpec {
+	version := db.Spec.Version
+	if version == "" {
+		version = "latest"
+	}
 	return v1.DeploymentSpec{
 		Replicas: int32Ptr(1),
 		Selector: &metav1.LabelSelector{
@@ -237,7 +241,7 @@ func toSpec(db *crd.Database) v1.DeploymentSpec {
 				Containers: []corev1.Container{
 					{
 						Name:  db.Name,
-						Image: db.Spec.Engine, // TODO is this correct
+						Image: fmt.Sprintf("%v:%v", db.Spec.Engine, version), // TODO is this correct
 						Env: []corev1.EnvVar{corev1.EnvVar{
 							Name: "POSTGRES_PASSWORD",
 							ValueFrom: &corev1.EnvVarSource{

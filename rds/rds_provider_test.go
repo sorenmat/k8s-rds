@@ -21,6 +21,7 @@ func TestConvertSpecToInput(t *testing.T) {
 			PubliclyAccessible: true,
 			StorageEncrypted:   true,
 			StorageType:        "bad",
+			Version:            "9.6",
 			Iops:               1000,
 			Password:           v1.SecretKeySelector{LocalObjectReference: v1.LocalObjectReference{Name: "password"}, Key: "mypassword"},
 		},
@@ -38,6 +39,7 @@ func TestConvertSpecToInput(t *testing.T) {
 	assert.Equal(t, 2, len(i.VpcSecurityGroupIds))
 	assert.Equal(t, "bad", *i.StorageType)
 	assert.Equal(t, int64(1000), *i.Iops)
+	assert.Equal(t, "9.6", *i.EngineVersion)
 }
 
 func TestGetIDFromProvider(t *testing.T) {
