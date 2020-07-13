@@ -81,9 +81,7 @@ func (r *RDS) CreateDatabase(db *crd.Database) (string, error) {
 	}
 }
 
-// CreateDatabase creates a database from the CRD database object, is also ensures that the correct
-// subnets are created for the database so we can access it
-func (r *RDS) CreateDatabaseInstance(db *crd.Database) (string, error) {
+func (r *RDS) getSubnetGroupName(db *crd.Database) (string, error) {
 	var err error
 	dbSubnetGroupName := db.Spec.DBSubnetGroupName
 	if dbSubnetGroupName == "" {
@@ -94,6 +92,13 @@ func (r *RDS) CreateDatabaseInstance(db *crd.Database) (string, error) {
 			return "", err
 		}
 	}
+	return dbSubnetGroupName, nil
+}
+
+// CreateDatabase creates a database from the CRD database object, is also ensures that the correct
+// subnets are created for the database so we can access it
+func (r *RDS) CreateDatabaseInstance(db *crd.Database) (string, error) {
+	dbSubnetGroupName, err := r.getSubnetGroupName(db)
 
 	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
 	pw, err := r.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
@@ -136,16 +141,8 @@ func (r *RDS) CreateDatabaseInstance(db *crd.Database) (string, error) {
 // RestoreDatabaseFromSnapshot creates a database instance from a snapshot using the CRD database object, is also ensures that the correct
 // subnets are created for the database so we can access it
 func (r *RDS) RestoreDatabaseFromSnapshot(db *crd.Database) (string, error) {
-	var err error
-	dbSubnetGroupName := db.Spec.DBSubnetGroupName
-	if dbSubnetGroupName == "" {
-		// Ensure that the subnets for the DB is create or updated
-		log.Println("Trying to find the correct subnets")
-		dbSubnetGroupName, err = r.ensureSubnets(db)
-		if err != nil {
-			return "", err
-		}
-	}
+	dbSubnetGroupName, err := r.getSubnetGroupName(db)
+
 	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
 	pw, err := r.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
 	if err != nil {
@@ -158,7 +155,10 @@ func (r *RDS) RestoreDatabaseFromSnapshot(db *crd.Database) (string, error) {
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: restoreSnapshotInput.DBInstanceIdentifier}
 	res := r.rdsclient().DescribeDBInstancesRequest(k)
 	_, err = res.Send(context.Background())
-	if err != nil && err.Error() != rds.ErrCodeDBInstanceNotFoundFault {
+	switch {
+	case err == nil:
+		return "", errors.New(fmt.Sprintf("DB instance %v already exists. Will not restore", *restoreSnapshotInput.DBInstanceIdentifier))
+	case err.Error() == rds.ErrCodeDBInstanceNotFoundFault:
 		log.Printf("DB instance %v not found trying to restore it\n", *restoreSnapshotInput.DBInstanceIdentifier)
 		// seems like we didn't find a database with this name, let's create on
 		res := r.rdsclient().RestoreDBInstanceFromDBSnapshotRequest(restoreSnapshotInput)
@@ -166,11 +166,10 @@ func (r *RDS) RestoreDatabaseFromSnapshot(db *crd.Database) (string, error) {
 		if err != nil {
 			return "", errors.Wrap(err, "RestoreDBInstanceFromDBSnapshot")
 		}
-	} else if err != nil {
+	default:
 		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", restoreSnapshotInput.DBInstanceIdentifier))
-	} else {
-		return "", errors.New(fmt.Sprintf("DB instance %v already exists. Will not restore", *restoreSnapshotInput.DBInstanceIdentifier))
 	}
+
 	log.Printf("Waiting for db instance %v to become available\n", *restoreSnapshotInput.DBInstanceIdentifier)
 	time.Sleep(5 * time.Second)
 	err = r.rdsclient().WaitUntilDBInstanceAvailable(context.Background(), k)
