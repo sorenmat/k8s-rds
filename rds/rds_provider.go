@@ -177,7 +177,7 @@ func (r *RDS) RestoreDatabaseFromSnapshot(db *crd.Database) (string, error) {
 		return "", errors.Wrap(err, fmt.Sprintf("something went wrong in WaitUntilDBInstanceAvailable for db instance %v", *restoreSnapshotInput.DBInstanceIdentifier))
 	}
 
-	if modifyInstanceInput == nil {
+	if modifyInstanceInput != nil {
 		log.Printf("DB instance %v restored.\n", *restoreSnapshotInput.DBInstanceIdentifier)
 	} else {
 		// apply needed modifications
