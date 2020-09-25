@@ -20,10 +20,11 @@ type Local struct {
 	ServiceProvider provider.ServiceProvider
 	kc              kubernetes.Interface
 	SkipWaiting     bool
+	repository      string
 }
 
-func New(db *crd.Database, kc kubernetes.Interface) (*Local, error) {
-	r := Local{kc: kc}
+func New(db *crd.Database, kc kubernetes.Interface, repository string) (*Local, error) {
+	r := Local{kc: kc, repository: repository}
 	return &r, nil
 }
 
@@ -53,7 +54,7 @@ func (r *Local) CreateDatabase(db *crd.Database) (string, error) {
 	d.ObjectMeta = metav1.ObjectMeta{
 		Name: db.Name,
 	}
-	d.Spec = toSpec(db)
+	d.Spec = toSpec(db, r.repository)
 
 	if new {
 		log.Printf("creating database %v", db.Name)
@@ -219,10 +220,15 @@ func (r *Local) DeleteDatabase(db *crd.Database) error {
 
 func int32Ptr(i int32) *int32 { return &i }
 
-func toSpec(db *crd.Database) v1.DeploymentSpec {
+func toSpec(db *crd.Database, repository string) v1.DeploymentSpec {
 	version := db.Spec.Version
 	if version == "" {
 		version = "latest"
+	}
+
+	image := fmt.Sprintf("%v:%v", db.Spec.Engine, version)
+	if repository != "" {
+		image = fmt.Sprintf("%v/%v:%v", repository, db.Spec.Engine, version)
 	}
 	return v1.DeploymentSpec{
 		Replicas: int32Ptr(1),
@@ -241,7 +247,7 @@ func toSpec(db *crd.Database) v1.DeploymentSpec {
 				Containers: []corev1.Container{
 					{
 						Name:  db.Name,
-						Image: fmt.Sprintf("%v:%v", db.Spec.Engine, version), // TODO is this correct
+						Image: image, // TODO is this correct
 						Env: []corev1.EnvVar{corev1.EnvVar{
 							Name: "POSTGRES_PASSWORD",
 							ValueFrom: &corev1.EnvVarSource{
