@@ -57,18 +57,20 @@ func main() {
 		provider          string
 		excludeNamespaces []string
 		includeNamespaces []string
+		repository        string
 	)
 	var rootCmd = &cobra.Command{
 		Use:   "k8s-rds",
 		Short: "Kubernetes database provisioner",
 		Long:  `Kubernetes database provisioner`,
 		Run: func(cmd *cobra.Command, args []string) {
-			execute(provider, excludeNamespaces, includeNamespaces)
+			execute(provider, excludeNamespaces, includeNamespaces, repository)
 		},
 	}
 	rootCmd.PersistentFlags().StringVar(&provider, "provider", "aws", "Type of provider (aws, local)")
 	rootCmd.PersistentFlags().StringSliceVar(&excludeNamespaces, "exclude-namespaces", nil, "list of namespaces to exclude. Mutually exclusive with --include-namespaces.")
 	rootCmd.PersistentFlags().StringSliceVar(&includeNamespaces, "include-namespaces", nil, "list of namespaces to include. Mutually exclusive with --exclude-namespaces.")
+	rootCmd.PersistentFlags().StringVar(&repository, "repository", "", "Docker image repository, default is hub.docker.com)")
 	if len(excludeNamespaces) > 0 && len(includeNamespaces) > 0 {
 		panic("--include-namespaces and --exclude-namespaces are mutually exclusive")
 	}
@@ -78,7 +80,7 @@ func main() {
 	}
 }
 
-func execute(dbprovider string, excludeNamespaces, includeNamespaces []string) {
+func execute(dbprovider string, excludeNamespaces, includeNamespaces []string, repository string) {
 	log.Println("Starting k8s-rds")
 
 	config, err := getClientConfig(kube.Config())
@@ -118,7 +120,7 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string) {
 					return
 				}
 				client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
-				err = handleCreateDatabase(db, client, dbprovider)
+				err = handleCreateDatabase(db, client, dbprovider, repository)
 				if err != nil {
 					log.Printf("database creation failed: %v", err)
 					err := updateStatus(db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, client)
@@ -134,7 +136,7 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string) {
 				}
 				log.Printf("deleting database: %s \n", db.Name)
 
-				r, err := getProvider(db, dbprovider)
+				r, err := getProvider(db, dbprovider, repository)
 				if err != nil {
 					log.Println(err)
 					return
@@ -163,7 +165,7 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string) {
 	select {}
 }
 
-func getProvider(db *crd.Database, dbprovider string) (provider.DatabaseProvider, error) {
+func getProvider(db *crd.Database, dbprovider, repository string) (provider.DatabaseProvider, error) {
 	kubectl, err := getKubectl()
 	if err != nil {
 		log.Println(err)
@@ -178,7 +180,7 @@ func getProvider(db *crd.Database, dbprovider string) (provider.DatabaseProvider
 		return r, nil
 
 	case "local":
-		r, err := local.New(db, kubectl)
+		r, err := local.New(db, kubectl, repository)
 		if err != nil {
 			return nil, err
 		}
@@ -187,7 +189,7 @@ func getProvider(db *crd.Database, dbprovider string) (provider.DatabaseProvider
 	return nil, fmt.Errorf("unable to find provider for %v", dbprovider)
 }
 
-func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovider string) error {
+func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovider, repository string) error {
 	// we don't need to skip when it is a local provider without running pod
 	if db.Status.State == "Created" && dbprovider == "aws" {
 		log.Printf("database %v already created, skipping\n", db.Name)
@@ -204,7 +206,7 @@ func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovi
 
 	log.Println("trying to get kubectl")
 
-	r, err := getProvider(db, dbprovider)
+	r, err := getProvider(db, dbprovider, repository)
 	if err != nil {
 		return err
 	}

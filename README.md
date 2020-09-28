@@ -69,7 +69,7 @@ spec:
   multiaz: true # multi AZ support
   storagetype: gp2 # type of the underlying storage
   tags: "key=value,key1=value1"
- 
+  
 ```
 
 After the deploy is done you should be able to see your database via `kubectl get databases`
