@@ -253,6 +253,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 	input := &rds.CreateDBInstanceInput{
 		DBName:                aws.String(v.Spec.DBName),
 		AllocatedStorage:      aws.Int64(v.Spec.Size),
+		MaxAllocatedStorage:   aws.Int64(v.Spec.MaxAllocatedSize),
 		DBInstanceClass:       aws.String(v.Spec.Class),
 		DBInstanceIdentifier:  aws.String(dbidentifier(v)),
 		VpcSecurityGroupIds:   securityGroups,

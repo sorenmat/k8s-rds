@@ -80,6 +80,12 @@ func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
 									Minimum:     floatptr(20),
 									Maximum:     floatptr(64000),
 								},
+								"MaxAllocatedSize": {
+									Type:        "integer",
+									Description: "Database size in Gb",
+									Minimum:     floatptr(20),
+									Maximum:     floatptr(64000),
+								},
 								"multiaz": {
 									Type:        "boolean",
 									Description: "should it be available in multiple regions?",
@@ -153,6 +159,7 @@ type DatabaseSpec struct {
 	Version               string               `json:"version"` // version of the engine / database
 	Class                 string               `json:"class"`   // like "db.t2.micro"
 	Size                  int64                `json:"size"`    // size in gb
+	MaxAllocatedSize      int64                `json:"MaxAllocatedSize"`    // size in gb
 	MultiAZ               bool                 `json:"multiaz,omitempty"`
 	PubliclyAccessible    bool                 `json:"publicaccess,omitempty"`
 	StorageEncrypted      bool                 `json:"encrypted,omitempty"`
