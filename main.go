@@ -135,7 +135,6 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string, r
 					return
 				}
 				log.Printf("deleting database: %s \n", db.Name)
-
 				r, err := getProvider(db, dbprovider, repository)
 				if err != nil {
 					log.Println(err)
@@ -171,7 +170,11 @@ func getProvider(db *crd.Database, dbprovider, repository string) (provider.Data
 		log.Println(err)
 		return nil, err
 	}
-	switch dbprovider {
+	provider := dbprovider
+	if db.Spec.Provider != "" {
+		provider = db.Spec.Provider
+	}
+	switch provider {
 	case "aws":
 		r, err := rds.New(db, kubectl)
 		if err != nil {
