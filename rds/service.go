@@ -16,7 +16,7 @@ func (k *RDS) createServiceObj(s *v1.Service, namespace string, hostname string,
 	var ports []v1.ServicePort
 
 	ports = append(ports, v1.ServicePort{
-		Name:       fmt.Sprintf("pgsql"),
+		Name:       "pgsql",
 		Port:       int32(5432),
 		TargetPort: intstr.IntOrString{IntVal: int32(5432)},
 	})
