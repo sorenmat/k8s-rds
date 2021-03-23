@@ -123,7 +123,8 @@ func TestUpdateDatabase(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, host)
 	assert.Equal(t, 4, len(kc.Fake.Actions()))
-	host, err = l.CreateDatabase(db)
+	_, err = l.CreateDatabase(db)
+	assert.NoError(t, err)
 	assert.Equal(t, 8, len(kc.Fake.Actions()))
 
 	sequence := []struct {
