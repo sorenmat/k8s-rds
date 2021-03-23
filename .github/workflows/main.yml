@@ -25,5 +25,6 @@ jobs:
         # uses: docker/build-push-action@9379083e426e2e84abb80c8c091f5cdeb7d3fd7a
         uses: docker/build-push-action@v2.3.0
         with:
+          push: true
           tags: sorenmat/k8s-rds:latest,sorenmat/k8s-rds:v${{ github.run_number }}
       
