@@ -1,6 +1,6 @@
 module github.com/sorenmat/k8s-rds
 
-go 1.14
+go 1.16
 
 require (
 	github.com/aws/aws-sdk-go-v2 v0.11.0

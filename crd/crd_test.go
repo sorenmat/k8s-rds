@@ -26,6 +26,7 @@ func TestMarshal(t *testing.T) {
 			StorageEncrypted:   true,
 			StorageType:        "gp2",
 			Username:           "dbuser",
+			Provider:           "local",
 		},
 	}
 	j, err := yaml.Marshal(d)
@@ -52,6 +53,7 @@ func TestCRDValidationWithValidInput(t *testing.T) {
 			StorageEncrypted:      true,
 			StorageType:           "gp2",
 			Username:              "dbuser",
+			Provider:              "local",
 		},
 	}
 

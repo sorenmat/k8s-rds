@@ -91,6 +91,7 @@ spec:
   multiaz: true # multi AZ support
   storagetype: gp2 # type of the underlying storage
   tags: "key=value,key1=value1"
+  provider: aws # Optional either aws or local, will overrides the value the operator was started with 
   
 ```
 
