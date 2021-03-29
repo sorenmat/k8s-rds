@@ -9,7 +9,8 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/config"
+	//"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/pkg/errors"
@@ -424,7 +425,7 @@ func ec2client(kubectl *kubernetes.Clientset) (*ec2.Client, error) {
 	}
 	log.Printf("Found node with ID: %v in region %v", name, region)
 
-	cfg, err := external.LoadDefaultAWSConfig()
+	cfg, err := config.LoadDefaultConfig()
 	if err != nil {
 		panic("unable to load SDK config, " + err.Error())
 	}

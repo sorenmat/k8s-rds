@@ -3,7 +3,7 @@ module github.com/sorenmat/k8s-rds
 go 1.16
 
 require (
-	github.com/aws/aws-sdk-go-v2 v0.11.0
+	github.com/aws/aws-sdk-go-v2 v1.3.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/golangci/golangci-lint v1.17.2-0.20190910081425-f312a0fc4e31
 	github.com/mitchellh/go-homedir v1.1.0
