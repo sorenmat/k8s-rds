@@ -1,6 +1,7 @@
 package local
 
 import (
+	"context"
 	"testing"
 
 	"github.com/sorenmat/k8s-rds/crd"
@@ -57,7 +58,7 @@ func TestCreateDatabase(t *testing.T) {
 	assert.NoError(t, err)
 	// we need it to not wait for status
 	l.SkipWaiting = true
-	host, err := l.CreateDatabase(db)
+	host, err := l.CreateDatabase(context.Background(), db)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, host)
 
@@ -119,11 +120,11 @@ func TestUpdateDatabase(t *testing.T) {
 	assert.NoError(t, err)
 	// we need it to not wait for status
 	l.SkipWaiting = true
-	host, err := l.CreateDatabase(db)
+	host, err := l.CreateDatabase(context.Background(), db)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, host)
 	assert.Equal(t, 4, len(kc.Fake.Actions()))
-	_, err = l.CreateDatabase(db)
+	_, err = l.CreateDatabase(context.Background(), db)
 	assert.NoError(t, err)
 	assert.Equal(t, 8, len(kc.Fake.Actions()))
 

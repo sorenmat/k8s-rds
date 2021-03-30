@@ -12,7 +12,7 @@ import (
 )
 
 // create an External named service object for Kubernetes
-func (k *RDS) createServiceObj(s *v1.Service, namespace string, hostname string, internalname string) *v1.Service {
+func (r *RDS) createServiceObj(s *v1.Service, namespace string, hostname string, internalname string) *v1.Service {
 	var ports []v1.ServicePort
 
 	ports = append(ports, v1.ServicePort{
@@ -31,7 +31,7 @@ func (k *RDS) createServiceObj(s *v1.Service, namespace string, hostname string,
 }
 
 // CreateService Creates or updates a service in Kubernetes with the new information
-func (k *RDS) CreateService(namespace string, hostname string, internalname string) error {
+func (r *RDS) CreateService(namespace string, hostname string, internalname string) error {
 
 	// create a service in kubernetes that points to the AWS RDS instance
 	kubectl, err := kube.Client()
@@ -47,7 +47,7 @@ func (k *RDS) CreateService(namespace string, hostname string, internalname stri
 		s = &v1.Service{}
 		create = true
 	}
-	s = k.createServiceObj(s, namespace, hostname, internalname)
+	s = r.createServiceObj(s, namespace, hostname, internalname)
 	if create {
 		_, err = serviceInterface.Create(s)
 	} else {
@@ -57,7 +57,7 @@ func (k *RDS) CreateService(namespace string, hostname string, internalname stri
 	return err
 }
 
-func (k *RDS) DeleteService(namespace string, dbname string) error {
+func (r *RDS) DeleteService(namespace string, dbname string) error {
 	kubectl, err := kube.Client()
 	if err != nil {
 		return err
@@ -71,7 +71,7 @@ func (k *RDS) DeleteService(namespace string, dbname string) error {
 	return nil
 }
 
-func (k *RDS) GetSecret(namespace string, name string, key string) (string, error) {
+func (r *RDS) GetSecret(namespace string, name string, key string) (string, error) {
 	kubectl, err := kube.Client()
 	if err != nil {
 		return "", err
