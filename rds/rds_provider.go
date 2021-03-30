@@ -279,7 +279,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 //DescribeInstancesResponse
 // describeNodeEC2Instance returns the AWS Metadata for the firt Node from the cluster
 func describeNodeEC2Instance(ctx context.Context, kubectl *kubernetes.Clientset, svc *ec2.Client) (*ec2.DescribeInstancesOutput, error) {
-	nodes, err := kubectl.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
@@ -305,8 +305,9 @@ func describeNodeEC2Instance(ctx context.Context, kubectl *kubernetes.Clientset,
 		},
 	}
 	log.Println("trying to describe instance")
+	//DescribeInstancesRequest
 	nodeInfo, err := svc.DescribeInstances(ctx, params)
-
+	//nodeInfo, err := req.Send(context.Background())
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to describe AWS instance")
 	}
@@ -380,7 +381,7 @@ func getSGS(ctx context.Context, kubectl *kubernetes.Clientset, svc *ec2.Client)
 	}
 	log.Println("trying to describe instance")
 	res, err := svc.DescribeInstances(ctx, params)
-
+	//res, err := req.Send(context.Background())
 	if err != nil {
 		log.Println(err)
 		return nil, errors.Wrap(err, "unable to describe AWS instance")
@@ -403,7 +404,7 @@ func getSGS(ctx context.Context, kubectl *kubernetes.Clientset, svc *ec2.Client)
 }
 
 func ec2config(ctx context.Context, kubectl *kubernetes.Clientset) (*aws.Config, error) {
-	nodes, err := kubectl.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}

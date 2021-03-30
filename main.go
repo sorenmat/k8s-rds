@@ -124,7 +124,7 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string, r
 				err = handleCreateDatabase(context.Background(), db, _client, dbprovider, repository)
 				if err != nil {
 					log.Printf("database creation failed: %v", err)
-					err := updateStatus(context.Background(), db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, _client)
+					err := updateStatus(db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, _client)
 					if err != nil {
 						log.Printf("database CRD status update failed: %v", err)
 					}
@@ -145,7 +145,7 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string, r
 					return
 				}
 
-				err = r.DeleteDatabase(ctx, db)
+				err = r.DeleteDatabase(context.Background(), db)
 				if err != nil {
 					log.Println(err)
 				}
