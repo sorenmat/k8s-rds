@@ -3,6 +3,8 @@ package rds
 import (
 	"context"
 	"fmt"
+	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	rdstypes "github.com/aws/aws-sdk-go-v2/service/rds/types"
 	"log"
 	"regexp"
 	"strings"
@@ -398,7 +400,6 @@ func getSGS(ctx context.Context, kubectl *kubernetes.Clientset, svc *ec2.Client)
 	}
 	log.Println("trying to describe instance")
 	res, err := svc.DescribeInstances(ctx, params)
-
 	if err != nil {
 		log.Println(err)
 		return nil, errors.Wrap(err, "unable to describe AWS instance")
