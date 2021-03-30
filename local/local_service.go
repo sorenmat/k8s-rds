@@ -12,7 +12,7 @@ import (
 )
 
 // create an External named service object for Kubernetes
-func (k *Local) createServiceObj(s *v1.Service, namespace string, hostname string, internalname string) *v1.Service {
+func (l *Local) createServiceObj(s *v1.Service, namespace string, hostname string, internalname string) *v1.Service {
 	var ports []v1.ServicePort
 
 	ports = append(ports, v1.ServicePort{
@@ -31,7 +31,7 @@ func (k *Local) createServiceObj(s *v1.Service, namespace string, hostname strin
 }
 
 // CreateService Creates or updates a service in Kubernetes with the new information
-func (k *Local) CreateService(namespace string, hostname string, internalname string) error {
+func (l *Local) CreateService(namespace string, hostname string, internalname string) error {
 	client, err := kube.Client()
 	if err != nil {
 		return err
@@ -46,7 +46,7 @@ func (k *Local) CreateService(namespace string, hostname string, internalname st
 		s = &v1.Service{}
 		create = true
 	}
-	s = k.createServiceObj(s, namespace, hostname, internalname)
+	s = l.createServiceObj(s, namespace, hostname, internalname)
 
 	if create {
 		_, err = serviceInterface.Create(s)
@@ -57,7 +57,7 @@ func (k *Local) CreateService(namespace string, hostname string, internalname st
 	return err
 }
 
-func (k *Local) DeleteService(namespace string, dbname string) error {
+func (l *Local) DeleteService(namespace string, dbname string) error {
 	client, err := kube.Client()
 	if err != nil {
 		return err
@@ -71,7 +71,7 @@ func (k *Local) DeleteService(namespace string, dbname string) error {
 	return nil
 }
 
-func (k *Local) GetSecret(namespace string, name string, key string) (string, error) {
+func (l *Local) GetSecret(namespace string, name string, key string) (string, error) {
 	client, err := kube.Client()
 	if err != nil {
 		return "", err

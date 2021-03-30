@@ -33,14 +33,14 @@ func TestConvertSpecToInput(t *testing.T) {
 	assert.Equal(t, "mypassword", *i.MasterUserPassword)
 	assert.Equal(t, "myuser", *i.MasterUsername)
 	assert.Equal(t, "db.t2.micro", *i.DBInstanceClass)
-	assert.Equal(t, int64(100), *i.AllocatedStorage)
-	assert.Equal(t, int64(200), *i.MaxAllocatedStorage)
+	assert.Equal(t, int32(100), *i.AllocatedStorage)
+	assert.Equal(t, int32(200), *i.MaxAllocatedStorage)
 	assert.Equal(t, true, *i.PubliclyAccessible)
 	assert.Equal(t, true, *i.MultiAZ)
 	assert.Equal(t, true, *i.StorageEncrypted)
 	assert.Equal(t, 2, len(i.VpcSecurityGroupIds))
 	assert.Equal(t, "bad", *i.StorageType)
-	assert.Equal(t, int64(1000), *i.Iops)
+	assert.Equal(t, int32(1000), *i.Iops)
 	assert.Equal(t, "9.6", *i.EngineVersion)
 }
 
