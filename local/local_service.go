@@ -32,7 +32,7 @@ func (l *Local) createServiceObj(s *v1.Service, namespace string, hostname strin
 }
 
 // CreateService Creates or updates a service in Kubernetes with the new information
-func (l *Local) CreateService(ctx context.Context, namespace string, hostname string, internalname string) error {
+func (l *Local) CreateService(namespace string, hostname string, internalname string) error {
 	client, err := kube.Client()
 	if err != nil {
 		return err
@@ -58,7 +58,7 @@ func (l *Local) CreateService(ctx context.Context, namespace string, hostname st
 	return err
 }
 
-func (l *Local) DeleteService(ctx context.Context, namespace string, dbname string) error {
+func (l *Local) DeleteService(namespace string, dbname string) error {
 	client, err := kube.Client()
 	if err != nil {
 		return err
@@ -72,7 +72,7 @@ func (l *Local) DeleteService(ctx context.Context, namespace string, dbname stri
 	return nil
 }
 
-func (l *Local) GetSecret(ctx context.Context, namespace string, name string, key string) (string, error) {
+func (l *Local) GetSecret(namespace string, name string, key string) (string, error) {
 	client, err := kube.Client()
 	if err != nil {
 		return "", err
