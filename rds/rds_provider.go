@@ -384,7 +384,7 @@ func getSGS(ctx context.Context, kubectl *kubernetes.Clientset, svc *ec2.Client)
 	}
 	log.Println("trying to describe instance")
 	res, err := svc.DescribeInstances(ctx, params)
-	//res, err := req.Send(context.Background())
+
 	if err != nil {
 		log.Println(err)
 		return nil, errors.Wrap(err, "unable to describe AWS instance")
