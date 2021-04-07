@@ -307,7 +307,7 @@ func describeNodeEC2Instance(ctx context.Context, kubectl *kubernetes.Clientset,
 	log.Println("trying to describe instance")
 	//DescribeInstancesRequest
 	nodeInfo, err := svc.DescribeInstances(ctx, params)
-	//nodeInfo, err := req.Send(context.Background())
+
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to describe AWS instance")
 	}
