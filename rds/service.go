@@ -32,7 +32,7 @@ func (r *RDS) createServiceObj(s *v1.Service, namespace string, hostname string,
 }
 
 // CreateService Creates or updates a service in Kubernetes with the new information
-func (r *RDS) CreateService(namespace string, hostname string, internalname string) error {
+func (r *RDS) CreateService(ctx context.Context, namespace string, hostname string, internalname string) error {
 
 	// create a service in kubernetes that points to the AWS RDS instance
 	kubectl, err := kube.Client()
@@ -58,7 +58,7 @@ func (r *RDS) CreateService(namespace string, hostname string, internalname stri
 	return err
 }
 
-func (r *RDS) DeleteService(namespace string, dbname string) error {
+func (r *RDS) DeleteService(ctx context.Context, namespace string, dbname string) error {
 	kubectl, err := kube.Client()
 	if err != nil {
 		return err
@@ -72,7 +72,7 @@ func (r *RDS) DeleteService(namespace string, dbname string) error {
 	return nil
 }
 
-func (r *RDS) GetSecret(namespace string, name string, key string) (string, error) {
+func (r *RDS) GetSecret(ctx context.Context, namespace string, name string, key string) (string, error) {
 	kubectl, err := kube.Client()
 	if err != nil {
 		return "", err

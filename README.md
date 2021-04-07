@@ -92,6 +92,7 @@ spec:
   storagetype: gp2 # type of the underlying storage
   tags: "key=value,key1=value1"
   provider: aws # Optional either aws or local, will overrides the value the operator was started with 
+  skipfinalsnapshot: false # Indicates whether to skip the creation of a final DB snapshot before deleting the instance. By default, skipfinalsnapshot isn't enabled, and the DB snapshot is created.
   
 ```
 

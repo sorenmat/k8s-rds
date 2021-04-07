@@ -31,14 +31,14 @@ func New(db *crd.Database, kc kubernetes.Interface, repository string) (*Local, 
 
 // CreateDatabase creates a database from the CRD database object, is also ensures that the correct
 // subnets are created for the database so we can access it
-func (l *Local) CreateDatabase(_ context.Context, db *crd.Database) (string, error) {
+func (l *Local) CreateDatabase(ctx context.Context, db *crd.Database) (string, error) {
 
-	if err := l.createPVC(db.Name, db.Namespace, db.Spec.Size); err != nil {
+	if err := l.createPVC(ctx, db.Name, db.Namespace, db.Spec.Size); err != nil {
 		return "", err
 	}
 
 	_new := false
-	d, err := l.kc.AppsV1().Deployments(db.Namespace).Get(db.Name, metav1.GetOptions{})
+	d, err := l.kc.AppsV1().Deployments(db.Namespace).Get(ctx, db.Name, metav1.GetOptions{})
 	if err != nil && !errors.IsNotFound(err) {
 		// we got an error and it's not the NotFound, let's crash
 		return "", err
@@ -59,13 +59,13 @@ func (l *Local) CreateDatabase(_ context.Context, db *crd.Database) (string, err
 
 	if _new {
 		log.Printf("creating database %v", db.Name)
-		_, err = l.kc.AppsV1().Deployments(db.Namespace).Create(d)
+		_, err = l.kc.AppsV1().Deployments(db.Namespace).Create(ctx, d, metav1.CreateOptions{})
 		if err != nil {
 			return "", err
 		}
 	} else {
 		log.Printf("updating database %v", db.Name)
-		_, err = l.kc.AppsV1().Deployments(db.Namespace).Update(d)
+		_, err = l.kc.AppsV1().Deployments(db.Namespace).Update(ctx, d, metav1.UpdateOptions{})
 		if err != nil {
 			return "", err
 		}
@@ -80,11 +80,10 @@ const (
 	iterationWaitPeriodSec    = 5 * time.Second
 )
 
-func (l *Local) createPVC(name, namespace string, size int64) error {
+func (l *Local) createPVC(ctx context.Context, name, namespace string, size int64) error {
 	newPVC := false
 
-	pvc, err := l.kc.CoreV1().PersistentVolumeClaims(namespace).Get(name,
-		metav1.GetOptions{})
+	pvc, err := l.kc.CoreV1().PersistentVolumeClaims(namespace).Get(ctx, name, metav1.GetOptions{})
 	if err != nil && !errors.IsNotFound(err) {
 		// we got an error and it's not the NotFound, let's crash
 		return err
@@ -127,14 +126,13 @@ func (l *Local) createPVC(name, namespace string, size int64) error {
 
 	if newPVC {
 		log.Printf("creating pvc %v", name)
-		_, err = l.kc.CoreV1().PersistentVolumeClaims(namespace).Create(pvc)
+		_, err = l.kc.CoreV1().PersistentVolumeClaims(namespace).Create(ctx, pvc, metav1.CreateOptions{})
 		if err != nil {
 			return err
 		}
 	} else {
 		log.Printf("updating pvc %v", name)
-		oldPvc, err := l.kc.CoreV1().PersistentVolumeClaims(namespace).Get(pvc.Name,
-			metav1.GetOptions{})
+		oldPvc, err := l.kc.CoreV1().PersistentVolumeClaims(namespace).Get(ctx, pvc.Name, metav1.GetOptions{})
 		if err != nil {
 			return err
 		}
@@ -144,7 +142,7 @@ func (l *Local) createPVC(name, namespace string, size int64) error {
 				name)
 			return nil
 		}
-		_, err = l.kc.CoreV1().PersistentVolumeClaims(namespace).Update(pvc)
+		_, err = l.kc.CoreV1().PersistentVolumeClaims(namespace).Update(ctx, pvc, metav1.UpdateOptions{})
 		if err != nil {
 			return e.Wrap(err,
 				fmt.Sprintf("Error: PVC %s has problems while updating %v", name, err))
@@ -155,15 +153,13 @@ func (l *Local) createPVC(name, namespace string, size int64) error {
 		pvcIsReady := false
 		for i := 0; i < maxAmountOfWaitIterations; i++ {
 
-			pvc, err := l.kc.CoreV1().PersistentVolumeClaims(namespace).Get(name,
-				metav1.GetOptions{})
+			pvc, err := l.kc.CoreV1().PersistentVolumeClaims(namespace).Get(ctx, name, metav1.GetOptions{})
 
 			if err != nil {
 				return e.Wrap(err, "problem of getting pvcs")
 			}
 			if pvc.Status.Phase == "Bound" {
-				pv, err := l.kc.CoreV1().PersistentVolumes().Get(pvc.Spec.VolumeName,
-					metav1.GetOptions{})
+				pv, err := l.kc.CoreV1().PersistentVolumes().Get(ctx, pvc.Spec.VolumeName, metav1.GetOptions{})
 				if err != nil {
 					return e.Wrap(err, "problem of getting pv")
 				}
@@ -192,12 +188,11 @@ const (
 )
 
 // DeleteDatabase deletes the db pod and pvc
-func (l *Local) DeleteDatabase(_ context.Context, db *crd.Database) error {
+func (l *Local) DeleteDatabase(ctx context.Context, db *crd.Database) error {
 	// delete the database instance
 
 	for i := 0; i < nDeleteAttempts; i++ {
-		if err := l.kc.AppsV1().Deployments(db.Namespace).Delete(db.Name,
-			&metav1.DeleteOptions{}); err != nil {
+		if err := l.kc.AppsV1().Deployments(db.Namespace).Delete(ctx, db.Name, metav1.DeleteOptions{}); err != nil {
 			fmt.Printf("ERROR: error while deleting the deployment: %v\n", err)
 			continue
 		}
@@ -205,8 +200,7 @@ func (l *Local) DeleteDatabase(_ context.Context, db *crd.Database) error {
 		if db.Spec.DeleteProtection {
 			log.Printf("Trying to delete a %v in %v which is a deleted protected database", db.Name, db.Namespace)
 		} else {
-			if err := l.kc.CoreV1().PersistentVolumeClaims(db.Namespace).Delete(db.Name,
-				&metav1.DeleteOptions{}); err != nil {
+			if err := l.kc.CoreV1().PersistentVolumeClaims(db.Namespace).Delete(ctx, db.Name, metav1.DeleteOptions{}); err != nil {
 				fmt.Printf("ERROR: error while deleting the pvc: %v\n", err)
 				continue
 			}
@@ -238,7 +232,7 @@ func toSpec(db *crd.Database, repository string) v1.DeploymentSpec {
 			},
 		},
 		Strategy: v1.DeploymentStrategy{
-		    Type: "Recreate",
+			Type: "Recreate",
 		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
