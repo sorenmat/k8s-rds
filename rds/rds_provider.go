@@ -3,12 +3,13 @@ package rds
 import (
 	"context"
 	"fmt"
-	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	rdstypes "github.com/aws/aws-sdk-go-v2/service/rds/types"
 	"log"
 	"regexp"
 	"strings"
 	"time"
+
+	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	rdstypes "github.com/aws/aws-sdk-go-v2/service/rds/types"
 
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	rdstypes "github.com/aws/aws-sdk-go-v2/service/rds/types"
