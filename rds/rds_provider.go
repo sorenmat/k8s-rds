@@ -307,8 +307,7 @@ func describeNodeEC2Instance(ctx context.Context, kubectl *kubernetes.Clientset,
 			},
 		},
 	}
-	log.Println("trying to describe instance")
-	//DescribeInstancesRequest
+	log.Println("trying to describe instance"
 	nodeInfo, err := svc.DescribeInstances(ctx, params)
 
 	if err != nil {
