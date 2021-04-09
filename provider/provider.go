@@ -14,7 +14,7 @@ type DatabaseProvider interface {
 }
 
 type ServiceProvider interface {
-	CreateService(namespace string, hostname string, internalname string) error
-	DeleteService(namespace string, dbname string) error
-	GetSecret(namepspace string, pwname string, pwkey string) (string, error)
+	CreateService(ctx context.Context, namespace string, hostname string, internalname string) error
+	DeleteService(ctx context.Context, namespace string, dbname string) error
+	GetSecret(ctx context.Context, namepspace string, pwname string, pwkey string) (string, error)
 }

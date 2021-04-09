@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"log"
 
 	"github.com/sorenmat/k8s-rds/crd"
@@ -26,45 +27,45 @@ type Crdclient struct {
 	codec  runtime.ParameterCodec
 }
 
-func (f *Crdclient) Create(obj *crd.Database) (*crd.Database, error) {
+func (f *Crdclient) Create(ctx context.Context, obj *crd.Database) (*crd.Database, error) {
 	var result crd.Database
 	err := f.cl.Post().
 		Namespace(f.ns).Resource(f.plural).
-		Body(obj).Do().Into(&result)
+		Body(obj).Do(ctx).Into(&result)
 	return &result, err
 }
 
-func (f *Crdclient) Update(obj *crd.Database) (*crd.Database, error) {
+func (f *Crdclient) Update(ctx context.Context, obj *crd.Database) (*crd.Database, error) {
 	var result crd.Database
 	err := f.cl.Put().
 		Namespace(f.ns).Resource(f.plural).Name(obj.Name).
-		Body(obj).Do().Into(&result)
+		Body(obj).Do(ctx).Into(&result)
 	log.Printf("New resource version of the DB %s is %s\n", result.Name,
 		result.ResourceVersion)
 	return &result, err
 }
 
-func (f *Crdclient) Delete(name string, options *meta_v1.DeleteOptions) error {
+func (f *Crdclient) Delete(ctx context.Context, name string, options *meta_v1.DeleteOptions) error {
 	return f.cl.Delete().
 		Namespace(f.ns).Resource(f.plural).
-		Name(name).Body(options).Do().
+		Name(name).Body(options).Do(ctx).
 		Error()
 }
 
-func (f *Crdclient) Get(name string) (*crd.Database, error) {
+func (f *Crdclient) Get(ctx context.Context, name string) (*crd.Database, error) {
 	var result crd.Database
 	err := f.cl.Get().
 		Namespace(f.ns).Resource(f.plural).
-		Name(name).Do().Into(&result)
+		Name(name).Do(ctx).Into(&result)
 	return &result, err
 }
 
-func (f *Crdclient) List(opts meta_v1.ListOptions) (*crd.DatabaseList, error) {
+func (f *Crdclient) List(ctx context.Context, opts meta_v1.ListOptions) (*crd.DatabaseList, error) {
 	var result crd.DatabaseList
 	err := f.cl.Get().
 		Namespace(f.ns).Resource(f.plural).
 		VersionedParams(&opts, f.codec).
-		Do().Into(&result)
+		Do(ctx).Into(&result)
 	return &result, err
 }
 

@@ -80,7 +80,7 @@ func (r *RDS) CreateDatabase(ctx context.Context, db *crd.Database) (string, err
 	}
 
 	log.Printf("getting secret: Name: %v Key: %v \n", db.Spec.Password.Name, db.Spec.Password.Key)
-	pw, err := r.GetSecret(db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
+	pw, err := r.GetSecret(ctx, db.Namespace, db.Spec.Password.Name, db.Spec.Password.Key)
 	if err != nil {
 		return "", err
 	}
@@ -279,7 +279,7 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 //DescribeInstancesResponse
 // describeNodeEC2Instance returns the AWS Metadata for the firt Node from the cluster
 func describeNodeEC2Instance(ctx context.Context, kubectl *kubernetes.Clientset, svc *ec2.Client) (*ec2.DescribeInstancesOutput, error) {
-	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
@@ -354,7 +354,7 @@ func getIDFromProvider(x string) string {
 }
 func getSGS(ctx context.Context, kubectl *kubernetes.Clientset, svc *ec2.Client) ([]string, error) {
 
-	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}
@@ -403,7 +403,7 @@ func getSGS(ctx context.Context, kubectl *kubernetes.Clientset, svc *ec2.Client)
 }
 
 func ec2config(ctx context.Context, kubectl *kubernetes.Clientset) (*aws.Config, error) {
-	nodes, err := kubectl.CoreV1().Nodes().List(metav1.ListOptions{})
+	nodes, err := kubectl.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get nodes")
 	}

@@ -1,6 +1,7 @@
 package local
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -31,7 +32,7 @@ func (l *Local) createServiceObj(s *v1.Service, namespace string, hostname strin
 }
 
 // CreateService Creates or updates a service in Kubernetes with the new information
-func (l *Local) CreateService(namespace string, hostname string, internalname string) error {
+func (l *Local) CreateService(ctx context.Context, namespace string, hostname string, internalname string) error {
 	client, err := kube.Client()
 	if err != nil {
 		return err
@@ -39,7 +40,7 @@ func (l *Local) CreateService(namespace string, hostname string, internalname st
 	// create a service in kubernetes that points to the AWS RDS instance
 	serviceInterface := client.CoreV1().Services(namespace)
 
-	s, sErr := serviceInterface.Get(hostname, metav1.GetOptions{})
+	s, sErr := serviceInterface.Get(ctx, hostname, metav1.GetOptions{})
 
 	create := false
 	if sErr != nil {
@@ -49,21 +50,21 @@ func (l *Local) CreateService(namespace string, hostname string, internalname st
 	s = l.createServiceObj(s, namespace, hostname, internalname)
 
 	if create {
-		_, err = serviceInterface.Create(s)
+		_, err = serviceInterface.Create(ctx, s, metav1.CreateOptions{})
 	} else {
-		_, err = serviceInterface.Update(s)
+		_, err = serviceInterface.Update(ctx, s, metav1.UpdateOptions{})
 	}
 
 	return err
 }
 
-func (l *Local) DeleteService(namespace string, dbname string) error {
+func (l *Local) DeleteService(ctx context.Context, namespace string, dbname string) error {
 	client, err := kube.Client()
 	if err != nil {
 		return err
 	}
 	serviceInterface := client.CoreV1().Services(namespace)
-	err = serviceInterface.Delete(dbname, &metav1.DeleteOptions{})
+	err = serviceInterface.Delete(ctx, dbname, metav1.DeleteOptions{})
 	if err != nil {
 		log.Println(err)
 		return errors.Wrap(err, fmt.Sprintf("delete of service %v failed in namespace %v", dbname, namespace))
@@ -71,12 +72,12 @@ func (l *Local) DeleteService(namespace string, dbname string) error {
 	return nil
 }
 
-func (l *Local) GetSecret(namespace string, name string, key string) (string, error) {
+func (l *Local) GetSecret(ctx context.Context, namespace string, name string, key string) (string, error) {
 	client, err := kube.Client()
 	if err != nil {
 		return "", err
 	}
-	secret, err := client.CoreV1().Secrets(namespace).Get(name, metav1.GetOptions{})
+	secret, err := client.CoreV1().Secrets(namespace).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("unable to fetch secret %v", name))
 	}
