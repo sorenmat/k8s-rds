@@ -1,0 +1,21 @@
+apiVersion: k8s.io/v1
+kind: Database
+metadata:
+  name: my_db
+  namespace: default
+spec:
+  maxallocatedsize: 200
+  backupretentionperiod: 10
+  class: db.t2.micro
+  dbname: database_name
+  encrypted: true
+  engine: postgres
+  multiaz: true
+  password:
+    key: key
+    name: DB-Secret
+  provider: local
+  size: 20
+  storagetype: gp2
+  username: dbuser
+  version: ""
