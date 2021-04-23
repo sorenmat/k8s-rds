@@ -2,6 +2,7 @@ package crd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"testing"
 
 	"github.com/ghodss/yaml"
@@ -64,6 +65,23 @@ func TestCRDValidationWithValidInput(t *testing.T) {
 	assert.NoError(t, err)
 	assert.True(t, result.Valid(), result.Errors())
 }
+
+func TestCaseInsensitiveInput(t *testing.T) {
+	// in the test.yaml, you can see maxallocatedsize instead of MaxAllocatedSize
+	yamlFile, err := ioutil.ReadFile("test.yaml")
+	assert.NoError(t, err)
+	db := Database{}
+	err = yaml.Unmarshal(yamlFile,&db)
+	assert.NoError(t, err)
+	assert.Equal(t, int(db.Spec.MaxAllocatedSize), 200, "they should be equal")
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	documentLoader := gojsonschema.NewGoLoader(db)
+
+	result, err := gojsonschema.Validate(loader, documentLoader)
+	assert.NoError(t, err)
+	assert.True(t, result.Valid(), result.Errors())
+}
+
 
 func TestDatabaseSizeIsTooSmall(t *testing.T) {
 	d := Database{
