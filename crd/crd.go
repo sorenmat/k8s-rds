@@ -1,6 +1,7 @@
 package crd
 
 import (
+	"context"
 	v1 "k8s.io/api/core/v1"
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -134,8 +135,9 @@ func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
 
 // CreateCRD creates the CRD resource, ignore error if it already exists
 func CreateCRD(clientset apiextcs.Interface) error {
+	ctx := context.Background()
 	crd := NewDatabaseCRD()
-	_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Create(crd)
+	_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Create(ctx, crd, meta_v1.CreateOptions{})
 	if err != nil && apierrors.IsAlreadyExists(err) {
 		return nil
 	}
