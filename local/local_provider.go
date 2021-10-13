@@ -241,7 +241,7 @@ func toSpec(db *crd.Database) v1.DeploymentSpec {
 				Containers: []corev1.Container{
 					{
 						Name:  db.Name,
-						Image: fmt.Sprintf("%v:%v", db.Spec.Engine, version), // TODO is this correct
+						Image: fmt.Sprintf("eu.gcr.io/tradeshift-base/%v:%v", db.Spec.Engine, version), // TODO is this correct
 						Env: []corev1.EnvVar{corev1.EnvVar{
 							Name: "POSTGRES_PASSWORD",
 							ValueFrom: &corev1.EnvVarSource{
