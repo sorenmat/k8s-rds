@@ -32,6 +32,27 @@ kubectl apply -f deploy/operator-cluster-role-binding.yaml
 kubectl apply -f deploy/deployment-rbac.yaml
 ```
 
+## Running 
+```
+Kubernetes database provisioner
+
+Usage:
+  k8s-rds [flags]
+
+Flags:
+      --exclude-namespaces strings   list of namespaces to exclude. Mutually exclusive with --include-namespaces.
+  -h, --help                         help for k8s-rds
+      --include-namespaces strings   list of namespaces to include. Mutually exclusive with --exclude-namespaces.
+      --provider string              Type of provider (aws, local) (default "aws")
+      --repository string            Docker image repository, default is hub.docker.com)
+```
+
+The provider can be started in two modes:
+
+**Local** - this will provision a docker image in the cluster, and providing a database that way
+
+**AWS** - This will use the AWS API to create a RDS database
+
 ## Deploying
 
 When the controller is running in the cluster you can deploy/create a new database by running `kubectl apply` on the following
@@ -62,6 +83,7 @@ spec:
     name: mysecret # the name of the secret
   username: postgres # Database username
   size: 20 # size in GB
+  MaxAllocatedSize: 50 # size in GB
   backupretentionperiod: 10 # days to keep backup, 0 means diable
   deleteprotection: true # don't delete the database even though the object is delete in k8s
   encrypted: true # should the database be encrypted
@@ -69,7 +91,8 @@ spec:
   multiaz: true # multi AZ support
   storagetype: gp2 # type of the underlying storage
   tags: "key=value,key1=value1"
- 
+  provider: aws # Optional either aws or local, will overrides the value the operator was started with 
+  
 ```
 
 After the deploy is done you should be able to see your database via `kubectl get databases`

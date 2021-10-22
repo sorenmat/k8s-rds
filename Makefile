@@ -11,7 +11,7 @@ tools:
 test:
 	$(GO) test ./... -v
 lint:
-	$(ENV) golangci-lint
+	$(ENV) golangci-lint run
 build:
 	$(GO) build -o bin/$(NAME)
 

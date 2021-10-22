@@ -1,6 +1,7 @@
 package local
 
 import (
+	"context"
 	"testing"
 
 	"github.com/sorenmat/k8s-rds/crd"
@@ -28,8 +29,10 @@ func TestConvertSpecToDeployment(t *testing.T) {
 			Password:           v1.SecretKeySelector{LocalObjectReference: v1.LocalObjectReference{Name: "password"}, Key: "mypassword"},
 		},
 	}
-	spec := toSpec(db)
+	repository := "registry.bwtsi.cn"
+	spec := toSpec(db, repository)
 	assert.Equal(t, "mydb", spec.Template.Spec.Containers[0].Name)
+	assert.Equal(t, "registry.bwtsi.cn/postgres:latest", spec.Template.Spec.Containers[0].Image)
 }
 
 func TestCreateDatabase(t *testing.T) {
@@ -50,11 +53,12 @@ func TestCreateDatabase(t *testing.T) {
 		},
 	}
 	kc := testclient.NewSimpleClientset()
-	l, err := New(db, kc)
+	repository := ""
+	l, err := New(db, kc, repository)
 	assert.NoError(t, err)
 	// we need it to not wait for status
 	l.SkipWaiting = true
-	host, err := l.CreateDatabase(db)
+	host, err := l.CreateDatabase(context.Background(), db)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, host)
 
@@ -111,15 +115,17 @@ func TestUpdateDatabase(t *testing.T) {
 		},
 	}
 	kc := testclient.NewSimpleClientset()
-	l, err := New(db, kc)
+	repository := ""
+	l, err := New(db, kc, repository)
 	assert.NoError(t, err)
 	// we need it to not wait for status
 	l.SkipWaiting = true
-	host, err := l.CreateDatabase(db)
+	host, err := l.CreateDatabase(context.Background(), db)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, host)
 	assert.Equal(t, 4, len(kc.Fake.Actions()))
-	host, err = l.CreateDatabase(db)
+	_, err = l.CreateDatabase(context.Background(), db)
+	assert.NoError(t, err)
 	assert.Equal(t, 8, len(kc.Fake.Actions()))
 
 	sequence := []struct {

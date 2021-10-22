@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
@@ -54,21 +55,23 @@ func getKubectl() (*kubernetes.Clientset, error) {
 
 func main() {
 	var (
-		provider          string
+		_provider         string
 		excludeNamespaces []string
 		includeNamespaces []string
+		repository        string
 	)
 	var rootCmd = &cobra.Command{
 		Use:   "k8s-rds",
 		Short: "Kubernetes database provisioner",
 		Long:  `Kubernetes database provisioner`,
 		Run: func(cmd *cobra.Command, args []string) {
-			execute(provider, excludeNamespaces, includeNamespaces)
+			execute(_provider, excludeNamespaces, includeNamespaces, repository)
 		},
 	}
-	rootCmd.PersistentFlags().StringVar(&provider, "provider", "aws", "Type of provider (aws, local)")
+	rootCmd.PersistentFlags().StringVar(&_provider, "provider", "aws", "Type of provider (aws, local)")
 	rootCmd.PersistentFlags().StringSliceVar(&excludeNamespaces, "exclude-namespaces", nil, "list of namespaces to exclude. Mutually exclusive with --include-namespaces.")
 	rootCmd.PersistentFlags().StringSliceVar(&includeNamespaces, "include-namespaces", nil, "list of namespaces to include. Mutually exclusive with --exclude-namespaces.")
+	rootCmd.PersistentFlags().StringVar(&repository, "repository", "", "Docker image repository, default is hub.docker.com)")
 	if len(excludeNamespaces) > 0 && len(includeNamespaces) > 0 {
 		panic("--include-namespaces and --exclude-namespaces are mutually exclusive")
 	}
@@ -78,7 +81,7 @@ func main() {
 	}
 }
 
-func execute(dbprovider string, excludeNamespaces, includeNamespaces []string) {
+func execute(dbprovider string, excludeNamespaces, includeNamespaces []string, repository string) {
 	log.Println("Starting k8s-rds")
 
 	config, err := getClientConfig(kube.Config())
@@ -117,35 +120,37 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string) {
 				if excluded(db, excludeNamespaces, includeNamespaces) {
 					return
 				}
-				client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
-				err = handleCreateDatabase(db, client, dbprovider)
+				_client := client.CrdClient(crdcs, scheme, db.Namespace) // add the database namespace to the client
+				err = handleCreateDatabase(context.Background(), db, _client, dbprovider, repository)
 				if err != nil {
 					log.Printf("database creation failed: %v", err)
-					err := updateStatus(db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, client)
+					err := updateStatus(context.Background(), db, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, _client)
 					if err != nil {
 						log.Printf("database CRD status update failed: %v", err)
 					}
 				}
 			},
 			DeleteFunc: func(obj interface{}) {
+				ctx := context.Background()
+
 				db := obj.(*crd.Database)
 				if excluded(db, excludeNamespaces, includeNamespaces) {
 					return
 				}
 				log.Printf("deleting database: %s \n", db.Name)
 
-				r, err := getProvider(db, dbprovider)
+				r, err := getProvider(db, dbprovider, repository)
 				if err != nil {
 					log.Println(err)
 					return
 				}
 
-				err = r.DeleteDatabase(db)
+				err = r.DeleteDatabase(ctx, db)
 				if err != nil {
 					log.Println(err)
 				}
 
-				err = r.DeleteService(db.Namespace, db.Name)
+				err = r.DeleteService(ctx, db.Namespace, db.Name)
 				if err != nil {
 					log.Println(err)
 				}
@@ -163,22 +168,26 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string) {
 	select {}
 }
 
-func getProvider(db *crd.Database, dbprovider string) (provider.DatabaseProvider, error) {
+func getProvider(db *crd.Database, dbprovider, repository string) (provider.DatabaseProvider, error) {
 	kubectl, err := getKubectl()
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	switch dbprovider {
+	_provider := dbprovider
+	if db.Spec.Provider != "" {
+		_provider = db.Spec.Provider
+	}
+	switch _provider {
 	case "aws":
-		r, err := rds.New(db, kubectl)
+		r, err := rds.New(context.Background(), db, kubectl)
 		if err != nil {
 			return nil, err
 		}
 		return r, nil
 
 	case "local":
-		r, err := local.New(db, kubectl)
+		r, err := local.New(db, kubectl, repository)
 		if err != nil {
 			return nil, err
 		}
@@ -187,7 +196,7 @@ func getProvider(db *crd.Database, dbprovider string) (provider.DatabaseProvider
 	return nil, fmt.Errorf("unable to find provider for %v", dbprovider)
 }
 
-func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovider string) error {
+func handleCreateDatabase(ctx context.Context, db *crd.Database, crdclient *client.Crdclient, dbprovider, repository string) error {
 	// we don't need to skip when it is a local provider without running pod
 	if db.Status.State == "Created" && dbprovider == "aws" {
 		log.Printf("database %v already created, skipping\n", db.Name)
@@ -196,7 +205,7 @@ func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovi
 	// validate dbname is only alpha numeric
 	// This check is needed in case local provider with already created db
 	if db.Status.State != "Created" {
-		err := updateStatus(db, crd.DatabaseStatus{Message: "Creating", State: "Creating"}, crdclient)
+		err := updateStatus(context.Background(), db, crd.DatabaseStatus{Message: "Creating", State: "Creating"}, crdclient)
 		if err != nil {
 			return fmt.Errorf("database CRD status update failed: %v", err)
 		}
@@ -204,23 +213,23 @@ func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovi
 
 	log.Println("trying to get kubectl")
 
-	r, err := getProvider(db, dbprovider)
+	r, err := getProvider(db, dbprovider, repository)
 	if err != nil {
 		return err
 	}
 
-	hostname, err := r.CreateDatabase(db)
+	hostname, err := r.CreateDatabase(ctx, db)
 	if err != nil {
 		return err
 	}
 
 	log.Printf("Creating service '%v' for %v\n", db.Name, hostname)
-	err = r.CreateService(db.Namespace, hostname, db.Name)
+	err = r.CreateService(ctx, db.Namespace, hostname, db.Name)
 	if err != nil {
 		return err
 	}
 
-	err = updateStatus(db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
+	err = updateStatus(context.Background(), db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
 	if err != nil {
 		return err
 	}
@@ -228,14 +237,14 @@ func handleCreateDatabase(db *crd.Database, crdclient *client.Crdclient, dbprovi
 	return nil
 }
 
-func updateStatus(db *crd.Database, status crd.DatabaseStatus, crdclient *client.Crdclient) error {
-	db, err := crdclient.Get(db.Name)
+func updateStatus(ctx context.Context, db *crd.Database, status crd.DatabaseStatus, crdclient *client.Crdclient) error {
+	db, err := crdclient.Get(ctx, db.Name)
 	if err != nil {
 		return err
 	}
 
 	db.Status = status
-	_, err = crdclient.Update(db)
+	_, err = crdclient.Update(ctx, db)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,7 @@
 package crd
 
 import (
+	"context"
 	v1 "k8s.io/api/core/v1"
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -80,6 +81,12 @@ func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
 									Minimum:     floatptr(20),
 									Maximum:     floatptr(64000),
 								},
+								"MaxAllocatedSize": {
+									Type:        "integer",
+									Description: "Database size in Gb",
+									Minimum:     floatptr(20),
+									Maximum:     floatptr(64000),
+								},
 								"multiaz": {
 									Type:        "boolean",
 									Description: "should it be available in multiple regions?",
@@ -128,8 +135,9 @@ func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
 
 // CreateCRD creates the CRD resource, ignore error if it already exists
 func CreateCRD(clientset apiextcs.Interface) error {
+	ctx := context.Background()
 	crd := NewDatabaseCRD()
-	_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Create(crd)
+	_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Create(ctx, crd, meta_v1.CreateOptions{})
 	if err != nil && apierrors.IsAlreadyExists(err) {
 		return nil
 	}
@@ -149,10 +157,11 @@ type DatabaseSpec struct {
 	Username              string               `json:"username"`
 	Password              v1.SecretKeySelector `json:"password"`
 	DBName                string               `json:"dbname"`
-	Engine                string               `json:"engine"`  // "postgres"
-	Version               string               `json:"version"` // version of the engine / database
-	Class                 string               `json:"class"`   // like "db.t2.micro"
-	Size                  int64                `json:"size"`    // size in gb
+	Engine                string               `json:"engine"`           // "postgres"
+	Version               string               `json:"version"`          // version of the engine / database
+	Class                 string               `json:"class"`            // like "db.t2.micro"
+	Size                  int64                `json:"size"`             // size in gb
+	MaxAllocatedSize      int64                `json:"MaxAllocatedSize"` // size in gb
 	MultiAZ               bool                 `json:"multiaz,omitempty"`
 	PubliclyAccessible    bool                 `json:"publicaccess,omitempty"`
 	StorageEncrypted      bool                 `json:"encrypted,omitempty"`
@@ -160,7 +169,9 @@ type DatabaseSpec struct {
 	Iops                  int64                `json:"iops,omitempty"`
 	BackupRetentionPeriod int64                `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
 	DeleteProtection      bool                 `json:"deleteprotection,omitempty"`
-	Tags                  string               `json:"tags,omitempty"` // key=value,key1=value1
+	Tags                  string               `json:"tags,omitempty"`     // key=value,key1=value1
+	Provider              string               `json:"provider,omitempty"` // local or aws
+
 }
 
 type DatabaseStatus struct {
