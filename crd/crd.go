@@ -2,6 +2,7 @@ package crd
 
 import (
 	"context"
+
 	v1 "k8s.io/api/core/v1"
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -124,6 +125,10 @@ func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
 									Type:        "string",
 									Description: "Tags to create on the database instance format key=value,key1=value1",
 								},
+								"skipfinalsnapshot": {
+									Type:        "boolean",
+									Description: "Indicates whether to skip the creation of a final DB snapshot before deleting the instance. By default, skipfinalsnapshot isn't enabled, and the DB snapshot is created.",
+								},
 							},
 						},
 					},
@@ -171,7 +176,7 @@ type DatabaseSpec struct {
 	DeleteProtection      bool                 `json:"deleteprotection,omitempty"`
 	Tags                  string               `json:"tags,omitempty"`     // key=value,key1=value1
 	Provider              string               `json:"provider,omitempty"` // local or aws
-
+	SkipFinalSnapshot     bool                 `json:"skipfinalsnapshot,omitempty"`
 }
 
 type DatabaseStatus struct {

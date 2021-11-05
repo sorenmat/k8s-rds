@@ -3,12 +3,13 @@ package rds
 import (
 	"context"
 	"fmt"
-	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	rdstypes "github.com/aws/aws-sdk-go-v2/service/rds/types"
 	"log"
 	"regexp"
 	"strings"
 	"time"
+
+	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	rdstypes "github.com/aws/aws-sdk-go-v2/service/rds/types"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -157,6 +158,21 @@ func getEndpoint(ctx context.Context, dbName *string, svc *rds.Client) (string, 
 	return dbHostname, nil
 }
 
+func dbSnapshotIdentifier(v *crd.Database, timestamp int64) string {
+	return fmt.Sprintf("%s-%s-%d", v.Name, v.Namespace, timestamp)
+}
+
+func convertSpecToDeleteInput(db *crd.Database, timestamp int64) *rds.DeleteDBInstanceInput {
+	input := rds.DeleteDBInstanceInput{
+		DBInstanceIdentifier: aws.String(dbidentifier(db)),
+		SkipFinalSnapshot:    db.Spec.SkipFinalSnapshot,
+	}
+	if !db.Spec.SkipFinalSnapshot {
+		input.FinalDBSnapshotIdentifier = aws.String(dbSnapshotIdentifier(db, timestamp))
+	}
+	return &input
+}
+
 func (r *RDS) DeleteDatabase(ctx context.Context, db *crd.Database) error {
 	if db.Spec.DeleteProtection {
 		log.Printf("Trying to delete a %v in %v which is a deleted protected database", db.Name, db.Namespace)
@@ -165,15 +181,17 @@ func (r *RDS) DeleteDatabase(ctx context.Context, db *crd.Database) error {
 	// delete the database instance
 	svc := r.rdsclient()
 
-	_, err := svc.DeleteDBInstance(ctx, &rds.DeleteDBInstanceInput{
-		DBInstanceIdentifier: aws.String(dbidentifier(db)),
-		SkipFinalSnapshot:    true,
-	})
+	input := convertSpecToDeleteInput(db, time.Now().UnixNano())
+	_, err := svc.DeleteDBInstance(ctx, input)
 
 	if err != nil {
 		err := errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName))
 		log.Println(err)
 		return err
+	}
+
+	if !input.SkipFinalSnapshot && input.FinalDBSnapshotIdentifier != nil {
+		log.Printf("Will create DB final snapshot: %v\n", *input.FinalDBSnapshotIdentifier)
 	}
 
 	log.Printf("Waiting for db instance %v to be deleted\n", db.Spec.DBName)
