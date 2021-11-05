@@ -7,6 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
+	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func TestConvertSpecToInput(t *testing.T) {
@@ -158,4 +159,35 @@ func TestTagsWithSpaces(t *testing.T) {
 	assert.Equal(t, "key1", *tags[1].Key)
 	assert.Equal(t, "value1", *tags[1].Value)
 
+}
+
+func TestConvertSpecToDeleteInput_enabled(t *testing.T) {
+	timestamp := int64(10202020202)
+	input := convertSpecToDeleteInput(&crd.Database{
+		Spec: crd.DatabaseSpec{
+			SkipFinalSnapshot: true,
+		},
+		ObjectMeta: meta_v1.ObjectMeta{
+			Name:      "mydb",
+			Namespace: "myns",
+		},
+	}, timestamp)
+	assert.Nil(t, input.FinalDBSnapshotIdentifier)
+	assert.Equal(t, true, input.SkipFinalSnapshot)
+}
+
+func TestConvertSpecToDeleteInput_disabled(t *testing.T) {
+	timestamp := int64(10202020202)
+	input := convertSpecToDeleteInput(&crd.Database{
+		Spec: crd.DatabaseSpec{
+			SkipFinalSnapshot: false,
+		},
+		ObjectMeta: meta_v1.ObjectMeta{
+			Name:      "mydb",
+			Namespace: "myns",
+		},
+	}, timestamp)
+	assert.NotNil(t, input.FinalDBSnapshotIdentifier)
+	assert.Equal(t, "mydb-myns-10202020202", *input.FinalDBSnapshotIdentifier)
+	assert.Equal(t, false, input.SkipFinalSnapshot)
 }
