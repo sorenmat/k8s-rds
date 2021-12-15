@@ -82,8 +82,8 @@ spec:
     key: mykey # the key in the secret
     name: mysecret # the name of the secret
   username: postgres # Database username
-  size: 20 # size in GB
-  MaxAllocatedSize: 50 # size in GB
+  size: 20 # Initial allocated size in GB for the database to use
+  MaxAllocatedSize: 50 # max_allocated_storage size in GB, the maximum allowed storage size for the database when using autoscaling. Has to be larger then size.
   backupretentionperiod: 10 # days to keep backup, 0 means diable
   deleteprotection: true # don't delete the database even though the object is delete in k8s
   encrypted: true # should the database be encrypted
