@@ -1,6 +1,8 @@
 package crd
 
 import (
+	"context"
+
 	v1 "k8s.io/api/core/v1"
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextcs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -134,8 +136,9 @@ func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
 
 // CreateCRD creates the CRD resource, ignore error if it already exists
 func CreateCRD(clientset apiextcs.Interface) error {
+	ctx := context.Background()
 	crd := NewDatabaseCRD()
-	_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Create(crd)
+	_, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Create(ctx, crd, meta_v1.CreateOptions{})
 	if err != nil && apierrors.IsAlreadyExists(err) {
 		return nil
 	}
@@ -159,7 +162,7 @@ type DatabaseSpec struct {
 	Version               string               `json:"version"`          // version of the engine / database
 	Class                 string               `json:"class"`            // like "db.t2.micro"
 	Size                  int64                `json:"size"`             // size in gb
-	MaxAllocatedSize      int64                `json:"MaxAllocatedSize"` // size in gb
+	MaxAllocatedSize      int64                `json:"MaxAllocatedSize"` // max_allocated_storage size in gb, the maximum allowed storage size for the database when using autoscaling. Has to be larger then size
 	MultiAZ               bool                 `json:"multiaz,omitempty"`
 	PubliclyAccessible    bool                 `json:"publicaccess,omitempty"`
 	StorageEncrypted      bool                 `json:"encrypted,omitempty"`

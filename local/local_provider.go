@@ -215,8 +215,7 @@ func (l *Local) DeleteDatabase(_ context.Context, db *crd.Database) error {
 		return nil
 	}
 
-	return fmt.Errorf("The number of attempts to delete db %s has exceeded",
-		db.ObjectMeta.Name)
+	return fmt.Errorf("the number of attempts to delete db %s has exceeded", db.ObjectMeta.Name)
 }
 
 func int32Ptr(i int32) *int32 { return &i }
@@ -237,6 +236,9 @@ func toSpec(db *crd.Database, repository string) v1.DeploymentSpec {
 			MatchLabels: map[string]string{
 				"db": db.Name,
 			},
+		},
+		Strategy: v1.DeploymentStrategy{
+		    Type: "Recreate",
 		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{

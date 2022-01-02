@@ -131,6 +131,8 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string, r
 				}
 			},
 			DeleteFunc: func(obj interface{}) {
+				ctx := context.Background()
+
 				db := obj.(*crd.Database)
 				if excluded(db, excludeNamespaces, includeNamespaces) {
 					return
@@ -148,7 +150,7 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string, r
 					log.Println(err)
 				}
 
-				err = r.DeleteService(db.Namespace, db.Name)
+				err = r.DeleteService(ctx, db.Namespace, db.Name)
 				if err != nil {
 					log.Println(err)
 				}
@@ -203,7 +205,7 @@ func handleCreateDatabase(ctx context.Context, db *crd.Database, crdclient *clie
 	// validate dbname is only alpha numeric
 	// This check is needed in case local provider with already created db
 	if db.Status.State != "Created" {
-		err := updateStatus(db, crd.DatabaseStatus{Message: "Creating", State: "Creating"}, crdclient)
+		err := updateStatus(context.Background(), db, crd.DatabaseStatus{Message: "Creating", State: "Creating"}, crdclient)
 		if err != nil {
 			return fmt.Errorf("database CRD status update failed: %v", err)
 		}
@@ -222,12 +224,12 @@ func handleCreateDatabase(ctx context.Context, db *crd.Database, crdclient *clie
 	}
 
 	log.Printf("Creating service '%v' for %v\n", db.Name, hostname)
-	err = r.CreateService(db.Namespace, hostname, db.Name)
+	err = r.CreateService(ctx, db.Namespace, hostname, db.Name)
 	if err != nil {
 		return err
 	}
 
-	err = updateStatus(db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
+	err = updateStatus(context.Background(), db, crd.DatabaseStatus{Message: "Created", State: "Created"}, crdclient)
 	if err != nil {
 		return err
 	}
@@ -235,14 +237,14 @@ func handleCreateDatabase(ctx context.Context, db *crd.Database, crdclient *clie
 	return nil
 }
 
-func updateStatus(db *crd.Database, status crd.DatabaseStatus, crdclient *client.Crdclient) error {
-	db, err := crdclient.Get(db.Name)
+func updateStatus(ctx context.Context, db *crd.Database, status crd.DatabaseStatus, crdclient *client.Crdclient) error {
+	db, err := crdclient.Get(ctx, db.Name)
 	if err != nil {
 		return err
 	}
 
 	db.Status = status
-	_, err = crdclient.Update(db)
+	_, err = crdclient.Update(ctx, db)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,7 @@
 package rds
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -40,7 +41,7 @@ func (r *RDS) CreateService(namespace string, hostname string, internalname stri
 	}
 	serviceInterface := kubectl.CoreV1().Services(namespace)
 
-	s, sErr := serviceInterface.Get(hostname, metav1.GetOptions{})
+	s, sErr := serviceInterface.Get(ctx, hostname, metav1.GetOptions{})
 
 	create := false
 	if sErr != nil {
@@ -49,9 +50,9 @@ func (r *RDS) CreateService(namespace string, hostname string, internalname stri
 	}
 	s = r.createServiceObj(s, namespace, hostname, internalname)
 	if create {
-		_, err = serviceInterface.Create(s)
+		_, err = serviceInterface.Create(ctx, s, metav1.CreateOptions{})
 	} else {
-		_, err = serviceInterface.Update(s)
+		_, err = serviceInterface.Update(ctx, s, metav1.UpdateOptions{})
 	}
 
 	return err
@@ -63,7 +64,7 @@ func (r *RDS) DeleteService(namespace string, dbname string) error {
 		return err
 	}
 	serviceInterface := kubectl.CoreV1().Services(namespace)
-	err = serviceInterface.Delete(dbname, &metav1.DeleteOptions{})
+	err = serviceInterface.Delete(ctx, dbname, metav1.DeleteOptions{})
 	if err != nil {
 		log.Println(err)
 		return errors.Wrap(err, fmt.Sprintf("delete of service %v failed in namespace %v", dbname, namespace))
@@ -76,7 +77,7 @@ func (r *RDS) GetSecret(namespace string, name string, key string) (string, erro
 	if err != nil {
 		return "", err
 	}
-	secret, err := kubectl.CoreV1().Secrets(namespace).Get(name, metav1.GetOptions{})
+	secret, err := kubectl.CoreV1().Secrets(namespace).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("unable to fetch secret %v", name))
 	}
