@@ -166,7 +166,7 @@ type DatabaseSpec struct {
 	Version               string               `json:"version"`          // version of the engine / database
 	Class                 string               `json:"class"`            // like "db.t2.micro"
 	Size                  int64                `json:"size"`             // size in gb
-	MaxAllocatedSize      int64                `json:"MaxAllocatedSize"` // size in gb
+	MaxAllocatedSize      int64                `json:"MaxAllocatedSize"` // max_allocated_storage size in gb, the maximum allowed storage size for the database when using autoscaling. Has to be larger then size
 	MultiAZ               bool                 `json:"multiaz,omitempty"`
 	PubliclyAccessible    bool                 `json:"publicaccess,omitempty"`
 	StorageEncrypted      bool                 `json:"encrypted,omitempty"`
