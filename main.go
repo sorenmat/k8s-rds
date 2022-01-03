@@ -145,7 +145,7 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string, r
 					return
 				}
 
-				err = r.DeleteDatabase(context.Background(), db)
+				err = r.DeleteDatabase(ctx, db)
 				if err != nil {
 					log.Println(err)
 				}
