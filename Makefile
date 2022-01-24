@@ -7,7 +7,7 @@ all: mod test build
 mod:
 	$(GO) mod download
 tools:
-	$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint
+	$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
 test:
 	$(GO) test ./... -v
 lint:

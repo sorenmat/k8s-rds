@@ -232,7 +232,7 @@ func toSpec(db *crd.Database, repository string) v1.DeploymentSpec {
 			},
 		},
 		Strategy: v1.DeploymentStrategy{
-		    Type: "Recreate",
+			Type: "Recreate",
 		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
