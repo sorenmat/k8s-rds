@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: k8s-rds
+  description: |
+    Kubernetes operator to create RDS instances
+  annotations:
+    github.com/project-slug: Tradeshift/k8s-rds
+    sentry.io/project-slug: k8s-rds
+    backstage.io/kubernetes-id: k8s-rds
+    sonarqube.org/project-key: k8s-rds
+  tags:
+    - go
+spec:
+  type: service
+  owner: platform-ops
+  lifecycle: production
