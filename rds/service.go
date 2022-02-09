@@ -59,17 +59,28 @@ func (r *RDS) CreateService(ctx context.Context, namespace string, hostname stri
 }
 
 func (r *RDS) DeleteService(ctx context.Context, namespace string, dbname string) error {
-	kubectl, err := kube.Client()
-	if err != nil {
-		return err
-	}
-	serviceInterface := kubectl.CoreV1().Services(namespace)
-	err = serviceInterface.Delete(ctx, dbname, metav1.DeleteOptions{})
-	if err != nil {
-		log.Println(err)
-		return errors.Wrap(err, fmt.Sprintf("delete of service %v failed in namespace %v", dbname, namespace))
-	}
+	log.Printf("DeleteService function called for %v database in namespace %v. This function returns nil until the EKS migration is in progress.", dbname, namespace)
 	return nil
+
+	/*
+		TODO: We are about to migrate services to EKS which involves deploying helm charts to EKS and later removing the charts
+		from the legacy cluster. It can happen that when charts are removed from the legacy cluster, this operator would
+		delete a Redis instance in AWS (because the the chart does not have db.Spec.DeleteProtection). Therefore, to completely
+		eliminate any possibilities of this happening, this delete function does not do anything.
+
+		The migration should be finished by mid 2022. Check with Platform Ops for the status.
+	*/
+	//kubectl, err := kube.Client()
+	//if err != nil {
+	//	return err
+	//}
+	//serviceInterface := kubectl.CoreV1().Services(namespace)
+	//err = serviceInterface.Delete(ctx, dbname, metav1.DeleteOptions{})
+	//if err != nil {
+	//	log.Println(err)
+	//	return errors.Wrap(err, fmt.Sprintf("delete of service %v failed in namespace %v", dbname, namespace))
+	//}
+	//return nil
 }
 
 func (r *RDS) GetSecret(ctx context.Context, namespace string, name string, key string) (string, error) {

@@ -158,38 +158,49 @@ func getEndpoint(ctx context.Context, dbName *string, svc *rds.Client) (string, 
 }
 
 func (r *RDS) DeleteDatabase(ctx context.Context, db *crd.Database) error {
-	if db.Spec.DeleteProtection {
-		log.Printf("Trying to delete a %v in %v which is a deleted protected database", db.Name, db.Namespace)
-		return nil
-	}
-	// delete the database instance
-	svc := r.rdsclient()
-
-	_, err := svc.DeleteDBInstance(ctx, &rds.DeleteDBInstanceInput{
-		DBInstanceIdentifier: aws.String(dbidentifier(db)),
-		SkipFinalSnapshot:    true,
-	})
-
-	if err != nil {
-		err := errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName))
-		log.Println(err)
-		return err
-	}
-
-	log.Printf("Waiting for db instance %v to be deleted\n", db.Spec.DBName)
-	time.Sleep(5 * time.Second)
-
-	// delete the subnet group attached to the instance
-	subnetName := db.Name + "-subnet-" + db.Namespace
-	_, err = svc.DeleteDBSubnetGroup(ctx, &rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
-	if err != nil {
-		e := errors.Wrap(err, fmt.Sprintf("unable to delete subnet %v", subnetName))
-		log.Println(e)
-		return e
-	} else {
-		log.Println("Deleted DBSubnet group: ", subnetName)
-	}
+	log.Printf("DeleteDatabase function called for %v database in namespace %v. This function returns nil until the EKS migration is in progress.", db.Name, db.Namespace)
 	return nil
+
+	/*
+		TODO: We are about to migrate services to EKS which involves deploying helm charts to EKS and later removing the charts
+		from the legacy cluster. It can happen that when charts are removed from the legacy cluster, this operator would
+		delete a Redis instance in AWS (because the the chart does not have db.Spec.DeleteProtection). Therefore, to completely
+		eliminate any possibilities of this happening, this delete function does not do anything.
+		The migration should be finished by mid 2022. Check with Platform Ops for the status.
+	*/
+
+	//if db.Spec.DeleteProtection {
+	//	log.Printf("Trying to delete a %v in %v which is a deleted protected database", db.Name, db.Namespace)
+	//	return nil
+	//}
+	//// delete the database instance
+	//svc := r.rdsclient()
+	//
+	//_, err := svc.DeleteDBInstance(ctx, &rds.DeleteDBInstanceInput{
+	//	DBInstanceIdentifier: aws.String(dbidentifier(db)),
+	//	SkipFinalSnapshot:    true,
+	//})
+	//
+	//if err != nil {
+	//	err := errors.Wrap(err, fmt.Sprintf("unable to delete database %v", db.Spec.DBName))
+	//	log.Println(err)
+	//	return err
+	//}
+	//
+	//log.Printf("Waiting for db instance %v to be deleted\n", db.Spec.DBName)
+	//time.Sleep(5 * time.Second)
+	//
+	//// delete the subnet group attached to the instance
+	//subnetName := db.Name + "-subnet-" + db.Namespace
+	//_, err = svc.DeleteDBSubnetGroup(ctx, &rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
+	//if err != nil {
+	//	e := errors.Wrap(err, fmt.Sprintf("unable to delete subnet %v", subnetName))
+	//	log.Println(e)
+	//	return e
+	//} else {
+	//	log.Println("Deleted DBSubnet group: ", subnetName)
+	//}
+	//return nil
 }
 
 func (r *RDS) rdsclient() *rds.Client {
