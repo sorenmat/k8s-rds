@@ -232,7 +232,7 @@ func toSpec(db *crd.Database, repository string) v1.DeploymentSpec {
 			},
 		},
 		Strategy: v1.DeploymentStrategy{
-		    Type: "Recreate",
+			Type: "Recreate",
 		},
 		Template: corev1.PodTemplateSpec{
 			ObjectMeta: metav1.ObjectMeta{
@@ -267,7 +267,10 @@ func toSpec(db *crd.Database, repository string) v1.DeploymentSpec {
 								MountPath: "/var/lib/postgresql/data",
 							},
 						},
-
+						Args: []string{
+							"-N",
+							"400",
+						},
 						Ports: []corev1.ContainerPort{
 							{
 								Name:          "pgsql",
