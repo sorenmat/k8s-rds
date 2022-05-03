@@ -1,4 +1,4 @@
-FROM golang:1.14.0-alpine AS builder
+FROM eu.gcr.io/tradeshift-base/tradeshift-golang:17 AS builder
 
 WORKDIR /app
 RUN apk --no-cache add git make
@@ -9,7 +9,7 @@ RUN make mod tools
 COPY . .
 RUN make test lint build
 
-FROM alpine
+FROM eu.gcr.io/tradeshift-base/tradeshift-alpine:latest
 
 MAINTAINER Soren Mathiasen <sorenm@mymessages.dk>
 

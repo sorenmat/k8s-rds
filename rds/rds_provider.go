@@ -344,7 +344,7 @@ func getSubnets(ctx context.Context, nodeInfo *ec2.DescribeInstancesOutput, svc 
 		return nil, errors.Wrap(err, fmt.Sprintf("unable to describe subnet in VPC %v", *vpcID))
 	}
 	for _, sn := range subnets.Subnets {
-		if sn.MapPublicIpOnLaunch == public {
+		if *sn.MapPublicIpOnLaunch == public {
 			result = append(result, *sn.SubnetId)
 		} else {
 			log.Printf("Skipping subnet %v since it's public state was %v and we were looking for %v\n", *sn.SubnetId, sn.MapPublicIpOnLaunch, public)
