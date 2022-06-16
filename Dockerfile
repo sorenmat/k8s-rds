@@ -17,4 +17,7 @@ RUN apk --no-cache add ca-certificates
 
 COPY --from=builder /app/bin/k8s-rds /k8s-rds
 
+RUN chown tradeshift /k8s-rds
+USER tradeshift
+
 ENTRYPOINT ["/k8s-rds"]
