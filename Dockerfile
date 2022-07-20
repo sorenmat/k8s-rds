@@ -1,4 +1,4 @@
-FROM eu.gcr.io/tradeshift-base/tradeshift-golang:17 AS builder
+FROM eu.gcr.io/tradeshift-base/tradeshift-golang:18 AS builder
 
 WORKDIR /app
 RUN apk --no-cache add git make
@@ -10,8 +10,6 @@ COPY . .
 RUN make test lint build
 
 FROM eu.gcr.io/tradeshift-base/tradeshift-alpine:latest
-
-MAINTAINER Soren Mathiasen <sorenm@mymessages.dk>
 
 RUN apk --no-cache add ca-certificates
 
