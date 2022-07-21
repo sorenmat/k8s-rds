@@ -241,6 +241,31 @@ func toSpec(db *crd.Database, repository string) v1.DeploymentSpec {
 				},
 			},
 			Spec: corev1.PodSpec{
+				Tolerations: []corev1.Toleration{
+					{
+						Effect:   "NoSchedule",
+						Key:      "ARM",
+						Operator: "Equal",
+						Value:    "TRUE",
+					},
+				},
+				Affinity: &corev1.Affinity{
+					NodeAffinity: &corev1.NodeAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
+							NodeSelectorTerms: []corev1.NodeSelectorTerm{
+								{
+									MatchExpressions: []corev1.NodeSelectorRequirement{
+										{
+											Operator: "In",
+											Key:      "kubernetes.io/arch",
+											Values:   []string{"arm64"},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 				Containers: []corev1.Container{
 					{
 						Name:  db.Name,
@@ -277,7 +302,8 @@ func toSpec(db *crd.Database, repository string) v1.DeploymentSpec {
 								Protocol:      corev1.ProtocolTCP,
 								ContainerPort: 5432,
 							},
-						}},
+						},
+					},
 				},
 
 				Volumes: []corev1.Volume{
