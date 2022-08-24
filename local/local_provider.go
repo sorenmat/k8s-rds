@@ -29,6 +29,11 @@ func New(db *crd.Database, kc kubernetes.Interface, repository string) (*Local, 
 	return &r, nil
 }
 
+func (l *Local) UpdateDatabase(ctx context.Context, db *crd.Database) error {
+	_, err := l.CreateDatabase(ctx, db)
+	return err
+}
+
 // CreateDatabase creates a database from the CRD database object, is also ensures that the correct
 // subnets are created for the database so we can access it
 func (l *Local) CreateDatabase(ctx context.Context, db *crd.Database) (string, error) {

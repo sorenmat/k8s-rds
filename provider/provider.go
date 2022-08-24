@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+
 	"github.com/sorenmat/k8s-rds/crd"
 )
 
@@ -9,6 +10,7 @@ import (
 // this is the main interface that should be implemented if a new provider is created
 type DatabaseProvider interface {
 	CreateDatabase(context.Context, *crd.Database) (string, error)
+	UpdateDatabase(context.Context, *crd.Database) error
 	DeleteDatabase(context.Context, *crd.Database) error
 	ServiceProvider
 }

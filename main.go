@@ -157,6 +157,27 @@ func execute(dbprovider string, excludeNamespaces, includeNamespaces []string, r
 				log.Printf("Deletion of database %v done\n", db.Name)
 			},
 			UpdateFunc: func(oldObj, newObj interface{}) {
+				oldDB := oldObj.(*crd.Database)
+				newDB := newObj.(*crd.Database)
+				if excluded(newDB, excludeNamespaces, includeNamespaces) {
+					return
+				}
+				// only update when one of these params changed
+				if newDB.Spec.ApplyImmediately == oldDB.Spec.ApplyImmediately && newDB.Spec.Class == oldDB.Spec.Class && newDB.Spec.Size == oldDB.Spec.Size && newDB.Spec.MaxAllocatedSize == oldDB.Spec.MaxAllocatedSize {
+					return
+				}
+
+				log.Printf("Updating database, class: %s, old class: %s, size: %d, old size: %d, maxAllocatedSize: %d, old maxAllocatedSize: %d", newDB.Spec.Class, oldDB.Spec.Class, newDB.Spec.Size, oldDB.Spec.Size, newDB.Spec.MaxAllocatedSize, oldDB.Spec.MaxAllocatedSize)
+				_client := client.CrdClient(crdcs, scheme, newDB.Namespace) // add the database namespace to the client
+				err = handleUpdateDatabase(context.Background(), newDB, _client, dbprovider, repository)
+
+				if err != nil {
+					log.Printf("database update failed: %v", err)
+					err := updateStatus(context.Background(), newDB, crd.DatabaseStatus{Message: fmt.Sprintf("%v", err), State: Failed}, _client)
+					if err != nil {
+						log.Printf("database CRD status update failed: %v", err)
+					}
+				}
 			},
 		},
 	)
@@ -234,6 +255,28 @@ func handleCreateDatabase(ctx context.Context, db *crd.Database, crdclient *clie
 		return err
 	}
 	log.Printf("Creation of database %v done\n", db.Name)
+	return nil
+}
+
+func handleUpdateDatabase(ctx context.Context, db *crd.Database, crdclient *client.Crdclient, dbprovider, repository string) error {
+	r, err := getProvider(db, dbprovider, repository)
+	if err != nil {
+		log.Printf("Updating database: failed getting provider:%v\n", err)
+		return err
+	}
+
+	err = r.UpdateDatabase(ctx, db)
+	if err != nil {
+		log.Printf("Updating database: UpdateDatabase:%v\n", err)
+		return err
+	}
+
+	err = updateStatus(context.Background(), db, crd.DatabaseStatus{Message: "Updated", State: "Updated"}, crdclient)
+	if err != nil {
+		log.Printf("Updating database: updateStatus:%v\n", err)
+		return err
+	}
+	log.Printf("Update of database %v done\n", db.Name)
 	return nil
 }
 

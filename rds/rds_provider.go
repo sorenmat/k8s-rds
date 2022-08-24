@@ -114,6 +114,33 @@ func (r *RDS) CreateDatabase(ctx context.Context, db *crd.Database) (string, err
 	return dbHostname, nil
 }
 
+func (r *RDS) UpdateDatabase(ctx context.Context, db *crd.Database) error {
+	input := convertSpecToModifyInput(db)
+
+	log.Printf("Trying to find db instance %v to update\n", db.Spec.DBName)
+	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
+	_, err := r.rdsclient().DescribeDBInstances(ctx, k)
+
+	if err == nil {
+		log.Printf("DB instance %v found trying to update it\n", db.Spec.DBName)
+		_, err := r.rdsclient().ModifyDBInstance(ctx, input)
+		if err != nil {
+			log.Printf("Updating database failed: ModifyDBInstance:%v\n", err)
+			return errors.Wrap(err, "ModifyDBInstance")
+		}
+	} else {
+		return errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", input.DBInstanceIdentifier))
+	}
+
+	if input.ApplyImmediately {
+		log.Printf("Database modified and will be updated immediately")
+	} else {
+		log.Printf("Database modified and update is pending and will be executed during the next maintenance window")
+	}
+
+	return nil
+}
+
 // ensureSubnets is ensuring that we have created or updated the subnet according to the data from the CRD object
 func (r *RDS) ensureSubnets(ctx context.Context, db *crd.Database) (string, error) {
 	if len(r.Subnets) == 0 {
@@ -294,6 +321,30 @@ func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []str
 	return input
 }
 
+func convertSpecToModifyInput(v *crd.Database) *rds.ModifyDBInstanceInput {
+	input := &rds.ModifyDBInstanceInput{
+		AllocatedStorage:      aws.Int32(int32(v.Spec.Size)),
+		MaxAllocatedStorage:   aws.Int32(int32(v.Spec.MaxAllocatedSize)),
+		DBInstanceClass:       aws.String(v.Spec.Class),
+		ApplyImmediately:      v.Spec.ApplyImmediately,
+		DBInstanceIdentifier:  aws.String(dbidentifier(v)),
+		PubliclyAccessible:    aws.Bool(v.Spec.PubliclyAccessible),
+		MultiAZ:               aws.Bool(v.Spec.MultiAZ),
+		BackupRetentionPeriod: aws.Int32(int32(v.Spec.BackupRetentionPeriod)),
+		DeletionProtection:    aws.Bool(v.Spec.DeleteProtection),
+	}
+	if v.Spec.Version != "" {
+		input.EngineVersion = aws.String(v.Spec.Version)
+	}
+	if v.Spec.StorageType != "" {
+		input.StorageType = aws.String(v.Spec.StorageType)
+	}
+	if v.Spec.Iops > 0 {
+		input.Iops = aws.Int32(int32(v.Spec.Iops))
+	}
+	return input
+}
+
 //DescribeInstancesResponse
 // describeNodeEC2Instance returns the AWS Metadata for the firt Node from the cluster
 func describeNodeEC2Instance(ctx context.Context, kubectl *kubernetes.Clientset, svc *ec2.Client) (*ec2.DescribeInstancesOutput, error) {
@@ -351,7 +402,7 @@ func getSubnets(ctx context.Context, nodeInfo *ec2.DescribeInstancesOutput, svc 
 		return nil, errors.Wrap(err, fmt.Sprintf("unable to describe subnet in VPC %v", *vpcID))
 	}
 	for _, sn := range subnets.Subnets {
-		if *sn.MapPublicIpOnLaunch == public {
+		if sn.MapPublicIpOnLaunch != nil && *sn.MapPublicIpOnLaunch == public {
 			result = append(result, *sn.SubnetId)
 		} else {
 			log.Printf("Skipping subnet %v since it's public state was %v and we were looking for %v\n", *sn.SubnetId, sn.MapPublicIpOnLaunch, public)

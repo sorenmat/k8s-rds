@@ -191,3 +191,43 @@ func TestConvertSpecToDeleteInput_disabled(t *testing.T) {
 	assert.Equal(t, "mydb-myns-10202020202", *input.FinalDBSnapshotIdentifier)
 	assert.Equal(t, false, input.SkipFinalSnapshot)
 }
+
+func TestConvertSpecToModifyInput_withApplyImmediately(t *testing.T) {
+	input := convertSpecToModifyInput(&crd.Database{
+		Spec: crd.DatabaseSpec{
+			MaxAllocatedSize: 50,
+			Size:             21,
+			ApplyImmediately: true,
+			Class:            "db.t3.small",
+		},
+		ObjectMeta: meta_v1.ObjectMeta{
+			Name:      "mydb",
+			Namespace: "myns",
+		},
+	})
+	assert.NotNil(t, input.DBInstanceIdentifier)
+	assert.Equal(t, true, input.ApplyImmediately)
+	assert.Equal(t, int32(50), *input.MaxAllocatedStorage)
+	assert.Equal(t, int32(21), *input.AllocatedStorage)
+	assert.Equal(t, "db.t3.small", *input.DBInstanceClass)
+}
+
+func TestConvertSpecToModifyInput_withoutApplyImmediately(t *testing.T) {
+	input := convertSpecToModifyInput(&crd.Database{
+		Spec: crd.DatabaseSpec{
+			MaxAllocatedSize: 50,
+			Size:             21,
+			ApplyImmediately: false,
+			Class:            "db.t3.small",
+		},
+		ObjectMeta: meta_v1.ObjectMeta{
+			Name:      "mydb",
+			Namespace: "myns",
+		},
+	})
+	assert.NotNil(t, input.DBInstanceIdentifier)
+	assert.Equal(t, false, input.ApplyImmediately)
+	assert.Equal(t, int32(50), *input.MaxAllocatedStorage)
+	assert.Equal(t, int32(21), *input.AllocatedStorage)
+	assert.Equal(t, "db.t3.small", *input.DBInstanceClass)
+}
