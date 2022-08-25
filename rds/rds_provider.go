@@ -180,7 +180,9 @@ func getEndpoint(ctx context.Context, dbName *string, svc *rds.Client) (string, 
 		return "", fmt.Errorf("wasn't able to describe the db instance with id %v", dbName)
 	}
 	rdsdb := instance.DBInstances[0]
-
+	if rdsdb.Endpoint == nil || rdsdb.Endpoint.Address == nil {
+		return "", fmt.Errorf("couldn't get the endpoint for DB instance with id %v", dbName)
+	}
 	dbHostname := *rdsdb.Endpoint.Address
 	return dbHostname, nil
 }
