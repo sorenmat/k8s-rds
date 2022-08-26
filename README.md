@@ -11,6 +11,28 @@ State: BETA - use with caution
 
 The node running the pod should have an instance profile that allows creation and deletion of RDS databases and Subnets.
 
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeSubnets",
+                "rds:CreateDBSubnetGroup",
+                "rds:DeleteDBSubnetGroup",
+                "rds:AddTagsToResource",
+                "rds:DescribeDBInstances",
+                "rds:CreateDBInstance",
+                "rds:ModifyDBInstance",
+                "rds:DeleteDBInstance"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
 The codes will search for the first node, and take the subnets from that node. And depending on wether or not your DB should be public, then filter them on that. If any subnets left it will attach the DB to that.
 
 ## Building
