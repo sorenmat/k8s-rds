@@ -129,6 +129,10 @@ func NewDatabaseCRD() *apiextv1beta1.CustomResourceDefinition {
 									Type:        "boolean",
 									Description: "Indicates whether to skip the creation of a final DB snapshot before deleting the instance. By default, skipfinalsnapshot isn't enabled, and the DB snapshot is created.",
 								},
+								"ApplyImmediately": {
+									Type:        "boolean",
+									Description: "When you modify a DB instance, you can apply the changes immediately by setting the ApplyImmediately parameter to true. If you don't choose to apply changes immediately, the changes are put into the pending modifications queue. During the next maintenance window, any pending changes in the queue are applied. If you choose to apply changes immediately, your new changes and any changes in the pending modifications queue are applied. ",
+								},
 							},
 						},
 					},
@@ -177,6 +181,7 @@ type DatabaseSpec struct {
 	Tags                  string               `json:"tags,omitempty"`     // key=value,key1=value1
 	Provider              string               `json:"provider,omitempty"` // local or aws
 	SkipFinalSnapshot     bool                 `json:"skipfinalsnapshot,omitempty"`
+	ApplyImmediately      bool                 `json:"ApplyImmediately,omitempty"`
 }
 
 type DatabaseStatus struct {
