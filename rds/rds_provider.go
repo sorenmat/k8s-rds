@@ -70,6 +70,14 @@ func New(ctx context.Context, db *crd.Database, kc *kubernetes.Clientset) (*RDS,
 	return &r, nil
 }
 
+func createDatabase(ctx context.Context, rdsCli *rds.Client, input *rds.CreateDBInstanceInput) error {
+	_, err := rdsCli.CreateDBInstance(ctx, input)
+	if err != nil {
+		return errors.Wrap(err, "CreateDBInstance")
+	}
+	return nil
+}
+
 // waitForDBAvailability waits for db to become available
 func waitForDBAvailability(ctx context.Context, dbName *string, rdsCli *rds.Client) error {
 	if dbName == nil || *dbName == "" {
@@ -130,11 +138,35 @@ func (r *RDS) CreateDatabase(ctx context.Context, db *crd.Database) (string, err
 
 	_, err = r.rdsclient().DescribeDBInstances(ctx, k)
 	if isErrAs(err, &rdstypes.DBInstanceNotFoundFault{}) {
-		log.Printf("DB instance %v not found trying to create it\n", db.Spec.DBName)
-		// seems like we didn't find a database with this name, let's create on
-		_, err := r.rdsclient().CreateDBInstance(ctx, input)
-		if err != nil {
-			return "", errors.Wrap(err, "CreateDBInstance")
+		if db.Spec.DBSnapshotIdentifier != "" {
+			log.Printf("DB instance %v not found trying to restore it from snapshot with id: %s\n", db.Spec.DBName, db.Spec.DBSnapshotIdentifier)
+			// check for snapshot existence
+			snapshotIdentifier := db.Spec.DBSnapshotIdentifier
+			_, err = r.rdsclient().DescribeDBSnapshots(ctx, &rds.DescribeDBSnapshotsInput{DBSnapshotIdentifier: &snapshotIdentifier})
+			if isErrAs(err, &rdstypes.DBSnapshotNotFoundFault{}) {
+				// DB Snapshot was not found, creating the database
+				log.Printf("DB Snapshot with identifier %v was not found trying to create new DB instance with name: %s\n", db.Spec.DBSnapshotIdentifier, db.Spec.DBName)
+				err = createDatabase(ctx, r.rdsclient(), input)
+				if err != nil {
+					return "", err
+				}
+			} else if err != nil {
+				return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db snapshot with id %v", db.Spec.DBSnapshotIdentifier))
+			} else {
+				log.Printf("DB Snapshot with identifier %v was found trying to restore it\n", db.Spec.DBSnapshotIdentifier)
+				restoreInput := convertSpecToRestoreFromSnapshotInput(db, subnetName, r.SecurityGroups)
+				_, err = r.rdsclient().RestoreDBInstanceFromDBSnapshot(ctx, restoreInput)
+				if err != nil {
+					return "", errors.Wrap(err, "RestoreDBInstanceFromDBSnapshot")
+				}
+			}
+		} else {
+			log.Printf("DB instance %v not found trying to create it\n", db.Spec.DBName)
+			// seems like we didn't find a database with this name, let's create on
+			err = createDatabase(ctx, r.rdsclient(), input)
+			if err != nil {
+				return "", err
+			}
 		}
 	} else if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", input.DBInstanceIdentifier))
@@ -324,6 +356,31 @@ func gettags(db *crd.Database) []rdstypes.Tag {
 		tags = append(tags, rdstypes.Tag{Key: aws.String(strings.TrimSpace(kv[0])), Value: aws.String(strings.TrimSpace(kv[1]))})
 	}
 	return tags
+}
+
+func convertSpecToRestoreFromSnapshotInput(v *crd.Database, subnetName string, securityGroups []string) *rds.RestoreDBInstanceFromDBSnapshotInput {
+	tags := toTags(v.Annotations, v.Labels)
+	tags = append(tags, gettags(v)...)
+
+	input := &rds.RestoreDBInstanceFromDBSnapshotInput{
+		DBSnapshotIdentifier: aws.String(v.Spec.DBSnapshotIdentifier),
+		DBInstanceClass:      aws.String(v.Spec.Class),
+		DBInstanceIdentifier: aws.String(dbidentifier(v)),
+		VpcSecurityGroupIds:  securityGroups,
+		Engine:               aws.String(v.Spec.Engine),
+		DBSubnetGroupName:    aws.String(subnetName),
+		PubliclyAccessible:   aws.Bool(v.Spec.PubliclyAccessible),
+		MultiAZ:              aws.Bool(v.Spec.MultiAZ),
+		DeletionProtection:   aws.Bool(v.Spec.DeleteProtection),
+		Tags:                 tags,
+	}
+	if v.Spec.StorageType != "" {
+		input.StorageType = aws.String(v.Spec.StorageType)
+	}
+	if v.Spec.Iops > 0 {
+		input.Iops = aws.Int32(int32(v.Spec.Iops))
+	}
+	return input
 }
 
 func convertSpecToInput(v *crd.Database, subnetName string, securityGroups []string, password string) *rds.CreateDBInstanceInput {

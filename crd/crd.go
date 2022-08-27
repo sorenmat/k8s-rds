@@ -182,6 +182,7 @@ type DatabaseSpec struct {
 	Provider              string               `json:"provider,omitempty"` // local or aws
 	SkipFinalSnapshot     bool                 `json:"skipfinalsnapshot,omitempty"`
 	ApplyImmediately      bool                 `json:"ApplyImmediately,omitempty"`
+	DBSnapshotIdentifier  string               `json:"DBSnapshotIdentifier,omitempty"`
 }
 
 type DatabaseStatus struct {
