@@ -70,6 +70,43 @@ func New(ctx context.Context, db *crd.Database, kc *kubernetes.Clientset) (*RDS,
 	return &r, nil
 }
 
+// waitForDBAvailability waits for db to become available
+func waitForDBAvailability(ctx context.Context, dbName *string, rdsCli *rds.Client) error {
+	if dbName == nil || *dbName == "" {
+		return fmt.Errorf("error got empty db instance name")
+	}
+	log.Printf("Waiting for db instance %s to become available\n", *dbName)
+	time.Sleep(5 * time.Second)
+	ticker := time.NewTicker(time.Second * 10)
+	timer := time.NewTimer(time.Minute * 30)
+	defer ticker.Stop()
+	defer timer.Stop()
+	for {
+		select {
+		case <-timer.C:
+			return fmt.Errorf("waited too much for db instance with name %s to become available", *dbName)
+		case <-ticker.C:
+			k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: dbName}
+			instance, err := rdsCli.DescribeDBInstances(ctx, k)
+			if err != nil || len(instance.DBInstances) == 0 {
+				return errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with name %s", *dbName))
+			}
+			rdsdb := instance.DBInstances[0]
+			if rdsdb.DBInstanceStatus != nil && *rdsdb.DBInstanceStatus == "available" {
+				log.Printf("DB instance %s is now available\n", *dbName)
+				return nil
+			}
+		}
+	}
+}
+
+func isErrAs(err error, target interface{}) bool {
+	if err == nil {
+		return false
+	}
+	return errors.As(err, &target)
+}
+
 // CreateDatabase creates a database from the CRD database object, is also ensures that the correct
 // subnets are created for the database so we can access it
 func (r *RDS) CreateDatabase(ctx context.Context, db *crd.Database) (string, error) {
@@ -92,7 +129,7 @@ func (r *RDS) CreateDatabase(ctx context.Context, db *crd.Database) (string, err
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: input.DBInstanceIdentifier}
 
 	_, err = r.rdsclient().DescribeDBInstances(ctx, k)
-	if err != nil && err.Error() != new(rdstypes.DBInstanceNotFoundFault).Error() {
+	if isErrAs(err, &rdstypes.DBInstanceNotFoundFault{}) {
 		log.Printf("DB instance %v not found trying to create it\n", db.Spec.DBName)
 		// seems like we didn't find a database with this name, let's create on
 		_, err := r.rdsclient().CreateDBInstance(ctx, input)
@@ -102,10 +139,7 @@ func (r *RDS) CreateDatabase(ctx context.Context, db *crd.Database) (string, err
 	} else if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", input.DBInstanceIdentifier))
 	}
-	log.Printf("Waiting for db instance %v to become available\n", *input.DBInstanceIdentifier)
-
-	time.Sleep(5 * time.Second)
-
+	waitForDBAvailability(ctx, input.DBInstanceIdentifier, r.rdsclient())
 	// Get the newly created database so we can get the endpoint
 	dbHostname, err := getEndpoint(ctx, input.DBInstanceIdentifier, r.rdsclient())
 	if err != nil {
@@ -137,7 +171,7 @@ func (r *RDS) UpdateDatabase(ctx context.Context, db *crd.Database) error {
 	} else {
 		log.Printf("Database modified and update is pending and will be executed during the next maintenance window")
 	}
-
+	waitForDBAvailability(ctx, input.DBInstanceIdentifier, r.rdsclient())
 	return nil
 }
 
@@ -173,15 +207,18 @@ func (r *RDS) ensureSubnets(ctx context.Context, db *crd.Database) (string, erro
 }
 
 func getEndpoint(ctx context.Context, dbName *string, svc *rds.Client) (string, error) {
+	if dbName == nil || *dbName == "" {
+		return "", fmt.Errorf("error got empty db instance name")
+	}
 	k := &rds.DescribeDBInstancesInput{DBInstanceIdentifier: dbName}
 
 	instance, err := svc.DescribeDBInstances(ctx, k)
 	if err != nil || len(instance.DBInstances) == 0 {
-		return "", fmt.Errorf("wasn't able to describe the db instance with id %v", dbName)
+		return "", fmt.Errorf("wasn't able to describe the db instance with id %s", *dbName)
 	}
 	rdsdb := instance.DBInstances[0]
 	if rdsdb.Endpoint == nil || rdsdb.Endpoint.Address == nil {
-		return "", fmt.Errorf("couldn't get the endpoint for DB instance with id %v", dbName)
+		return "", fmt.Errorf("couldn't get the endpoint for DB instance with id %s", *dbName)
 	}
 	dbHostname := *rdsdb.Endpoint.Address
 	return dbHostname, nil
