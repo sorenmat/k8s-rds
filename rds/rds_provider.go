@@ -139,7 +139,9 @@ func (r *RDS) CreateDatabase(ctx context.Context, db *crd.Database) (string, err
 	} else if err != nil {
 		return "", errors.Wrap(err, fmt.Sprintf("wasn't able to describe the db instance with id %v", input.DBInstanceIdentifier))
 	}
-	waitForDBAvailability(ctx, input.DBInstanceIdentifier, r.rdsclient())
+	if err := waitForDBAvailability(ctx, input.DBInstanceIdentifier, r.rdsclient()); err != nil {
+		return "", errors.Wrap(err, fmt.Sprintf("error while waiting for the DB %s availability", *input.DBInstanceIdentifier))
+	}
 	// Get the newly created database so we can get the endpoint
 	dbHostname, err := getEndpoint(ctx, input.DBInstanceIdentifier, r.rdsclient())
 	if err != nil {
@@ -171,7 +173,9 @@ func (r *RDS) UpdateDatabase(ctx context.Context, db *crd.Database) error {
 	} else {
 		log.Printf("Database modified and update is pending and will be executed during the next maintenance window")
 	}
-	waitForDBAvailability(ctx, input.DBInstanceIdentifier, r.rdsclient())
+	if err := waitForDBAvailability(ctx, input.DBInstanceIdentifier, r.rdsclient()); err != nil {
+		return errors.Wrap(err, fmt.Sprintf("error while waiting for the DB %s availability", *input.DBInstanceIdentifier))
+	}
 	return nil
 }
 
