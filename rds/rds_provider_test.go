@@ -231,3 +231,19 @@ func TestConvertSpecToModifyInput_withoutApplyImmediately(t *testing.T) {
 	assert.Equal(t, int32(21), *input.AllocatedStorage)
 	assert.Equal(t, "db.t3.small", *input.DBInstanceClass)
 }
+
+func TestConvertSpecToRestoreFromSnapshotInput(t *testing.T) {
+	input := convertSpecToRestoreFromSnapshotInput(&crd.Database{
+		Spec: crd.DatabaseSpec{
+			Class:                "db.t3.small",
+			DBSnapshotIdentifier: "dbidentifier",
+		},
+		ObjectMeta: meta_v1.ObjectMeta{
+			Name:      "mydb",
+			Namespace: "myns",
+		},
+	}, "mysubnet", []string{"sg-1234", "sg-4321"})
+	assert.NotNil(t, input.DBInstanceIdentifier)
+	assert.Equal(t, "db.t3.small", *input.DBInstanceClass)
+	assert.Equal(t, "dbidentifier", *input.DBSnapshotIdentifier)
+}

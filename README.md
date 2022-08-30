@@ -25,7 +25,9 @@ The node running the pod should have an instance profile that allows creation an
                 "rds:DescribeDBInstances",
                 "rds:CreateDBInstance",
                 "rds:ModifyDBInstance",
-                "rds:DeleteDBInstance"
+                "rds:DeleteDBInstance",
+                "rds:DescribeDBSnapshots",
+                "rds:RestoreDBInstanceFromDBSnapshot"
             ],
             "Resource": "*"
         }
