@@ -211,13 +211,17 @@ func (r *RDS) UpdateDatabase(ctx context.Context, db *crd.Database) error {
 	return nil
 }
 
+func (r *RDS) getSubnetGroupName() string {
+	return "db-subnetgroup-" + r.VpcId
+}
+
 // ensureSubnets is ensuring that we have created or updated the subnet according to the data from the CRD object
 func (r *RDS) ensureSubnets(ctx context.Context, db *crd.Database) (string, error) {
 	if len(r.Subnets) == 0 {
 		log.Println("Error: unable to continue due to lack of subnets, perhaps we couldn't lookup the subnets")
 	}
 	subnetDescription := "RDS Subnet Group for VPC: " + r.VpcId
-	subnetName := "db-subnetgroup-" + r.VpcId
+	subnetName := r.getSubnetGroupName()
 
 	svc := r.rdsclient()
 
@@ -300,10 +304,22 @@ func (r *RDS) DeleteDatabase(ctx context.Context, db *crd.Database) error {
 	time.Sleep(5 * time.Second)
 
 	// delete the subnet group attached to the instance
-	subnetName := db.Name + "-subnet-" + db.Namespace
+	subnetName := r.getSubnetGroupName()
 	_, err = svc.DeleteDBSubnetGroup(ctx, &rds.DeleteDBSubnetGroupInput{DBSubnetGroupName: aws.String(subnetName)})
-	if err != nil {
-		e := errors.Wrap(err, fmt.Sprintf("unable to delete subnet %v", subnetName))
+	if isErrAs(err, &rdstypes.InvalidDBSubnetGroupStateFault{}) {
+		e := errors.Wrap(err, fmt.Sprintf("the DB subnet group %s cannot be deleted because it's in use", subnetName))
+		log.Println(e)
+		return e
+	} else if isErrAs(err, &rdstypes.DBSubnetGroupNotFoundFault{}) {
+		e := errors.Wrap(err, fmt.Sprintf("the DB subnet group %s doesn't refer to an existing DB subnet group", subnetName))
+		log.Println(e)
+		return e
+	} else if isErrAs(err, &rdstypes.InvalidDBSubnetStateFault{}) {
+		e := errors.Wrap(err, fmt.Sprintf("the DB subnet group %s isn't in the available state", subnetName))
+		log.Println(e)
+		return e
+	} else if err != nil {
+		e := errors.Wrap(err, fmt.Sprintf("unable to deelte the DB subnet group %s, unknown error", subnetName))
 		log.Println(e)
 		return e
 	} else {
