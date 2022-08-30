@@ -117,6 +117,7 @@ spec:
   tags: "key=value,key1=value1"
   provider: aws # Optional either aws or local, will overrides the value the operator was started with 
   skipfinalsnapshot: false # Indicates whether to skip the creation of a final DB snapshot before deleting the instance. By default, skipfinalsnapshot isn't enabled, and the DB snapshot is created.
+  DBSnapshotIdentifier: "mypgsql-default-1661462171045938588" # (Optional) allows for restoring from snapshots be manual or automatic.
   ApplyImmediately: true # When you modify a DB instance, you can apply the changes immediately by setting the ApplyImmediately parameter to true. If you don't choose to apply changes immediately, the changes are put into the pending modifications queue. During the next maintenance window, any pending changes in the queue are applied. If you choose to apply changes immediately, your new changes and any changes in the pending modifications queue are applied. 
   
 ```
