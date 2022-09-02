@@ -111,8 +111,8 @@ spec:
   MaxAllocatedSize: 50 # max_allocated_storage size in GB, the maximum allowed storage size for the database when using autoscaling. Has to be larger then size.
   backupretentionperiod: 10 # days to keep backup, 0 means diable
   deleteprotection: true # don't delete the database even though the object is delete in k8s
-  encrypted: true # should the database be encrypted
-  iops: 1000 # number of iops
+  storageencrypted: true # should the database be encrypted
+  iops: 1000 # Only useful with iops storagetype number of iops
   multiaz: true # multi AZ support
   storagetype: gp2 # type of the underlying storage
   tags: "key=value,key1=value1"
