@@ -73,9 +73,9 @@ metadata:
   name: pgsql
   namespace: default
 spec:
-  class: db.t2.medium # type of the db instance
+  class: db.t4g.medium # type of the db instance
   engine: postgres # what engine to use postgres, mysql, aurora-postgresql etc.
-  version: "9.6"
+  version: "14.3"
   dbname: pgsql # name of the initial created database
   name: pgsql # name of the database at the provider
   password: # link to database secret
@@ -86,12 +86,12 @@ spec:
   MaxAllocatedSize: 50 # size in GB
   backupretentionperiod: 10 # days to keep backup, 0 means diable
   deleteprotection: true # don't delete the database even though the object is delete in k8s
-  encrypted: true # should the database be encrypted
+  encrypted: true # should the database be encrypted - always enable for sandbox and production
   iops: 1000 # number of iops
-  multiaz: true # multi AZ support
+  multiaz: true # multi AZ support - always enable for sandbox and production
   storagetype: gp2 # type of the underlying storage
   tags: "key=value,key1=value1"
-  provider: aws # Optional either aws or local, will overrides the value the operator was started with 
+  provider: aws # Optional either aws or local, will override the value the operator was started with 
   
 ```
 
