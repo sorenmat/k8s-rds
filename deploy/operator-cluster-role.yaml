@@ -10,7 +10,7 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - k8s.io
+  - k8s-rds.io
   resources:
   - databases
   verbs:
