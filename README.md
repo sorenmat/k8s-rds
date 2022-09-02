@@ -92,7 +92,7 @@ type: Opaque
 data:
   mykey: cGFzc3dvcmRvcnNvbWV0aGluZw==
 ---
-apiVersion: k8s.io/v1
+apiVersion: k8s-rds.io/v1
 kind: Database
 metadata:
   name: pgsql

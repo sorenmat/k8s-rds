@@ -15,7 +15,7 @@ import (
 func TestMarshal(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"}, Spec: DatabaseSpec{BackupRetentionPeriod: 10,
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"}, Spec: DatabaseSpec{BackupRetentionPeriod: 10,
 			Class:              "db.t2.micro",
 			DBName:             "database_name",
 			Engine:             "postgres",
@@ -40,7 +40,7 @@ func TestMarshal(t *testing.T) {
 func TestCRDValidationWithValidInput(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 10,
 			Class:                 "db.t2.micro",
@@ -58,7 +58,7 @@ func TestCRDValidationWithValidInput(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -71,10 +71,10 @@ func TestCaseInsensitiveInput(t *testing.T) {
 	yamlFile, err := ioutil.ReadFile("test.yaml")
 	assert.NoError(t, err)
 	db := Database{}
-	err = yaml.Unmarshal(yamlFile,&db)
+	err = yaml.Unmarshal(yamlFile, &db)
 	assert.NoError(t, err)
 	assert.Equal(t, int(db.Spec.MaxAllocatedSize), 200, "they should be equal")
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(db)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -82,11 +82,10 @@ func TestCaseInsensitiveInput(t *testing.T) {
 	assert.True(t, result.Valid(), result.Errors())
 }
 
-
 func TestDatabaseSizeIsTooSmall(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 10,
 			Class:                 "db.t2.micro",
@@ -104,7 +103,7 @@ func TestDatabaseSizeIsTooSmall(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -115,7 +114,7 @@ func TestDatabaseSizeIsTooSmall(t *testing.T) {
 func TestDatabaseSizeIsTooBig(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 10,
 			Class:                 "db.t2.micro",
@@ -133,7 +132,7 @@ func TestDatabaseSizeIsTooBig(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -144,7 +143,7 @@ func TestDatabaseSizeIsTooBig(t *testing.T) {
 func TestBackupRetentionPeriodIsTooLong(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 36,
 			Class:                 "db.t2.micro",
@@ -162,7 +161,7 @@ func TestBackupRetentionPeriodIsTooLong(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -173,7 +172,7 @@ func TestBackupRetentionPeriodIsTooLong(t *testing.T) {
 func TestInvalidDatabaseNameWithDashSeparator(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 30,
 			Class:                 "db.t2.micro",
@@ -191,7 +190,7 @@ func TestInvalidDatabaseNameWithDashSeparator(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -202,7 +201,7 @@ func TestInvalidDatabaseNameWithDashSeparator(t *testing.T) {
 func TestInvalidDatabaseNameStartingWithANumber(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 30,
 			Class:                 "db.t2.micro",
@@ -220,7 +219,7 @@ func TestInvalidDatabaseNameStartingWithANumber(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -231,7 +230,7 @@ func TestInvalidDatabaseNameStartingWithANumber(t *testing.T) {
 func TestInvalidUsername(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 30,
 			Class:                 "db.t2.micro",
@@ -249,7 +248,7 @@ func TestInvalidUsername(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -260,7 +259,7 @@ func TestInvalidUsername(t *testing.T) {
 func TestInvalidStorageType(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 30,
 			Class:                 "db.t2.micro",
@@ -278,7 +277,7 @@ func TestInvalidStorageType(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -289,7 +288,7 @@ func TestInvalidStorageType(t *testing.T) {
 func TestIopsTooSmall(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 30,
 			Class:                 "db.t2.micro",
@@ -307,7 +306,7 @@ func TestIopsTooSmall(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -318,7 +317,7 @@ func TestIopsTooSmall(t *testing.T) {
 func TestIopsTooBig(t *testing.T) {
 	d := Database{
 		ObjectMeta: meta_v1.ObjectMeta{Name: "my_db", Namespace: "default"},
-		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s.io/v1"},
+		TypeMeta:   meta_v1.TypeMeta{Kind: "Database", APIVersion: "k8s-rds.io/v1"},
 		Spec: DatabaseSpec{
 			BackupRetentionPeriod: 30,
 			Class:                 "db.t2.micro",
@@ -336,7 +335,7 @@ func TestIopsTooBig(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
