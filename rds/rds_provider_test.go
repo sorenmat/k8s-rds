@@ -3,6 +3,7 @@ package rds
 import (
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/sorenmat/k8s-rds/crd"
 
 	"github.com/stretchr/testify/assert"
@@ -13,12 +14,12 @@ import (
 func TestConvertSpecToInput(t *testing.T) {
 	db := &crd.Database{
 		Spec: crd.DatabaseSpec{
-			DBName:             "mydb",
+			DBName:             aws.String("mydb"),
 			Engine:             "postgres",
 			Username:           "myuser",
 			Class:              "db.t2.micro",
-			Size:               100,
-			MaxAllocatedSize:   200,
+			Size:               aws.Int64(100),
+			MaxAllocatedSize:   aws.Int64(200),
 			MultiAZ:            true,
 			PubliclyAccessible: true,
 			StorageEncrypted:   true,
@@ -136,7 +137,7 @@ func TestTags(t *testing.T) {
 			Tags: "key=value,key1=value1",
 		},
 	}
-	tags := gettags(db)
+	tags := gettags(db.Spec.Tags)
 	assert.NotNil(t, tags)
 	assert.Equal(t, 2, len(tags))
 	assert.Equal(t, "key", *tags[0].Key)
@@ -151,7 +152,7 @@ func TestTagsWithSpaces(t *testing.T) {
 			Tags: "key= value,   key1=value1",
 		},
 	}
-	tags := gettags(db)
+	tags := gettags(db.Spec.Tags)
 	assert.NotNil(t, tags)
 	assert.Equal(t, 2, len(tags))
 	assert.Equal(t, "key", *tags[0].Key)
@@ -195,8 +196,8 @@ func TestConvertSpecToDeleteInput_disabled(t *testing.T) {
 func TestConvertSpecToModifyInput_withApplyImmediately(t *testing.T) {
 	input := convertSpecToModifyInput(&crd.Database{
 		Spec: crd.DatabaseSpec{
-			MaxAllocatedSize: 50,
-			Size:             21,
+			MaxAllocatedSize: aws.Int64(50),
+			Size:             aws.Int64(21),
 			ApplyImmediately: true,
 			Class:            "db.t3.small",
 		},
@@ -215,8 +216,8 @@ func TestConvertSpecToModifyInput_withApplyImmediately(t *testing.T) {
 func TestConvertSpecToModifyInput_withoutApplyImmediately(t *testing.T) {
 	input := convertSpecToModifyInput(&crd.Database{
 		Spec: crd.DatabaseSpec{
-			MaxAllocatedSize: 50,
-			Size:             21,
+			MaxAllocatedSize: aws.Int64(50),
+			Size:             aws.Int64(21),
 			ApplyImmediately: false,
 			Class:            "db.t3.small",
 		},

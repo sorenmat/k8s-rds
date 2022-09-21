@@ -19,15 +19,19 @@ The node running the pod should have an instance profile that allows creation an
             "Effect": "Allow",
             "Action": [
                 "rds:AddTagsToResource",
-                "rds:DeleteDBSubnetGroup",
+                "rds:CreateDBCluster",
+                "rds:DeleteDBCluster",
                 "rds:DescribeDBSnapshots",
-                "rds:RestoreDBInstanceFromDBSnapshot",
                 "rds:DescribeDBSubnetGroups",
+                "rds:CreateDBSubnetGroup",
+                "rds:DeleteDBSubnetGroup",
+                "rds:RestoreDBInstanceFromDBSnapshot",
                 "rds:CreateDBInstance",
                 "rds:DescribeDBInstances",
                 "rds:ModifyDBInstance",
+                "rds:ModifyDBCluster",
                 "ec2:DescribeSubnets",
-                "rds:CreateDBSubnetGroup",
+                "rds:DescribeDBClusters",
                 "rds:DeleteDBInstance"
             ],
             "Resource": "*"

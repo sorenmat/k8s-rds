@@ -165,6 +165,14 @@ func NewDatabaseCRD() *apiextv1.CustomResourceDefinition {
 											Type:        "string",
 											Description: "DB snapshot identifier to restore from.",
 										},
+										"DBClusterIdentifier": {
+											Type:        "string",
+											Description: "DB cluster identifier.",
+										},
+										"DBInstanceIdentifier": {
+											Type:        "string",
+											Description: "DB instance identifier.",
+										},
 									},
 								},
 							},
@@ -199,24 +207,26 @@ type Database struct {
 type DatabaseSpec struct {
 	Username              string               `json:"username"`
 	Password              v1.SecretKeySelector `json:"password"`
-	DBName                string               `json:"dbname"`
+	DBName                *string              `json:"dbname"`
 	Engine                string               `json:"engine"`           // "postgres"
 	Version               string               `json:"version"`          // version of the engine / database
 	Class                 string               `json:"class"`            // like "db.t2.micro"
-	Size                  int64                `json:"size"`             // size in gb
-	MaxAllocatedSize      int64                `json:"MaxAllocatedSize"` // max_allocated_storage size in gb, the maximum allowed storage size for the database when using autoscaling. Has to be larger then size
+	Size                  *int64               `json:"size"`             // size in gb
+	MaxAllocatedSize      *int64               `json:"MaxAllocatedSize"` // max_allocated_storage size in gb, the maximum allowed storage size for the database when using autoscaling. Has to be larger then size
 	MultiAZ               bool                 `json:"multiaz,omitempty"`
 	PubliclyAccessible    bool                 `json:"publicaccess,omitempty"`
 	StorageEncrypted      bool                 `json:"encrypted,omitempty"`
 	StorageType           string               `json:"storagetype,omitempty"`
 	Iops                  int64                `json:"iops,omitempty"`
-	BackupRetentionPeriod int64                `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
-	DeleteProtection      bool                 `json:"deleteprotection,omitempty"`
+	BackupRetentionPeriod *int64               `json:"backupretentionperiod,omitempty"` // between 0 and 35, zero means disable
+	DeleteProtection      *bool                `json:"deleteprotection,omitempty"`
 	Tags                  string               `json:"tags,omitempty"`     // key=value,key1=value1
 	Provider              string               `json:"provider,omitempty"` // local or aws
 	SkipFinalSnapshot     bool                 `json:"skipfinalsnapshot,omitempty"`
 	ApplyImmediately      bool                 `json:"ApplyImmediately,omitempty"`
 	DBSnapshotIdentifier  string               `json:"DBSnapshotIdentifier,omitempty"`
+	DBClusterIdentifier   string               `json:"DBClusterIdentifier,omitempty"`
+	DBInstanceIdentifier  string               `json:"DBInstanceIdentifier,omitempty"`
 }
 
 type DatabaseStatus struct {

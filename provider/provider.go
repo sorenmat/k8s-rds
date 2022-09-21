@@ -12,6 +12,9 @@ type DatabaseProvider interface {
 	CreateDatabase(context.Context, *crd.Database) (string, error)
 	UpdateDatabase(context.Context, *crd.Database) error
 	DeleteDatabase(context.Context, *crd.Database) error
+	CreateDBCluster(context.Context, *crd.DBCluster) (string, error)
+	UpdateDBCluster(context.Context, *crd.DBCluster) error
+	DeleteDBCluster(context.Context, *crd.DBCluster) error
 	ServiceProvider
 }
 

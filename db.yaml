@@ -12,15 +12,20 @@ metadata:
   name: mypgsql
   namespace: default
 spec:
-  class: db.t2.medium
-  engine: postgres
-  dbname: thepgsql
-  name: thatpgsql
-  deleteprotection: false
+  class: db.t3.medium
+  engine: aurora-postgresql
+  #dbname: mypgsql
+  DBInstanceIdentifier: mypgsql-in-dbluster
+  name: mypgsql
   password:
     key: mykey
     name: mysecret
   username: postgres
-  size: 10
+  provider: aws
+  #size: 20
+  #MaxAllocatedSize: 50
   tags: "environment=test,team=backend"
-  skipfinalsnapshot: false
+  skipfinalsnapshot: true
+  ApplyImmediately: true
+  DBSnapshotIdentifier: "mypgsql-default-1661462171045938588"
+  DBClusterIdentifier: "mypgsql-dbluster"

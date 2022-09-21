@@ -1,12 +1,12 @@
 module github.com/sorenmat/k8s-rds
 
-go 1.17
+go 1.18
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.11.2
+	github.com/aws/aws-sdk-go-v2 v1.16.3
 	github.com/aws/aws-sdk-go-v2/config v1.11.1
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.26.0
-	github.com/aws/aws-sdk-go-v2/service/rds v1.14.0
+	github.com/aws/aws-sdk-go-v2/service/rds v1.21.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/golangci/golangci-lint v1.43.0
 	github.com/mitchellh/go-homedir v1.1.0
@@ -33,13 +33,13 @@ require (
 	github.com/ashanbrown/makezero v0.0.0-20210520155254-b6261585ddde // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.6.5 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.8.2 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.2 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.0.2 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.10 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.4 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.2 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.5.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.7.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.12.0 // indirect
-	github.com/aws/smithy-go v1.9.0 // indirect
+	github.com/aws/smithy-go v1.11.2 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bkielbasa/cyclop v1.2.0 // indirect
 	github.com/blizzy78/varnamelen v0.5.0 // indirect
@@ -82,7 +82,7 @@ require (
 	github.com/golangci/misspell v0.3.5 // indirect
 	github.com/golangci/revgrep v0.0.0-20210930125155-c22e5001d4f2 // indirect
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4 // indirect
-	github.com/google/go-cmp v0.5.6 // indirect
+	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect
 	github.com/gordonklaus/ineffassign v0.0.0-20210914165742-4cc7213b9bc8 // indirect

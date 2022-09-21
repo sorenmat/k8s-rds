@@ -21,7 +21,7 @@ build:
 	$(GO) build -o bin/$(NAME)
 
 docker-build:
-	docker build --load -t $(FULL_IMAGE_NAME) .
+	docker build --no-cache --load -t $(FULL_IMAGE_NAME) .
 
 docker-tag: docker-build
 	docker tag $(FULL_IMAGE_NAME) $(IMAGE_NAME):latest

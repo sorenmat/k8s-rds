@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dbclustersecret
+type: Opaque
+data:
+  mykey: cGFzc3dvcmRvcnNvbWV0aGluZzI=
+---
+apiVersion: k8s-rds.io/v1
+kind: DBCluster
+metadata:
+  name: mycluster
+  namespace: default
+spec:
+  MasterUsername: postgres
+  MasterUserPassword:
+    key: mykey
+    name: dbclustersecret
+  DBClusterIdentifier: mypgsql-dbluster
+  Engine: aurora-postgresql
+  DBName: aurorapostgresql
+  EngineVersion: "14.3"
+  #AllocatedStorage: 22
+  MultiAZ: false
+  BackupRetentionPeriod: 2
+  #DBClusterInstanceClass: db.r5.large
+  DeletionProtection: false
+  Provider: aws
+  Tags: "environment=test,team=backend"
+  #Iops: 1000
+  Port: 1151
+  SkipFinalSnapshot: true
+  SnapshotIdentifier: "mycluster-default-1662897555091001830"
+  ServerlessV2ScalingConfiguration:
+    MinCapacity: 1
+    MaxCapacity: 12

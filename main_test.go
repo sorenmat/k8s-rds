@@ -50,7 +50,7 @@ func TestExcluded(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			expected := test.excluded
-			if actual := excluded(test.db, test.exclNS, test.inclNS); actual != expected {
+			if actual := excluded(test.db.Namespace, test.db.Name, test.exclNS, test.inclNS); actual != expected {
 				t.Errorf("expected %v, actual %v", expected, actual)
 			}
 		})

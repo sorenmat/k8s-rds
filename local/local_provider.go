@@ -24,7 +24,7 @@ type Local struct {
 	repository      string
 }
 
-func New(db *crd.Database, kc kubernetes.Interface, repository string) (*Local, error) {
+func New(kc kubernetes.Interface, repository string) (*Local, error) {
 	r := Local{kc: kc, repository: repository}
 	return &r, nil
 }
@@ -38,7 +38,7 @@ func (l *Local) UpdateDatabase(ctx context.Context, db *crd.Database) error {
 // subnets are created for the database so we can access it
 func (l *Local) CreateDatabase(ctx context.Context, db *crd.Database) (string, error) {
 
-	if err := l.createPVC(ctx, db.Name, db.Namespace, db.Spec.Size); err != nil {
+	if err := l.createPVC(ctx, db.Name, db.Namespace, *db.Spec.Size); err != nil {
 		return "", err
 	}
 
@@ -202,7 +202,7 @@ func (l *Local) DeleteDatabase(ctx context.Context, db *crd.Database) error {
 			continue
 		}
 
-		if db.Spec.DeleteProtection {
+		if db.Spec.DeleteProtection != nil && *db.Spec.DeleteProtection {
 			log.Printf("Trying to delete a %v in %v which is a deleted protected database", db.Name, db.Namespace)
 		} else {
 			if err := l.kc.CoreV1().PersistentVolumeClaims(db.Namespace).Delete(ctx, db.Name, metav1.DeleteOptions{}); err != nil {
@@ -215,6 +215,16 @@ func (l *Local) DeleteDatabase(ctx context.Context, db *crd.Database) error {
 	}
 
 	return fmt.Errorf("the number of attempts to delete db %s has exceeded", db.ObjectMeta.Name)
+}
+
+func (r *Local) CreateDBCluster(context.Context, *crd.DBCluster) (string, error) {
+	return "", nil
+}
+func (r *Local) UpdateDBCluster(context.Context, *crd.DBCluster) error {
+	return nil
+}
+func (r *Local) DeleteDBCluster(context.Context, *crd.DBCluster) error {
+	return nil
 }
 
 func int32Ptr(i int32) *int32 { return &i }
@@ -262,7 +272,7 @@ func toSpec(db *crd.Database, repository string) v1.DeploymentSpec {
 							},
 						},
 							corev1.EnvVar{Name: "POSTGRES_USER", Value: db.Spec.Username},
-							corev1.EnvVar{Name: "POSTGRES_DB", Value: db.Spec.DBName},
+							corev1.EnvVar{Name: "POSTGRES_DB", Value: *db.Spec.DBName},
 							corev1.EnvVar{Name: "PGDATA",
 								Value: "/var/lib/postgresql/data/pgdata"},
 						},

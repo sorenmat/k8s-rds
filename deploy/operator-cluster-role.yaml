@@ -13,6 +13,7 @@ rules:
   - k8s-rds.io
   resources:
   - databases
+  - dbclusters
   verbs:
   - '*'
 - apiGroups:
