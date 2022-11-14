@@ -10,7 +10,7 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - k8s.io
+  - tradeshift.com
   resources:
   - databases
   verbs:
