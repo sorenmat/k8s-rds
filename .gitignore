@@ -1,2 +1,4 @@
 /k8s-rds
+/bin
 *.idea/
+.vscode/
