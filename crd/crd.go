@@ -155,6 +155,20 @@ func NewDatabaseCRD() *apiextv1.CustomResourceDefinition {
 										},
 									},
 								},
+								"status": {
+									Type:        "object",
+									Description: "This field is added by k8s-rds operator in order to have the status of the underlying database.",
+									Properties: map[string]apiextv1.JSONSchemaProps{
+										"message": {
+											Type:        "string",
+											Description: "Provides details about creation of underlying database.",
+										},
+										"state": {
+											Type:        "string",
+											Description: "The state of the underlying database like Created/Failed.",
+										},
+									},
+								},
 							},
 						},
 					},
