@@ -6,19 +6,9 @@ on:
 
   workflow_dispatch:
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Docker Push
-        uses: tradeshift/actions-docker@v1
-        with:
-          password: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_NOBASE64 }}
-          repository: eu.gcr.io/tradeshift-base/k8s-rds
-          platform: linux/amd64
-          useqemu: true
+  docker-multi-arch:
+    uses: tradeshift/actions-workflow-multiarch/.github/workflows/docker-multiarch.yml@master
+    with:
+      registry: eu.gcr.io/tradeshift-base/k8s-rds
+    secrets:
+      eu-key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_NOBASE64 }}
