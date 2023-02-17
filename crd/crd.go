@@ -63,7 +63,7 @@ func NewDatabaseCRD() *apiextv1.CustomResourceDefinition {
 											MaxLength:   intptr(16),
 											Pattern:     DBUsernamePattern,
 										},
-										"password": {
+										"MasterUserPassword": {
 											Type: "object",
 											Properties: map[string]apiextv1.JSONSchemaProps{
 												"name": {
@@ -206,7 +206,7 @@ type Database struct {
 // DatabaseSpec main structure describing the database instance
 type DatabaseSpec struct {
 	Username              string               `json:"username"`
-	Password              v1.SecretKeySelector `json:"password"`
+	MasterUserPassword    v1.SecretKeySelector `json:"MasterUserPassword"`
 	DBName                *string              `json:"dbname"`
 	Engine                string               `json:"engine"`           // "postgres"
 	Version               string               `json:"version"`          // version of the engine / database
