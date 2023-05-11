@@ -58,7 +58,7 @@ func TestCRDValidationWithValidInput(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -71,17 +71,16 @@ func TestCaseInsensitiveInput(t *testing.T) {
 	yamlFile, err := ioutil.ReadFile("test.yaml")
 	assert.NoError(t, err)
 	db := Database{}
-	err = yaml.Unmarshal(yamlFile,&db)
+	err = yaml.Unmarshal(yamlFile, &db)
 	assert.NoError(t, err)
 	assert.Equal(t, int(db.Spec.MaxAllocatedSize), 200, "they should be equal")
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(db)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
 	assert.NoError(t, err)
 	assert.True(t, result.Valid(), result.Errors())
 }
-
 
 func TestDatabaseSizeIsTooSmall(t *testing.T) {
 	d := Database{
@@ -104,7 +103,7 @@ func TestDatabaseSizeIsTooSmall(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -133,7 +132,7 @@ func TestDatabaseSizeIsTooBig(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -162,7 +161,7 @@ func TestBackupRetentionPeriodIsTooLong(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -191,7 +190,7 @@ func TestInvalidDatabaseNameWithDashSeparator(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -220,7 +219,7 @@ func TestInvalidDatabaseNameStartingWithANumber(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -249,7 +248,7 @@ func TestInvalidUsername(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -278,7 +277,7 @@ func TestInvalidStorageType(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -307,7 +306,7 @@ func TestIopsTooSmall(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
@@ -336,7 +335,7 @@ func TestIopsTooBig(t *testing.T) {
 		},
 	}
 
-	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Validation.OpenAPIV3Schema)
+	loader := gojsonschema.NewGoLoader(NewDatabaseCRD().Spec.Versions[0].Schema.OpenAPIV3Schema)
 	documentLoader := gojsonschema.NewGoLoader(d)
 
 	result, err := gojsonschema.Validate(loader, documentLoader)
