@@ -16,7 +16,7 @@ import (
 
 const (
 	CRDPlural          string = "databases"
-	CRDGroup           string = "k8s.io"
+	CRDGroup           string = "cloudnatix.com" // TODO(junm): fix this later.
 	CRDVersion         string = "v1"
 	FullCRDName        string = "databases." + CRDGroup
 	StorageTypePattern string = `gp2|io1`
@@ -39,8 +39,9 @@ func NewDatabaseCRD() *apiextv1.CustomResourceDefinition {
 			Group: CRDGroup,
 			Versions: []apiextv1.CustomResourceDefinitionVersion{
 				{
-					Name:   CRDVersion,
-					Served: true,
+					Name:    CRDVersion,
+					Served:  true,
+					Storage: true,
 					Schema: &apiextv1.CustomResourceValidation{
 						OpenAPIV3Schema: &apiextv1.JSONSchemaProps{
 							Type: "object",

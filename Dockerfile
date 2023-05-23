@@ -1,4 +1,4 @@
-FROM golang:1.17.0-alpine AS builder
+FROM golang:1.20.0-alpine AS builder
 
 WORKDIR /app
 RUN apk --no-cache add git make
